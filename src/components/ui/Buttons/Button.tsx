@@ -24,11 +24,11 @@ const CustomButton = ({
       style={{
         ...styles.container,
         ...buttonStyle,
-        backgroundColor: buttonColor || '#FF521C',
+        backgroundColor: buttonColor || COLORS.primaryColor,
       }}
       onTouchEnd={onPress}>
       <Text
-        style={{...styles.title, ...textStyle, color: titleColor || 'white'}}>
+        style={{...styles.title, ...textStyle, color: titleColor || '#ffffff'}}>
         {title}
       </Text>
     </View>
@@ -39,15 +39,16 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20,
+    borderRadius: 15,
     backgroundColor: COLORS.primaryColor,
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    color: 'white',
-    fontSize: 18,
+    fontWeight: '500',
+    color: '#ffffff',
+    fontSize: 16,
     fontFamily: 'Satoshi-Regular',
   },
 });

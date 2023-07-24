@@ -2,11 +2,27 @@
   "common": {
     "Signin": "Sign in"
   },
-  "loginScren": {
+  "loginScreen": {
     "WelcomeTitle": "Welcome to Gurukul Parivar",
     "WelcomeSubtitle": "Enter Mobile Number and Login",
     "MobileNumber": "Mobile Number",
     "EnterMobileNum": "Enter mobile number",
     "FooterText": "By proceeding you agree with our Terms of Service & Privacy Policy"
+  },
+  "loginSuccess":{
+    "LoginSuccess":"Login Successful!",
+    "SuccessSubtitle": "Welcome to a world of spirituality and serenity.",
+    "SuccessSubtitle2":"Begin your journey now. 🌟",
+    "LoginSuccessBTN" : "Let’s Complete your Profile"
+  },
+  "uploadPhoto":{
+    "HederText":"Complete your profile",
+    "FirstSubtitle":"Let’s add your profile photo",
+    "SecondSubtitle":"Please upload your own formal picture for recognition and improved service during visits to Gurukul.",
+    "PickPhotoBTN":"Add profile photo",
+    "BottomSubtitle1":"Which gurukul branch do you visit regularly?",
+    "BottomSubtitle2":"Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
+    "NextBtn":"Next"
   }
+
 }

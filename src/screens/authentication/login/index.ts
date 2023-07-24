@@ -1,1 +1,1 @@
-export * from './LoginSuccess';
+export * from './loginSuccess';

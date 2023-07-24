@@ -1,5 +1,5 @@
 export const Fonts = {
-  bold: 'Satoshi-Bold',
+  bold: 'Satoshi-Black',
   regular: 'Satoshi-Regular',
   medium: 'Satoshi-Medium',
 };
