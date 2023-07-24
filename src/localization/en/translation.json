@@ -3,7 +3,8 @@
     "Signin": "Sign in"
   },
   "loginScren": {
-    "WelcomeTitle": "Welcome to Gurukul Parivar",
+    "WelcomeTitle1": "Welcome to",
+    "WelcomeTitle2": "Gurukul Parivar",
     "WelcomeSubtitle": "Enter Mobile Number and Login",
     "MobileNumber": "Mobile Number",
     "EnterMobileNum": "Enter mobile number",

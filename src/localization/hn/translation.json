@@ -3,7 +3,8 @@
     "Signin": "दाखिल करना"
   },
   "loginScren": {
-    "WelcomeTitle": "गुरुकुल परिवार में आपका स्वागत है",
+    "WelcomeTitle1": "आपका स्वागत है",
+    "WelcomeTitle2": "गुरुकुल परिवार में",
     "WelcomeSubtitle": "मोबाइल नंबर दर्ज करें और लॉगिन करें",
     "MobileNumber": "मोबाइल नंबर",
     "EnterMobileNum": "मोबाइल नंबर दर्ज करें",
