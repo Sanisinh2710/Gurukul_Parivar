@@ -1,8 +1,9 @@
 import React from 'react';
+import {Text} from 'react-native';
 
 import '../localization/i18n';
 
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 
 import {useTranslation} from 'react-i18next';
 import {COLORS} from '../utils/colors';

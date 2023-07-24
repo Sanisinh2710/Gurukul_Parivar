@@ -3,6 +3,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {LoginSuccess} from '../screens';
 import {RootAuthStackParamList, RootStackParamList} from '../types';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
@@ -10,14 +11,15 @@ const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 export const AuthStackNavigator = (): React.JSX.Element => {
   return (
     <AuthStack.Navigator
-      initialRouteName="MobileLogin"
+      // initialRouteName="MobileLogin"
       screenOptions={{
         orientation: 'portrait',
         animation: 'none',
         headerShown: false,
       }}>
-      <AuthStack.Screen name="MobileLogin" component={<></>} />
-      <AuthStack.Screen name="MobileLoginOTP" component={<></>} />
+      <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
+      {/* <AuthStack.Screen name="MobileLogin" component={<></>} />
+      <AuthStack.Screen name="MobileLoginOTP" component={<></>} /> */}
     </AuthStack.Navigator>
   );
 };
@@ -29,7 +31,7 @@ export const Routes = (): React.JSX.Element => {
 
   return (
     <SafeAreaProvider>
-      {/* <CustomStatusBar backgroundColor={theme.statusBarColor} theme={theme} /> */}
+      {/* <CustomStatusBar backgroundColor={theme.statusBarColor} theme={theme} />  */}
 
       <SafeAreaProvider>
         <NavigationContainer>

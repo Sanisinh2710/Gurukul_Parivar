@@ -6,4 +6,5 @@ export type RootStackParamList = {
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
   MobileLoginOTP: undefined;
+  LoginSuccess: undefined;
 };
