@@ -1,0 +1,12 @@
+{
+  "common": {
+    "Signin": "Sign in"
+  },
+  "loginScren": {
+    "WelcomeTitle": "Welcome to Gurukul Parivar",
+    "WelcomeSubtitle": "Enter Mobile Number and Login",
+    "MobileNumber": "Mobile Number",
+    "EnterMobileNum": "Enter mobile number",
+    "FooterText": "By proceeding you agree with our Terms of Service & Privacy Policy"
+  }
+}
