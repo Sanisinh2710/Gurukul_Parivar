@@ -4,8 +4,10 @@ import {
   Image,
   PermissionsAndroid,
   Platform,
+  StyleProp,
   Text,
   View,
+  ViewStyle,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles/common.style';
 import {ScreenHeader} from '../../../../components';
@@ -14,12 +16,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './styles';
 import Dropdown from '../../../../components/ui/Dropdown/Dropdown';
 import CustomButton from '../../../../components/ui/Buttons/Button';
-import {
-  MediaType,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
 import {captureImage, chooseFile} from '../../../../utils/helper';
+import {COLORS} from '../../../../utils/colors';
 
 const data = [
   {item: 'hello'},
@@ -32,103 +30,23 @@ export const UploadPhoto = () => {
   const commonStyle = CommonStyle();
   const style = styles();
 
+  const [width1, setWidth] = useState<any>({
+    height: 5,
+    width: '20%',
+    backgroundColor: COLORS.primaryColor,
+  });
+
   const [filePath, setFilePath] = useState<{uri: string | undefined}>({
     uri: '',
   });
 
   const [selectedItem, setselectedItem] = useState('');
 
-  // const requestCameraPermission = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.CAMERA,
-  //         // {
-  //         //   title: 'Camera Permission',
-  //         //   message: 'App needs camera permission',
-  //         // },
-  //       );
-  //       // If CAMERA Permission is granted
-  //       return granted === PermissionsAndroid.RESULTS.GRANTED;
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return false;
-  //     }
-  //   } else return true;
-  // };
-
-  // const captureImage = async (type: MediaType) => {
-  //   let isCameraPermitted = await requestCameraPermission();
-  //   if (isCameraPermitted) {
-  //     launchCamera(
-  //       {
-  //         mediaType: type,
-  //         maxWidth: 300,
-  //         maxHeight: 550,
-  //         quality: 1,
-  //         videoQuality: 'low',
-  //         durationLimit: 30, //Video max duration in seconds
-  //         saveToPhotos: true,
-  //       },
-  //       response => {
-  //         console.log('Response = ', response);
-
-  //         if (response.didCancel) {
-  //           Alert.alert('User cancelled camera picker');
-  //           return;
-  //         } else if (response.errorCode == 'camera_unavailable') {
-  //           Alert.alert('Camera not available on device');
-  //           return;
-  //         } else if (response.errorCode == 'permission') {
-  //           Alert.alert('Permission not satisfied');
-  //           return;
-  //         } else if (response.errorCode == 'others') {
-  //           Alert.alert(`${response.errorMessage}`);
-  //           return;
-  //         } else {
-  //           const uri = {uri: response.assets?.[0].uri};
-  //           if (uri.uri !== undefined) {
-  //             setFilePath(uri);
-  //           }
-  //         }
-  //       },
-  //     );
-  //   }
-  // };
-
-  // const chooseFile = (type: MediaType) => {
-  //   let options = {
-  //     mediaType: type,
-  //     maxWidth: 300,
-  //     maxHeight: 550,
-  //   };
-  //   launchImageLibrary(options, response => {
-  //     console.log('Response = ', response);
-
-  //     if (response.didCancel) {
-  //       Alert.alert('User cancelled camera picker');
-  //       return;
-  //     } else if (response.errorCode == 'camera_unavailable') {
-  //       Alert.alert('Camera not available on device');
-  //       return;
-  //     } else if (response.errorCode == 'permission') {
-  //       Alert.alert('Permission not satisfied');
-  //       return;
-  //     } else if (response.errorCode == 'others') {
-  //       Alert.alert(`${response.errorMessage}`);
-
-  //       return;
-  //     } else {
-  //       const uri = {uri: response.assets?.[0].uri};
-  //       if (uri.uri !== undefined) {
-  //         setFilePath(uri);
-  //       }
-  //     }
-  //   });
-  // };
-
   return (
     <SafeAreaView style={commonStyle.container}>
+      <View style={{height: 5, backgroundColor: '#E5E5E5'}}>
+        <View style={width1} />
+      </View>
       <ScreenHeader
         theme={undefined}
         showLeft={true}
@@ -212,7 +130,14 @@ export const UploadPhoto = () => {
       <View>
         <CustomButton
           title={t('uploadPhoto:NextBtn')}
-          onPress={undefined}
+          onPress={() => {
+            let previousWidth = width1.width;
+            if (parseInt(previousWidth) < 100) {
+              let newWidth = parseInt(previousWidth) + parseInt('20%');
+              console.log(newWidth);
+              setWidth({...width1, width: newWidth.toString() + '%'});
+            }
+          }}
           buttonColor={''}
           titleColor={''}
           buttonStyle={style.NextBtn}
