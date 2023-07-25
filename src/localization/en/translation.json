@@ -19,10 +19,15 @@
     "HederText":"Complete your profile",
     "FirstSubtitle":"Let’s add your profile photo",
     "SecondSubtitle":"Please upload your own formal picture for recognition and improved service during visits to Gurukul.",
-    "PickPhotoBTN":"Add profile photo",
-    "BottomSubtitle1":"Which gurukul branch do you visit regularly?",
+    "PickPhotoBTN":"+ Add Profile Photo",
+    "BottomSubtitle1":"Which Gurukul Branch Do You Visit Regularly?",
     "BottomSubtitle2":"Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
+    "DropdownTitle": "Gurukul Branch",
     "NextBtn":"Next"
   }
 
 }
+
+
+
+

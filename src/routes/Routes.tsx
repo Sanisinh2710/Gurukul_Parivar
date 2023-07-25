@@ -14,7 +14,7 @@ export const AuthStackNavigator = (): React.JSX.Element => {
       // initialRouteName="MobileLogin"
       screenOptions={{
         orientation: 'portrait',
-        animation: 'none',
+        animation: 'flip',
         headerShown: false,
       }}>
       <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />

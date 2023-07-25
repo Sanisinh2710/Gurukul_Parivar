@@ -7,5 +7,8 @@ export const CommonStyle = () => {
       width: Dimensions.get('window').width,
       backgroundColor: '#ffffff',
     },
+    contentView: {
+      paddingHorizontal: 20,
+    },
   });
 };
