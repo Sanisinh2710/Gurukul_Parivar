@@ -1,7 +1,6 @@
 import {useTranslation} from 'react-i18next';
 import * as yup from 'yup';
 import {LoginValidationSchemaType} from '../types';
-import {phoneRegex} from '../utils';
 
 export const LoginValidationSchema =
   (): yup.ObjectSchema<LoginValidationSchemaType> => {
@@ -11,6 +10,27 @@ export const LoginValidationSchema =
         .string()
         .trim()
         .required(t('loginScreen:MobileEmptyErrMsg'))
-        .matches(phoneRegex, {message: t('loginScreen:MobileErrMsg1')}),
+        .test({
+          name: 'mobileNumber',
+          skipAbsent: true,
+          test(value: string, ctx) {
+            if (value.includes(')')) {
+              const phoneNumArr = value.split(')');
+              const phonenum = phoneNumArr[1];
+              if (phonenum.length < 10) {
+                return ctx.createError({
+                  message: t('loginScreen:MobileErrMsg1'),
+                });
+              }
+            }
+            if (value.length < 10) {
+              return ctx.createError({
+                message: t('loginScreen:MobileErrMsg1'),
+              });
+            }
+            return true;
+          },
+        }),
+      // .matches(phoneRegex, {message: t('loginScreen:MobileErrMsg1')}),
     });
   };

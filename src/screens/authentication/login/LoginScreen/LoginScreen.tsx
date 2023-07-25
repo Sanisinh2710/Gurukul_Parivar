@@ -4,7 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../../assets/styles';
 import {FormInput, PrimaryButton} from '../../../../components';
@@ -46,10 +46,7 @@ export const LoginScreen = ({
 
   return (
     <SafeAreaView style={[commonStyle.commonContainer]}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={commonStyle.commonContentView}>
+      <View style={commonStyle.commonContentView}>
         {/* Header:------------------------------------------------------------------------ */}
         <View key={'LoginFormHeader'} style={style.headerView}>
           <View style={style.imgLogoView}>
@@ -115,7 +112,7 @@ export const LoginScreen = ({
               .join(' ')}
           </Text>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
