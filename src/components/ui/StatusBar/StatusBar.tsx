@@ -1,8 +1,8 @@
 import React from 'react';
-import { StatusBar, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Theme } from '../../../types';
-import { style } from './StatusBar.style';
+import {StatusBar, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Theme} from '../../../types';
+import {style} from './style';
 
 type CustomStatusBarProps = {
   [key: string]: any;

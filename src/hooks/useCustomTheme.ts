@@ -1,6 +1,6 @@
 import {useMemo, useState} from 'react';
 import {Theme} from '../types';
-import {GurukulTheme} from '../utils/constants';
+import {GurukulTheme} from '../utils';
 import {useColorScheme} from './useColorScheme';
 
 export const useCustomTheme = () => {

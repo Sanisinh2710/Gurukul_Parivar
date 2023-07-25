@@ -2,12 +2,17 @@
   "common": {
     "Signin": "Sign in"
   },
-  "loginScren": {
+  "loginScreen": {
     "WelcomeTitle1": "Welcome to",
     "WelcomeTitle2": "Gurukul Parivar",
     "WelcomeSubtitle": "Enter Mobile Number and Login",
     "MobileNumber": "Mobile Number",
     "EnterMobileNum": "Enter mobile number",
-    "FooterText": "By proceeding you agree with our Terms of Service & Privacy Policy"
+    "MobileEmptyErrMsg": "**Mobile number can't be empty..!",
+    "MobileErrMsg1": "**Please enter valid mobile number..!",
+    "FooterText1": "By proceeding you agree with our",
+    "FooterText2": "&",
+    "FT1": "Terms of Service",
+    "FT2": "Privacy Policy"
   }
 }

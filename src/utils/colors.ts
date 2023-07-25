@@ -1,5 +1,10 @@
 export const COLORS = {
   primaryColor: '#AC2B31',
+  primaryRippleColor: 'rgba(237, 74, 81,0.1)',
+
+  primaryInputBackgroundColor: 'rgba(172, 43, 49, 0.05)',
+  primaryInputBorderColor: 'rgba(172, 43, 49, 0.2)',
+
   sunray: '#DBB159',
   white: '#FFFFFF',
   headingColor: '#171717',

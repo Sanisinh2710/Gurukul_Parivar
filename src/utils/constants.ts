@@ -28,3 +28,8 @@ export const GurukulTheme: {[key: string]: Theme} = {
   light: LightTheme,
   dark: DarkTheme,
 };
+
+export const nameRegex = /^[a-zA-Z]{2,3}[a-zA-Z\s]*$/;
+export const phoneRegex = /^[6-9]\d{9}$/;
+export const mailRegex = /^\w+[@]{1}\w+(\.[a-zA-Z]{2,3})+$/;
+export const passwordRegex = /^[A-Z]{1}[a-zA-Z]+[@$.]{1}[a-zA-Z\d]+$/;

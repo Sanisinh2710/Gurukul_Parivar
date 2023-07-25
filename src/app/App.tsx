@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../localization/i18n';
+import '../localization';
 
 import {Routes} from '../routes';
 

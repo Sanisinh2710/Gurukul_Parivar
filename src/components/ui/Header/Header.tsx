@@ -1,8 +1,7 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
-import {CustomFonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/colors';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {COLORS, CustomFonts} from '../../../utils';
 
 type ScreenHeaderProps = {
   theme: any;

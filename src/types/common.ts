@@ -9,3 +9,7 @@ export type Theme = {
   textColor: string;
   textSubtitleColor: string;
 };
+
+export type LoginValidationSchemaType = {
+  mobileNumber: string;
+};
