@@ -56,5 +56,23 @@ export const styles = () => {
       ...CustomFonts.header.small18,
       color: COLORS.primaryColor,
     },
+    otpTextInputStyle: {
+      borderWidth: 1,
+      borderRadius: 12,
+      borderBottomWidth: 1,
+      backgroundColor: 'rgba(172, 43, 49, 0.1)',
+    },
+    phoneEditContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginTop: 10,
+      gap: 10,
+    },
+    otpNotRecieveContainer: {
+      flexDirection: 'row',
+      marginTop: 16,
+      marginBottom: 57,
+      justifyContent: 'center',
+    },
   });
 };
