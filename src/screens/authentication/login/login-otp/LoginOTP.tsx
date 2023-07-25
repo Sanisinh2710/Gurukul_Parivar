@@ -8,12 +8,14 @@ import {COLORS} from '../../../../utils/colors';
 import CustomButton from '../../../../components/ui/Buttons/Button';
 import {OtpComponent} from '../../../../components/features/otpComponent';
 import {useTranslation} from 'react-i18next';
+import {LoginOtpScreenProps} from '../../../../types';
 
-export const LoginOTP = () => {
+export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const style = styles();
   const CommonStyles = CommonStyle();
   const {t, i18n} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
+  const [Otp, setOtp] = React.useState<string[]>([]);
 
   return (
     <View style={CommonStyles.container}>
@@ -43,7 +45,10 @@ export const LoginOTP = () => {
               <Text style={style.otpResend}>{t('otpScreen:OtpResend')}</Text>
             </View>
             <CustomButton
-              onPress={() => {}}
+              onPress={() => {
+                setOtp([num.join('')]);
+                navigation.replace('LoginSuccess');
+              }}
               textStyle={style.buttonText}
               titleColor={COLORS.white}
               buttonColor={COLORS.primaryColor}
