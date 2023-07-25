@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, TextInput, View} from 'react-native';
+import {Keyboard, ScrollView, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../../utils/colors';
 import {useOtpStyle} from './otpStyle';
@@ -34,6 +34,14 @@ export const OtpComponent = ({num, setNum}: otpTypeProps) => {
           {num.map((item, index) => (
             <View key={index} style={style.otpWrapper}>
               <TextInput
+                onSubmitEditing={() => {
+                  return (
+                    num[index] === '' &&
+                    refs.current[index]?.setNativeProps({
+                      style: {borderColor: 'rgba(172, 43, 49, 0.18)'},
+                    })
+                  );
+                }}
                 onFocus={() => {
                   setFocus(prev => !prev);
                 }}
@@ -43,7 +51,6 @@ export const OtpComponent = ({num, setNum}: otpTypeProps) => {
                   setNum(newOtpValue);
                 }}
                 keyboardType="number-pad"
-                autoFocus={index === 0 ? true : false}
                 ref={el => (refs.current[index] = el)}
                 style={
                   refs.current[index]?.isFocused()
