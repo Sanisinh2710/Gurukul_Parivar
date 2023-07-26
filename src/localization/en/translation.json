@@ -1,0 +1,45 @@
+{
+  "common": {
+    "Signin": "Sign in",
+    "Search": "Search"
+  },
+  "loginScreen": {
+    "WelcomeTitle1": "Welcome to",
+    "WelcomeTitle2": "Gurukul Parivar",
+    "WelcomeSubtitle": "Enter Mobile Number and Login",
+    "MobileNumber": "Mobile Number",
+    "EnterMobileNum": "Enter mobile number",
+    "MobileEmptyErrMsg": "**Mobile number can't be empty..!",
+    "MobileErrMsg1": "**Please enter valid mobile number..!",
+    "FooterText1": "By proceeding you agree with our",
+    "FooterText2": "&",
+    "FT1": "Terms of Service",
+    "FT2": "Privacy Policy",
+    "SelectCountryLabel": "Select Country Code",
+    "SelectLangLabel": "Select Language"
+  },
+  "loginSuccess": {
+    "LoginSuccess": "Login Successful!",
+    "SuccessSubtitle": "Welcome to a world of spirituality and serenity.",
+    "SuccessSubtitle2": "Begin your journey now. 🌟",
+    "LoginSuccessBTN": "Let’s Complete your Profile"
+  },
+  "uploadPhoto": {
+    "HederText": "Complete your profile",
+    "FirstSubtitle": "Let’s add your profile photo",
+    "SecondSubtitle": "Please upload your own formal picture for recognition and improved service during visits to Gurukul.",
+    "PickPhotoBTN": "+ Add Profile Photo",
+    "BottomSubtitle1": "Which Gurukul Branch Do You Visit Regularly?",
+    "BottomSubtitle2": "Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
+    "DropdownTitle": "Gurukul Branch",
+    "NextBtn": "Next"
+  },
+  "otpScreen": {
+    "OtpHeader": "OTP Verification",
+    "OtpSubtext": "Please verify your mobile number to procced",
+    "OtpContainerText": "An OTP has been sent to mobile number",
+    "OtpNotRecieve": "Didn't recieve code?",
+    "OtpResend": "Resend",
+    "Verify&Login": "Verify & Login"
+  }
+}
