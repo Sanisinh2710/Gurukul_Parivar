@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, ScrollView, TextInput, View} from 'react-native';
+import React from 'react';
+import {ScrollView, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../../../utils/colors';
 import {useOtpStyle} from './otpStyle';
@@ -10,14 +10,14 @@ type otpTypeProps = {
 };
 export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
   const style = useOtpStyle();
-  const [focus, setFocus] = useState(false);
-  const refs = useRef<Array<TextInput | null>>([]);
+  const [focus, setFocus] = React.useState(false);
+  const refs = React.useRef<Array<TextInput | null>>([]);
 
   const changeFocus = (index: number) => {
     refs.current[index]?.focus();
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     for (let i = 0; i < num.length; i++) {
       if (num[i] !== '') {
         refs.current[i]?.setNativeProps({
