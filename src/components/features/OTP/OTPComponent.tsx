@@ -1,5 +1,5 @@
 import React from 'react';
-import {Keyboard, ScrollView, TextInput, View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import {COLORS} from '../../../utils';
 import {useOtpStyle} from './otpStyle';
 
