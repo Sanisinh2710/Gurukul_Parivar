@@ -30,7 +30,8 @@
     "OtpSubtext": "Please verify your mobile number to procced",
     "OtpContainerText": "An OTP has been sent to mobile number",
     "OtpNotRecieve": "Didn't recieve code?",
-    "OtpResend": "Resend"
+    "OtpResend": "Resend",
+    "Verify&Login":"Verify & Login"
   }
 
 }

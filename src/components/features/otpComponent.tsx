@@ -8,7 +8,7 @@ type otpTypeProps = {
   num: string[];
   setNum: React.Dispatch<React.SetStateAction<string[]>>;
 };
-export const OtpComponent = ({num, setNum}: otpTypeProps) => {
+const OtpComponent = ({num, setNum}: otpTypeProps) => {
   const style = useOtpStyle();
   const [focus, setFocus] = useState(false);
   const refs = useRef<Array<TextInput | null>>([]);
@@ -31,9 +31,10 @@ export const OtpComponent = ({num, setNum}: otpTypeProps) => {
     <SafeAreaView>
       <ScrollView>
         <View style={{justifyContent: 'center', gap: 10, flexDirection: 'row'}}>
-          {num.map((item, index) => (
-            <View key={index} style={style.otpWrapper}>
+          <View style={style.otpWrapper}>
+            {num.map((item, index) => (
               <TextInput
+                key={index}
                 onSubmitEditing={() => {
                   return (
                     num[index] === '' &&
@@ -68,10 +69,11 @@ export const OtpComponent = ({num, setNum}: otpTypeProps) => {
                 }}
                 maxLength={1}
               />
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
+export default React.memo(OtpComponent);

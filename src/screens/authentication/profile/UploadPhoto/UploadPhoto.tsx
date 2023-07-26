@@ -4,6 +4,7 @@ import {
   Image,
   PermissionsAndroid,
   Platform,
+  ScrollView,
   StyleProp,
   Text,
   View,
@@ -55,94 +56,98 @@ export const UploadPhoto = () => {
         headerTitle={t('uploadPhoto:HederText')}
         headerTitleAlign="center"
       />
-      <View style={commonStyle.contentView}>
-        <View style={style.FirstSubtitleView}>
-          <Text style={style.FirstSubtitle}>
-            {t('uploadPhoto:FirstSubtitle')}
-          </Text>
-          <Text style={style.SecondSubtitle}>
-            {t('uploadPhoto:SecondSubtitle')}
-          </Text>
-        </View>
-        <View
-          style={style.photoMainView}
-          onTouchEnd={() => {
-            Alert.alert('Select Image', 'From', [
-              {
-                text: 'Cancel',
-                onPress: () => {},
-                style: 'cancel',
-              },
-              {
-                text: 'From Gallery',
-                onPress: async () => {
-                  let path = await chooseFile('photo');
-                  console.log(path);
-
-                  if (path) {
-                    setFilePath(path);
-                  }
-                },
-              },
-              {
-                text: 'Capture Photo',
-                onPress: async () => {
-                  let path = await captureImage('photo');
-                  if (path) {
-                    setFilePath(path);
-                  }
-                },
-              },
-            ]);
-          }}>
-          <View style={style.photOutSideView}>
-            <View style={style.photoView}>
-              {filePath.uri !== '' && filePath.uri !== undefined ? (
-                <Image source={{uri: filePath.uri}} style={style.image} />
-              ) : (
-                <Image
-                  source={require('../../../../../assets/images/avtar.png')}
-                  style={style.avtar}
-                />
-              )}
-            </View>
+      <ScrollView contentContainerStyle={{paddingBottom: 100}}>
+        <View style={commonStyle.contentView}>
+          <View style={style.FirstSubtitleView}>
+            <Text style={style.FirstSubtitle}>
+              {t('uploadPhoto:FirstSubtitle')}
+            </Text>
+            <Text style={style.SecondSubtitle}>
+              {t('uploadPhoto:SecondSubtitle')}
+            </Text>
           </View>
-          <Text style={style.photoBottomText}>
-            {t('uploadPhoto:PickPhotoBTN')}
-          </Text>
+          <View
+            style={style.photoMainView}
+            onTouchEnd={() => {
+              Alert.alert('Select Image', 'From', [
+                {
+                  text: 'Cancel',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                {
+                  text: 'From Gallery',
+                  onPress: async () => {
+                    let path = await chooseFile('photo');
+                    console.log(path);
+
+                    if (path) {
+                      setFilePath(path);
+                    }
+                  },
+                },
+                {
+                  text: 'Capture Photo',
+                  onPress: async () => {
+                    let path = await captureImage('photo');
+                    if (path) {
+                      setFilePath(path);
+                    }
+                  },
+                },
+              ]);
+            }}>
+            <View style={style.photOutSideView}>
+              <View style={style.photoView}>
+                {filePath.uri !== '' && filePath.uri !== undefined ? (
+                  <Image source={{uri: filePath.uri}} style={style.image} />
+                ) : (
+                  <Image
+                    source={require('../../../../../assets/images/avtar.png')}
+                    style={style.avtar}
+                  />
+                )}
+              </View>
+            </View>
+            <Text style={style.photoBottomText}>
+              {t('uploadPhoto:PickPhotoBTN')}
+            </Text>
+          </View>
+          <View style={style.BottomView}>
+            <Text style={style.BottomSubtitle1}>
+              {t('uploadPhoto:BottomSubtitle1')}
+            </Text>
+            <Text style={style.BottomSubtitle2}>
+              {t('uploadPhoto:BottomSubtitle2')}
+            </Text>
+            <Text style={style.DropdownTitle}>
+              {t('uploadPhoto:DropdownTitle')}
+            </Text>
+            <Dropdown
+              dataObject={data}
+              selectedItem={selectedItem}
+              setselectedItem={setselectedItem}
+              placeholder={'Select gurukul branch'}
+            />
+          </View>
         </View>
-        <View style={style.BottomView}>
-          <Text style={style.BottomSubtitle1}>
-            {t('uploadPhoto:BottomSubtitle1')}
-          </Text>
-          <Text style={style.BottomSubtitle2}>
-            {t('uploadPhoto:BottomSubtitle2')}
-          </Text>
-          <Text style={style.DropdownTitle}>
-            {t('uploadPhoto:DropdownTitle')}
-          </Text>
-          <Dropdown
-            dataObject={data}
-            selectedItem={selectedItem}
-            setselectedItem={setselectedItem}
-            placeholder={'Select gurukul branch'}
+        <View>
+          <CustomButton
+            title={t('uploadPhoto:NextBtn')}
+            onPress={() => {
+              let previousWidth = width1.width;
+              if (parseInt(previousWidth) < 100) {
+                let newWidth = parseInt(previousWidth) + parseInt('20%');
+                setWidth({...width1, width: newWidth.toString() + '%'});
+              }
+            }}
+            buttonColor={''}
+            titleColor={''}
+            buttonStyle={style.NextBtn}
+            textStyle={{}}
           />
         </View>
-        <CustomButton
-          title={t('uploadPhoto:NextBtn')}
-          onPress={() => {
-            let previousWidth = width1.width;
-            if (parseInt(previousWidth) < 100) {
-              let newWidth = parseInt(previousWidth) + parseInt('20%');
-              setWidth({...width1, width: newWidth.toString() + '%'});
-            }
-          }}
-          buttonColor={''}
-          titleColor={''}
-          buttonStyle={style.NextBtn}
-          textStyle={{}}
-        />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

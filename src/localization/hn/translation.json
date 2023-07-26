@@ -14,7 +14,8 @@
     "OtpSubtext": "कृपया आगे बढ़ने के लिए अपना मोबाइल नंबर सत्यापित करें",
     "OtpContainerText": "एक ओटीपी मोबाइल नंबर पर भेजा गया है",
     "OtpNotRecieve": "कोड प्राप्त नहीं हुआ?",
-    "OtpResend": "फिर से भेजें"
+    "OtpResend": "फिर से भेजें",
+    "Verify&Login": "सत्यापित करें और लॉगिन करें"
 },
   "loginSuccess":{
     "LoginSuccess":"लॉग इन सफल!",

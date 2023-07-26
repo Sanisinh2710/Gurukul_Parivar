@@ -78,6 +78,7 @@ export const styles = () => {
       width: 335,
       hieght: 50,
       marginTop: 100,
+      // paddingBottom: 40,
       alignSelf: 'center',
     },
   });
