@@ -25,8 +25,9 @@ export const useOtpStyle = () => {
       textAlign: 'center',
       //   ...typography.body.thin,
       fontWeight: 'bold',
-      //   color: color.primaryText,
+      color: COLORS.primaryColor,
       fontSize: 20,
+      // color:
     },
   });
 };

@@ -24,8 +24,13 @@ const OtpComponent = ({num, setNum}: otpTypeProps) => {
           style: {borderColor: COLORS.primaryColor},
         });
       }
+      // else {
+      //   refs.current[i]?.setNativeProps({
+      //     style: {borderColor: 'rgba(172, 43, 49, 0.18)'},
+      //   });
+      // }
     }
-  }, [num]);
+  }, [num, focus]);
 
   return (
     <SafeAreaView>
@@ -36,6 +41,7 @@ const OtpComponent = ({num, setNum}: otpTypeProps) => {
               <TextInput
                 key={index}
                 onSubmitEditing={() => {
+                  console.log('submit editing caallleddd');
                   return (
                     num[index] === '' &&
                     refs.current[index]?.setNativeProps({
@@ -62,10 +68,8 @@ const OtpComponent = ({num, setNum}: otpTypeProps) => {
                 onKeyPress={({nativeEvent}) => {
                   if (nativeEvent.key === 'Backspace') {
                     changeFocus(index - 1);
-                    setFocus(false);
                   } else {
                     changeFocus(index + 1);
-                    setFocus(false);
                   }
                 }}
                 maxLength={1}

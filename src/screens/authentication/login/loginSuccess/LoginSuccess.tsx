@@ -4,7 +4,7 @@ import {ScreenHeader} from '../../../../components';
 import {CommonStyle} from '../../../../../assets/styles/common.style';
 import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
-import CustomButton from '../../../../components/ui/Buttons/Button';
+import {CustomButton} from '../../../../components/ui/Buttons/Button';
 import {LoginSuccessStackScreenProps} from '../../../../types';
 
 export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
