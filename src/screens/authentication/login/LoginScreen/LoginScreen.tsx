@@ -175,6 +175,8 @@ export const LoginScreen = ({
             </Text>
           </View>
         </View>
+
+        {/* Language Model.................................................................. */}
         <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
