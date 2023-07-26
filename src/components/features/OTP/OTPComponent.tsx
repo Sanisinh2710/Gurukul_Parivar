@@ -1,6 +1,5 @@
 import React from 'react';
-import {ScrollView, TextInput, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Keyboard, ScrollView, TextInput, View} from 'react-native';
 import {COLORS} from '../../../utils';
 import {useOtpStyle} from './otpStyle';
 
@@ -25,15 +24,16 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
         });
       }
     }
-  }, [num]);
+  }, [num, focus]);
 
   return (
-    s<View style={{justifyContent: 'center', gap: 10, flexDirection: 'row'}}>
+    <View style={{justifyContent: 'center', gap: 10, flexDirection: 'row'}}>
       <View style={style.otpWrapper}>
         {num.map((item, index) => (
           <TextInput
             key={index}
             onSubmitEditing={() => {
+              console.log('submit editing caallleddd');
               return (
                 num[index] === '' &&
                 refs.current[index]?.setNativeProps({
@@ -47,6 +47,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             onChangeText={val => {
               const newOtpValue = [...num];
               newOtpValue[index] = val;
+
               setNum(newOtpValue);
             }}
             keyboardType="number-pad"
@@ -59,10 +60,8 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             onKeyPress={({nativeEvent}) => {
               if (nativeEvent.key === 'Backspace') {
                 changeFocus(index - 1);
-                setFocus(false);
               } else {
                 changeFocus(index + 1);
-                setFocus(false);
               }
             }}
             maxLength={1}

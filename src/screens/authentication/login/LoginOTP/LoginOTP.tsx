@@ -5,12 +5,12 @@ import {
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
+import {CommonStyle} from '../../../../../assets/styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {COLORS} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {LoginOtpScreenProps} from '../../../../types';
 import {styles} from './styles';
-import {CommonStyle} from '../../../../../assets/styles';
 
 export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const style = styles();
@@ -20,7 +20,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(true);
-  // const [disabled, setDisabled] = React.useState(true);
+  const [disabled, setDisabled] = React.useState(false);
   const handleLogin = () => {
     let flag = 0;
 
@@ -31,17 +31,22 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       }
     }
     if (flag === 1) {
-      // setDisabled(true);
+      return;
     } else {
-      // setDisabled(false);
       setOtp([num.join('')]);
       navigation.replace('LoginSuccess');
     }
   };
-
   React.useEffect(() => {
-    // let interval: string | number | NodeJS.Timeout;
-
+    for (let i = 0; i < num.length; i++) {
+      if (num[i] !== '' || num[i] === undefined) {
+        setDisabled(false);
+      } else {
+        setDisabled(true);
+      }
+    }
+  }, [num]);
+  React.useEffect(() => {
     if (countdown > 0) {
       const interval = setInterval(() => {
         setCountdown(prevCountdown => prevCountdown - 1);
@@ -109,7 +114,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
               buttonColor={COLORS.primaryColor}
               title={t('otpScreen:Verify&Login')}
               buttonStyle={style.buttonStyle}
-              // disabled={disabled}
+              disabled={disabled}
             />
           </View>
         </View>

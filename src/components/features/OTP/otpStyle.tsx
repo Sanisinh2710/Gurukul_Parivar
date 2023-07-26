@@ -23,9 +23,8 @@ export const useOtpStyle = () => {
       borderRadius: 12,
       borderColor: 'rgba(172, 43, 49, 0.18)',
       textAlign: 'center',
-      //   ...typography.body.thin,
       fontWeight: 'bold',
-      //   color: color.primaryText,
+      color: COLORS.black,
       fontSize: 20,
     },
   });
