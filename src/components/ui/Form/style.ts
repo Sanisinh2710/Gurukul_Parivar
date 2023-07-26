@@ -58,42 +58,5 @@ export const FormInputStyle = (value: any) => {
       width: '80%',
       paddingLeft: '5%',
     },
-    phoneModelMainView: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    phoneModelInnerView: {
-      marginTop: '70%',
-      width: 375,
-      height: 300,
-      backgroundColor: '#FFFFFF',
-      elevation: 5,
-      borderRadius: 10,
-      paddingTop: 20,
-      paddingHorizontal: 30,
-    },
-    phoneModelSearchView: {
-      width: '100%',
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderWidth: 1.5,
-      borderRadius: 10,
-      height: 50,
-      paddingHorizontal: 10,
-    },
-    phoneModelFlatListContainerStyle: {
-      paddingTop: 30,
-      paddingBottom: '30%',
-      gap: 25,
-    },
-    phoneModelMenuText: {
-      ...CustomFonts.body.large14,
-      fontSize: 16,
-      color: theme.textColor,
-      paddingBottom: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.primary,
-    },
   });
 };

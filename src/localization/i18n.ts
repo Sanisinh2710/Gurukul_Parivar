@@ -16,7 +16,7 @@ i18n
   .init({
     compatibilityJSON: 'v3', //To make it work for Android devices, add this line.
     resources,
-    lng: 'en', // default language to use.
+    lng: 'gu', // default language to use.
     // if you're using a language detector, do not define the lng option
     interpolation: {
       escapeValue: false,

@@ -276,3 +276,9 @@ export const countries = [
   {country: 'Zambia', code: '260', iso: 'ZM'},
   {country: 'Zimbabwe', code: '263', iso: 'ZW'},
 ];
+
+export const Languages: {[key: string]: string} = {
+  en: 'English',
+  gu: 'Gujarati',
+  hn: 'Hindi',
+};

@@ -1,6 +1,7 @@
 {
   "common": {
-    "Signin": "સાઇન ઇન કરો"
+    "Signin": "સાઇન ઇન કરો",
+    "Search": "શોધો"
   },
   "loginScreen": {
     "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -13,6 +14,8 @@
     "FooterText1": "આગળ વધીને તમે અમારી",
     "FooterText2": "અને સાથે સંમત થાઓ છો",
     "FT1": "સેવાની શરતો",
-    "FT2": "ગોપનીયતા નીતિ"
+    "FT2": "ગોપનીયતા નીતિ",
+    "SelectCountryLabel": "દેશનો કોડ પસંદ કરો",
+    "SelectLangLabel": "ભાષા પસંદ કરો"
   }
 }

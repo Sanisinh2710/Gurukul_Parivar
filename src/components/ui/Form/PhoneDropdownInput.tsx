@@ -1,9 +1,11 @@
 import React from 'react';
 
-import {FlatList, Modal, Text, TextInput, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useCustomTheme} from '../../../hooks';
 import {countries} from '../../../utils';
+import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
 type PhoneDropdownInputProps = {
@@ -26,6 +28,8 @@ export const PhoneDropdownInput = ({
   state,
 }: PhoneDropdownInputProps) => {
   const {theme} = useCustomTheme();
+
+  const {t} = useTranslation();
 
   const style = FormInputStyle(value);
 
@@ -114,60 +118,19 @@ export const PhoneDropdownInput = ({
           }}
         />
       </View>
-      <Modal
-        transparent
-        visible={modelVisible}
-        animationType="fade"
-        onDismiss={() => {
-          setModelVisible(false);
-        }}>
-        <View style={style.phoneModelMainView}>
-          <View style={style.phoneModelInnerView}>
-            <View style={style.phoneModelSearchView}>
-              <MaterialCommunityIcon
-                name="magnify"
-                size={25}
-                color={theme.textColor}
-              />
-              <TextInput
-                value={searchvalue}
-                placeholder={'Find your country code'}
-                placeholderTextColor={theme.textColor}
-                style={[style.formTextInput, {width: '80%'}]}
-                onChangeText={val => {
-                  setSearchValue(val);
-                }}
-              />
-              <MaterialCommunityIcon
-                name="close"
-                size={25}
-                color={theme.textColor}
-                onPress={() => setSearchValue('')}
-              />
-            </View>
-            <FlatList
-              contentContainerStyle={style.phoneModelFlatListContainerStyle}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              data={countryCodeList}
-              renderItem={({item, index}) => {
-                return (
-                  <Text
-                    onPress={() => {
-                      const newItem =
-                        item.split(' ').at(0) + ' ' + item.split(' ').at(1);
-                      setLocalVal(newItem);
-                      setModelVisible(false);
-                    }}
-                    style={style.phoneModelMenuText}>
-                    {item}
-                  </Text>
-                );
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+      <DropDownModel
+        modelVisible={modelVisible}
+        setModelVisible={setModelVisible}
+        searchvalue={searchvalue}
+        setSearchValue={setSearchValue}
+        inputList={countryCodeList}
+        wantSearchBar={true}
+        type={'phone'}
+        localVal={localval}
+        setLocalVal={setLocalVal}
+        modalHeight={'90%'}
+        label={t('loginScreen:SelectCountryLabel')}
+      />
     </>
   );
 };

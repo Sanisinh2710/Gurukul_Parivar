@@ -26,6 +26,7 @@ export const LoginScreenstyle = () => {
       ...CustomFonts.body.regular14,
       fontSize: 34,
       color: theme.textColor,
+      lineHeight: 43,
     },
     welcomeTitle2Text: {
       ...CustomFonts.header.large36,

@@ -1,6 +1,7 @@
 {
   "common": {
-    "Signin": "Sign in"
+    "Signin": "Sign in",
+    "Search": "Search"
   },
   "loginScreen": {
     "WelcomeTitle1": "Welcome to",
@@ -13,6 +14,8 @@
     "FooterText1": "By proceeding you agree with our",
     "FooterText2": "&",
     "FT1": "Terms of Service",
-    "FT2": "Privacy Policy"
+    "FT2": "Privacy Policy",
+    "SelectCountryLabel": "Select Country Code",
+    "SelectLangLabel": "Select Language"
   }
 }
