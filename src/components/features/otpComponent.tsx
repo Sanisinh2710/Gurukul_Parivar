@@ -49,6 +49,7 @@ const OtpComponent = ({num, setNum}: otpTypeProps) => {
                 onChangeText={val => {
                   const newOtpValue = [...num];
                   newOtpValue[index] = val;
+
                   setNum(newOtpValue);
                 }}
                 keyboardType="number-pad"

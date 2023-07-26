@@ -9,37 +9,42 @@ type Props = {
   titleColor: string;
   buttonStyle: {[key: string]: any};
   textStyle: {[key: string]: any};
-  // disabled: boolean;
+  disabled: boolean;
 };
 
-const CustomButton = ({
-  title,
-  onPress,
-  buttonColor,
-  titleColor,
-  buttonStyle,
-  textStyle,
-}: // disabled,
-Props) => {
-  return (
-    <Pressable
-      // disabled={disabled}
-      style={{
-        // opacity: disabled ? 0.5 : 1,
-        ...styles.container,
-        ...buttonStyle,
-        backgroundColor: buttonColor || COLORS.primaryColor,
-      }}
-      onTouchEnd={onPress}>
-      <Text
-        style={{...styles.title, ...textStyle, color: titleColor || '#ffffff'}}>
-        {title}
-      </Text>
-    </Pressable>
-  );
-};
+export const CustomButton = React.memo(
+  ({
+    title,
+    onPress,
+    buttonColor,
+    titleColor,
+    buttonStyle,
+    textStyle,
+    disabled,
+  }: Props) => {
+    return (
+      <Pressable
+        disabled={disabled}
+        style={{
+          opacity: disabled ? 0.7 : 1,
 
-export default CustomButton;
+          ...styles.container,
+          ...buttonStyle,
+          backgroundColor: buttonColor || COLORS.primaryColor,
+        }}
+        onTouchEnd={onPress}>
+        <Text
+          style={{
+            ...styles.title,
+            ...textStyle,
+            color: titleColor || '#ffffff',
+          }}>
+          {title}
+        </Text>
+      </Pressable>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {
