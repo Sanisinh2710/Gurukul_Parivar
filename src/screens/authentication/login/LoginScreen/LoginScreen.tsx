@@ -27,6 +27,8 @@ export const LoginScreen = ({
 
   const style = LoginScreenstyle();
 
+  const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
+
   const {
     control,
     reset,
@@ -38,9 +40,12 @@ export const LoginScreen = ({
   });
 
   const onSubmit = (data: LoginValidationSchemaType) => {
-    console.log(data.mobileNumber);
+    data.mobileNumber =
+      countryCodeSelect.toString() + data.mobileNumber.toString();
+
     // Do something with mobile number and than navigate to OTP Screen;
 
+    reset();
     navigation.navigate('MobileLoginOTP');
   };
 
@@ -84,6 +89,7 @@ export const LoginScreen = ({
                   onBlur={onBlur}
                   onChange={onChange}
                   error={errors['mobileNumber']?.message?.toString()}
+                  state={{countryCodeSelect, setCountryCodeSelect}}
                 />
               );
             }}
