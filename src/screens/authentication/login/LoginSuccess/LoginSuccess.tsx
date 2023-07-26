@@ -1,11 +1,10 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
-import {ScreenHeader} from '../../../../components';
-import {CommonStyle} from '../../../../../assets/styles/common.style';
-import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
-import CustomButton from '../../../../components/ui/Buttons/Button';
+import {Image, Text, View} from 'react-native';
+import {PrimaryButton, ScreenHeader} from '../../../../components';
 import {LoginSuccessStackScreenProps} from '../../../../types';
+import {styles} from './styles';
+import {CommonStyle} from '../../../../../assets/styles';
 
 export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const commonStyle = CommonStyle();
@@ -13,7 +12,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const {t, i18n} = useTranslation();
 
   return (
-    <View style={commonStyle.container}>
+    <View style={commonStyle.commonContainer}>
       <View>
         <ScreenHeader
           theme={undefined}
@@ -39,13 +38,10 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
           <Text style={[style.subtitle, {textAlign: 'center'}]}>
             {t('loginSuccess:SuccessSubtitle2')}
           </Text>
-          <CustomButton
+          <PrimaryButton
             title={t('loginSuccess:LoginSuccessBTN')}
             onPress={() => navigation.replace('UploadPhoto')}
-            buttonColor={''}
-            titleColor={''}
             buttonStyle={{marginTop: 40}}
-            textStyle={{}}
           />
         </View>
       </View>

@@ -1,8 +1,7 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
-import {CustomFonts} from '../../../utils/fonts';
-import {COLORS} from '../../../utils/colors';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {COLORS, CustomFonts} from '../../../utils';
 
 type ScreenHeaderProps = {
   theme: any;
@@ -18,111 +17,116 @@ type ScreenHeaderProps = {
   leftOnPress?: () => void;
 };
 
-export const ScreenHeader = ({
-  theme,
-  headerTitle,
-  showLeft,
-  headerLeft,
-  customTitle,
-  headerTitleAlign,
-  headerRight,
-  leftOnPress,
-}: ScreenHeaderProps) => {
-  return (
-    <View
-      style={[
-        Platform.OS === 'android'
-          ? style(theme).commonHeaderBarAndroid
-          : style(theme).commonHeaderBarIOS,
-      ]}>
-      <View style={[style(theme).commonHeaderBarContent, {width: '100%'}]}>
-        {showLeft !== false && !headerLeft && (
-          <View
-            onTouchEnd={leftOnPress ? leftOnPress : () => {}}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 60,
-              backgroundColor: COLORS.leftArrowBg,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Icon name="arrow-left" size={25} color={COLORS.black} />
-          </View>
-        )}
-
-        {showLeft !== false && headerLeft && (
-          <View onTouchEnd={leftOnPress ? leftOnPress : () => {}}>
-            {headerLeft}
-          </View>
-        )}
-
-        {headerTitleAlign === 'center' ? (
-          <View
-            style={{
-              width: '80%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}>
-            {headerTitle ? (
-              <Text
-                style={[style(theme).commonHeaderText, {textAlign: 'center'}]}>
-                {headerTitle}
-              </Text>
-            ) : (
-              customTitle
-            )}
-          </View>
-        ) : headerLeft ? (
-          <>
-            {headerTitle ? (
-              <Text style={style(theme).commonHeaderText}>{headerTitle}</Text>
-            ) : (
-              customTitle
-            )}
-          </>
-        ) : headerTitle ? (
-          <Text style={[style(theme).commonHeaderText, {paddingLeft: 0}]}>
-            {headerTitle}
-          </Text>
-        ) : (
-          customTitle && customTitle
-        )}
-
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            width: '10%',
-            alignItems: 'center',
-          }}>
-          {headerRight && (
+export const ScreenHeader = React.memo(
+  ({
+    theme,
+    headerTitle,
+    showLeft,
+    headerLeft,
+    customTitle,
+    headerTitleAlign,
+    headerRight,
+    leftOnPress,
+  }: ScreenHeaderProps) => {
+    return (
+      <View
+        style={[
+          Platform.OS === 'android'
+            ? style(theme).commonHeaderBarAndroid
+            : style(theme).commonHeaderBarIOS,
+        ]}>
+        <View style={[style(theme).commonHeaderBarContent, {width: '100%'}]}>
+          {showLeft !== false && !headerLeft && (
             <View
+              onTouchEnd={leftOnPress ? leftOnPress : () => {}}
               style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
+                width: 40,
+                height: 40,
+                borderRadius: 60,
+                backgroundColor: COLORS.leftArrowBg,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              {headerRight.map((icons, index) => {
-                return (
-                  <></>
-                  // <RoundedIcon
-                  //   key={index}
-                  //   theme={theme}
-                  //   icon={icons.icon}
-                  //   onPress={icons.onPress}
-                  // />
-                );
-              })}
+              <Icon name="arrow-left" size={25} color={COLORS.black} />
             </View>
           )}
+
+          {showLeft !== false && headerLeft && (
+            <View onTouchEnd={leftOnPress ? leftOnPress : () => {}}>
+              {headerLeft}
+            </View>
+          )}
+
+          {headerTitleAlign === 'center' ? (
+            <View
+              style={{
+                width: '80%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}>
+              {headerTitle ? (
+                <Text
+                  style={[
+                    style(theme).commonHeaderText,
+                    {textAlign: 'center'},
+                  ]}>
+                  {headerTitle}
+                </Text>
+              ) : (
+                customTitle
+              )}
+            </View>
+          ) : headerLeft ? (
+            <>
+              {headerTitle ? (
+                <Text style={style(theme).commonHeaderText}>{headerTitle}</Text>
+              ) : (
+                customTitle
+              )}
+            </>
+          ) : headerTitle ? (
+            <Text style={[style(theme).commonHeaderText, {paddingLeft: 0}]}>
+              {headerTitle}
+            </Text>
+          ) : (
+            customTitle && customTitle
+          )}
+
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              width: '10%',
+              alignItems: 'center',
+            }}>
+            {headerRight && (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}>
+                {headerRight.map((icons, index) => {
+                  return (
+                    <></>
+                    // <RoundedIcon
+                    //   key={index}
+                    //   theme={theme}
+                    //   icon={icons.icon}
+                    //   onPress={icons.onPress}
+                    // />
+                  );
+                })}
+              </View>
+            )}
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
 
 const style = (theme?: any) =>
   StyleSheet.create({

@@ -1,14 +1,16 @@
 import React from 'react';
 import {Pressable, Text, View} from 'react-native';
-import {ScreenHeader} from '../../../../components';
-import {styles} from '../login-otp/styles';
-import {CommonStyle} from '../../../../../assets/styles/common.style';
+import {
+  OtpComponent,
+  PrimaryButton,
+  ScreenHeader,
+} from '../../../../components';
 import Icon from 'react-native-vector-icons/Feather';
-import {COLORS} from '../../../../utils/colors';
-import CustomButton from '../../../../components/ui/Buttons/Button';
-import OtpComponent from '../../../../components/features/otpComponent';
+import {COLORS} from '../../../../utils';
 import {useTranslation} from 'react-i18next';
 import {LoginOtpScreenProps} from '../../../../types';
+import {styles} from './styles';
+import {CommonStyle} from '../../../../../assets/styles';
 
 export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const style = styles();
@@ -64,7 +66,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       .padStart(2, '0')}`;
   };
   return (
-    <View style={CommonStyles.container}>
+    <View style={CommonStyles.commonContainer}>
       <ScreenHeader theme={undefined} showLeft={true} />
       <View style={style.container}>
         <View style={style.textWrapper}>
@@ -100,7 +102,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
                 </Pressable>
               )}
             </View>
-            <CustomButton
+            <PrimaryButton
               onPress={handleLogin}
               textStyle={style.buttonText}
               titleColor={COLORS.white}

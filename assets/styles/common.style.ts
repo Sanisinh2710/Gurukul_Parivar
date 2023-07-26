@@ -1,16 +1,15 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {COLORS} from '../../src/utils/colors';
+import {useCustomTheme} from '../../src/hooks';
 
 export const CommonStyle = () => {
+  const {theme} = useCustomTheme();
   return StyleSheet.create({
-    container: {
+    commonContainer: {
       flex: 1,
-      backgroundColor: COLORS.white,
       width: Dimensions.get('window').width,
-      // height: Dimensions.get('window').height * 0.5,
+      backgroundColor: theme.background,
     },
-
-    contentView: {
+    commonContentView: {
       paddingHorizontal: 20,
     },
   });

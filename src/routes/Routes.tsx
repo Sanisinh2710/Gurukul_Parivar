@@ -3,7 +3,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {LoginOTP, LoginSuccess, UploadPhoto} from '../screens';
+import {CustomStatusBar} from '../components';
+import {useCustomTheme} from '../hooks';
+import {LoginOTP, LoginScreen, LoginSuccess, UploadPhoto} from '../screens';
 import {RootAuthStackParamList, RootStackParamList} from '../types';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
@@ -11,16 +13,16 @@ const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 export const AuthStackNavigator = (): React.JSX.Element => {
   return (
     <AuthStack.Navigator
-      // initialRouteName="MobileLogin"
+      initialRouteName="MobileLogin"
       screenOptions={{
         orientation: 'portrait',
         animation: 'flip',
         headerShown: false,
       }}>
+      <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
       <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
       <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
       <AuthStack.Screen name="UploadPhoto" component={UploadPhoto} />
-      {/* <AuthStack.Screen name="MobileLogin" component={<></>} /> */}
     </AuthStack.Navigator>
   );
 };
@@ -28,11 +30,14 @@ export const AuthStackNavigator = (): React.JSX.Element => {
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
 
 export const Routes = (): React.JSX.Element => {
-  //   const theme = MyAppTheme();
+  const {theme} = useCustomTheme();
 
   return (
     <SafeAreaProvider>
-      {/* <CustomStatusBar backgroundColor={theme.statusBarColor} theme={theme} />  */}
+      <CustomStatusBar
+        backgroundColor={theme.statusBarBackground}
+        theme={theme}
+      />
 
       <SafeAreaProvider>
         <NavigationContainer>
@@ -43,7 +48,6 @@ export const Routes = (): React.JSX.Element => {
               headerShown: false,
             }}>
             <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
-            {/* <NativeStack.Screen name="BottomNavBar" component={<></>} /> */}
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

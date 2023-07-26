@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, ScrollView, TextInput, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {COLORS} from '../../utils/colors';
+import {COLORS} from '../../../utils/colors';
 import {useOtpStyle} from './otpStyle';
 
 type otpTypeProps = {
   num: string[];
   setNum: React.Dispatch<React.SetStateAction<string[]>>;
 };
-const OtpComponent = ({num, setNum}: otpTypeProps) => {
+export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
   const style = useOtpStyle();
   const [focus, setFocus] = useState(false);
   const refs = useRef<Array<TextInput | null>>([]);
@@ -75,5 +75,4 @@ const OtpComponent = ({num, setNum}: otpTypeProps) => {
       </ScrollView>
     </SafeAreaView>
   );
-};
-export default React.memo(OtpComponent);
+});

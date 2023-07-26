@@ -1,8 +1,9 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {CustomFonts} from '../../../../utils/fonts';
-import {COLORS} from '../../../../utils/colors';
+import {StyleSheet} from 'react-native';
+import {COLORS, CustomFonts} from '../../../../utils';
+import {useCustomTheme} from '../../../../hooks';
 
 export const styles = () => {
+  const {theme} = useCustomTheme();
   return StyleSheet.create({
     FirstSubtitleView: {
       marginTop: 24,
@@ -11,7 +12,7 @@ export const styles = () => {
       ...CustomFonts.body.regular14,
       fontSize: 18,
       fontWeight: '700',
-      color: COLORS.headingColor,
+      color: theme.textColor,
     },
     SecondSubtitle: {
       ...CustomFonts.body.regular14,
@@ -76,9 +77,24 @@ export const styles = () => {
     },
     NextBtn: {
       width: 335,
-      hieght: 50,
       marginTop: 100,
       alignSelf: 'center',
+    },
+    contentView: {
+      marginTop: 10,
+      height: 50,
+      borderRadius: 10,
+      borderWidth: 1,
+      backgroundColor: COLORS.primaryLightColor,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingLeft: 15,
+      paddingRight: 15,
+    },
+    placeholderFonts: {
+      ...CustomFonts.header.small18,
+      fontSize: 16,
     },
   });
 };
