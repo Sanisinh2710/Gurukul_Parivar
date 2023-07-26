@@ -1,11 +1,11 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {COLORS} from '../../../utils/colors';
 import {CustomFonts} from '../../../utils/fonts';
 
 export const Dropdownstyles = () => {
   return StyleSheet.create({
     container: {
-      flex: 1,
+      // flex: 1,
     },
     contentView: {
       marginTop: 8,
@@ -23,30 +23,44 @@ export const Dropdownstyles = () => {
       ...CustomFonts.header.small18,
       fontSize: 16,
     },
+    mainView: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      height: Dimensions.get('window').height,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      bottom: 0,
+    },
     modelView: {
+      height: Dimensions.get('window').height * 0.98,
+      backgroundColor: '#ffffff',
       elevation: 5,
-      marginTop: -370,
-      height: 300,
-      backgroundColor: '#fff',
-      borderRadius: 10,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
     },
     searchInput: {
+      paddingLeft: 10,
       height: 50,
-      borderColor: '#8e8e8e',
+      borderWidth: 1,
       borderRadius: 7,
-      marginTop: 20,
-      paddingLeft: 20,
+      marginBottom: 24,
+      marginHorizontal: 20,
     },
     ListView: {
-      paddingHorizontal: 20,
+      marginHorizontal: 20,
       height: 50,
       justifyContent: 'center',
-      borderBottomWidth: 0.5,
-      borderColor: '#8e8e8e',
     },
     ListFonts: {
       ...CustomFonts.header.small18,
       fontSize: 16,
+    },
+    button: {
+      backgroundColor: 'rgba(60, 60, 67, 0.3)',
+      marginTop: 10,
+      marginBottom: 10,
+      height: 5,
+      width: 36,
+      alignSelf: 'center',
     },
   });
 };

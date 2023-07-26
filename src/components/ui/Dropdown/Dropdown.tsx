@@ -2,6 +2,8 @@ import {Dispatch, SetStateAction, useRef, useState} from 'react';
 import {
   FlatList,
   Image,
+  Modal,
+  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -64,39 +66,51 @@ const Dropdown = ({
           />
         )}
       </TouchableOpacity>
-      {clicked ? (
-        <View style={styles.modelView}>
-          <TextInput
-            placeholder="Search.."
-            value={search}
-            onChangeText={txt => {
-              onSearch(txt);
-              setSearch(txt);
-            }}
-            style={styles.searchInput}
-          />
-
-          <FlatList
-            data={data}
-            renderItem={({item, index}) => {
-              return (
-                <View>
-                  <TouchableOpacity
-                    style={styles.ListView}
-                    onPress={() => {
-                      setselectedItem(item.item);
-                      setClicked(!clicked);
-                      onSearch('');
-                      setSearch('');
-                    }}>
-                    <Text style={styles.ListFonts}>{item.item}</Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={clicked}
+        onRequestClose={() => {
+          setClicked(!clicked);
+        }}>
+        <View style={styles.mainView}>
+          <View style={styles.modelView}>
+            <Pressable
+              style={styles.button}
+              onPress={() => setClicked(!clicked)}
+            />
+            <Text></Text>
+            <TextInput
+              placeholder="Search.."
+              value={search}
+              onChangeText={txt => {
+                onSearch(txt);
+                setSearch(txt);
+              }}
+              style={styles.searchInput}
+            />
+            <FlatList
+              data={data}
+              renderItem={({item, index}) => {
+                return (
+                  <View>
+                    <TouchableOpacity
+                      style={styles.ListView}
+                      onPress={() => {
+                        setselectedItem(item.item);
+                        setClicked(!clicked);
+                        onSearch('');
+                        setSearch('');
+                      }}>
+                      <Text style={styles.ListFonts}>{item.item}</Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
+          </View>
         </View>
-      ) : null}
+      </Modal>
     </View>
   );
 };
