@@ -17,6 +17,23 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
 
+  const handleLogin = () => {
+    let flag = 0;
+    for (let i = 0; i < num.length; i++) {
+      if (num[i] === '' || num[i] === undefined) {
+        flag = 1;
+        break;
+      }
+    }
+    if (flag === 1) {
+      console.log('error');
+    } else {
+      setOtp([num.join('')]);
+
+      navigation.replace('LoginSuccess');
+    }
+  };
+
   return (
     <View style={CommonStyles.container}>
       <ScreenHeader theme={undefined} showLeft={true} />
@@ -45,10 +62,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
               <Text style={style.otpResend}>{t('otpScreen:OtpResend')}</Text>
             </View>
             <CustomButton
-              onPress={() => {
-                setOtp([num.join('')]);
-                navigation.replace('LoginSuccess');
-              }}
+              onPress={handleLogin}
               textStyle={style.buttonText}
               titleColor={COLORS.white}
               buttonColor={COLORS.primaryColor}
