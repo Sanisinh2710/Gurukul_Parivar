@@ -1,15 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  Image,
-  PermissionsAndroid,
-  Platform,
-  ScrollView,
-  StyleProp,
-  Text,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Alert, Image, ScrollView, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles/common.style';
 import {ScreenHeader} from '../../../../components';
 import {useTranslation} from 'react-i18next';
@@ -27,7 +17,7 @@ const data = [
   {item: 'sdgzsd'},
 ];
 export const UploadPhoto = () => {
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const commonStyle = CommonStyle();
   const style = styles();
 
