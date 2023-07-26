@@ -1,5 +1,6 @@
 export const COLORS = {
   primaryColor: '#AC2B31',
+  primaryLightColor: 'rgba(172, 43, 49, 0.1)',
   primaryRippleColor: 'rgba(237, 74, 81,0.1)',
 
   primaryInputBackgroundColor: 'rgba(172, 43, 49, 0.05)',

@@ -38,6 +38,7 @@ export const ScreenHeader = React.memo(
         <View style={[style(theme).commonHeaderBarContent, {width: '100%'}]}>
           {showLeft !== false && !headerLeft && (
             <View
+              onTouchEnd={leftOnPress ? leftOnPress : () => {}}
               style={{
                 width: 40,
                 height: 40,
@@ -131,6 +132,7 @@ const style = (theme?: any) =>
   StyleSheet.create({
     commonHeaderBarAndroid: {
       backgroundColor: theme?.headerBarColor,
+
       //   elevation: 10,
       paddingHorizontal: 20,
       marginTop: '5%',
@@ -151,7 +153,7 @@ const style = (theme?: any) =>
     },
     commonHeaderText: {
       ...CustomFonts.header.medium20,
-      color: theme?.textPrimaryColor,
+      color: COLORS.headingColor,
       fontWeight: '500',
       fontSize: 18,
       paddingLeft: '3%',
