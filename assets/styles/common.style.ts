@@ -7,6 +7,11 @@ export const CommonStyle = () => {
       flex: 1,
       backgroundColor: COLORS.white,
       width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+    },
+
+    contentView: {
+      paddingHorizontal: 20,
     },
   });
 };
