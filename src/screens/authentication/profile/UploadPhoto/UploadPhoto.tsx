@@ -40,6 +40,8 @@ export const UploadPhoto = () => {
     uri: '',
   });
 
+  console.log(filePath.uri);
+
   const [selectedItem, setselectedItem] = useState('');
 
   return (
@@ -68,16 +70,18 @@ export const UploadPhoto = () => {
             Alert.alert('Select Image', 'From', [
               {
                 text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
+                onPress: () => {},
                 style: 'cancel',
               },
               {
                 text: 'From Gallery',
                 onPress: async () => {
                   let path = await chooseFile('photo');
-                  console.log(path, 'path');
+                  console.log(path);
 
-                  setFilePath(path);
+                  if (path) {
+                    setFilePath(path);
+                  }
                 },
               },
               {
@@ -93,7 +97,7 @@ export const UploadPhoto = () => {
           }}>
           <View style={style.photOutSideView}>
             <View style={style.photoView}>
-              {filePath.uri !== '' ? (
+              {filePath.uri !== '' && filePath.uri !== undefined ? (
                 <Image source={{uri: filePath.uri}} style={style.image} />
               ) : (
                 <Image
@@ -117,24 +121,19 @@ export const UploadPhoto = () => {
           <Text style={style.DropdownTitle}>
             {t('uploadPhoto:DropdownTitle')}
           </Text>
-          <View>
-            <Dropdown
-              dataObject={data}
-              selectedItem={selectedItem}
-              setselectedItem={setselectedItem}
-              placeholder={'Select gurukul branch'}
-            />
-          </View>
+          <Dropdown
+            dataObject={data}
+            selectedItem={selectedItem}
+            setselectedItem={setselectedItem}
+            placeholder={'Select gurukul branch'}
+          />
         </View>
-      </View>
-      <View>
         <CustomButton
           title={t('uploadPhoto:NextBtn')}
           onPress={() => {
             let previousWidth = width1.width;
             if (parseInt(previousWidth) < 100) {
               let newWidth = parseInt(previousWidth) + parseInt('20%');
-              console.log(newWidth);
               setWidth({...width1, width: newWidth.toString() + '%'});
             }
           }}

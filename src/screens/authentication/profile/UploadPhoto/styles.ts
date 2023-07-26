@@ -77,7 +77,7 @@ export const styles = () => {
     NextBtn: {
       width: 335,
       hieght: 50,
-      marginTop: 200,
+      marginTop: 100,
       alignSelf: 'center',
     },
   });
