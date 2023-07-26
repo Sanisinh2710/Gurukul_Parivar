@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {PermissionsAndroid, Platform} from 'react-native';
 
 import '../localization';

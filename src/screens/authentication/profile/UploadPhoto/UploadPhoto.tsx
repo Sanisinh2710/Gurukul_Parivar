@@ -1,18 +1,23 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Alert, Image, ScrollView, Text, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   DropDownModel,
-  Dropdown,
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
 import {COLORS, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
-import {CommonStyle} from '../../../../../assets/styles';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableOpacity} from 'react-native';
 
 const data = [
   'hello',
