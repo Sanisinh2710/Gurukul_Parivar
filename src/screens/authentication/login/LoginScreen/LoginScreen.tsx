@@ -42,6 +42,8 @@ export const LoginScreen = ({
 
   const [isLoading, setIsloading] = React.useState(false);
 
+  const [disabled, setDisabled] = React.useState(true);
+
   React.useMemo(async () => {
     setIsloading(true);
     const getLangCode = await AsyncStorage.getItem('langCode');
@@ -60,24 +62,35 @@ export const LoginScreen = ({
 
   const {
     control,
+    watch,
     reset,
     handleSubmit,
+    getValues,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(LoginValidationSchema()),
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   React.useEffect(() => {
     if (language) {
-      Object.keys(Languages).forEach(lang => {
+      for (let lang in Languages) {
         if (language === Languages[lang]) {
           i18n.changeLanguage(lang);
           AsyncStorage.setItem('langCode', JSON.stringify(lang));
+          break;
         }
-      });
+      }
     }
   }, [language]);
+
+  React.useEffect(() => {
+    if (Object.keys(errors).length === 0 && getValues('mobileNumber')) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [watch()]);
 
   const onSubmit = (data: LoginValidationSchemaType) => {
     data.mobileNumber =
@@ -143,6 +156,7 @@ export const LoginScreen = ({
             <PrimaryButton
               title={t('common:Signin')}
               onPress={handleSubmit(onSubmit)}
+              disabled={disabled}
             />
             <Text style={style.footerText}>
               {t('loginScreen:FooterText1')}{' '}

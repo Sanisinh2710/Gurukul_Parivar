@@ -8,49 +8,55 @@ import {ButtonStyles} from './style';
 type Props = {
   title: string;
   onPress: any;
+  disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
   buttonStyle?: {[key: string]: any};
   textStyle?: {[key: string]: any};
 };
-export const PrimaryButton = ({
-  title,
-  onPress,
-  buttonColor,
-  titleColor,
-  buttonStyle,
-  textStyle,
-}: Props) => {
-  const {theme} = useCustomTheme();
+export const PrimaryButton = React.memo(
+  ({
+    title,
+    onPress,
+    buttonColor,
+    titleColor,
+    buttonStyle,
+    textStyle,
+    disabled,
+  }: Props) => {
+    const {theme} = useCustomTheme();
 
-  const styles = ButtonStyles();
+    const styles = ButtonStyles();
 
-  return (
-    <View
-      onTouchEnd={onPress}
-      style={{
-        ...styles.container,
-      }}>
-      <Pressable
-        android_ripple={{
-          color: COLORS.primaryRippleColor,
-        }}
-        style={[
-          styles.pressableButtonstyle,
-          {
-            ...buttonStyle,
-            backgroundColor: buttonColor || theme.primary,
-          },
-        ]}>
-        <Text
-          style={{
-            ...styles.titleText,
-            ...textStyle,
-            color: titleColor || COLORS.darkModetextColor,
-          }}>
-          {title}
-        </Text>
-      </Pressable>
-    </View>
-  );
-};
+    return (
+      <View
+        onTouchEnd={disabled ? () => {} : onPress}
+        style={{
+          ...styles.container,
+        }}>
+        <Pressable
+          android_ripple={{
+            color: COLORS.primaryRippleColor,
+          }}
+          style={[
+            styles.pressableButtonstyle,
+            {
+              ...buttonStyle,
+              backgroundColor: disabled
+                ? '#D28F90'
+                : buttonColor || theme.primary,
+            },
+          ]}>
+          <Text
+            style={{
+              ...styles.titleText,
+              ...textStyle,
+              color: titleColor || COLORS.darkModetextColor,
+            }}>
+            {title}
+          </Text>
+        </Pressable>
+      </View>
+    );
+  },
+);

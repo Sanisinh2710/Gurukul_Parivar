@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {useCustomTheme} from '../../../hooks';
 
-export const Loader = (): React.JSX.Element => {
+export const Loader = React.memo((): React.JSX.Element => {
   const {theme} = useCustomTheme();
   return (
     <View
@@ -60,4 +60,4 @@ export const Loader = (): React.JSX.Element => {
       </View>
     </View>
   );
-};
+});

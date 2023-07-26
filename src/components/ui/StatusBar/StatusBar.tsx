@@ -10,21 +10,23 @@ type CustomStatusBarProps = {
   theme: Theme;
 };
 
-export const CustomStatusBar = ({
-  backgroundColor,
-  theme,
-  ...props
-}: CustomStatusBarProps): React.JSX.Element => {
-  const insets = useSafeAreaInsets();
+export const CustomStatusBar = React.memo(
+  ({
+    backgroundColor,
+    theme,
+    ...props
+  }: CustomStatusBarProps): React.JSX.Element => {
+    const insets = useSafeAreaInsets();
 
-  return (
-    <View style={style(backgroundColor, insets).statusBarMainView}>
-      <StatusBar
-        barStyle={theme.isDark ? 'light-content' : 'dark-content'}
-        translucent
-        backgroundColor={backgroundColor}
-        {...props}
-      />
-    </View>
-  );
-};
+    return (
+      <View style={style(backgroundColor, insets).statusBarMainView}>
+        <StatusBar
+          barStyle={theme.isDark ? 'light-content' : 'dark-content'}
+          translucent
+          backgroundColor={backgroundColor}
+          {...props}
+        />
+      </View>
+    );
+  },
+);
