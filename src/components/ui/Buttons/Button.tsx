@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, Pressable} from 'react-native';
 import {COLORS} from '../../../utils/colors';
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
   titleColor: string;
   buttonStyle: {[key: string]: any};
   textStyle: {[key: string]: any};
+  // disabled: boolean;
 };
 
 const CustomButton = ({
@@ -18,10 +19,13 @@ const CustomButton = ({
   titleColor,
   buttonStyle,
   textStyle,
-}: Props) => {
+}: // disabled,
+Props) => {
   return (
-    <View
+    <Pressable
+      // disabled={disabled}
       style={{
+        // opacity: disabled ? 0.5 : 1,
         ...styles.container,
         ...buttonStyle,
         backgroundColor: buttonColor || COLORS.primaryColor,
@@ -31,7 +35,7 @@ const CustomButton = ({
         style={{...styles.title, ...textStyle, color: titleColor || '#ffffff'}}>
         {title}
       </Text>
-    </View>
+    </Pressable>
   );
 };
 

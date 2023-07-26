@@ -11,6 +11,10 @@ export type RootAuthStackParamList = {
   LoginSuccess: undefined;
   UploadPhoto: undefined;
 };
+export type LoginOtpScreenProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'MobileLoginOTP'
+>;
 
 export type LoginSuccessStackScreenProps = NativeStackScreenProps<
   RootAuthStackParamList,

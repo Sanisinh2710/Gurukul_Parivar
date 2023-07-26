@@ -24,6 +24,14 @@
     "BottomSubtitle2":"Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
     "DropdownTitle": "Gurukul Branch",
     "NextBtn":"Next"
+  },
+  "otpScreen":{
+    "OtpHeader" : "OTP Verification",
+    "OtpSubtext": "Please verify your mobile number to procced",
+    "OtpContainerText": "An OTP has been sent to mobile number",
+    "OtpNotRecieve": "Didn't recieve code?",
+    "OtpResend": "Resend",
+    "Verify&Login":"Verify & Login"
   }
 
 }
