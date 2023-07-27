@@ -1,7 +1,8 @@
 {
   "common": {
     "Signin": "સાઇન ઇન કરો",
-    "Search": "શોધો"
+    "Search": "શોધો",
+    "Reset": "રીસેટ"
   },
   "loginScreen": {
     "WelcomeTitle1": "આપનું સ્વાગત છે",

@@ -282,3 +282,24 @@ export const Languages: {[key: string]: string} = {
   gu: 'Gujarati',
   hn: 'Hindi',
 };
+
+export const GuruKulList = [
+  'Ahmedabad Gurukul: Memnagar',
+  'Ahmedabad Gurukul: Nikol',
+  'Ahmedabad Gurukul: Santigram',
+  'America Gurukul',
+  'Atlanta Gurukul',
+  'Austin',
+  'Bangalore Gurukul',
+  'Bhavnagar Gurukul',
+  'Bhayavadar Gurukul',
+  'Bidar Gurukul',
+  'Boise',
+  'Boston',
+];
+
+export const AllCountryCodes = [
+  ...countries.map(item => {
+    return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
+  }),
+];

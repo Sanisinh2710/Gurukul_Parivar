@@ -1,7 +1,8 @@
 {
   "common": {
     "Signin": "Sign in",
-    "Search": "Search"
+    "Search": "Search",
+    "Reset": "Reset"
   },
   "loginScreen": {
     "WelcomeTitle1": "Welcome to",

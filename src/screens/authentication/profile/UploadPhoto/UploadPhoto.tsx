@@ -16,36 +16,13 @@ import {
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
-import {COLORS, captureImage, chooseFile} from '../../../../utils';
+import {COLORS, GuruKulList, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
 
-const data = [
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-];
 export const UploadPhoto = () => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   const style = styles();
-
-  const [modelVisible, setModelVisible] = React.useState(false);
-  const [searchvalue, setSearch] = React.useState('');
-
-  const [searchdata, setSearchData] = React.useState([...data]);
 
   const [width1, setWidth] = React.useState<any>({
     height: 5,
@@ -55,31 +32,10 @@ export const UploadPhoto = () => {
   const [filePath, setFilePath] = React.useState<{uri: string | undefined}>({
     uri: '',
   });
+
+  const [modelVisible, setModelVisible] = React.useState(false);
+
   const [selectedItem, setselectedItem] = React.useState('');
-
-  React.useEffect(() => {
-    let temp = [...data];
-
-    if (
-      searchvalue !== null &&
-      searchvalue !== undefined &&
-      searchvalue !== ''
-    ) {
-      let abc = temp.filter((mainitem: any) => {
-        if (
-          mainitem
-            .toString()
-            .toLowerCase()
-            .includes(searchvalue.trim().toLowerCase())
-        ) {
-          return mainitem;
-        }
-      });
-      setSearchData(abc);
-    } else {
-      setSearchData([...data]);
-    }
-  }, [searchvalue]);
 
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
@@ -87,7 +43,6 @@ export const UploadPhoto = () => {
         <View style={width1} />
       </View>
       <ScreenHeader
-        theme={undefined}
         showLeft={true}
         headerTitle={t('uploadPhoto:HederText')}
         headerTitleAlign="center"
@@ -197,17 +152,15 @@ export const UploadPhoto = () => {
           </View>
         </View>
         <DropDownModel
-          inputList={searchdata}
-          localVal={selectedItem}
-          setLocalVal={setselectedItem}
+          inputList={[...GuruKulList]}
+          selectedItem={selectedItem}
+          setSelectedItem={setselectedItem}
           label="Select gurukul branch"
           wantSearchBar={true}
           modalHeight="90%"
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
           type={'none'}
-          searchvalue={searchvalue}
-          setSearchValue={setSearch}
         />
       </ScrollView>
     </SafeAreaView>

@@ -1,14 +1,15 @@
 import React from 'react';
+
+import {useTranslation} from 'react-i18next';
 import {Pressable, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/Feather';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   OtpComponent,
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
-import {CommonStyle} from '../../../../../assets/styles';
-import Icon from 'react-native-vector-icons/Feather';
-import {COLORS} from '../../../../utils';
-import {useTranslation} from 'react-i18next';
 import {LoginOtpScreenProps} from '../../../../types';
 import {styles} from './styles';
 
@@ -21,6 +22,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(true);
   const [disabled, setDisabled] = React.useState(false);
+
   const handleLogin = () => {
     let flag = 0;
 
@@ -71,9 +73,14 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       .padStart(2, '0')}`;
   };
   return (
-    <View style={CommonStyles.commonContainer}>
-      <ScreenHeader theme={undefined} showLeft={true} />
-      <View style={style.container}>
+    <SafeAreaView style={CommonStyles.commonContainer}>
+      <ScreenHeader
+        showLeft={true}
+        leftOnPress={() => {
+          navigation.goBack();
+        }}
+      />
+      <View style={CommonStyles.commonContentView}>
         <View style={style.textWrapper}>
           <Text style={style.headerText}>{t('otpScreen:OtpHeader')}</Text>
           <Text style={style.headerSubText}>{t('otpScreen:OtpSubtext')}</Text>
@@ -109,16 +116,12 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
             </View>
             <PrimaryButton
               onPress={handleLogin}
-              textStyle={style.buttonText}
-              titleColor={COLORS.white}
-              buttonColor={COLORS.primaryColor}
               title={t('otpScreen:Verify&Login')}
-              buttonStyle={style.buttonStyle}
               disabled={disabled}
             />
           </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };

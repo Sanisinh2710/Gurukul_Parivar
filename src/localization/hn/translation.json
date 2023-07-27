@@ -1,7 +1,8 @@
 {
   "common": {
     "Signin": "दाखिल करना",
-    "Search": "खोजे"
+    "Search": "खोजे",
+    "Reset": "रीसेट"
   },
   "loginScreen": {
     "WelcomeTitle1": "आपका स्वागत है",
