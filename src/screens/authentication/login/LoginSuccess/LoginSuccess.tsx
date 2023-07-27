@@ -14,25 +14,25 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
 
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
-      <View>
-        <View>
-          <ScreenHeader
-            theme={undefined}
-            showLeft={true}
-            headerTitleAlign="center"
-            leftOnPress={() => navigation.goBack()}
-          />
-        </View>
-        <View style={style.container}>
+      <ScreenHeader
+        theme={undefined}
+        showLeft={true}
+        headerTitleAlign="center"
+        leftOnPress={() => navigation.goBack()}
+      />
+      <View style={commonStyle.commonContentView}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           <View style={style.logoView}>
             <Image
               source={require('../../../../../assets/images/logo.png')}
               style={style.logo}
             />
           </View>
-          <View>
-            <Text style={style.title}>{t('loginSuccess:LoginSuccess')}</Text>
-          </View>
+          <Text style={style.title}>{t('loginSuccess:LoginSuccess')}</Text>
           <View style={style.subtitleView}>
             <Text style={style.subtitle}>
               {t('loginSuccess:SuccessSubtitle')}

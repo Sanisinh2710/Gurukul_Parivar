@@ -20,18 +20,20 @@ export const styles = () => {
     },
     title: {
       ...CustomFonts.body.regular14,
+      marginTop: 12,
       fontSize: 30,
+      lineHeight: 40,
       fontWeight: '700',
       color: theme.textColor,
     },
     subtitleView: {
-      marginTop: 5,
+      marginTop: 10,
     },
     subtitle: {
       ...CustomFonts.body.medium12,
       fontSize: 16,
       color: theme.textColor,
-      lineHeight: 21,
+      lineHeight: 21.6,
       fontWeight: '400',
     },
   });
