@@ -19,9 +19,9 @@ export const AuthStackNavigator = (): React.JSX.Element => {
         animation: 'flip',
         headerShown: false,
       }}>
-      {/* <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
+      <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
       <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
-      <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} /> */}
+      <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
       <AuthStack.Screen name="UploadPhoto" component={UploadPhoto} />
     </AuthStack.Navigator>
   );
