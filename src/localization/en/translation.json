@@ -33,6 +33,7 @@
     "BottomSubtitle1": "Which Gurukul Branch Do You Visit Regularly?",
     "BottomSubtitle2": "Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
     "DropdownTitle": "Gurukul Branch",
+    "DropdownLable": "Select gurukul branch",
     "NextBtn": "Next"
   },
   "otpScreen": {

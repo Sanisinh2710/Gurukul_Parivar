@@ -4,6 +4,15 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import {useCustomTheme} from '../../../hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
+/* ----Memo takes second callback to determine whether previos and new state is same or not..!
+ (prev, next) => {
+  if (prev.headerRight?.icon === next.headerRight?.icon) {
+    return true;
+  }
+  return false;
+},
+*/
+
 type ScreenHeaderProps = {
   headerTitle?: string;
   showLeft: boolean;
@@ -40,7 +49,7 @@ export const ScreenHeader = React.memo(
           <View
             onTouchEnd={leftOnPress ? leftOnPress : () => {}}
             style={{
-              width: showLeft === false && !headerRight ? '0%' : '12%',
+              width: showLeft === false && !headerRight ? '0%' : '11.5%',
               height: 40,
               overflow: 'hidden',
               alignItems: 'center',
@@ -124,12 +133,6 @@ export const ScreenHeader = React.memo(
         </View>
       </View>
     );
-  },
-  (prev, next) => {
-    if (prev.headerRight?.icon === next.headerRight?.icon) {
-      return true;
-    }
-    return false;
   },
 );
 

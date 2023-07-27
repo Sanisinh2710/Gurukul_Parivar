@@ -2,12 +2,14 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   Alert,
+  Dimensions,
   Image,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import * as Progress from 'react-native-progress';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -24,28 +26,34 @@ export const UploadPhoto = () => {
   const commonStyle = CommonStyle();
   const style = styles();
 
-  const [width1, setWidth] = React.useState<any>({
-    height: 5,
-    width: '20%',
-    backgroundColor: COLORS.primaryColor,
-  });
+  const [width, setwidth] = React.useState(20);
+
+  const [modelVisible, setModelVisible] = React.useState(false);
   const [filePath, setFilePath] = React.useState<{uri: string | undefined}>({
     uri: '',
   });
-
-  const [modelVisible, setModelVisible] = React.useState(false);
 
   const [selectedItem, setselectedItem] = React.useState('');
 
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
-      <View style={{height: 5, backgroundColor: '#E5E5E5'}}>
-        <View style={width1} />
-      </View>
+      <Progress.Bar
+        progress={width / 100}
+        width={Dimensions.get('window').width}
+        borderRadius={0}
+        color={COLORS.primaryColor}
+        unfilledColor={COLORS.unfilledProgressbar}
+        borderWidth={0}
+      />
       <ScreenHeader
         showLeft={true}
         headerTitle={t('uploadPhoto:HederText')}
         headerTitleAlign="center"
+        leftOnPress={() => {
+          if (width > 20) {
+            setwidth(width - 20);
+          }
+        }}
       />
       <ScrollView>
         <View style={commonStyle.commonContentView}>
@@ -121,7 +129,9 @@ export const UploadPhoto = () => {
                 setModelVisible(!modelVisible);
               }}>
               <Text style={style.placeholderFonts}>
-                {selectedItem == '' ? 'Select gurukul branch' : selectedItem}
+                {selectedItem == ''
+                  ? t('uploadPhoto:DropdownLable')
+                  : selectedItem}
               </Text>
               {modelVisible ? (
                 <MaterialCommunityIcon
@@ -142,10 +152,8 @@ export const UploadPhoto = () => {
             <PrimaryButton
               title={t('uploadPhoto:NextBtn')}
               onPress={() => {
-                let previousWidth = width1.width;
-                if (parseInt(previousWidth) < 100) {
-                  let newWidth = parseInt(previousWidth) + parseInt('20%');
-                  setWidth({...width1, width: newWidth.toString() + '%'});
+                if (width < 100) {
+                  setwidth(width + 20);
                 }
               }}
             />
@@ -155,9 +163,9 @@ export const UploadPhoto = () => {
           inputList={[...GuruKulList]}
           selectedItem={selectedItem}
           setSelectedItem={setselectedItem}
-          label="Select gurukul branch"
+          label={t('uploadPhoto:DropdownLable')}
           wantSearchBar={true}
-          modalHeight="90%"
+          modalHeight="95%"
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
           type={'none'}

@@ -21,7 +21,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(true);
-  const [disabled, setDisabled] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
 
   const handleLogin = () => {
     let flag = 0;
@@ -85,41 +85,35 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
           <Text style={style.headerText}>{t('otpScreen:OtpHeader')}</Text>
           <Text style={style.headerSubText}>{t('otpScreen:OtpSubtext')}</Text>
         </View>
-        <View>
-          <View style={style.otpContainer}>
-            <Text style={style.otpContainerHeader}>
-              {t('otpScreen:OtpContainerText')}
-            </Text>
-            <View style={style.phoneEditContainer}>
-              <Text style={style.phoneNumber}>+91-9876543210</Text>
-              <View style={style.editIconStyle}>
-                <Icon name="edit-3" size={14} />
-              </View>
+        <View style={style.otpContainer}>
+          <Text style={style.otpContainerHeader}>
+            {t('otpScreen:OtpContainerText')}
+          </Text>
+          <View style={style.phoneEditContainer}>
+            <Text style={style.phoneNumber}>+91-9876543210</Text>
+            <View style={style.editIconStyle}>
+              <Icon name="edit-3" size={14} />
             </View>
-
-            <OtpComponent num={num} setNum={setNum} />
-
-            <View style={style.otpNotRecieveContainer}>
-              <Text style={style.smallText}>
-                {t('otpScreen:OtpNotRecieve')}{' '}
-              </Text>
-
-              {countdown > 0 ? (
-                <Text style={style.otpResend}>{formatTime(countdown)}</Text>
-              ) : (
-                <Pressable onPress={handleResendOTP}>
-                  <Text style={style.otpResend}>
-                    {t('otpScreen:OtpResend')}
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-            <PrimaryButton
-              onPress={handleLogin}
-              title={t('otpScreen:Verify&Login')}
-              disabled={disabled}
-            />
           </View>
+
+          <OtpComponent num={num} setNum={setNum} />
+
+          <View style={style.otpNotRecieveContainer}>
+            <Text style={style.smallText}>{t('otpScreen:OtpNotRecieve')} </Text>
+
+            {countdown > 0 ? (
+              <Text style={style.otpResend}>{formatTime(countdown)}</Text>
+            ) : (
+              <Pressable onPress={handleResendOTP}>
+                <Text style={style.otpResend}>{t('otpScreen:OtpResend')}</Text>
+              </Pressable>
+            )}
+          </View>
+          <PrimaryButton
+            onPress={handleLogin}
+            title={t('otpScreen:Verify&Login')}
+            disabled={disabled}
+          />
         </View>
       </View>
     </SafeAreaView>
