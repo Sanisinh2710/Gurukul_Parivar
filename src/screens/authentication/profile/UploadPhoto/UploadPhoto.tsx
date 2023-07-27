@@ -168,7 +168,7 @@ export const UploadPhoto = () => {
           modalHeight="95%"
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          type={'none'}
+          type={'simple'}
         />
       </ScrollView>
     </SafeAreaView>
