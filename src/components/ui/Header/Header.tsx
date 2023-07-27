@@ -2,6 +2,7 @@ import React from 'react';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS, CustomFonts} from '../../../utils';
+import {useCustomTheme} from '../../../hooks';
 
 type ScreenHeaderProps = {
   theme: any;
