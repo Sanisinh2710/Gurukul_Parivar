@@ -1,10 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {CommonStyle} from '../../../../../assets/styles';
 import {PrimaryButton, ScreenHeader} from '../../../../components';
 import {LoginSuccessStackScreenProps} from '../../../../types';
 import {styles} from './styles';
-import {CommonStyle} from '../../../../../assets/styles';
 
 export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const commonStyle = CommonStyle();
@@ -12,39 +13,40 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const {t, i18n} = useTranslation();
 
   return (
-    <View style={commonStyle.commonContainer}>
-      <View>
-        <ScreenHeader
-          theme={undefined}
-          showLeft={true}
-          headerTitleAlign="center"
-          leftOnPress={() => navigation.goBack()}
-        />
-      </View>
-      <View style={style.container}>
-        <View style={style.logoView}>
-          <Image
-            source={require('../../../../../assets/images/logo.png')}
-            style={style.logo}
-          />
-        </View>
-        <View>
+    <SafeAreaView style={commonStyle.commonContainer}>
+      <ScreenHeader
+        showLeft={true}
+        headerTitleAlign="center"
+        leftOnPress={() => navigation.goBack()}
+      />
+      <View style={commonStyle.commonContentView}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View style={style.logoView}>
+            <Image
+              source={require('../../../../../assets/images/logo.png')}
+              style={style.logo}
+            />
+          </View>
           <Text style={style.title}>{t('loginSuccess:LoginSuccess')}</Text>
-        </View>
-        <View style={style.subtitleView}>
-          <Text style={style.subtitle}>
-            {t('loginSuccess:SuccessSubtitle')}
-          </Text>
-          <Text style={[style.subtitle, {textAlign: 'center'}]}>
-            {t('loginSuccess:SuccessSubtitle2')}
-          </Text>
-          <PrimaryButton
-            title={t('loginSuccess:LoginSuccessBTN')}
-            onPress={() => navigation.replace('UploadPhoto')}
-            buttonStyle={{marginTop: 40}}
-          />
+          <View style={style.subtitleView}>
+            <Text style={style.subtitle}>
+              {t('loginSuccess:SuccessSubtitle')}
+            </Text>
+            <Text style={[style.subtitle, {textAlign: 'center'}]}>
+              {t('loginSuccess:SuccessSubtitle2')}
+            </Text>
+            <PrimaryButton
+              title={t('loginSuccess:LoginSuccessBTN')}
+              onPress={() => navigation.replace('UploadPhoto')}
+              buttonStyle={{marginTop: 40}}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };

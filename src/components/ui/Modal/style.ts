@@ -24,7 +24,7 @@ export const ModalStyle = (modalHeight: any) => {
       borderTopRightRadius: 24,
       backgroundColor: 'rgba(255, 255, 255, 1)',
     },
-    modelCloserMainView: {height: 20},
+    modelCloserMainView: {height: 40},
     modelCloserView: {
       width: 50,
       height: 5,
@@ -38,9 +38,16 @@ export const ModalStyle = (modalHeight: any) => {
       fontWeight: '700',
       color: COLORS.lightModetextColor,
     },
+    modelValueResetText: {
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      fontWeight: '500',
+      color: COLORS.lightModetextColor,
+      opacity: 0.5,
+    },
     modelInnerView: {
       elevation: 5,
-      marginTop: 35,
+      marginTop: 20,
       paddingHorizontal: 30,
     },
     modelSearchView: {

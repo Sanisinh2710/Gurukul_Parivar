@@ -282,3 +282,47 @@ export const Languages: {[key: string]: string} = {
   gu: 'Gujarati',
   hn: 'Hindi',
 };
+
+export const GuruKulList = [
+  'Ahmedabad Gurukul: Memnagar',
+  'Ahmedabad Gurukul: Nikol',
+  'Ahmedabad Gurukul: Santigram',
+  'America Gurukul',
+  'Atlanta Gurukul',
+  'Austin',
+  'Bangalore Gurukul',
+  'Bhavnagar Gurukul',
+  'Bhayavadar Gurukul',
+  'Bidar Gurukul',
+  'Boise',
+  'Boston',
+];
+
+export const AllCountryCodes = [
+  ...countries.map(item => {
+    return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
+  }),
+];
+
+export const FrontDesk = [
+  {
+    image: require('../../assets/icons/Paper.png'),
+    title: 'Go Form',
+  },
+  {
+    image: require('../../assets/icons/Chat.png'),
+    title: 'Special Speech',
+  },
+  {
+    image: require('../../assets/icons/Video.png'),
+    title: 'Gurukul Darshan',
+  },
+  {
+    image: require('../../assets/icons/Ticket.png'),
+    title: 'Gurukul Events',
+  },
+  {
+    image: require('../../assets/icons/Star.png'),
+    title: 'Daily Quiz',
+  },
+];

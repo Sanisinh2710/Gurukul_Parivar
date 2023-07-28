@@ -1,7 +1,8 @@
 {
   "common": {
     "Signin": "Sign in",
-    "Search": "Search"
+    "Search": "Search",
+    "Reset": "Reset"
   },
   "loginScreen": {
     "WelcomeTitle1": "Welcome to",
@@ -32,6 +33,7 @@
     "BottomSubtitle1": "Which Gurukul Branch Do You Visit Regularly?",
     "BottomSubtitle2": "Please let us know the nearest gurukul branch so that we can keep you updated about various social events and Utsav information's.",
     "DropdownTitle": "Gurukul Branch",
+    "DropdownLable": "Select gurukul branch",
     "NextBtn": "Next"
   },
   "otpScreen": {
@@ -41,5 +43,10 @@
     "OtpNotRecieve": "Didn't recieve code?",
     "OtpResend": "Resend",
     "Verify&Login": "Verify & Login"
+  },
+  "HomeScreen":{
+    "WelcomeText1":"Hello",
+    "Name":"Maheshbhai",
+    "WelcomeText2":"Have a Great Day"
   }
 }

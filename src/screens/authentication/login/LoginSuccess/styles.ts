@@ -1,11 +1,13 @@
 import {StyleSheet} from 'react-native';
 import {COLORS, CustomFonts} from '../../../../utils';
+import {useCustomTheme} from '../../../../hooks';
 
 export const styles = () => {
+  const {theme} = useCustomTheme();
+
   return StyleSheet.create({
     container: {
       alignItems: 'center',
-      backgroundColor: '#ffffff',
     },
     logoView: {
       marginTop: 100,
@@ -18,18 +20,20 @@ export const styles = () => {
     },
     title: {
       ...CustomFonts.body.regular14,
+      marginTop: 12,
       fontSize: 30,
+      lineHeight: 40,
       fontWeight: '700',
-      color: COLORS.headingColor,
+      color: theme.textColor,
     },
     subtitleView: {
-      marginTop: 5,
+      marginTop: 10,
     },
     subtitle: {
       ...CustomFonts.body.medium12,
       fontSize: 16,
-      color: COLORS.black,
-      lineHeight: 21,
+      color: theme.textColor,
+      lineHeight: 21.6,
       fontWeight: '400',
     },
   });

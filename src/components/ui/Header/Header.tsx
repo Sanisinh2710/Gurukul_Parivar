@@ -1,10 +1,26 @@
 import React from 'react';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  Dimensions,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useCustomTheme} from '../../../hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
+/* ----Memo takes second callback to determine whether previos and new state is same or not..!
+ (prev, next) => {
+  if (prev.headerRight?.icon === next.headerRight?.icon) {
+    return true;
+  }
+  return false;
+},
+*/
+
 type ScreenHeaderProps = {
-  theme: any;
   headerTitle?: string;
   showLeft: boolean;
   headerLeft?: React.JSX.Element;
@@ -13,13 +29,12 @@ type ScreenHeaderProps = {
   headerRight?: {
     icon: any;
     onPress: () => void;
-  }[];
+  };
   leftOnPress?: () => void;
 };
 
 export const ScreenHeader = React.memo(
   ({
-    theme,
     headerTitle,
     showLeft,
     headerLeft,
@@ -28,6 +43,8 @@ export const ScreenHeader = React.memo(
     headerRight,
     leftOnPress,
   }: ScreenHeaderProps) => {
+    const {theme} = useCustomTheme();
+
     return (
       <View
         style={[
@@ -36,89 +53,104 @@ export const ScreenHeader = React.memo(
             : style(theme).commonHeaderBarIOS,
         ]}>
         <View style={[style(theme).commonHeaderBarContent, {width: '100%'}]}>
-          {showLeft !== false && !headerLeft && (
-            <View
-              onTouchEnd={leftOnPress ? leftOnPress : () => {}}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 60,
-                backgroundColor: COLORS.leftArrowBg,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Icon name="arrow-left" size={25} color={COLORS.black} />
-            </View>
-          )}
+          <View
+            onTouchEnd={leftOnPress ? leftOnPress : () => {}}
+            style={{
+              width:
+                showLeft === false && !headerRight
+                  ? '0%'
+                  : headerTitleAlign === 'left' && showLeft === false
+                  ? '0%'
+                  : showLeft === false && headerRight
+                  ? '11.5%'
+                  : '11.5%',
+              height: 40,
+              overflow: 'hidden',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {showLeft && !headerLeft && (
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 60,
+                  backgroundColor: COLORS.leftArrowBg,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <MaterialCommunityIcon
+                  name="arrow-left"
+                  size={25}
+                  color={COLORS.black}
+                />
+              </View>
+            )}
+            {showLeft && headerLeft && <View>{headerLeft}</View>}
+          </View>
 
-          {showLeft !== false && headerLeft && (
-            <View onTouchEnd={leftOnPress ? leftOnPress : () => {}}>
-              {headerLeft}
-            </View>
-          )}
-
-          {headerTitleAlign === 'center' ? (
-            <View
-              style={{
-                width: '80%',
-                justifyContent: 'center',
+          <View
+            style={[
+              {
+                width: showLeft
+                  ? '76%'
+                  : !headerRight
+                  ? '100%'
+                  : headerTitleAlign === 'left'
+                  ? '88%'
+                  : '76%',
+                justifyContent:
+                  headerTitleAlign === 'center' ? 'center' : 'flex-start',
                 alignItems: 'center',
                 flexDirection: 'row',
-              }}>
-              {headerTitle ? (
-                <Text
-                  style={[
-                    style(theme).commonHeaderText,
-                    {textAlign: 'center'},
-                  ]}>
-                  {headerTitle}
-                </Text>
-              ) : (
-                customTitle
-              )}
-            </View>
-          ) : headerLeft ? (
-            <>
-              {headerTitle ? (
-                <Text style={style(theme).commonHeaderText}>{headerTitle}</Text>
-              ) : (
-                customTitle
-              )}
-            </>
-          ) : headerTitle ? (
-            <Text style={[style(theme).commonHeaderText, {paddingLeft: 0}]}>
-              {headerTitle}
-            </Text>
-          ) : (
-            customTitle && customTitle
-          )}
+              },
+              headerTitleAlign === 'left' && {
+                paddingLeft: 12,
+              },
+            ]}>
+            {headerLeft ? (
+              <>
+                {headerTitle ? (
+                  <Text style={style(theme).commonHeaderText}>
+                    {headerTitle}
+                  </Text>
+                ) : (
+                  customTitle
+                )}
+              </>
+            ) : headerTitle ? (
+              <Text style={[style(theme).commonHeaderText, {paddingLeft: 0}]}>
+                {headerTitle}
+              </Text>
+            ) : (
+              customTitle && customTitle
+            )}
+          </View>
 
           <View
             style={{
-              flex: 1,
               flexDirection: 'row',
               justifyContent: 'center',
-              width: '10%',
+              width: '12%',
               alignItems: 'center',
             }}>
             {headerRight && (
               <View
+                onTouchEnd={headerRight.onPress}
                 style={{
                   flex: 1,
                   flexDirection: 'row',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 60,
+                  backgroundColor: COLORS.primaryLightColor,
+                  height: 40,
+                  width: 40,
                 }}>
-                {headerRight.map((icons, index) => {
-                  return (
-                    <></>
-                    // <RoundedIcon
-                    //   key={index}
-                    //   theme={theme}
-                    //   icon={icons.icon}
-                    //   onPress={icons.onPress}
-                    // />
-                  );
-                })}
+                <Image
+                  source={headerRight.icon}
+                  style={{height: 24, width: 24}}
+                />
               </View>
             )}
           </View>

@@ -11,6 +11,7 @@ export const CommonStyle = () => {
     },
     commonContentView: {
       paddingHorizontal: 20,
+      // backgroundColor: 'red',
     },
   });
 };

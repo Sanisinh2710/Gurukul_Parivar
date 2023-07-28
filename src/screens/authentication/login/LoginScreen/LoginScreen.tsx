@@ -1,7 +1,7 @@
-import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
@@ -33,15 +33,15 @@ export const LoginScreen = ({
 
   const style = LoginScreenstyle();
 
-  const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
+  const [isLoading, setIsloading] = React.useState(false);
+
+  const [disabled, setDisabled] = React.useState(true);
 
   const [modelVisible, setModelVisible] = React.useState<boolean>(false);
 
   const [language, setLanguage] = React.useState(Languages.gu);
 
-  const [isLoading, setIsloading] = React.useState(false);
-
-  const [disabled, setDisabled] = React.useState(true);
+  const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
 
   React.useMemo(async () => {
     setIsloading(true);
@@ -182,8 +182,8 @@ export const LoginScreen = ({
           inputList={Object.values(Languages)}
           wantSearchBar={false}
           type={'radio'}
-          localVal={language}
-          setLocalVal={setLanguage}
+          selectedItem={language}
+          setSelectedItem={setLanguage}
           modalHeight={'45%'}
           label={t('loginScreen:SelectLangLabel')}
         />

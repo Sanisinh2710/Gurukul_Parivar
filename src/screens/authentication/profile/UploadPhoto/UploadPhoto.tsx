@@ -2,12 +2,14 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   Alert,
+  Dimensions,
   Image,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import * as Progress from 'react-native-progress';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -16,82 +18,42 @@ import {
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
-import {UploadPhotoScreenProps} from '../../../../types';
-import {COLORS, captureImage, chooseFile} from '../../../../utils';
+import {COLORS, GuruKulList, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
 
-const data = [
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-  'hello',
-  'jsid',
-  'hiii',
-  'sdgzsd',
-];
-export const UploadPhoto = ({navigation}: UploadPhotoScreenProps) => {
+export const UploadPhoto = () => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   const style = styles();
 
+  const [width, setwidth] = React.useState(20);
+
   const [modelVisible, setModelVisible] = React.useState(false);
-  const [searchvalue, setSearch] = React.useState('');
-
-  const [searchdata, setSearchData] = React.useState([...data]);
-
-  const [width1, setWidth] = React.useState<any>({
-    height: 5,
-    width: '20%',
-    backgroundColor: COLORS.primaryColor,
-  });
   const [filePath, setFilePath] = React.useState<{uri: string | undefined}>({
     uri: '',
   });
+
   const [selectedItem, setselectedItem] = React.useState('');
-
-  React.useEffect(() => {
-    let temp = [...data];
-
-    if (
-      searchvalue !== null &&
-      searchvalue !== undefined &&
-      searchvalue !== ''
-    ) {
-      let abc = temp.filter((mainitem: any) => {
-        if (
-          mainitem
-            .toString()
-            .toLowerCase()
-            .includes(searchvalue.trim().toLowerCase())
-        ) {
-          return mainitem;
-        }
-      });
-      setSearchData(abc);
-    } else {
-      setSearchData([...data]);
-    }
-  }, [searchvalue]);
 
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
-      <View style={{height: 5, backgroundColor: '#E5E5E5'}}>
-        <View style={width1} />
-      </View>
+      <Progress.Bar
+        progress={width / 100}
+        width={Dimensions.get('window').width}
+        borderRadius={0}
+        color={COLORS.primaryColor}
+        unfilledColor={COLORS.unfilledProgressbar}
+        borderWidth={0}
+      />
       <ScreenHeader
-        theme={undefined}
         showLeft={true}
         headerTitle={t('uploadPhoto:HederText')}
         headerTitleAlign="center"
+        leftOnPress={() => {
+          if (width > 20) {
+            setwidth(width - 20);
+          }
+        }}
       />
       <ScrollView>
         <View style={commonStyle.commonContentView}>
@@ -167,7 +129,9 @@ export const UploadPhoto = ({navigation}: UploadPhotoScreenProps) => {
                 setModelVisible(!modelVisible);
               }}>
               <Text style={style.placeholderFonts}>
-                {selectedItem == '' ? 'Select gurukul branch' : selectedItem}
+                {selectedItem == ''
+                  ? t('uploadPhoto:DropdownLable')
+                  : selectedItem}
               </Text>
               {modelVisible ? (
                 <MaterialCommunityIcon
@@ -188,27 +152,23 @@ export const UploadPhoto = ({navigation}: UploadPhotoScreenProps) => {
             <PrimaryButton
               title={t('uploadPhoto:NextBtn')}
               onPress={() => {
-                let previousWidth = width1.width;
-                if (parseInt(previousWidth) < 100) {
-                  let newWidth = parseInt(previousWidth) + parseInt('20%');
-                  setWidth({...width1, width: newWidth.toString() + '%'});
+                if (width < 100) {
+                  setwidth(width + 20);
                 }
               }}
             />
           </View>
         </View>
         <DropDownModel
-          inputList={searchdata}
-          localVal={selectedItem}
-          setLocalVal={setselectedItem}
-          label="Select gurukul branch"
+          inputList={[...GuruKulList]}
+          selectedItem={selectedItem}
+          setSelectedItem={setselectedItem}
+          label={t('uploadPhoto:DropdownLable')}
           wantSearchBar={true}
-          modalHeight="90%"
+          modalHeight="95%"
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          type={'none'}
-          searchvalue={searchvalue}
-          setSearchValue={setSearch}
+          type={'simple'}
         />
       </ScrollView>
     </SafeAreaView>

@@ -16,5 +16,8 @@ export const styles = () => {
       borderBottomRightRadius: 4,
       borderBottomLeftRadius: 4,
     },
+    // barContainer: {
+    //   height: 60,
+    // },
   });
 };

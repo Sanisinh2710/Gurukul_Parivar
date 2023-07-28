@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useCustomTheme} from '../../../hooks';
-import {countries} from '../../../utils';
+import {AllCountryCodes, countries} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
@@ -36,8 +36,6 @@ export const PhoneDropdownInput = React.memo(
 
     const [modelVisible, setModelVisible] = React.useState(false);
 
-    const [searchvalue, setSearchValue] = React.useState<string>('');
-
     const [localval, setLocalVal] = React.useState(
       '+' +
         countries.find(val => val.iso === 'IN' && val)?.code +
@@ -45,41 +43,6 @@ export const PhoneDropdownInput = React.memo(
         countries.find(val => val.iso === 'IN' && val)?.iso +
         ')',
     );
-
-    const [countryCodeList, setCountryCodeList] = React.useState<string[]>([]);
-
-    React.useEffect(() => {
-      let temp = [
-        ...countries.map(item => {
-          return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
-        }),
-      ];
-
-      if (
-        searchvalue !== null &&
-        searchvalue !== undefined &&
-        searchvalue !== ''
-      ) {
-        let abc = temp.filter((mainitem: any) => {
-          if (
-            mainitem
-              .toString()
-              .toLowerCase()
-              .includes(searchvalue.trim().toLowerCase())
-          ) {
-            return mainitem;
-          }
-        });
-
-        setCountryCodeList(abc);
-      } else {
-        setCountryCodeList([
-          ...countries.map(item => {
-            return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
-          }),
-        ]);
-      }
-    }, [searchvalue]);
 
     React.useEffect(() => {
       if (state) {
@@ -95,7 +58,22 @@ export const PhoneDropdownInput = React.memo(
           }}
           style={style.phoneDropFirstView}>
           <Text style={style.phoneDropFirstViewText}>
-            {state?.countryCodeSelect}
+            {state?.countryCodeSelect?.split(' ')?.[0] +
+              state?.countryCodeSelect?.split(' ')?.[1] !==
+              undefined &&
+            state?.countryCodeSelect?.split(' ')?.[0] +
+              state?.countryCodeSelect?.split(' ')?.[1] !==
+              '' &&
+            state?.countryCodeSelect?.split(' ')?.[0] +
+              state?.countryCodeSelect?.split(' ')?.[1] !==
+              'undefined'
+              ? state?.countryCodeSelect?.split(' ')?.[0] +
+                state?.countryCodeSelect?.split(' ')?.[1]
+              : '+' +
+                countries.find(val => val.iso === 'IN' && val)?.code +
+                ' (' +
+                countries.find(val => val.iso === 'IN' && val)?.iso +
+                ')'}
           </Text>
           <MaterialCommunityIcon
             name={modelVisible ? 'chevron-up' : 'chevron-down'}
@@ -122,13 +100,11 @@ export const PhoneDropdownInput = React.memo(
         <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          searchvalue={searchvalue}
-          setSearchValue={setSearchValue}
-          inputList={countryCodeList}
+          inputList={AllCountryCodes}
           wantSearchBar={true}
           type={'phone'}
-          localVal={localval}
-          setLocalVal={setLocalVal}
+          selectedItem={localval}
+          setSelectedItem={setLocalVal}
           modalHeight={'90%'}
           label={t('loginScreen:SelectCountryLabel')}
         />

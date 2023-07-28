@@ -79,6 +79,7 @@ const BottomTabNavigator = () => {
         tabBarShowLabel: false,
         tabBarActiveTintColor: theme.primary,
         tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
+        // tabBarStyle: style.barContainer,
       }}>
       <Tab.Screen
         options={{

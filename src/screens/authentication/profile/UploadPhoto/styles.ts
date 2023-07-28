@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, CustomFonts} from '../../../../utils';
 import {useCustomTheme} from '../../../../hooks';
+import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   const {theme} = useCustomTheme();
@@ -19,6 +19,7 @@ export const styles = () => {
       marginTop: 8,
       lineHeight: 18.9,
       fontSize: 15,
+      color: theme.textColor,
     },
     photoMainView: {
       alignItems: 'center',
@@ -63,13 +64,14 @@ export const styles = () => {
       ...CustomFonts.body.regular14,
       fontSize: 18,
       fontWeight: '700',
-      color: COLORS.headingColor,
+      color: theme.textColor,
     },
     BottomSubtitle2: {
       ...CustomFonts.body.regular14,
       marginTop: 8,
       lineHeight: 18.9,
       fontSize: 15,
+      color: theme.textColor,
     },
     DropdownTitle: {
       ...CustomFonts.header.small18,
@@ -77,7 +79,7 @@ export const styles = () => {
     },
     NextBtn: {
       width: 335,
-      marginTop: 100,
+      marginTop: 50,
       alignSelf: 'center',
     },
     contentView: {
@@ -93,8 +95,9 @@ export const styles = () => {
       paddingRight: 15,
     },
     placeholderFonts: {
-      ...CustomFonts.header.small18,
+      ...CustomFonts.body.regular14,
       fontSize: 16,
+      color: theme.textColor,
     },
   });
 };

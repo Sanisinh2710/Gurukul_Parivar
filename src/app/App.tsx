@@ -1,12 +1,13 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {PermissionsAndroid, Platform} from 'react-native';
-
-import '../localization';
 
 import {Routes} from '../routes';
 
 export const App = () => {
+  const {i18n} = useTranslation();
   React.useMemo(async () => {
     // const timer = setTimeout(() => {
     //   SplashScreen.hide();
@@ -23,6 +24,18 @@ export const App = () => {
     };
 
     await askingPerMissions();
+
+    const getLanguage = async () => {
+      const getLangCode = await AsyncStorage.getItem('langCode');
+      if (getLangCode) {
+        const newLangcode = JSON.parse(getLangCode);
+
+        if (newLangcode) {
+          i18n.changeLanguage(newLangcode);
+        }
+      }
+    };
+    await getLanguage();
 
     // return () => {
     //   clearTimeout(timer);

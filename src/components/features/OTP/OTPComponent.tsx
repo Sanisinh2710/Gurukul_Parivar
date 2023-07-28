@@ -1,5 +1,5 @@
 import React from 'react';
-import {Keyboard, ScrollView, TextInput, View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import {COLORS} from '../../../utils';
 import {useOtpStyle} from './otpStyle';
 
@@ -33,7 +33,6 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
           <TextInput
             key={index}
             onSubmitEditing={() => {
-              console.log('submit editing caallleddd');
               return (
                 num[index] === '' &&
                 refs.current[index]?.setNativeProps({
@@ -47,7 +46,6 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             onChangeText={val => {
               const newOtpValue = [...num];
               newOtpValue[index] = val;
-
               setNum(newOtpValue);
             }}
             keyboardType="number-pad"
