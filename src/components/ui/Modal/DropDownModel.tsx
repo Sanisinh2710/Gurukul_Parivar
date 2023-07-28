@@ -179,7 +179,7 @@ export const DropDownModel = React.memo(
                               paddingVertical: 17,
                             },
                             type === 'radio' &&
-                              selectedItem.includes(item) &&
+                              selectedItem?.includes(item) &&
                               item.includes(selectedItem) && {
                                 backgroundColor: 'rgba(172, 43, 49, 0.1)',
                               },
@@ -194,14 +194,14 @@ export const DropDownModel = React.memo(
                                 fontSize: 16,
                                 color: COLORS.lightModetextColor,
                               },
-                              (selectedItem.includes(item) ||
+                              (selectedItem?.includes(item) ||
                                 (type === 'phone' &&
                                   item.includes(selectedItem))) &&
                                 type !== 'radio' && {color: 'red'},
                             ]}>
                             {item}
                           </Text>
-                          {(selectedItem.includes(item) ||
+                          {(selectedItem?.includes(item) ||
                             (type === 'phone' &&
                               item.includes(selectedItem))) &&
                           type !== 'radio' ? (
@@ -212,7 +212,7 @@ export const DropDownModel = React.memo(
                             />
                           ) : (
                             type === 'radio' &&
-                            (selectedItem.includes(item) ||
+                            (selectedItem?.includes(item) ||
                               item.includes(selectedItem)) && (
                               <View
                                 style={{

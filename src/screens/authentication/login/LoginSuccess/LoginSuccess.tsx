@@ -41,7 +41,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
             </Text>
             <PrimaryButton
               title={t('loginSuccess:LoginSuccessBTN')}
-              onPress={() => navigation.replace('UploadPhoto')}
+              onPress={() => navigation.replace('ProfileSignup')}
               buttonStyle={{marginTop: 40}}
             />
           </View>

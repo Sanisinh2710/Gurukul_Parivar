@@ -2,6 +2,7 @@ import React from 'react';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useCustomTheme} from '../../../hooks';
+import {Theme} from '../../../types';
 import {COLORS, CustomFonts} from '../../../utils';
 
 /* ----Memo takes second callback to determine whether previos and new state is same or not..!
@@ -136,23 +137,17 @@ export const ScreenHeader = React.memo(
   },
 );
 
-const style = (theme?: any) =>
-  StyleSheet.create({
+const style = (theme?: Theme) => {
+  return StyleSheet.create({
     commonHeaderBarAndroid: {
-      backgroundColor: theme?.headerBarColor,
-
-      //   elevation: 10,
+      backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
     },
     commonHeaderBarIOS: {
-      backgroundColor: theme?.headerBarColor,
+      backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
-      //   shadowColor: 'grey',
-      //   shadowOffset: {width: 0, height: 2},
-      //   shadowOpacity: 0.6,
-      //   shadowRadius: 2,
     },
     commonHeaderBarContent: {
       height: Dimensions.get('window').height * 0.07,
@@ -161,7 +156,7 @@ const style = (theme?: any) =>
     },
     commonHeaderText: {
       ...CustomFonts.header.medium20,
-      color: COLORS.headingColor,
+      color: theme?.textColor,
       fontWeight: '500',
       fontSize: 18,
       paddingLeft: '3%',
@@ -172,3 +167,4 @@ const style = (theme?: any) =>
       //   paddingLeft: 20,
     },
   });
+};

@@ -63,13 +63,15 @@ export const ModalStyle = (modalHeight: any) => {
     },
     modelFlatListContainerStyle: {
       paddingTop: 30,
-      paddingBottom: '30%',
+      paddingBottom: '40%',
       gap: 25,
     },
     modelMenuView: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: 'rgba(0, 0, 0, 0.10)',
     },
     modelMenuText: {
       ...CustomFonts.body.large14,

@@ -10,10 +10,12 @@ import {
 import {useCustomTheme} from '../../../hooks';
 import {COLORS} from '../../../utils';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
+import {PhotoPicker} from './PhotoPicker';
+import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
 type FormInputProps = {
-  type: 'phone' | 'number' | 'text';
+  type: 'phone' | 'number' | 'text' | 'select' | 'photo';
   name: string;
   label: string;
   icon?: string;
@@ -23,6 +25,7 @@ type FormInputProps = {
   onChange: (...event: any[]) => void;
   error?: string;
   state?: {[key: string]: any};
+  dropDownList?: string[];
 };
 
 export const FormInput = React.memo(
@@ -36,6 +39,7 @@ export const FormInput = React.memo(
     onBlur,
     onChange,
     state,
+    dropDownList,
     error,
   }: FormInputProps): React.JSX.Element => {
     const {theme} = useCustomTheme();
@@ -64,6 +68,32 @@ export const FormInput = React.memo(
             placeholder={placeholder}
             setFocused={setFocused}
             state={state}
+          />
+        );
+        break;
+
+      case 'photo':
+        fieldblock = (
+          <PhotoPicker
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            placeholder={placeholder}
+            setFocused={setFocused}
+          />
+        );
+        break;
+
+      case 'select':
+        fieldblock = (
+          <SimpleDropDown
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            label={label}
+            placeholder={placeholder}
+            setFocused={setFocused}
+            dropDownList={dropDownList ? [...dropDownList] : []}
           />
         );
         break;
@@ -111,18 +141,25 @@ export const FormInput = React.memo(
             setFocused(false);
           }}>
           <>
-            <Text style={style.labelText}>{label}</Text>
-            <View
-              style={[
-                style.fieldBlockView,
-                {
-                  borderColor: focused
-                    ? theme.primary
-                    : COLORS.primaryInputBorderColor,
-                },
-              ]}>
-              {fieldblock}
-            </View>
+            {type !== 'photo' ? (
+              <>
+                <Text style={style.labelText}>{label}</Text>
+                <View
+                  style={[
+                    style.fieldBlockView,
+                    {
+                      borderColor: focused
+                        ? theme.primary
+                        : COLORS.primaryInputBorderColor,
+                      justifyContent: 'space-between',
+                    },
+                  ]}>
+                  {fieldblock}
+                </View>
+              </>
+            ) : (
+              fieldblock
+            )}
           </>
         </TouchableWithoutFeedback>
         {error && <Text style={style.errorText}>{error}</Text>}
