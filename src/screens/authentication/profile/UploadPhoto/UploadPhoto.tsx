@@ -16,6 +16,7 @@ import {
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
+import {UploadPhotoScreenProps} from '../../../../types';
 import {COLORS, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
 
@@ -37,7 +38,7 @@ const data = [
   'hiii',
   'sdgzsd',
 ];
-export const UploadPhoto = () => {
+export const UploadPhoto = ({navigation}: UploadPhotoScreenProps) => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   const style = styles();

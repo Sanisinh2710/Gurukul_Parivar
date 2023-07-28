@@ -1,7 +1,9 @@
 import {StyleSheet} from 'react-native';
+import {useCustomTheme} from '../../../hooks';
 import {COLORS} from '../../../utils';
 
 export const useOtpStyle = () => {
+  const {theme} = useCustomTheme();
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -24,7 +26,7 @@ export const useOtpStyle = () => {
       borderColor: 'rgba(172, 43, 49, 0.18)',
       textAlign: 'center',
       fontWeight: 'bold',
-      color: COLORS.black,
+      color: theme.textColor,
       fontSize: 20,
     },
   });

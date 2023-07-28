@@ -1,11 +1,13 @@
 import {StyleSheet} from 'react-native';
+import {useCustomTheme} from '../../../../hooks';
 import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
+  const {theme} = useCustomTheme();
   return StyleSheet.create({
     headerText: {
       ...CustomFonts.header.large36,
-      color: COLORS.headingColor,
+      color: theme.textColor,
     },
     headerSubText: {
       ...CustomFonts.body.regular14,
@@ -23,7 +25,7 @@ export const styles = () => {
     otpContainerHeader: {
       ...CustomFonts.body.regular14,
       fontSize: 16,
-      color: COLORS.black,
+      color: theme.textColor,
       textAlign: 'center',
     },
     phoneNumber: {
@@ -49,7 +51,7 @@ export const styles = () => {
     },
     smallText: {
       ...CustomFonts.body.regular14,
-      color: COLORS.black,
+      color: theme.textColor,
     },
     otpResend: {
       ...CustomFonts.header.small18,

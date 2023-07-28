@@ -1,12 +1,21 @@
 import React from 'react';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {CustomStatusBar} from '../components';
 import {useCustomTheme} from '../hooks';
 import {LoginOTP, LoginScreen, LoginSuccess, UploadPhoto} from '../screens';
-import {RootAuthStackParamList, RootStackParamList} from '../types';
+import {
+  RootAuthStackParamList,
+  RootBottomTabParamList,
+  RootStackParamList,
+} from '../types';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Image, View} from 'react-native';
+import {HomeScreen} from '../screens/core/Home/home';
+import {ProfileScreen} from '../screens/core/Profile/profile';
+import {FrontDeskScreen} from '../screens/core/FrontDesk/frontDesk';
+import {styles} from './BottomTabStyles';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -16,7 +25,7 @@ export const AuthStackNavigator = (): React.JSX.Element => {
       initialRouteName="MobileLogin"
       screenOptions={{
         orientation: 'portrait',
-        animation: 'flip',
+        animation: 'none',
         headerShown: false,
       }}>
       <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
@@ -47,10 +56,105 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
+            <NativeStack.Screen
+              name="BottomNavBar"
+              component={BottomTabNavigator}
+            />
             <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
     </SafeAreaProvider>
+  );
+};
+
+const Tab = createBottomTabNavigator<RootBottomTabParamList>();
+const BottomTabNavigator = () => {
+  const style = styles();
+  const {theme} = useCustomTheme();
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
+      }}>
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color, focused}) => {
+            return (
+              <>
+                {focused && <View style={style.bottomBarLine} />}
+                <Image
+                  source={
+                    focused
+                      ? require('../../assets/icons/Home.png')
+                      : require('../../assets/icons/Home-Outline.png')
+                  }
+                  style={{
+                    tintColor: focused ? color : color,
+                    height: 24,
+                    width: 24,
+                  }}
+                />
+              </>
+            );
+          },
+        }}
+        name="homeScreen"
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color, focused}) => {
+            return (
+              <>
+                {focused && <View style={style.bottomBarLine} />}
+                <Image
+                  source={
+                    focused
+                      ? require('../../assets/icons/Category.png')
+                      : require('../../assets/icons/Category-Outline.png')
+                  }
+                  style={{
+                    tintColor: focused ? color : color,
+                    height: 24,
+                    width: 24,
+                  }}
+                />
+              </>
+            );
+          },
+        }}
+        name="frontDesk"
+        component={FrontDeskScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color, focused}) => {
+            return (
+              <>
+                {focused && <View style={style.bottomBarLine} />}
+                <Image
+                  source={
+                    focused
+                      ? require('../../assets/icons/Profile.png')
+                      : require('../../assets/icons/Profile-Outline.png')
+                  }
+                  style={{
+                    tintColor: focused ? color : color,
+                    height: 24,
+                    width: 24,
+                  }}
+                />
+              </>
+            );
+          },
+        }}
+        name="profileScreen"
+        component={ProfileScreen}
+      />
+    </Tab.Navigator>
   );
 };
