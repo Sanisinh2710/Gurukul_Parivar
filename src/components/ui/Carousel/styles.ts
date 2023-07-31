@@ -5,7 +5,7 @@ import {CustomFonts} from '../../../utils/fonts';
 export const style = (currentPage?: number) => {
   return StyleSheet.create({
     snailMainView: {
-      marginTop: 10,
+      marginTop: '5%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -35,14 +35,15 @@ export const style = (currentPage?: number) => {
       alignItems: 'center',
       // backgroundColor: 'yellow',
       borderRightColor: 'black',
-    },
-
-    pagerViewImage: {
-      borderRadius: 12,
-
-      marginTop: 24,
       width: 335,
       height: 164,
+    },
+    pagerViewImage: {
+      borderRadius: 12,
+      marginTop: 24,
+      width: Dimensions.get('window').width * 0.85,
+      height: '100%',
+      resizeMode: 'cover',
     },
   });
 };

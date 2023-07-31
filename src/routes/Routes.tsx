@@ -7,7 +7,11 @@ import {useCustomTheme} from '../hooks';
 import {LoginOTP, LoginScreen, LoginSuccess, UploadPhoto} from '../screens';
 import {
   RootAuthStackParamList,
+  RootBottomStack1List,
+  // RootBottomStack2List,
+  // RootBottomStack3List,
   RootBottomTabParamList,
+  RootPrimaryStack1,
   RootStackParamList,
 } from '../types';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -16,6 +20,10 @@ import {HomeScreen} from '../screens/core/Home/home';
 import {ProfileScreen} from '../screens/core/Profile/profile';
 import {FrontDeskScreen} from '../screens/core/FrontDesk/frontDesk';
 import {styles} from './BottomTabStyles';
+import {DailyDarshan} from '../screens/other/HomeStack/DailyDarshan/DailyDarshan';
+import {DailyQuotes} from '../screens/other/HomeStack/DailyQuotes/DailyQuotes';
+import {DailyUpdates} from '../screens/other/HomeStack/DailyUpdates/DailyUpdates';
+import {CalendarScreen} from '../screens/other/HomeStack/Calendar/CalendarScreen';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -67,7 +75,43 @@ export const Routes = (): React.JSX.Element => {
     </SafeAreaProvider>
   );
 };
-
+const BottomStack1 = createNativeStackNavigator<RootBottomStack1List>();
+const Bottom1StackNavigator = () => {
+  return (
+    <BottomStack1.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <BottomStack1.Screen name="homeScreen" component={HomeScreen} />
+      <BottomStack1.Screen
+        name="PrimaryBottomStack1"
+        component={PrimaryStack}
+      />
+    </BottomStack1.Navigator>
+  );
+};
+const PrimaryBottomStack1 = createNativeStackNavigator<RootPrimaryStack1>();
+const PrimaryStack = () => {
+  return (
+    <PrimaryBottomStack1.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <PrimaryBottomStack1.Screen
+        name="dailyDarshan"
+        component={DailyDarshan}
+      />
+      <PrimaryBottomStack1.Screen name="dailyQuotes" component={DailyQuotes} />
+      <PrimaryBottomStack1.Screen
+        name="dailyUpdates"
+        component={DailyUpdates}
+      />
+      <PrimaryBottomStack1.Screen name="calendar" component={CalendarScreen} />
+    </PrimaryBottomStack1.Navigator>
+  );
+};
+// const BottomStack2 = createBottomTabNavigator<RootBottomStack2List>();
+// const BottomStack3 = createBottomTabNavigator<RootBottomStack3List>();
 const Tab = createBottomTabNavigator<RootBottomTabParamList>();
 const BottomTabNavigator = () => {
   const style = styles();
@@ -82,6 +126,8 @@ const BottomTabNavigator = () => {
         // tabBarStyle: style.barContainer,
       }}>
       <Tab.Screen
+        name="homeScreen"
+        component={Bottom1StackNavigator}
         options={{
           tabBarIcon: ({color, focused}) => {
             return (
@@ -103,10 +149,8 @@ const BottomTabNavigator = () => {
             );
           },
         }}
-        name="homeScreen"
-        component={HomeScreen}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         options={{
           tabBarIcon: ({color, focused}) => {
             return (
@@ -129,7 +173,7 @@ const BottomTabNavigator = () => {
           },
         }}
         name="frontDesk"
-        component={FrontDeskScreen}
+        component={Bottom2TabNavigator}
       />
       <Tab.Screen
         options={{
@@ -154,8 +198,8 @@ const BottomTabNavigator = () => {
           },
         }}
         name="profileScreen"
-        component={ProfileScreen}
-      />
+        component={Bottom3TabNavigator}
+      /> */}
     </Tab.Navigator>
   );
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Image, ImageBackground, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
 import {ScreenHeader} from '../../../components';
@@ -8,13 +7,43 @@ import {PagerView} from '../../../components/ui/Carousel/pagerView';
 import {useCustomTheme} from '../../../hooks';
 import {styles} from './styles';
 import LinearGradient from 'react-native-linear-gradient';
-export const HomeScreen = () => {
+import {HomeGrid} from '../../../utils';
+import {
+  ImageBackground,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {PrimaryStack1ScreenProps} from '../../../types';
+export const HomeScreen = ({navigation}: any) => {
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const style = styles();
   const TouchX = React.useRef<any>();
   const {theme} = useCustomTheme();
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
+  function handlePress(val: any) {
+    console.log(val);
+
+    switch (val) {
+      case 'Daily Darshan':
+        navigation.navigate('dailyDarshan');
+        break;
+      case 'Daily Quotes':
+        navigation.navigate('dailyQuotes');
+        break;
+      case 'Daily Update':
+        navigation.navigate('dailyUpdates');
+        break;
+      case 'Calendar':
+        navigation.navigate('calendar');
+        break;
+
+      default:
+        break;
+    }
+  }
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
       <ScreenHeader
@@ -60,64 +89,30 @@ export const HomeScreen = () => {
           <PagerView currentPage={currentPage} />
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'space-around',
-          // backgroundColor: 'red',
-          marginTop: 14,
-          paddingHorizontal: 20,
-        }}>
-        <View style={{borderRadius: 12}}>
+      <View style={style.gridContainer}>
+        {HomeGrid.map((item, index) => (
+          // <TouchableOpacity
+          //   onPress={() => console.log('hi')}
+          //   style={style.gridItem}>
           <ImageBackground
+            key={index}
+            imageStyle={{height: '100%', width: '100%', resizeMode: 'cover'}}
             borderRadius={12}
-            source={require('../../../../assets/images/Darshan.png')}
+            source={item.image}
             style={style.images}>
-            <LinearGradient
-              colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
-              locations={[0, 1]}
-              style={{flex: 1, borderRadius: 12}}>
-              <Text style={style.textOverImage}>Daily Darshan</Text>
-            </LinearGradient>
+            <TouchableOpacity
+              style={{height: '100%', width: '100%'}}
+              activeOpacity={0.5}
+              onPress={() => handlePress(item.name)}>
+              <LinearGradient
+                colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
+                locations={[0, 1]}
+                style={{flex: 1, borderRadius: 12}}>
+                <Text style={style.textOverImage}>{item.name}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </ImageBackground>
-        </View>
-
-        <ImageBackground
-          borderRadius={12}
-          source={require('../../../../assets/images/Quotes.png')}
-          style={style.images}>
-          <LinearGradient
-            colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
-            locations={[0, 1]}
-            style={{flex: 1, borderRadius: 12}}>
-            <Text style={style.textOverImage}>Daily Quotes</Text>
-          </LinearGradient>
-        </ImageBackground>
-
-        <ImageBackground
-          borderRadius={12}
-          source={require('../../../../assets/images/Calendar.png')}
-          style={style.images}>
-          <LinearGradient
-            colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
-            locations={[0, 1]}
-            style={{flex: 1, borderRadius: 12}}>
-            <Text style={style.textOverImage}>Daily Update</Text>
-          </LinearGradient>
-        </ImageBackground>
-
-        <ImageBackground
-          borderRadius={12}
-          source={require('../../../../assets/images/Darshan.png')}
-          style={style.images}>
-          <LinearGradient
-            colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
-            locations={[0, 1]}
-            style={{flex: 1, borderRadius: 12}}>
-            <Text style={style.textOverImage}>Calendar</Text>
-          </LinearGradient>
-        </ImageBackground>
+        ))}
       </View>
     </SafeAreaView>
   );

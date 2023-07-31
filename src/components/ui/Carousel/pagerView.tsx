@@ -8,7 +8,6 @@ type PagerViewProps = {
 };
 
 export const PagerView = ({currentPage}: PagerViewProps): React.JSX.Element => {
-  console.log(currentPage);
   const image = useMemo(() => {
     return currentPage === 1
       ? require('../../../../assets/images/Rectangle.png')

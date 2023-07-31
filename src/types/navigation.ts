@@ -10,6 +10,26 @@ export type RootBottomTabParamList = {
   frontDesk: undefined;
   profileScreen: undefined;
 };
+export type RootBottomStack1List = {
+  homeScreen: undefined;
+  PrimaryBottomStack1: undefined;
+};
+// export type RootBottomStack2List = {
+//   homeScreen: undefined;
+//   frontDesk: undefined;
+//   profileScreen: undefined;
+// };
+// export type RootBottomStack3List = {
+//   homeScreen: undefined;
+//   frontDesk: undefined;
+//   profileScreen: undefined;
+// };
+export type RootPrimaryStack1 = {
+  dailyDarshan: undefined;
+  dailyUpdates: undefined;
+  dailyQuotes: undefined;
+  calendar: undefined;
+};
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
   MobileLoginOTP: undefined;
@@ -28,4 +48,8 @@ export type UploadPhotoScreenProps = NativeStackScreenProps<
 export type LoginSuccessStackScreenProps = NativeStackScreenProps<
   RootAuthStackParamList,
   'LoginSuccess'
+>;
+export type PrimaryStack1ScreenProps = NativeStackScreenProps<
+  RootPrimaryStack1,
+  'dailyDarshan'
 >;

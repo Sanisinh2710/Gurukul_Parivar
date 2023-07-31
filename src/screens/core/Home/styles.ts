@@ -24,8 +24,8 @@ export const styles = () => {
     images: {
       justifyContent: 'flex-end',
       borderRadius: 12,
-      height: 169,
-      width: 160,
+      height: '35%',
+      width: '45%',
       marginTop: 24,
     },
     textOverImage: {
@@ -39,5 +39,14 @@ export const styles = () => {
       paddingVertical: 3,
       textAlign: 'center',
     },
+    gridContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      marginTop: 14,
+      paddingHorizontal: 20,
+    },
+
+    gridItem: {height: '100%', width: '100%'},
   });
 };
