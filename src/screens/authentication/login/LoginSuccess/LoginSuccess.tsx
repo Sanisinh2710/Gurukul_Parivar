@@ -61,6 +61,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
           source={AllImages.Bgimage}
           style={{
             width: '100%',
+            opacity: 0.4,
             height: Dimensions.get('window').height * 0.3,
             resizeMode: 'cover',
           }}

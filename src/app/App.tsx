@@ -30,9 +30,9 @@ export const App = () => {
 
     await askingPerMissions();
 
-    // return () => {
-    //   clearTimeout(timer);
-    // };
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
   return (
     <Provider store={store}>
