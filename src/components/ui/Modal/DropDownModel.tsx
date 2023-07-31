@@ -13,7 +13,7 @@ type DropDownModelProps = {
   inputList?: string[];
   wantSearchBar?: boolean;
   wantResetButton?: boolean;
-  type: 'phone' | 'radio' | 'multi-select' | 'none';
+  type: 'phone' | 'radio' | 'multi-select' | 'simple' | 'none';
   selectedItem?: any;
   setSelectedItem?: any;
   modalHeight: string;
@@ -179,7 +179,8 @@ export const DropDownModel = React.memo(
                               paddingVertical: 17,
                             },
                             type === 'radio' &&
-                              selectedItem.includes(item) && {
+                              selectedItem?.includes(item) &&
+                              item.includes(selectedItem) && {
                                 backgroundColor: 'rgba(172, 43, 49, 0.1)',
                               },
                           ]}>
@@ -193,12 +194,17 @@ export const DropDownModel = React.memo(
                                 fontSize: 16,
                                 color: COLORS.lightModetextColor,
                               },
-                              selectedItem.includes(item) &&
+                              (selectedItem?.includes(item) ||
+                                (type === 'phone' &&
+                                  item.includes(selectedItem))) &&
                                 type !== 'radio' && {color: 'red'},
                             ]}>
                             {item}
                           </Text>
-                          {selectedItem.includes(item) && type !== 'radio' ? (
+                          {(selectedItem?.includes(item) ||
+                            (type === 'phone' &&
+                              item.includes(selectedItem))) &&
+                          type !== 'radio' ? (
                             <MaterialCommunityIcon
                               name="check-circle-outline"
                               size={25}
@@ -206,7 +212,8 @@ export const DropDownModel = React.memo(
                             />
                           ) : (
                             type === 'radio' &&
-                            selectedItem.includes(item) && (
+                            (selectedItem?.includes(item) ||
+                              item.includes(selectedItem)) && (
                               <View
                                 style={{
                                   width: 20,

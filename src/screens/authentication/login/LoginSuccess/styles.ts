@@ -10,7 +10,7 @@ export const styles = () => {
       alignItems: 'center',
     },
     logoView: {
-      marginTop: 100,
+      // marginTop: 100,
       alignItems: 'center',
       marginBottom: 10,
     },

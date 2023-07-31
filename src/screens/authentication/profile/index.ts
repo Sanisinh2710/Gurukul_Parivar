@@ -1,1 +1,1 @@
-export * from './UploadPhoto';
+export * from './ProfileSignup';

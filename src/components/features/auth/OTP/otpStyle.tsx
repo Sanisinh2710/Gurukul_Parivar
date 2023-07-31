@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLORS} from '../../../utils';
+import {COLORS} from '../../../../utils';
 
 export const useOtpStyle = () => {
   return StyleSheet.create({

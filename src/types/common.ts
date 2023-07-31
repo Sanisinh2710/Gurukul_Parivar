@@ -13,3 +13,9 @@ export type Theme = {
 export type LoginValidationSchemaType = {
   mobileNumber: string;
 };
+
+export type CompleteProfileValidationSchemaType = {
+  [key: string]: any;
+  profilePic: string | undefined;
+  gurukulName: string;
+};

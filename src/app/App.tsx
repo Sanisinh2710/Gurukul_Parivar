@@ -3,12 +3,13 @@ import React from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
 
 import {Routes} from '../routes';
+import SplashScreen from 'react-native-splash-screen';
 
 export const App = () => {
   React.useMemo(async () => {
-    // const timer = setTimeout(() => {
-    //   SplashScreen.hide();
-    // }, 2000);
+    const timer = setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
 
     const askingPerMissions = async () => {
       if (Platform.OS === 'android') {
