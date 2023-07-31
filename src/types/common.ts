@@ -19,3 +19,5 @@ export type CompleteProfileValidationSchemaType = {
   profilePic: string | undefined;
   gurukulName: string;
 };
+
+export type InitialThemeType = {theme: Theme; themeMode: string};

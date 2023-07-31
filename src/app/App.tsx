@@ -2,8 +2,15 @@ import React from 'react';
 
 import {PermissionsAndroid, Platform} from 'react-native';
 
+import {enableScreens} from 'react-native-screens';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {Loader} from '../components';
+import {persistor, store} from '../redux/store';
 import {Routes} from '../routes';
 import SplashScreen from 'react-native-splash-screen';
+
+enableScreens(true);
 
 export const App = () => {
   React.useMemo(async () => {
@@ -27,5 +34,11 @@ export const App = () => {
     //   clearTimeout(timer);
     // };
   }, []);
-  return <Routes />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={<Loader />}>
+        <Routes />
+      </PersistGate>
+    </Provider>
+  );
 };

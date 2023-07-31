@@ -3,7 +3,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Text, TextInput, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useCustomTheme} from '../../../hooks';
+import {useAppSelector} from '../../../redux/hooks';
 import {AllCountryCodes, countries} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
@@ -28,7 +28,7 @@ export const PhoneDropdownInput = React.memo(
     setFocused,
     state,
   }: PhoneDropdownInputProps) => {
-    const {theme} = useCustomTheme();
+    const theme = useAppSelector(state => state.theme.theme);
 
     const {t} = useTranslation();
 

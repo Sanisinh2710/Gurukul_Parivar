@@ -1,8 +1,9 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {useCustomTheme} from '../../src/hooks';
+import {useAppSelector} from '../../src/redux/hooks';
 
 export const CommonStyle = () => {
-  const {theme} = useCustomTheme();
+  // const {theme} = useCustomTheme();
+  const theme = useAppSelector(state => state.theme.theme);
   return StyleSheet.create({
     commonContainer: {
       flex: 1,

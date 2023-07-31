@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useCustomTheme} from '../../../hooks';
+import {useAppSelector} from '../../../redux/hooks';
 import {COLORS} from '../../../utils';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
 import {PhotoPicker} from './PhotoPicker';
@@ -42,7 +42,7 @@ export const FormInput = React.memo(
     dropDownList,
     error,
   }: FormInputProps): React.JSX.Element => {
-    const {theme} = useCustomTheme();
+    const theme = useAppSelector(state => state.theme.theme);
 
     const style = FormInputStyle(value);
 

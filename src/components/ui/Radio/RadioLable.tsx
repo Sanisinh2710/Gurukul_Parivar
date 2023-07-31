@@ -1,9 +1,7 @@
-import {DimensionValue, StyleSheet, Text, View, ViewStyle} from 'react-native';
-import {COLORS, CustomFonts} from '../../../utils';
-import {Image} from 'react-native';
 import React from 'react';
+import {DimensionValue, Image, Text, View} from 'react-native';
+import {COLORS} from '../../../utils';
 import {genstyle} from './style';
-import {StyleProp} from 'react-native';
 
 interface Props {
   wantFullSpace: boolean;

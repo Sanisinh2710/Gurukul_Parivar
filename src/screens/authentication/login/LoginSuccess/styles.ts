@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, CustomFonts} from '../../../../utils';
-import {useCustomTheme} from '../../../../hooks';
+import {useAppSelector} from '../../../../redux/hooks';
+import {CustomFonts} from '../../../../utils';
 
 export const styles = () => {
-  const {theme} = useCustomTheme();
+  const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
     container: {

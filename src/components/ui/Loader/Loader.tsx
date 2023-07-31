@@ -6,10 +6,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useCustomTheme} from '../../../hooks';
+import {useAppSelector} from '../../../redux/hooks';
 
 export const Loader = React.memo((): React.JSX.Element => {
-  const {theme} = useCustomTheme();
+  const theme = useAppSelector(state => state.theme.theme);
+
   return (
     <View
       style={{
