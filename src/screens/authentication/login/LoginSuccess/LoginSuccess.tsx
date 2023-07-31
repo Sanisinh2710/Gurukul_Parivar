@@ -2,7 +2,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {GurukulLogo} from '../../../../../assets/images';
+import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {PrimaryButton, ScreenHeader} from '../../../../components';
 import {LoginSuccessStackScreenProps} from '../../../../types';
@@ -27,7 +27,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
             justifyContent: 'center',
           }}>
           <View style={style.logoView}>
-            <Image source={GurukulLogo} style={style.logo} />
+            <Image source={AllImages.GurukulLogo} style={style.logo} />
           </View>
           <Text style={style.title}>{t('loginSuccess:LoginSuccess')}</Text>
           <View style={style.subtitleView}>

@@ -15,7 +15,7 @@ export type LoginValidationSchemaType = {
 };
 
 export type CompleteProfileValidationSchemaType = {
-  [key: string]: string;
-  profilePic: string;
+  [key: string]: any;
+  profilePic: string | undefined;
   gurukulName: string;
 };

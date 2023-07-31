@@ -22,10 +22,7 @@ export const CompleteProfileValidationSchema =
   (): yup.ObjectSchema<CompleteProfileValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      profilePic: yup
-        .string()
-        .trim()
-        .required('**Please select your profile picture..!'),
+      profilePic: yup.string(),
       gurukulName: yup
         .string()
         .trim()
