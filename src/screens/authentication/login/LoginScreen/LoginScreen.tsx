@@ -6,6 +6,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {AppLogo} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   DropDownModel,
@@ -109,10 +110,7 @@ export const LoginScreen = ({
           {/* Header:------------------------------------------------------------------------ */}
           <View key={'LoginFormHeader'} style={style.headerView}>
             <View style={style.imgLogoView}>
-              <Image
-                source={require('../../../../../assets/images/SGVP_Logo1.png')}
-                style={style.imgLogo}
-              />
+              <Image source={AppLogo} style={style.imgLogo} />
             </View>
             <View style={style.welcomeTitleView}>
               <Text style={style.welcomeTitle1Text}>

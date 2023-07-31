@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
-import {CompleteYourProfile, ScreenHeader} from '../../../components';
+import {Calendar, CompleteYourProfile, ScreenHeader} from '../../../components';
 import {COLORS} from '../../../utils';
 
 export const ProfileSignup = (): React.JSX.Element => {
@@ -52,6 +52,8 @@ export const ProfileSignup = (): React.JSX.Element => {
 
   console.log(formData);
 
+  const [calendarVisible, setCalendarVisible] = React.useState(true);
+
   return (
     <SafeAreaView style={commonStyle.commonContainer}>
       <Progress.Bar
@@ -81,7 +83,10 @@ export const ProfileSignup = (): React.JSX.Element => {
             onSubmitEvent={submitButton}
           />
         ) : (
-          <></>
+          <Calendar
+            calendarVisible={calendarVisible}
+            setCalendarVisible={setCalendarVisible}
+          />
         )}
       </View>
     </SafeAreaView>
