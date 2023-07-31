@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {useCustomTheme} from '../../../../hooks';
+import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 
 export const LoginScreenstyle = () => {
-  const {theme} = useCustomTheme();
+  const theme = useAppSelector(state => state.theme.theme);
+
   return StyleSheet.create({
     headerView: {
       gap: 10,

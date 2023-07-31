@@ -1,18 +1,9 @@
 import React from 'react';
 import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useCustomTheme} from '../../../hooks';
+import {useAppSelector} from '../../../redux/hooks';
 import {Theme} from '../../../types';
 import {COLORS, CustomFonts} from '../../../utils';
-
-/* ----Memo takes second callback to determine whether previos and new state is same or not..!
- (prev, next) => {
-  if (prev.headerRight?.icon === next.headerRight?.icon) {
-    return true;
-  }
-  return false;
-},
-*/
 
 type ScreenHeaderProps = {
   headerTitle?: string;
@@ -37,7 +28,7 @@ export const ScreenHeader = React.memo(
     headerRight,
     leftOnPress,
   }: ScreenHeaderProps) => {
-    const {theme} = useCustomTheme();
+    const theme = useAppSelector(state => state.theme.theme);
 
     return (
       <View

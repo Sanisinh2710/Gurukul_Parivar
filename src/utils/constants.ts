@@ -1,7 +1,7 @@
 import {Theme} from '../types';
 import {COLORS} from './colors';
 
-const LightTheme: Theme = {
+export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
   background: COLORS.lightModeBackgroundColor,
@@ -12,7 +12,7 @@ const LightTheme: Theme = {
   headerBarBackground: COLORS.lightModeBackgroundColor,
   iconBackground: COLORS.leftArrowBg,
 };
-const DarkTheme: Theme = {
+export const DarkTheme: Theme = {
   isDark: true,
   statusBarBackground: COLORS.darkModeStatusBarcolor,
   background: COLORS.darkModeBackgroundcolor,

@@ -2,9 +2,11 @@ import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {CustomStatusBar} from '../components';
-import {useCustomTheme} from '../hooks';
+import {TOGGLE_THEME} from '../redux/ducks/themeslice';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {LoginOTP, LoginScreen, LoginSuccess, ProfileSignup} from '../screens';
 import {RootAuthStackParamList, RootStackParamList} from '../types';
 
@@ -30,7 +32,24 @@ export const AuthStackNavigator = (): React.JSX.Element => {
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
 
 export const Routes = (): React.JSX.Element => {
-  const {theme} = useCustomTheme();
+  const theme = useAppSelector(state => state.theme.theme);
+  const themeMode = useAppSelector(state => state.theme.themeMode);
+
+  const dispatch = useAppDispatch();
+  const deviceColorScheme = useColorScheme();
+
+  React.useEffect(() => {
+    if (deviceColorScheme) {
+      if (themeMode === 'default') {
+        dispatch(
+          TOGGLE_THEME({
+            themeMode: 'default',
+            variant: deviceColorScheme,
+          }),
+        );
+      }
+    }
+  }, [deviceColorScheme]);
 
   return (
     <SafeAreaProvider>

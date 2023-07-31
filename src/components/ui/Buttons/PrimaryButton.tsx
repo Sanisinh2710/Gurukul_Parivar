@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Pressable, Text, TouchableOpacity, View} from 'react-native';
-import {useCustomTheme} from '../../../hooks';
+import {useAppSelector} from '../../../redux/hooks';
 import {COLORS} from '../../../utils';
 import {ButtonStyles} from './style';
 
@@ -24,7 +24,7 @@ export const PrimaryButton = React.memo(
     textStyle,
     disabled,
   }: Props) => {
-    const {theme} = useCustomTheme();
+    const theme = useAppSelector(state => state.theme.theme);
 
     const styles = ButtonStyles();
 

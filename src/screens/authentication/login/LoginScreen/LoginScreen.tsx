@@ -1,7 +1,7 @@
-import {yupResolver} from '@hookform/resolvers/yup';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {yupResolver} from '@hookform/resolvers/yup';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
@@ -14,6 +14,7 @@ import {
   Loader,
   PrimaryButton,
 } from '../../../../components';
+import {storage} from '../../../../storage';
 import {
   LoginValidationSchemaType,
   RootAuthStackParamList,
@@ -44,9 +45,11 @@ export const LoginScreen = ({
 
   const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
 
-  React.useMemo(async () => {
+  React.useMemo(() => {
     setIsloading(true);
-    const getLangCode = await AsyncStorage.getItem('langCode');
+
+    const getLangCode = storage.getString('langCode');
+
     if (getLangCode) {
       const newLangcode = JSON.parse(getLangCode);
 
@@ -57,13 +60,17 @@ export const LoginScreen = ({
     } else {
       setModelVisible(true);
     }
-    setIsloading(false);
+
+    const timer = setTimeout(() => {
+      setIsloading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const {
     control,
     watch,
-    reset,
     handleSubmit,
     getValues,
     formState: {errors},
@@ -77,7 +84,7 @@ export const LoginScreen = ({
       for (let lang in Languages) {
         if (language === Languages[lang]) {
           i18n.changeLanguage(lang);
-          AsyncStorage.setItem('langCode', JSON.stringify(lang));
+          storage.set('langCode', JSON.stringify(lang));
           break;
         }
       }
