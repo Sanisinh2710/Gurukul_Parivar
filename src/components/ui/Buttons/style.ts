@@ -4,10 +4,10 @@ import {COLORS, CustomFonts} from '../../../utils';
 export const ButtonStyles = () => {
   return StyleSheet.create({
     container: {
-      borderRadius: 12,
       overflow: 'hidden',
     },
     pressableButtonstyle: {
+      borderRadius: 12,
       height: 60,
       justifyContent: 'center',
       alignItems: 'center',
