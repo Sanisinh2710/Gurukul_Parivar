@@ -16,7 +16,9 @@ import {CommonStyle} from '../../../../../assets/styles';
 import {
   DropDownModel,
   PrimaryButton,
+  RadioLable,
   ScreenHeader,
+  SecondaryButton,
 } from '../../../../components';
 import {COLORS, GuruKulList, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
@@ -55,7 +57,7 @@ export const UploadPhoto = () => {
           }
         }}
       />
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={false}>
         <View style={commonStyle.commonContentView}>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
@@ -102,7 +104,7 @@ export const UploadPhoto = () => {
                   <Image source={{uri: filePath.uri}} style={style.image} />
                 ) : (
                   <Image
-                    source={require('../../../../../assets/images/avtar.png')}
+                    source={require('../../../../../assets/icons/Avtar.png')}
                     style={style.avtar}
                   />
                 )}
@@ -135,13 +137,13 @@ export const UploadPhoto = () => {
               </Text>
               {modelVisible ? (
                 <MaterialCommunityIcon
-                  name="chevron-down-circle-outline"
+                  name="chevron-up-circle-outline"
                   size={25}
                   color={COLORS.primaryColor}
                 />
               ) : (
                 <MaterialCommunityIcon
-                  name="chevron-up-circle-outline"
+                  name="chevron-down-circle-outline"
                   size={25}
                   color={COLORS.primaryColor}
                 />
