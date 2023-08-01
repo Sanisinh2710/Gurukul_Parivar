@@ -1,3 +1,5 @@
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -18,10 +20,16 @@ import {
   PrimaryButton,
   ScreenHeader,
 } from '../../../../components';
+import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
 import {COLORS, GuruKulList, captureImage, chooseFile} from '../../../../utils';
 import {styles} from './styles';
 
-export const UploadPhoto = () => {
+export const UploadPhoto = ({
+  navigation,
+}: CompositeScreenProps<
+  NativeStackScreenProps<RootAuthStackParamList, 'UploadPhoto'>,
+  NativeStackScreenProps<RootStackParamList, 'BottomNavBar'>
+>) => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   const style = styles();
@@ -154,6 +162,8 @@ export const UploadPhoto = () => {
               onPress={() => {
                 if (width < 100) {
                   setwidth(width + 20);
+                } else {
+                  navigation.navigate('BottomNavBar');
                 }
               }}
             />

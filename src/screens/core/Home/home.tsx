@@ -15,14 +15,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {PrimaryStack1ScreenProps} from '../../../types';
-export const HomeScreen = ({navigation}: any) => {
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+export const HomeScreen = ({
+  navigation,
+}: CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, 'homeScreen'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const style = styles();
   const TouchX = React.useRef<any>();
   const {theme} = useCustomTheme();
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
+
   function handlePress(val: any) {
     console.log(val);
 

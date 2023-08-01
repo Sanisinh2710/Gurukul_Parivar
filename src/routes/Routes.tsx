@@ -7,11 +7,7 @@ import {useCustomTheme} from '../hooks';
 import {LoginOTP, LoginScreen, LoginSuccess, UploadPhoto} from '../screens';
 import {
   RootAuthStackParamList,
-  RootBottomStack1List,
-  // RootBottomStack2List,
-  // RootBottomStack3List,
   RootBottomTabParamList,
-  RootPrimaryStack1,
   RootStackParamList,
 } from '../types';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -55,7 +51,6 @@ export const Routes = (): React.JSX.Element => {
         backgroundColor={theme.statusBarBackground}
         theme={theme}
       />
-
       <SafeAreaProvider>
         <NavigationContainer>
           <NativeStack.Navigator
@@ -64,54 +59,23 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
+            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}
             />
-            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
+
+            <NativeStack.Screen name="dailyDarshan" component={DailyDarshan} />
+            <NativeStack.Screen name="dailyUpdates" component={DailyUpdates} />
+            <NativeStack.Screen name="dailyQuotes" component={DailyQuotes} />
+            <NativeStack.Screen name="calendar" component={CalendarScreen} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
     </SafeAreaProvider>
   );
 };
-const BottomStack1 = createNativeStackNavigator<RootBottomStack1List>();
-const Bottom1StackNavigator = () => {
-  return (
-    <BottomStack1.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <BottomStack1.Screen name="homeScreen" component={HomeScreen} />
-      <BottomStack1.Screen
-        name="PrimaryBottomStack1"
-        component={PrimaryStack}
-      />
-    </BottomStack1.Navigator>
-  );
-};
-const PrimaryBottomStack1 = createNativeStackNavigator<RootPrimaryStack1>();
-const PrimaryStack = () => {
-  return (
-    <PrimaryBottomStack1.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <PrimaryBottomStack1.Screen
-        name="dailyDarshan"
-        component={DailyDarshan}
-      />
-      <PrimaryBottomStack1.Screen name="dailyQuotes" component={DailyQuotes} />
-      <PrimaryBottomStack1.Screen
-        name="dailyUpdates"
-        component={DailyUpdates}
-      />
-      <PrimaryBottomStack1.Screen name="calendar" component={CalendarScreen} />
-    </PrimaryBottomStack1.Navigator>
-  );
-};
-// const BottomStack2 = createBottomTabNavigator<RootBottomStack2List>();
-// const BottomStack3 = createBottomTabNavigator<RootBottomStack3List>();
+
 const Tab = createBottomTabNavigator<RootBottomTabParamList>();
 const BottomTabNavigator = () => {
   const style = styles();
@@ -127,7 +91,7 @@ const BottomTabNavigator = () => {
       }}>
       <Tab.Screen
         name="homeScreen"
-        component={Bottom1StackNavigator}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({color, focused}) => {
             return (
@@ -150,7 +114,7 @@ const BottomTabNavigator = () => {
           },
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         options={{
           tabBarIcon: ({color, focused}) => {
             return (
@@ -173,7 +137,7 @@ const BottomTabNavigator = () => {
           },
         }}
         name="frontDesk"
-        component={Bottom2TabNavigator}
+        component={FrontDeskScreen}
       />
       <Tab.Screen
         options={{
@@ -198,8 +162,8 @@ const BottomTabNavigator = () => {
           },
         }}
         name="profileScreen"
-        component={Bottom3TabNavigator}
-      /> */}
+        component={ProfileScreen}
+      />
     </Tab.Navigator>
   );
 };
