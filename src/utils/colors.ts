@@ -15,10 +15,10 @@ export const COLORS = {
   unfilledProgressbar: 'rgba(229, 229, 229, 1)',
 
   darkModeStatusBarcolor: '#171717',
-  lightModeStatusBarColor: '#FFFFFF',
+  lightModeStatusBarColor: '#F4EFEB',
 
   darkModeBackgroundcolor: '#171717',
-  lightModeBackgroundColor: '##F4EFEB',
+  lightModeBackgroundColor: '#F4EFEB',
 
   darkModetextColor: '#FFFFFF',
   lightModetextColor: '#171717',

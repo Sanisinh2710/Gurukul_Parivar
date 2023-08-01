@@ -2,10 +2,8 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
-import {ScreenHeader} from '../../../components';
-import {PagerView} from '../../../components/ui/Carousel/pagerView';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {HomeGrid} from '../../../utils';
 import {styles} from './styles';
 
@@ -51,7 +49,7 @@ export const HomeScreen = ({
     }
   }
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={false}
         headerTitleAlign={'left'}
@@ -120,6 +118,6 @@ export const HomeScreen = ({
           </ImageBackground>
         ))}
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

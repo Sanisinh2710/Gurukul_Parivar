@@ -136,12 +136,12 @@ export const ScreenHeader = React.memo(
 const style = (theme?: Theme) => {
   return StyleSheet.create({
     commonHeaderBarAndroid: {
-      backgroundColor: theme?.headerBarBackground,
+      // backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
     },
     commonHeaderBarIOS: {
-      backgroundColor: theme?.headerBarBackground,
+      // backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
     },

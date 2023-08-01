@@ -71,7 +71,7 @@ export const Routes = (): React.JSX.Element => {
   return (
     <SafeAreaProvider>
       <CustomStatusBar
-        backgroundColor={theme.statusBarBackground}
+        // backgroundColor={theme.statusBarBackground}
         theme={theme}
       />
       <SafeAreaProvider>
@@ -82,7 +82,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
+            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}

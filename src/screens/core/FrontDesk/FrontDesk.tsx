@@ -1,10 +1,9 @@
 import React from 'react';
+
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
-import {ScreenHeader} from '../../../components';
-import {PagerView} from '../../../components/ui/Carousel/pagerView';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts, FrontDesk} from '../../../utils';
 import {styles} from './styles';
@@ -19,7 +18,7 @@ export const FrontDeskScreen = () => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={false}
         headerTitleAlign={'left'}
@@ -94,6 +93,6 @@ export const FrontDeskScreen = () => {
           }}
         />
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

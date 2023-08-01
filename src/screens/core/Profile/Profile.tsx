@@ -1,8 +1,13 @@
 import React from 'react';
-import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
-import {PrimaryButton, RoundedIcon, ScreenHeader} from '../../../components';
+import {
+  PrimaryButton,
+  RoundedIcon,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
@@ -14,7 +19,7 @@ export const ProfileScreen = React.memo(() => {
   const commonStyle = CommonStyle();
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={false}
         headerTitleAlign={'left'}
@@ -164,6 +169,6 @@ export const ProfileScreen = React.memo(() => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 });

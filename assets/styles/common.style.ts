@@ -8,7 +8,7 @@ export const CommonStyle = () => {
     commonContainer: {
       flex: 1,
       width: Dimensions.get('window').width,
-      backgroundColor: theme.background,
+      // backgroundColor: theme.background,
     },
     commonContentView: {
       paddingHorizontal: 20,

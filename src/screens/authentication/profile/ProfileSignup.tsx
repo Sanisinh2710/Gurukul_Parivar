@@ -4,12 +4,12 @@ import * as Progress from 'react-native-progress';
 
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   CompleteYourProfile,
   PersonalInfo,
   ScreenHeader,
+  ScreenWrapper,
 } from '../../../components';
 import {COLORS} from '../../../utils';
 
@@ -59,7 +59,7 @@ export const ProfileSignup = (): React.JSX.Element => {
   const [calendarVisible, setCalendarVisible] = React.useState(true);
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <Progress.Bar
         progress={width / 100}
         width={Dimensions.get('window').width}
@@ -95,6 +95,6 @@ export const ProfileSignup = (): React.JSX.Element => {
           )
         )}
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

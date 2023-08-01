@@ -1,21 +1,17 @@
 import React from 'react';
-import {Image, SafeAreaView, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {RadioLable, ScreenHeader} from '../../../../components';
-import {useAppSelector} from '../../../../redux/hooks';
+import {RadioLable, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {CustomFonts} from '../../../../utils';
-import {styles} from './styles';
 
 export const DailyDarshan = React.memo(() => {
-  const theme = useAppSelector(state => state.theme.theme);
-  const style = styles();
   const commonStyle = CommonStyle();
   const [selectedItem, setselectedItem] = React.useState('');
   const date = new Date('Mar 25 2015');
   console.log(date);
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={true}
         headerTitleAlign={'left'}
@@ -63,6 +59,6 @@ export const DailyDarshan = React.memo(() => {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 });

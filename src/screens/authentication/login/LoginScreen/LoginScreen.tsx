@@ -5,7 +5,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -13,8 +12,8 @@ import {
   FormInput,
   Loader,
   PrimaryButton,
+  ScreenWrapper,
 } from '../../../../components';
-import i18n from '../../../../localization/i18n';
 import {storage} from '../../../../storage';
 import {
   LoginFormValidationSchemaType,
@@ -30,7 +29,7 @@ export const LoginScreen = ({
   RootAuthStackParamList,
   'MobileLogin'
 >): React.JSX.Element => {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const commonStyle = CommonStyle();
 
@@ -113,7 +112,7 @@ export const LoginScreen = ({
     return <Loader />;
   } else {
     return (
-      <SafeAreaView style={[commonStyle.commonContainer]}>
+      <ScreenWrapper>
         <View style={commonStyle.commonContentView}>
           {/* Header:------------------------------------------------------------------------ */}
           <View key={'LoginFormHeader'} style={style.headerView}>
@@ -193,7 +192,7 @@ export const LoginScreen = ({
           modalHeight={'45%'}
           label={t('loginScreen.SelectLangLabel')}
         />
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 };
