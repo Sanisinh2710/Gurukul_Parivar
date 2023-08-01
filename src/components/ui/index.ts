@@ -6,3 +6,4 @@ export * from './Loader';
 export * from './Modal';
 export * from './StatusBar';
 export * from './Radio';
+export * from './ScreenWrapper';

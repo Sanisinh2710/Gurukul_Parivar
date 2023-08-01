@@ -25,10 +25,6 @@ export type LoginOtpScreenProps = NativeStackScreenProps<
   RootAuthStackParamList,
   'MobileLoginOTP'
 >;
-export type UploadPhotoScreenProps = NativeStackScreenProps<
-  RootAuthStackParamList,
-  'UploadPhoto'
->;
 
 export type LoginSuccessStackScreenProps = NativeStackScreenProps<
   RootAuthStackParamList,

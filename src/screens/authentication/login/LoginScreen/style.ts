@@ -52,7 +52,7 @@ export const LoginScreenstyle = () => {
     },
     footerText: {
       ...CustomFonts.body.large14,
-      lineHeight: 16.2,
+      lineHeight: 20,
       color: theme.textColor,
     },
     footerRedText: {
