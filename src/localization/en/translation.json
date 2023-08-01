@@ -2,7 +2,9 @@
   "common": {
     "Signin": "Sign in",
     "Search": "Search",
-    "Reset": "Reset"
+    "Reset": "Reset",
+    "Save&Exit": "Save & Exit",
+    "Save&Next": "Save & Next"
   },
   "loginScreen": {
     "WelcomeTitle1": "Welcome to",
@@ -10,8 +12,8 @@
     "WelcomeSubtitle": "Enter Mobile Number and Login",
     "MobileNumber": "Mobile Number",
     "EnterMobileNum": "Enter mobile number",
-    "MobileEmptyErrMsg": "**Mobile number can't be empty..!",
-    "MobileErrMsg1": "**Please enter valid mobile number..!",
+    "MobileEmptyErrMsg": "Mobile number can't be empty..!",
+    "MobileErrMsg1": "Please enter valid mobile number..!",
     "FooterText1": "By proceeding you agree with our",
     "FooterText2": "&",
     "FT1": "Terms of Service",
@@ -43,5 +45,23 @@
     "OtpNotRecieve": "Didn't recieve code?",
     "OtpResend": "Resend",
     "Verify&Login": "Verify & Login"
+  },
+  "personalInfo":{
+    "Gender": "Choose Gender",
+    "GenderOpt1": "Male",
+    "GenderOpt2": "Female",
+    "FullNameLable": "Full name",
+    "FullNamePlaceholder": "Enter your full name",
+    "FatherNameLable": "Father’s full name",
+    "FatherNamePlaceholder":"Enter your father’s full name",
+    "DOB": "Date of birth",
+    "BloodGroup": "Blood Group",
+    "BloodGroupDropDown": "Select your blood group",
+    "ContactInformationLable": "Contact information",
+    "MobileNumber": "Mobile Number",
+    "AddSecondaryNumber": "+ Add secondary number",
+    "MobileFieldCheckbox": "I use this number as a WhatsApp number",
+    "EmailAddress": "Email address",
+    "AddSecondaryEmail": "+ Add secondary Email"
   }
 }

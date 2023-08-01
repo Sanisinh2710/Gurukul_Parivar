@@ -2,7 +2,9 @@
   "common": {
     "Signin": "दाखिल करना",
     "Search": "खोजे",
-    "Reset": "रीसेट"
+    "Reset": "रीसेट",
+    "Save&Exit": "सेव और बाहर",
+    "Save&Next": "सेव और आगे"
   },
   "loginScreen": {
     "WelcomeTitle1": "आपका स्वागत है",
@@ -10,8 +12,8 @@
     "WelcomeSubtitle": "मोबाइल नंबर दर्ज करें और लॉगिन करें",
     "MobileNumber": "मोबाइल नंबर",
     "EnterMobileNum": "मोबाइल नंबर दर्ज करें",
-    "MobileEmptyErrMsg": "**मोबाइल नंबर खाली नहीं हो सकता..!",
-    "MobileErrMsg1": "**कृपया मान्य मोबाइल नंबर दर्ज करें..!",
+    "MobileEmptyErrMsg": "मोबाइल नंबर खाली नहीं हो सकता..!",
+    "MobileErrMsg1": "कृपया मान्य मोबाइल नंबर दर्ज करें..!",
     "FooterText1": "आगे बढ़ते हुए आप हमारी",
     "FooterText2": "और से सहमत हैं",
     "FT1": "सेवा की शर्तों",
@@ -43,5 +45,23 @@
     "OtpNotRecieve": "कोड प्राप्त नहीं हुआ?",
     "OtpResend": "फिर से भेजें",
     "Verify&Login": "सत्यापित करें और लॉगिन करें"
+  },
+  "personalInfo": {
+    "Gender": "लिंग चुनें",
+    "GenderOpt1": "पुरुष",
+    "GenderOpt2": "स्त्री",
+    "FullNameLable": "पूरा नाम",
+    "FullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+    "FatherNameLable": "पिता का पूरा नाम",
+    "FatherNamePlaceholder": "अपने पिता का पूरा नाम दर्ज करें",
+    "DOB": "जन्म तारीख",
+    "BloodGroup": "रुधिर-वर्ग",
+    "BloodGroupDropDown": "अपने रक्त समूह का चयन करें",
+    "ContactInformationLable": "संपर्क जानकारी",
+    "MobileNumber": "मोबाइल नंबर",
+    "AddSecondaryNumber": "+ दूसरा फ़ोन नंबर जोड़ें",
+    "MobileFieldCheckbox": "मैं इस नंबर का उपयोग व्हाट्सएप नंबर के रूप में करता हूं।",
+    "EmailAddress": "ईमेल",
+    "AddSecondaryEmail": "+ दूसरा ईमेल जोड़ें"
   }
 }

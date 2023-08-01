@@ -2,7 +2,9 @@
   "common": {
     "Signin": "સાઇન ઇન કરો",
     "Search": "શોધો",
-    "Reset": "રીસેટ"
+    "Reset": "રીસેટ",
+    "Save&Exit": "સાચવો અને બહાર નીકળો",
+    "Save&Next": "સાચવો અને આગળ"
   },
   "loginScreen": {
     "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -10,8 +12,8 @@
     "WelcomeSubtitle": "મોબાઈલ નંબર દાખલ કરો અને લોગિન કરો",
     "MobileNumber": "મોબાઈલ નંબર",
     "EnterMobileNum": "મોબાઇલ નંબર દાખલ કરો",
-    "MobileEmptyErrMsg": "**મોબાઈલ નંબર ખાલી હોઈ શકતો નથી..!",
-    "MobileErrMsg1": "**કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો..!",
+    "MobileEmptyErrMsg": "મોબાઈલ નંબર ખાલી હોઈ શકતો નથી..!",
+    "MobileErrMsg1": "કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો..!",
     "FooterText1": "આગળ વધીને તમે અમારી",
     "FooterText2": "અને સાથે સંમત થાઓ છો",
     "FT1": "સેવાની શરતો",
@@ -43,5 +45,23 @@
     "OtpNotRecieve": "કોડ મેળવ્યો નથી?",
     "OtpResend": "ફરીથી મોકલો",
     "Verify&Login": "ચકાસો અને લૉગિન કરો"
+  },
+  "personalInfo": {
+    "Gender": "જાતિ પસંદ કરો",
+    "GenderOpt1": "પુરુષ",
+    "GenderOpt2": "સ્ત્રી",
+    "FullNameLable": "સંપૂર્ણ નામ",
+    "FullNamePlaceholder": "તમારું સંપૂર્ણ નામ દાખલ કરો",
+    "FatherNameLable": "પિતાનું આખું નામ",
+    "FatherNamePlaceholder": "તમારા પિતાનું પૂરું નામ દાખલ કરો", 
+    "DOB": "જન્મની તારીખ",
+    "BloodGroup": "બ્લડ ગ્રુપ",
+    "BloodGroupDropDown": "તમારા બ્લડ ગ્રુપને પસંદ કરો",
+    "ContactInformationLable": "સંપર્ક જાણકારી",
+    "MobileNumber": "મોબાઇલ નંબર",
+    "AddSecondaryNumber": "+ બીજો સંપર્ક ઉમેરો",
+    "MobileFieldCheckbox": "હું આ નંબરનો વોટ્સએપ નંબર તરીકે ઉપયોગ કરું છું",
+    "EmailAddress": "ઈ-મેઈલ સરનામું",
+    "AddSecondaryEmail": "+ બીજો ઈમેઈલ ઉમેરો"
   }
 }
