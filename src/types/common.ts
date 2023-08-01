@@ -1,3 +1,5 @@
+import {EnglishJSON} from '../localization/en';
+
 export type Theme = {
   isDark: boolean;
   primary: string;
@@ -10,11 +12,13 @@ export type Theme = {
   textSubtitleColor: string;
 };
 
-export type LoginValidationSchemaType = {
+export type CustomNameSpace = typeof EnglishJSON;
+
+export type LoginFormValidationSchemaType = {
   mobileNumber: string;
 };
 
-export type CompleteProfileValidationSchemaType = {
+export type CompleteProfileFormValidationSchemaType = {
   [key: string]: any;
   profilePic: string | undefined;
   gurukulName: string;

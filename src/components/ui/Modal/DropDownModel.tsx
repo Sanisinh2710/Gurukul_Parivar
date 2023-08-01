@@ -120,7 +120,7 @@ export const DropDownModel = React.memo(
                             }
                           }
                         }}>
-                        {t('common:Reset')}
+                        {t('common.Reset')}
                       </Text>
                     </View>
                   ) : (
@@ -135,7 +135,7 @@ export const DropDownModel = React.memo(
                       />
                       <TextInput
                         value={searchvalue}
-                        placeholder={t('common:Search')}
+                        placeholder={t('common.Search')}
                         placeholderTextColor={COLORS.lightModetextColor}
                         style={[style.formTextInput, {width: '80%'}]}
                         onChangeText={val => {

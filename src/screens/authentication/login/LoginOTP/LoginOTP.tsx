@@ -82,12 +82,12 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       />
       <View style={CommonStyles.commonContentView}>
         <View style={style.textWrapper}>
-          <Text style={style.headerText}>{t('otpScreen:OtpHeader')}</Text>
-          <Text style={style.headerSubText}>{t('otpScreen:OtpSubtext')}</Text>
+          <Text style={style.headerText}>{t('otpScreen.OtpHeader')}</Text>
+          <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
         </View>
         <View style={style.otpContainer}>
           <Text style={style.otpContainerHeader}>
-            {t('otpScreen:OtpContainerText')}
+            {t('otpScreen.OtpContainerText')}
           </Text>
           <View style={style.phoneEditContainer}>
             <Text style={style.phoneNumber}>+91-9876543210</Text>
@@ -99,19 +99,19 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
           <OtpComponent num={num} setNum={setNum} />
 
           <View style={style.otpNotRecieveContainer}>
-            <Text style={style.smallText}>{t('otpScreen:OtpNotRecieve')} </Text>
+            <Text style={style.smallText}>{t('otpScreen.OtpNotRecieve')} </Text>
 
             {countdown > 0 ? (
               <Text style={style.otpResend}>{formatTime(countdown)}</Text>
             ) : (
               <Pressable onPress={handleResendOTP}>
-                <Text style={style.otpResend}>{t('otpScreen:OtpResend')}</Text>
+                <Text style={style.otpResend}>{t('otpScreen.OtpResend')}</Text>
               </Pressable>
             )}
           </View>
           <PrimaryButton
             onPress={handleLogin}
-            title={t('otpScreen:Verify&Login')}
+            title={t('otpScreen.Verify&Login')}
             disabled={disabled}
           />
         </View>

@@ -71,7 +71,7 @@ export const ProfileSignup = (): React.JSX.Element => {
 
       <ScreenHeader
         showLeft={true}
-        headerTitle={t('uploadPhoto:HederText')}
+        headerTitle={t('uploadPhoto.HederText')}
         headerTitleAlign="center"
         leftOnPress={() => {
           if (width > 20) {
@@ -87,7 +87,12 @@ export const ProfileSignup = (): React.JSX.Element => {
             onSubmitEvent={submitButton}
           />
         ) : (
-          <PersonalInfo />
+          formStep === 2 && (
+            <PersonalInfo
+              initialValues={formData.personalInfo}
+              onSubmitEvent={submitButton}
+            />
+          )
         )}
       </View>
     </SafeAreaView>

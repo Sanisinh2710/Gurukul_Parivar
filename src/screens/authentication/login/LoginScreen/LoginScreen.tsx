@@ -14,13 +14,14 @@ import {
   Loader,
   PrimaryButton,
 } from '../../../../components';
+import i18n from '../../../../localization/i18n';
 import {storage} from '../../../../storage';
 import {
-  LoginValidationSchemaType,
+  LoginFormValidationSchemaType,
   RootAuthStackParamList,
 } from '../../../../types';
 import {Languages} from '../../../../utils';
-import {LoginValidationSchema} from '../../../../validations';
+import {LoginFormValidationSchema} from '../../../../validations';
 import {LoginScreenstyle} from './style';
 
 export const LoginScreen = ({
@@ -29,7 +30,7 @@ export const LoginScreen = ({
   RootAuthStackParamList,
   'MobileLogin'
 >): React.JSX.Element => {
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const commonStyle = CommonStyle();
 
@@ -75,7 +76,7 @@ export const LoginScreen = ({
     getValues,
     formState: {errors},
   } = useForm({
-    resolver: yupResolver(LoginValidationSchema()),
+    resolver: yupResolver(LoginFormValidationSchema()),
     mode: 'onChange',
   });
 
@@ -99,7 +100,7 @@ export const LoginScreen = ({
     }
   }, [watch()]);
 
-  const onSubmit = (data: LoginValidationSchemaType) => {
+  const onSubmit = (data: LoginFormValidationSchemaType) => {
     data.mobileNumber =
       countryCodeSelect.toString() + data.mobileNumber.toString();
 
@@ -121,13 +122,13 @@ export const LoginScreen = ({
             </View>
             <View style={style.welcomeTitleView}>
               <Text style={style.welcomeTitle1Text}>
-                {t('loginScreen:WelcomeTitle1')}
+                {t('loginScreen.WelcomeTitle1')}
               </Text>
               <Text style={style.welcomeTitle2Text}>
-                {t('loginScreen:WelcomeTitle2')}
+                {t('loginScreen.WelcomeTitle2')}
               </Text>
               <Text style={style.welcomeSubtitleText}>
-                {t('loginScreen:WelcomeSubtitle')}
+                {t('loginScreen.WelcomeSubtitle')}
               </Text>
             </View>
           </View>
@@ -142,8 +143,8 @@ export const LoginScreen = ({
                   <FormInput
                     type={'phone'}
                     name={'mobileNumber'}
-                    label={t('loginScreen:MobileNumber')}
-                    placeholder={t('loginScreen:EnterMobileNum')}
+                    label={t('loginScreen.MobileNumber')}
+                    placeholder={t('loginScreen.EnterMobileNum')}
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
@@ -158,19 +159,19 @@ export const LoginScreen = ({
           {/* LoginFormFooter:------------------------------------------------------------------------ */}
           <View key={'LoginFormFooter'} style={style.footerView}>
             <PrimaryButton
-              title={t('common:Signin')}
+              title={t('common.Signin')}
               onPress={handleSubmit(onSubmit)}
               disabled={disabled}
             />
             <Text style={style.footerText}>
-              {t('loginScreen:FooterText1')}{' '}
-              <Text style={style.footerRedText}>{t('loginScreen:FT1')}</Text>{' '}
-              {t('loginScreen:FooterText2').split(' ')[0]}
+              {t('loginScreen.FooterText1')}{' '}
+              <Text style={style.footerRedText}>{t('loginScreen.FT1')}</Text>{' '}
+              {t('loginScreen.FooterText2').split(' ')[0]}
               <Text style={style.footerRedText}>
                 {' '}
-                {t('loginScreen:FT2')}
+                {t('loginScreen.FT2')}
               </Text>{' '}
-              {t('loginScreen:FooterText2')
+              {t('loginScreen.FooterText2')
                 .split(' ')
                 .filter((val, index) => {
                   return index !== 0 && val;
@@ -190,7 +191,7 @@ export const LoginScreen = ({
           selectedItem={language}
           setSelectedItem={setLanguage}
           modalHeight={'45%'}
-          label={t('loginScreen:SelectLangLabel')}
+          label={t('loginScreen.SelectLangLabel')}
         />
       </SafeAreaView>
     );

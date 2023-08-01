@@ -33,16 +33,16 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
         <View style={style.logoView}>
           <Image source={AllImages.GurukulLogo} style={style.logo} />
         </View>
-        <Text style={style.title}>{t('loginSuccess:LoginSuccess')}</Text>
+        <Text style={style.title}>{t('loginSuccess.LoginSuccess')}</Text>
         <View style={style.subtitleView}>
           <Text style={style.subtitle}>
-            {t('loginSuccess:SuccessSubtitle')}
+            {t('loginSuccess.SuccessSubtitle')}
           </Text>
           <Text style={[style.subtitle, {textAlign: 'center'}]}>
-            {t('loginSuccess:SuccessSubtitle2')}
+            {t('loginSuccess.SuccessSubtitle2')}
           </Text>
           <PrimaryButton
-            title={t('loginSuccess:LoginSuccessBTN')}
+            title={t('loginSuccess.LoginSuccessBTN')}
             onPress={() => navigation.replace('ProfileSignup')}
             buttonStyle={{marginTop: 40}}
           />

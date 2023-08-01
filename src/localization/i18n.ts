@@ -4,19 +4,24 @@ import {EnglishJSON} from './en';
 import {GujaratiJSON} from './gu';
 import {HindiJSON} from './hn';
 
-const resources = {
+export const defaultNS = 'translation';
+
+export const resources = {
   // list of languages
   en: EnglishJSON,
   gu: GujaratiJSON,
   hn: HindiJSON,
-};
+} as const;
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     compatibilityJSON: 'v3', //To make it work for Android devices, add this line.
+    lng: 'gu',
+    ns: ['translation'],
+    defaultNS,
     resources,
-    lng: 'gu', // default language to use.
+    fallbackLng: 'en', // default language to use.
     // if you're using a language detector, do not define the lng option
     interpolation: {
       escapeValue: false,

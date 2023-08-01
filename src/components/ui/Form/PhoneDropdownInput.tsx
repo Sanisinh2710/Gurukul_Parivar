@@ -106,7 +106,7 @@ export const PhoneDropdownInput = React.memo(
           selectedItem={localval}
           setSelectedItem={setLocalVal}
           modalHeight={'90%'}
-          label={t('loginScreen:SelectCountryLabel')}
+          label={t('loginScreen.SelectCountryLabel')}
         />
       </>
     );
