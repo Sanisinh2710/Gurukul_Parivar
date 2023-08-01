@@ -3,6 +3,7 @@
     "Signin": "दाखिल करना",
     "Search": "खोजे",
     "Reset": "रीसेट",
+    "EmptyError": "यह फ़ील्ड आवश्यक है",
     "Save&Exit": "सेव और बाहर",
     "Save&Next": "सेव और आगे"
   },
@@ -47,6 +48,7 @@
     "Verify&Login": "सत्यापित करें और लॉगिन करें"
   },
   "personalInfo": {
+    "personalInfoHeader":"व्यक्तिगत जानकारी",
     "Gender": "लिंग चुनें",
     "GenderOpt1": "पुरुष",
     "GenderOpt2": "स्त्री",
@@ -62,6 +64,39 @@
     "AddSecondaryNumber": "+ दूसरा फ़ोन नंबर जोड़ें",
     "MobileFieldCheckbox": "मैं इस नंबर का उपयोग व्हाट्सएप नंबर के रूप में करता हूं।",
     "EmailAddress": "ईमेल",
-    "AddSecondaryEmail": "+ दूसरा ईमेल जोड़ें"
+    "AddSecondaryEmail": "+ दूसरा ईमेल जोड़ें",
+    "NameErr": "कृपया केवल वर्णमाला का उपयोग करके एक वैध नाम दर्ज करें।",
+    "EmailErr":"कृपया एक वैध ईमेल दर्ज करें।",
+    "DobErr": "कृपया एक वैध तिथि का चयन करें।"
+  },
+  "addressInfo": {
+    "AddressHeader":"पते की जानकारी",
+    "CountryLbl": "देश",
+    "AddressLbl": "पता",
+    "AddressPlaceholder": "अपना पता दर्ज करें",
+    "PincodeLbl": "पिनकोड",
+    "PincodePlaceholder": "अपना पिनकोड दर्ज करें",
+    "CityVillageLle": "शहर/गांव",
+    "CityVillagePlaceholder": "अपना शहर / गांव दर्ज करें",
+    "TypeofaddressLbl": "पते का प्रकार",
+    "HomeField": "घर", 
+    "NativeField": "मूल", 
+    "Work/BusinessField": "काम/व्यापार",
+    "AddressCheckbox": "यह पता मेरा पसंदीदा संचार पता है।",
+    "AddAnotherAddressBtn": "+ एक और पता जोड़ें"
+  },
+  "education/BusinessInfo": {
+    "EduHeader":"शिक्षा/व्यावसायिक जानकारी",
+    "HighesteduLbl": "उच्चतम शैक्षिक स्तर",
+    "HighesteduPlaceHolder": "शिक्षा स्तर का चयन करें",
+    "ChooseOccuLbl": "व्यवसाय चुनें",
+    "Occupation1": "मैं एक कर्मचारी हूँ",
+    "Occupation2": "मैं एक व्यवसाय चलाता हूँ",  
+    "OccupationType": "व्यवसाय का प्रकार",
+    "OccuTypePlaceHolder": "व्यवसाय प्रकार का चयन करें",
+    "SKills": "कौशल",
+    "SKillsPlaceHolder": "अपने कौशल का चयन करें",
+    "Other": "अन्य (टिप्पणी छोड़ दो)",
+    "OtherPlaceHolder": "अपनी टिप्पणी यहाँ छोड़ दो ..."
   }
 }

@@ -3,6 +3,7 @@
     "Signin": "Sign in",
     "Search": "Search",
     "Reset": "Reset",
+    "EmptyError": "This Field is required",
     "Save&Exit": "Save & Exit",
     "Save&Next": "Save & Next"
   },
@@ -47,6 +48,7 @@
     "Verify&Login": "Verify & Login"
   },
   "personalInfo":{
+    "personalInfoHeader":"Personal info",
     "Gender": "Choose Gender",
     "GenderOpt1": "Male",
     "GenderOpt2": "Female",
@@ -62,6 +64,39 @@
     "AddSecondaryNumber": "+ Add secondary number",
     "MobileFieldCheckbox": "I use this number as a WhatsApp number",
     "EmailAddress": "Email address",
-    "AddSecondaryEmail": "+ Add secondary Email"
+    "AddSecondaryEmail": "+ Add secondary Email",
+    "NameErr": "Please enter a valid name using alphabets only",
+    "EmailErr":"Please enter a valid email",
+    "DobErr": "Please select valid date"
+  },
+  "addressInfo":{
+    "AddressHeader":"Address info",
+    "CountryLbl":"Country",
+    "AddressLbl":"Address Line",
+    "AddressPlaceholder":"Enter your address",
+    "PincodeLbl":"Pincode",
+    "PincodePlaceholder":"Enter your pincode",
+    "CityVillageLle":"City/Village",
+    "CityVillagePlaceholder":"Enter your city/village",
+    "TypeofaddressLbl":"Type of address",
+    "HomeField":"Home",
+    "NativeField":"Native",
+    "Work/BusinessField":"Work/Business",
+    "AddressCheckbox":"This address is my preferred communication address",
+    "AddAnotherAddressBtn":"+Add Another Address"
+  },
+  "education/BusinessInfo":{
+    "EduHeader":"Education/Business Info",
+    "HighesteduLbl":"Highest educational level",
+    "HighesteduPlaceHolder":"Select education level",
+    "ChooseOccuLbl":"Choose Occupation",
+    "Occupation1":"I am an employee",
+    "Occupation2":"I run a business",
+    "OccupationType":"Occupation Type",
+    "OccuTypePlaceHolder":"Select occupation type",
+    "SKills":"SKills",
+    "SKillsPlaceHolder":"Select your skills",
+    "Other":"Others (Leave Comment)",
+    "OtherPlaceHolder":"Leave your comments here..."
   }
 }

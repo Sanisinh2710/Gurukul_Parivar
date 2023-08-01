@@ -3,6 +3,7 @@
     "Signin": "સાઇન ઇન કરો",
     "Search": "શોધો",
     "Reset": "રીસેટ",
+    "EmptyError": "આ ક્ષેત્ર જરૂરી છે",
     "Save&Exit": "સાચવો અને બહાર નીકળો",
     "Save&Next": "સાચવો અને આગળ"
   },
@@ -47,6 +48,7 @@
     "Verify&Login": "ચકાસો અને લૉગિન કરો"
   },
   "personalInfo": {
+    "personalInfoHeader":"વ્યક્તિગત માહિતી",
     "Gender": "જાતિ પસંદ કરો",
     "GenderOpt1": "પુરુષ",
     "GenderOpt2": "સ્ત્રી",
@@ -62,6 +64,40 @@
     "AddSecondaryNumber": "+ બીજો સંપર્ક ઉમેરો",
     "MobileFieldCheckbox": "હું આ નંબરનો વોટ્સએપ નંબર તરીકે ઉપયોગ કરું છું",
     "EmailAddress": "ઈ-મેઈલ સરનામું",
-    "AddSecondaryEmail": "+ બીજો ઈમેઈલ ઉમેરો"
+    "AddSecondaryEmail": "+ બીજો ઈમેઈલ ઉમેરો",
+    "NameErr": "કૃપા કરીને માત્ર વર્ણમાળાનો ઉપયોગ કરીને માન્ય નામ દાખલ કરો.",
+    "EmailErr":"કૃપા કરીને માન્ય ઇમેઇલ દાખલ કરો.",
+    "DobErr": "કૃપા કરીને માન્ય તારીખ પસંદ કરો."
+  },
+  
+  "addressInfo": {
+    "AddressHeader":"સરનામાની માહિતી",
+    "CountryLbl": "દેશ",
+    "AddressLbl": "સરનામુ",
+    "AddressPlaceholder": "તમારું સરનામું દાખલ કરો",
+    "PincodeLbl": "પિનકોડ",
+    "PincodePlaceholder": "તમારો પિનકોડ દાખલ કરો",
+    "CityVillageLle": "શહેર/ગામ",
+    "CityVillagePlaceholder": "તમારા શહેર/ગામને દાખલ કરો",
+    "TypeofaddressLbl": "સરનામાનાં પ્રકાર",
+    "HomeField": "ઘર", 
+    "NativeField": "સ્થાનિક",
+    "Work/BusinessField": "કામ/વ્યાપાર",
+    "AddressCheckbox": "આ સરનામું મારું પસંદીદા સંદેશાવ્યવહાર સરનામું છે",
+    "AddAnotherAddressBtn": "અન્ય સરનામાંને ઉમેરો"
+  },
+  "education/BusinessInfo": {
+    "EduHeader":"શિક્ષણ/વ્યવસાયની માહિતી",
+    "HighesteduLbl": "ઉચ્ચતમ શૈક્ષણિક સ્તર",
+    "HighesteduPlaceHolder": "શિક્ષણનું સ્તર પસંદ કરો",
+    "ChooseOccuLbl": "વ્યવસાય પસંદ કરો",
+    "Occupation1": "હું એક કર્મચારી છું",
+    "Occupation2": "હું બિઝનેસ ચલાવું છું",
+    "OccupationType": "વ્યવસાય પ્રકાર",
+    "OccuTypePlaceHolder": "વ્યવસાય પ્રકાર પસંદ કરો",
+    "SKills": "કુશળતાઓ",
+    "SKillsPlaceHolder": "તમારી કુશળતાઓ પસંદ કરો",
+    "Other": "બીજાંઓ (ટિપ્પણી છોડો)",
+    "OtherPlaceHolder": "તમારી ટિપ્પણીઓ અહીં મૂકો..." 
   }
 }
