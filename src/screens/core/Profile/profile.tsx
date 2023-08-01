@@ -1,16 +1,18 @@
 import React from 'react';
 import {ScrollView, Text} from 'react-native';
-import {FlatList} from 'react-native';
 import {SafeAreaView, View, Image} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {PrimaryButton, ScreenHeader} from '../../../components';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
 import {useAppSelector} from '../../../redux/hooks';
+import {useTranslation} from 'react-i18next';
+import {AllIcons} from '../../../../assets/icons';
+import {AllImages} from '../../../../assets/images';
 
 export const ProfileScreen = React.memo(() => {
   const theme = useAppSelector(state => state.theme.theme);
-
+  const {t} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
 
@@ -21,11 +23,11 @@ export const ProfileScreen = React.memo(() => {
         headerTitleAlign={'left'}
         customTitle={
           <View>
-            <Text style={style.title}>My Profile</Text>
+            <Text style={style.title}>{t('myProfile.Heading')}</Text>
           </View>
         }
         headerRight={{
-          icon: require('../../../../assets/icons/Notification.png'),
+          icon: AllIcons.Notification,
           onPress: () => {
             console.log('Notification recieved');
           },
@@ -33,7 +35,8 @@ export const ProfileScreen = React.memo(() => {
       />
       <ScrollView
         style={commonStyle.commonContentView}
-        showsVerticalScrollIndicator={false}>
+        contentContainerStyle={{paddingBottom: '20%'}}
+        showsVerticalScrollIndicator={true}>
         <View
           style={{
             flexDirection: 'row',
@@ -45,10 +48,7 @@ export const ProfileScreen = React.memo(() => {
             padding: 20,
             borderRadius: 8,
           }}>
-          <Image
-            source={require('../../../../assets/images/Person.png')}
-            style={{height: 64, width: 64}}
-          />
+          <Image source={AllImages.Person} style={{height: 64, width: 64}} />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text
               style={{
@@ -56,7 +56,7 @@ export const ProfileScreen = React.memo(() => {
                 fontSize: 16,
                 color: 'black',
               }}>
-              Maheshbhai Desai
+              {t('myProfile.Name')}
             </Text>
             <Text>+91-9873957274</Text>
             <View
@@ -74,7 +74,7 @@ export const ProfileScreen = React.memo(() => {
                   fontSize: 12,
                   textAlign: 'center',
                 }}>
-                Family ID: 148410
+                {t('myProfile.ID')}:148410
               </Text>
             </View>
           </View>
@@ -86,7 +86,7 @@ export const ProfileScreen = React.memo(() => {
             borderColor: 'rgba(172, 43, 49,0.3)',
             borderRadius: 8,
           }}>
-          {EditProfile.map((item, index) => {
+          {EditProfile(t).map((item, index) => {
             return (
               <View
                 key={index}

@@ -19,7 +19,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import { useAppSelector } from '../../../redux/hooks';
+import {useAppSelector} from '../../../redux/hooks';
+import {AllIcons} from '../../../../assets/icons';
 export const HomeScreen = ({
   navigation,
 }: CompositeScreenProps<
@@ -30,24 +31,22 @@ export const HomeScreen = ({
   const style = styles();
   const TouchX = React.useRef<any>();
   const theme = useAppSelector(state => state.theme.theme);
-  
-  const {t, i18n} = useTranslation();
+
+  const {t} = useTranslation();
   const commonStyle = CommonStyle();
 
   function handlePress(val: any) {
-    console.log(val);
-
     switch (val) {
-      case 'Daily Darshan':
+      case 'darshan':
         navigation.navigate('dailyDarshan');
         break;
-      case 'Daily Quotes':
+      case 'quotes':
         navigation.navigate('dailyQuotes');
         break;
-      case 'Daily Update':
+      case 'update':
         navigation.navigate('dailyUpdates');
         break;
-      case 'Calendar':
+      case 'calendar':
         navigation.navigate('calendar');
         break;
 
@@ -64,19 +63,19 @@ export const HomeScreen = ({
           <View>
             <View style={{flexDirection: 'row'}}>
               <Text style={style.WelcomeText1}>
-                {t('HomeScreen:WelcomeText1')}{' '}
+                {t('homeScreen.WelcomeText1')}{' '}
               </Text>
-              <Text style={style.name}>{t('HomeScreen:Name')}</Text>
+              <Text style={style.name}>{t('homeScreen.Name')}</Text>
             </View>
             <View>
               <Text style={style.WelcomeText2}>
-                {t('HomeScreen:WelcomeText2')}
+                {t('homeScreen.WelcomeText2')}
               </Text>
             </View>
           </View>
         }
         headerRight={{
-          icon: require('../../../../assets/icons/Notification.png'),
+          icon: AllIcons.Notification,
           onPress: () => {
             console.log('Notification recieved');
           },
@@ -101,7 +100,7 @@ export const HomeScreen = ({
         </View>
       </View>
       <View style={style.gridContainer}>
-        {HomeGrid.map((item, index) => (
+        {HomeGrid(t).map((item, index) => (
           // <TouchableOpacity
           //   onPress={() => console.log('hi')}
           //   style={style.gridItem}>
@@ -114,7 +113,7 @@ export const HomeScreen = ({
             <TouchableOpacity
               style={{height: '100%', width: '100%'}}
               activeOpacity={0.5}
-              onPress={() => handlePress(item.name)}>
+              onPress={() => handlePress(item.id)}>
               <LinearGradient
                 colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
                 locations={[0, 1]}

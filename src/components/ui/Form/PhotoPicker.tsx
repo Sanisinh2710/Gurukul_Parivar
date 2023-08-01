@@ -1,5 +1,7 @@
 import React from 'react';
 import {Alert, Image, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
+import {AllImages} from '../../../../assets/images';
 import {captureImage, chooseFile} from '../../../utils';
 import {FormInputStyle} from './style';
 
@@ -55,10 +57,7 @@ export const PhotoPicker = React.memo(
             {value ? (
               <Image source={{uri: value}} style={style.image} />
             ) : (
-              <Image
-                source={require('../../../../assets/icons/Avtar.png')}
-                style={style.avtar}
-              />
+              <Image source={AllIcons.Avtar} style={style.avtar} />
             )}
           </View>
         </View>

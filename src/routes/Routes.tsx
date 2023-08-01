@@ -22,6 +22,7 @@ import {DailyDarshan} from '../screens/other/HomeStack/DailyDarshan/DailyDarshan
 import {DailyQuotes} from '../screens/other/HomeStack/DailyQuotes/DailyQuotes';
 import {DailyUpdates} from '../screens/other/HomeStack/DailyUpdates/DailyUpdates';
 import {CalendarScreen} from '../screens/other/HomeStack/Calendar/CalendarScreen';
+import {AllIcons} from '../../assets/icons';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -78,11 +79,11 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}
             />
+            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
 
             <NativeStack.Screen name="dailyDarshan" component={DailyDarshan} />
             <NativeStack.Screen name="dailyUpdates" component={DailyUpdates} />
@@ -123,11 +124,7 @@ const BottomTabNavigator = () => {
               <>
                 {focused && <View style={style.bottomBarLine} />}
                 <Image
-                  source={
-                    focused
-                      ? require('../../assets/icons/Home.png')
-                      : require('../../assets/icons/Home-Outline.png')
-                  }
+                  source={focused ? AllIcons.Home : AllIcons.HomeOutline}
                   style={{
                     tintColor: color,
                     height: 24,
@@ -147,9 +144,7 @@ const BottomTabNavigator = () => {
                 {focused && <View style={style.bottomBarLine} />}
                 <Image
                   source={
-                    focused
-                      ? require('../../assets/icons/Category.png')
-                      : require('../../assets/icons/Category-Outline.png')
+                    focused ? AllIcons.Category : AllIcons.CategoryOutline
                   }
                   style={{
                     tintColor: color,
@@ -171,11 +166,7 @@ const BottomTabNavigator = () => {
               <>
                 {focused && <View style={style.bottomBarLine} />}
                 <Image
-                  source={
-                    focused
-                      ? require('../../assets/icons/Profile.png')
-                      : require('../../assets/icons/Profile-Outline.png')
-                  }
+                  source={focused ? AllIcons.Profile : AllIcons.ProfileOutline}
                   style={{
                     tintColor: color,
                     height: 24,
