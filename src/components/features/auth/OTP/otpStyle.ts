@@ -1,7 +1,9 @@
 import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../../utils';
+import { useAppSelector } from '../../../../redux/hooks';
 
 export const useOtpStyle = () => {
+  const theme = useAppSelector((state)=>state.theme.theme)
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -14,7 +16,6 @@ export const useOtpStyle = () => {
       alignItems: 'center',
       justifyContent: 'space-between',
     },
-
     textInput: {
       backgroundColor: 'rgba(172, 43, 49, 0.1)',
       height: 50,
@@ -24,7 +25,7 @@ export const useOtpStyle = () => {
       borderColor: 'rgba(172, 43, 49, 0.18)',
       textAlign: 'center',
       fontWeight: 'bold',
-      color: COLORS.black,
+      color: theme.textColor,
       fontSize: 20,
     },
   });

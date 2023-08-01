@@ -18,7 +18,7 @@ export const COLORS = {
   lightModeStatusBarColor: '#FFFFFF',
 
   darkModeBackgroundcolor: '#171717',
-  lightModeBackgroundColor: '#FFFFFF',
+  lightModeBackgroundColor: '##F4EFEB',
 
   darkModetextColor: '#FFFFFF',
   lightModetextColor: '#171717',

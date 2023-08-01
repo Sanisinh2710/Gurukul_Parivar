@@ -68,6 +68,8 @@ export const PrimaryButton = React.memo(
               style={{
                 ...styles.titleText,
                 ...textStyle,
+                marginTop: 'auto',
+                marginBottom: 'auto',
                 color: titleColor || COLORS.darkModetextColor,
               }}>
               {title}

@@ -303,3 +303,81 @@ export const AllCountryCodes = [
     return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
   }),
 ];
+
+export const FrontDesk = [
+  {
+    image: require('../../assets/icons/Paper.png'),
+    title: 'Go Form',
+  },
+  {
+    image: require('../../assets/icons/Chat.png'),
+    title: 'Special Speech',
+  },
+  {
+    image: require('../../assets/icons/Video.png'),
+    title: 'Gurukul Darshan',
+  },
+  {
+    image: require('../../assets/icons/Ticket.png'),
+    title: 'Gurukul Events',
+  },
+  {
+    image: require('../../assets/icons/Star.png'),
+    title: 'Daily Quiz',
+  },
+];
+
+export const HomeGrid: {name: string; image: any}[] = [
+  {
+    name: 'Daily Darshan',
+    image: require('../../assets/images/Darshan.png'),
+  },
+  {
+    name: 'Daily Quotes',
+    image: require('../../assets/images/Quotes.png'),
+  },
+  {
+    name: 'Daily Update',
+    image: require('../../assets/images/Calendar.png'),
+  },
+  {
+    name: 'Calendar',
+    image: require('../../assets/images/Darshan.png'),
+  },
+];
+export const EditProfile: {
+  image: any;
+  name: string;
+  rightIcon?: any;
+  language?: string;
+}[] = [
+  {
+    image: require('../../assets/icons/ProfileUser.png'),
+    name: 'Edit Profile',
+    rightIcon: require('../../assets/icons/RightArrow.png'),
+  },
+  {
+    image: require('../../assets/icons/multiUser.png'),
+    name: 'My Family',
+    rightIcon: require('../../assets/icons/RightArrow.png'),
+  },
+  {
+    image: require('../../assets/icons/translation.png'),
+    name: 'Change Language',
+    rightIcon: require('../../assets/icons/RightArrow.png'),
+    language: 'EN',
+  },
+  {
+    image: require('../../assets/icons/question.png'),
+    name: 'Need Help',
+    rightIcon: require('../../assets/icons/RightArrow.png'),
+  },
+  {
+    image: require('../../assets/icons/EditSquare.png'),
+    name: 'Feedback',
+  },
+  {
+    image: require('../../assets/icons/Logout.png'),
+    name: 'Logout',
+  },
+];

@@ -1,5 +1,12 @@
 import React from 'react';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppSelector} from '../../../redux/hooks';
 import {Theme} from '../../../types';
@@ -41,7 +48,14 @@ export const ScreenHeader = React.memo(
           <View
             onTouchEnd={leftOnPress ? leftOnPress : () => {}}
             style={{
-              width: showLeft === false && !headerRight ? '0%' : '11.5%',
+              width:
+                showLeft === false && !headerRight
+                  ? '0%'
+                  : headerTitleAlign === 'left' && showLeft === false
+                  ? '0%'
+                  : showLeft === false && headerRight
+                  ? '11.5%'
+                  : '11.5%',
               height: 40,
               overflow: 'hidden',
               alignItems: 'center',
@@ -70,7 +84,13 @@ export const ScreenHeader = React.memo(
           <View
             style={[
               {
-                width: showLeft ? '76%' : !headerRight ? '100%' : '76%',
+                width: showLeft
+                  ? '76%'
+                  : !headerRight
+                  ? '100%'
+                  : headerTitleAlign === 'left'
+                  ? '88%'
+                  : '76%',
                 justifyContent:
                   headerTitleAlign === 'center' ? 'center' : 'flex-start',
                 alignItems: 'center',
@@ -112,12 +132,16 @@ export const ScreenHeader = React.memo(
                 style={{
                   flex: 1,
                   flexDirection: 'row',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 60,
+                  backgroundColor: COLORS.primaryLightColor,
+                  height: 40,
+                  width: 40,
                 }}>
-                <MaterialCommunityIcon
-                  name={headerRight.icon}
-                  size={25}
-                  color={theme.textColor}
+                <Image
+                  source={headerRight.icon}
+                  style={{height: 24, width: 24}}
                 />
               </View>
             )}
