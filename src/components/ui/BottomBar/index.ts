@@ -1,0 +1,1 @@
+export {CustomBottomTabBar} from './CustomBottomBar';

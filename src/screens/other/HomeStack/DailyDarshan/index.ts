@@ -1,1 +1,1 @@
-export * as './DailyDarshan'
+export * from './DailyDarshan';

@@ -1,11 +1,10 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {SafeAreaView, View, Image} from 'react-native';
+import {Image, SafeAreaView, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {RadioLable, ScreenHeader} from '../../../../components';
+import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 import {styles} from './styles';
-import {useAppSelector} from '../../../../redux/hooks';
 
 export const DailyDarshan = React.memo(() => {
   const theme = useAppSelector(state => state.theme.theme);

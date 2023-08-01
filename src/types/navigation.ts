@@ -10,9 +10,9 @@ export type RootStackParamList = {
 };
 
 export type RootBottomTabParamList = {
-  homeScreen: undefined;
-  frontDesk: undefined;
-  profileScreen: undefined;
+  Home: undefined;
+  FrontDesk: undefined;
+  Profile: undefined;
 };
 
 export type RootAuthStackParamList = {
@@ -24,10 +24,6 @@ export type RootAuthStackParamList = {
 export type LoginOtpScreenProps = NativeStackScreenProps<
   RootAuthStackParamList,
   'MobileLoginOTP'
->;
-export type UploadPhotoScreenProps = NativeStackScreenProps<
-  RootAuthStackParamList,
-  'UploadPhoto'
 >;
 
 export type LoginSuccessStackScreenProps = NativeStackScreenProps<
