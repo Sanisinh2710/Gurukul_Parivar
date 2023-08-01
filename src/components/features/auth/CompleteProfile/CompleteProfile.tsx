@@ -4,15 +4,15 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, Text, View} from 'react-native';
-import {CompleteProfileValidationSchemaType} from '../../../../types';
+import {CompleteProfileFormValidationSchemaType} from '../../../../types';
 import {GuruKulList} from '../../../../utils';
-import {CompleteProfileValidationSchema} from '../../../../validations';
+import {CompleteProfileFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton} from '../../../ui';
 import {styles} from './styles';
 
 export const CompleteYourProfile = React.memo(
   ({initialValues, onSubmitEvent}: any) => {
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const style = styles();
 
     const completeProfileInputList: {
@@ -35,13 +35,13 @@ export const CompleteYourProfile = React.memo(
         label: '',
         type: 'photo',
         name: 'profilePic',
-        placeholder: t('uploadPhoto:PickPhotoBTN'),
+        placeholder: t('uploadPhoto.PickPhotoBTN'),
       },
       gurukulName: {
-        label: t('uploadPhoto:DropdownTitle'),
+        label: t('uploadPhoto.DropdownTitle'),
         type: 'select',
         name: 'gurukulName',
-        placeholder: t('uploadPhoto:DropdownLable'),
+        placeholder: t('uploadPhoto.DropdownLable'),
       },
     };
 
@@ -49,13 +49,13 @@ export const CompleteYourProfile = React.memo(
       control,
       handleSubmit,
       formState: {errors},
-    } = useForm<CompleteProfileValidationSchemaType>({
+    } = useForm<CompleteProfileFormValidationSchemaType>({
       defaultValues: initialValues,
-      resolver: yupResolver(CompleteProfileValidationSchema()),
-      mode: 'onChange',
+      resolver: yupResolver(CompleteProfileFormValidationSchema()),
+      mode: 'onBlur',
     });
 
-    const onSubmit = (data: CompleteProfileValidationSchemaType) => {
+    const onSubmit = (data: CompleteProfileFormValidationSchemaType) => {
       const formSubmitData = {
         profilePic: data.profilePic,
         gurukulName: data.gurukulName,
@@ -69,10 +69,10 @@ export const CompleteYourProfile = React.memo(
         <ScrollView>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
-              {t('uploadPhoto:FirstSubtitle')}
+              {t('uploadPhoto.FirstSubtitle')}
             </Text>
             <Text style={style.SecondSubtitle}>
-              {t('uploadPhoto:SecondSubtitle')}
+              {t('uploadPhoto.SecondSubtitle')}
             </Text>
           </View>
           {/* PhotoPicker-------------------------------------- */}
@@ -99,10 +99,10 @@ export const CompleteYourProfile = React.memo(
 
           <View style={style.BottomView}>
             <Text style={style.BottomSubtitle1}>
-              {t('uploadPhoto:BottomSubtitle1')}
+              {t('uploadPhoto.BottomSubtitle1')}
             </Text>
             <Text style={style.BottomSubtitle2}>
-              {t('uploadPhoto:BottomSubtitle2')}
+              {t('uploadPhoto.BottomSubtitle2')}
             </Text>
 
             {/* Gurukul List DropDown------------------------------------------------- */}
@@ -137,7 +137,7 @@ export const CompleteYourProfile = React.memo(
         {/* Submit button.................................. */}
         <View style={[style.NextBtn, {position: 'absolute', bottom: 100}]}>
           <PrimaryButton
-            title={t('uploadPhoto:NextBtn')}
+            title={t('uploadPhoto.NextBtn')}
             onPress={handleSubmit(onSubmit)}
           />
         </View>
