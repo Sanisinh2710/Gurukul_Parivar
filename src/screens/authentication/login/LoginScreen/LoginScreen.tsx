@@ -14,7 +14,6 @@ import {
   PrimaryButton,
   ScreenWrapper,
 } from '../../../../components';
-import i18n from '../../../../localization/i18n';
 import {storage} from '../../../../storage';
 import {
   LoginFormValidationSchemaType,
@@ -30,7 +29,7 @@ export const LoginScreen = ({
   RootAuthStackParamList,
   'MobileLogin'
 >): React.JSX.Element => {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const commonStyle = CommonStyle();
 

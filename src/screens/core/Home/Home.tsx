@@ -2,12 +2,17 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../components';
-import {PagerView} from '../../../components/ui/Carousel/pagerView';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {styles} from './styles';
 import LinearGradient from 'react-native-linear-gradient';
 import {HomeGrid} from '../../../utils';
-import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ImageBackground,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CompositeScreenProps} from '@react-navigation/native';
@@ -17,7 +22,7 @@ import {useAppSelector} from '../../../redux/hooks';
 export const HomeScreen = ({
   navigation,
 }: CompositeScreenProps<
-  BottomTabScreenProps<RootBottomTabParamList, 'homeScreen'>,
+  BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [currentPage, setCurrentPage] = React.useState<number>(1);

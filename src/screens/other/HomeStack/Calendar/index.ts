@@ -1,1 +1,1 @@
-export * as './CalendarScreen';
+export * from './CalendarScreen';

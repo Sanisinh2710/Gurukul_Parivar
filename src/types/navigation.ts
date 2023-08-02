@@ -10,9 +10,9 @@ export type RootStackParamList = {
 };
 
 export type RootBottomTabParamList = {
-  homeScreen: undefined;
-  frontDesk: undefined;
-  profileScreen: undefined;
+  Home: undefined;
+  FrontDesk: undefined;
+  Profile: undefined;
 };
 
 export type RootAuthStackParamList = {

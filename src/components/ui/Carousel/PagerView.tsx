@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Image, View} from 'react-native';
+import {Snail} from './SnailIndicator';
 import {style} from './styles';
-import {Snail} from './snailIndicator';
 
 type PagerViewProps = {
   currentPage: number;

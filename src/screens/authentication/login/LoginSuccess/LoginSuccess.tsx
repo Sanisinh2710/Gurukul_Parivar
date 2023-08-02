@@ -1,7 +1,7 @@
 import React from 'react';
+
 import {useTranslation} from 'react-i18next';
 import {Dimensions, Image, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -15,7 +15,7 @@ import {styles} from './styles';
 export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const commonStyle = CommonStyle();
   const style = styles();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   return (
     <ScreenWrapper>

@@ -4,7 +4,6 @@ import * as Progress from 'react-native-progress';
 
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   CompleteYourProfile,

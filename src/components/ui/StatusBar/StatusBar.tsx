@@ -1,10 +1,9 @@
 import React from 'react';
-import {StatusBar, View} from 'react-native';
+import {ImageBackground, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {AllImages} from '../../../../assets/images';
 import {Theme} from '../../../types';
 import {style} from './style';
-import {ImageBackground} from 'react-native';
-import {AllImages} from '../../../../assets/images';
 
 type CustomStatusBarProps = {
   [key: string]: any;
@@ -26,6 +25,7 @@ export const CustomStatusBar = React.memo(
         tintColor={backgroundColor}
         style={style(backgroundColor, insets).statusBarMainView}>
         <StatusBar
+          // Will change theme.isDark? 'light-content when dark theme will come
           barStyle={theme.isDark ? 'dark-content' : 'dark-content'}
           translucent
           backgroundColor="transparent"

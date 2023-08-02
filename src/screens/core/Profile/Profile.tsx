@@ -1,12 +1,16 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
-import {FlatList} from 'react-native';
-import {SafeAreaView, View, Image} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
-import {PrimaryButton, ScreenHeader} from '../../../components';
+import {
+  PrimaryButton,
+  RoundedIcon,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../components';
+import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
-import {useAppSelector} from '../../../redux/hooks';
 
 export const ProfileScreen = React.memo(() => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -15,7 +19,7 @@ export const ProfileScreen = React.memo(() => {
   const commonStyle = CommonStyle();
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={false}
         headerTitleAlign={'left'}
@@ -25,14 +29,17 @@ export const ProfileScreen = React.memo(() => {
           </View>
         }
         headerRight={{
-          icon: require('../../../../assets/icons/Notification.png'),
+          icon: AllIcons.Notification,
           onPress: () => {
             console.log('Notification recieved');
           },
         }}
       />
       <ScrollView
-        style={commonStyle.commonContentView}
+        contentContainerStyle={[
+          commonStyle.commonContentView,
+          {paddingBottom: '25%'},
+        ]}
         showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -40,7 +47,6 @@ export const ProfileScreen = React.memo(() => {
             borderWidth: 0.25,
             borderColor: 'rgba(172, 43, 49,0.3)',
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            // marginHorizontal: '7%',
             marginTop: 10,
             padding: 20,
             borderRadius: 8,
@@ -91,29 +97,21 @@ export const ProfileScreen = React.memo(() => {
               <View
                 key={index}
                 style={{
-                  borderBottomWidth: item.name === 'Logout' ? 0 : 0.25,
+                  borderBottomWidth: item.name === 'Logout' ? 0 : 1,
                   borderColor: 'rgba(23, 23, 23,0.1)',
                   flexDirection: 'row',
                   marginHorizontal: '7%',
                   marginVertical: '4%',
                   paddingBottom: '2.5%',
                 }}>
-                <View
-                  style={{
-                    height: 40,
-                    width: 40,
-                    backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 50,
-                  }}>
-                  {item.image && (
-                    <Image
-                      source={item.image}
-                      style={{height: 20, width: 20}}
-                    />
-                  )}
-                </View>
+                <RoundedIcon
+                  icon={item.image}
+                  onPress={() => {}}
+                  imageStyle={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
                 <View
                   style={{
                     justifyContent: 'center',
@@ -171,6 +169,6 @@ export const ProfileScreen = React.memo(() => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 });

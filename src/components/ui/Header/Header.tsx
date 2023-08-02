@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  Dimensions,
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppSelector} from '../../../redux/hooks';
 import {Theme} from '../../../types';
 import {COLORS, CustomFonts} from '../../../utils';
+import {RoundedIcon} from '../RoundedIcon';
 
 type ScreenHeaderProps = {
   headerTitle?: string;
@@ -127,23 +121,10 @@ export const ScreenHeader = React.memo(
               alignItems: 'center',
             }}>
             {headerRight && (
-              <View
-                onTouchEnd={headerRight.onPress}
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 60,
-                  backgroundColor: COLORS.primaryLightColor,
-                  height: 40,
-                  width: 40,
-                }}>
-                <Image
-                  source={headerRight.icon}
-                  style={{height: 24, width: 24}}
-                />
-              </View>
+              <RoundedIcon
+                icon={headerRight.icon}
+                onPress={headerRight.onPress}
+              />
             )}
           </View>
         </View>

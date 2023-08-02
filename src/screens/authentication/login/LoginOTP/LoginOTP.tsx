@@ -2,7 +2,6 @@ import React from 'react';
 
 import {useTranslation} from 'react-i18next';
 import {Pressable, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
 import {CommonStyle} from '../../../../../assets/styles';
 import {

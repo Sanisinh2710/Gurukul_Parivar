@@ -1,12 +1,12 @@
 import React from 'react';
+
 import {useTranslation} from 'react-i18next';
-import {View, Text, FlatList, Image} from 'react-native';
+import {FlatList, Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../components';
-import {PagerView} from '../../../components/ui/Carousel/pagerView';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts, FrontDesk} from '../../../utils';
 import {styles} from './styles';
-import {useAppSelector} from '../../../redux/hooks';
 
 export const FrontDeskScreen = () => {
   const theme = useAppSelector(state => state.theme.theme);
