@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import {useAppSelector} from '../../../redux/hooks';
 import {COLORS} from '../../../utils';
+import {RadioLable} from '../Radio';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
 import {PhotoPicker} from './PhotoPicker';
 import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
 type FormInputProps = {
-  type: 'phone' | 'number' | 'text' | 'select' | 'photo';
+  type: 'phone' | 'number' | 'text' | 'select' | 'photo' | 'radio';
   name: string;
   label: string;
   icon?: string;
@@ -25,7 +26,7 @@ type FormInputProps = {
   onChange: (...event: any[]) => void;
   error?: string;
   state?: {[key: string]: any};
-  dropDownList?: string[];
+  menuList?: any;
 };
 
 export const FormInput = React.memo(
@@ -39,7 +40,7 @@ export const FormInput = React.memo(
     onBlur,
     onChange,
     state,
-    dropDownList,
+    menuList,
     error,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
@@ -93,7 +94,21 @@ export const FormInput = React.memo(
             label={label}
             placeholder={placeholder}
             setFocused={setFocused}
-            dropDownList={dropDownList ? [...dropDownList] : []}
+            dropDownList={menuList ? [...menuList] : []}
+          />
+        );
+        break;
+
+      case 'radio':
+        fieldblock = (
+          <RadioLable
+            showHeading={true}
+            list={menuList}
+            wantFullSpace={true}
+            customStyle={{}}
+            value={value}
+            onChange={onChange}
+            heading={label}
           />
         );
         break;
@@ -141,7 +156,7 @@ export const FormInput = React.memo(
             setFocused(false);
           }}>
           <>
-            {type !== 'photo' ? (
+            {type !== 'photo' && type !== 'radio' ? (
               <>
                 <Text style={style.labelText}>{label}</Text>
                 <View

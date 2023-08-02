@@ -1,5 +1,3 @@
-import {EnglishJSON} from '../localization/en';
-
 export type Theme = {
   isDark: boolean;
   primary: string;
@@ -12,8 +10,6 @@ export type Theme = {
   textSubtitleColor: string;
 };
 
-export type CustomNameSpace = typeof EnglishJSON;
-
 export type LoginFormValidationSchemaType = {
   mobileNumber: string;
 };
@@ -25,3 +21,16 @@ export type CompleteProfileFormValidationSchemaType = {
 };
 
 export type InitialThemeType = {theme: Theme; themeMode: string};
+
+export type PersonalInfoFormValidationSchemaType = {
+  [key: string]: any;
+  gender: string;
+  fullname: string;
+  fatherFullName: string;
+  dob: string;
+  bloodGroup: string;
+  mobilenum: string;
+  secondaryMobileNum: string | undefined;
+  email: string;
+  secondaryEmail: string | undefined;
+};

@@ -1,6 +1,8 @@
 package com.gurukul_parivar;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -41,5 +43,7 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this);
       super.onCreate(savedInstanceState);
+      // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+      // getWindow().setStatusBarColor(Color.TRANSPARENT);
   }
 }

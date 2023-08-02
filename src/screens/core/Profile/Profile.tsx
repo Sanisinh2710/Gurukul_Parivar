@@ -1,5 +1,8 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
+import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   PrimaryButton,
@@ -10,13 +13,15 @@ import {
 import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
 
 export const ProfileScreen = () => {
   const theme = useAppSelector(state => state.theme.theme);
   const {t} = useTranslation();
+
+  const ProfileList = React.useMemo(() => {
+    return EditProfile(t);
+  }, [t]);
+
   const style = styles();
   const commonStyle = CommonStyle();
 
@@ -42,7 +47,7 @@ export const ProfileScreen = () => {
           commonStyle.commonContentView,
           {paddingBottom: '25%'},
         ]}
-        showsVerticalScrollIndicator={true}>
+        showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
@@ -92,12 +97,12 @@ export const ProfileScreen = () => {
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
             borderRadius: 8,
           }}>
-          {EditProfile(t).map((item, index) => {
+          {ProfileList.map((item, index) => {
             return (
               <View
                 key={index}
                 style={{
-                  borderBottomWidth: item.name === 'Logout' ? 0 : 1,
+                  borderBottomWidth: index === ProfileList.length - 1 ? 0 : 1,
                   borderColor: 'rgba(23, 23, 23,0.1)',
                   flexDirection: 'row',
                   marginHorizontal: '5%',

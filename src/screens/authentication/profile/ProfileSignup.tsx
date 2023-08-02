@@ -40,6 +40,14 @@ export const ProfileSignup = (): React.JSX.Element => {
     },
   });
 
+  const headerTitle = React.useMemo(() => {
+    return formStep === 1
+      ? t('uploadPhoto.HederText')
+      : formStep === 2
+      ? t('personalInfo.personalInfoHeader')
+      : '';
+  }, [formStep]);
+
   const submitButton = (receivedData: any) => {
     if (formStep === 1) {
       let newFormData = JSON.parse(JSON.stringify(formData));
@@ -49,14 +57,20 @@ export const ProfileSignup = (): React.JSX.Element => {
       setFormData(newFormData);
       setwidth(width + 20);
       setFormStep(formStep + 1);
+    } else if (formStep === 2) {
+      let newFormData = JSON.parse(JSON.stringify(formData));
+
+      newFormData.personalInfo = receivedData;
+
+      setFormData(newFormData);
+      setwidth(width + 20);
+      setFormStep(formStep + 1);
     } else {
-      console.log('Form step 2');
+      console.log('form step greater than 2');
     }
   };
 
   console.log(formData);
-
-  const [calendarVisible, setCalendarVisible] = React.useState(true);
 
   return (
     <ScreenWrapper>
@@ -71,8 +85,8 @@ export const ProfileSignup = (): React.JSX.Element => {
 
       <ScreenHeader
         showLeft={true}
-        headerTitle={t('uploadPhoto.HederText')}
-        headerTitleAlign="center"
+        headerTitle={headerTitle}
+        headerTitleAlign="left"
         leftOnPress={() => {
           if (width > 20) {
             setwidth(width - 20);

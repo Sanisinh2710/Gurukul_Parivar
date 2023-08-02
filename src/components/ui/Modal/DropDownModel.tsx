@@ -78,7 +78,11 @@ export const DropDownModel = React.memo(
         onDismiss={() => {
           setModelVisible(false);
         }}>
-        <View style={style.modelWholeView}>
+        <View
+          style={style.modelWholeView}
+          onTouchEnd={() => {
+            setModelVisible(false);
+          }}>
           <View style={style.modelMainView}>
             <View
               style={style.modelCloserMainView}
@@ -92,7 +96,11 @@ export const DropDownModel = React.memo(
               }}>
               <View style={style.modelCloserView} />
             </View>
-            <View style={style.modelInnerView}>
+            <View
+              style={style.modelInnerView}
+              onTouchEnd={e => {
+                e.stopPropagation();
+              }}>
               {customModelchild ? (
                 customModelchild
               ) : (
