@@ -9,6 +9,7 @@ import {
   OtpComponent,
   PrimaryButton,
   ScreenHeader,
+  ScreenWrapper,
 } from '../../../../components';
 import {LoginOtpScreenProps} from '../../../../types';
 import {styles} from './styles';
@@ -73,7 +74,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       .padStart(2, '0')}`;
   };
   return (
-    <SafeAreaView style={CommonStyles.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={true}
         leftOnPress={() => {
@@ -116,6 +117,6 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

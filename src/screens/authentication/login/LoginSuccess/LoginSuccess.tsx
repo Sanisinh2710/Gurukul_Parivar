@@ -4,7 +4,11 @@ import {Dimensions, Image, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {PrimaryButton, ScreenHeader} from '../../../../components';
+import {
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {LoginSuccessStackScreenProps} from '../../../../types';
 import {styles} from './styles';
 
@@ -14,7 +18,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
   const {t, i18n} = useTranslation();
 
   return (
-    <SafeAreaView style={[commonStyle.commonContainer]}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={true}
         headerTitleAlign="center"
@@ -67,6 +71,6 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
           }}
         />
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

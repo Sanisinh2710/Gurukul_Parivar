@@ -10,6 +10,7 @@ import {
   CompleteYourProfile,
   PersonalInfo,
   ScreenHeader,
+  ScreenWrapper,
 } from '../../../components';
 import {COLORS} from '../../../utils';
 
@@ -59,7 +60,7 @@ export const ProfileSignup = (): React.JSX.Element => {
   const [calendarVisible, setCalendarVisible] = React.useState(true);
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <Progress.Bar
         progress={width / 100}
         width={Dimensions.get('window').width}
@@ -95,6 +96,6 @@ export const ProfileSignup = (): React.JSX.Element => {
           )
         )}
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

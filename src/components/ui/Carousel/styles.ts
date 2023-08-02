@@ -1,5 +1,4 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {useCustomTheme} from '../../../hooks';
 import {CustomFonts} from '../../../utils/fonts';
 
 export const style = (currentPage?: number) => {
@@ -41,7 +40,7 @@ export const style = (currentPage?: number) => {
     pagerViewImage: {
       borderRadius: 12,
       marginTop: 24,
-      width: Dimensions.get('window').width * 0.85,
+      width: Dimensions.get('window').width * 0.86,
       height: '100%',
       resizeMode: 'cover',
     },

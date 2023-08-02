@@ -1,9 +1,8 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text, FlatList, Image} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyle} from '../../../../assets/styles';
-import {ScreenHeader} from '../../../components';
+import {ScreenHeader, ScreenWrapper} from '../../../components';
 import {PagerView} from '../../../components/ui/Carousel/pagerView';
 import {CustomFonts, FrontDesk} from '../../../utils';
 import {styles} from './styles';
@@ -19,7 +18,7 @@ export const FrontDeskScreen = () => {
   const {t, i18n} = useTranslation();
   const commonStyle = CommonStyle();
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={false}
         headerTitleAlign={'left'}
@@ -52,48 +51,57 @@ export const FrontDeskScreen = () => {
           }}>
           <PagerView currentPage={currentPage} />
         </View>
-      </View>
-      <View style={{marginTop: 24}}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={FrontDesk}
-          renderItem={({item, index}) => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginHorizontal: '5%',
-                  marginVertical: '4%',
-                }}>
+        <View style={{marginTop: 24}}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={FrontDesk}
+            renderItem={({item, index}) => {
+              return (
                 <View
                   style={{
-                    height: 48,
-                    width: 48,
-                    justifyContent: 'center',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    borderRadius: 50,
+                    marginVertical: '2.5%',
+                    marginHorizontal: '2%',
+                    borderRadius: 12,
+                    height: 64,
+                    backgroundColor: '#ffffff',
                   }}>
-                  <Image source={item.image} style={{height: 24, width: 24}} />
-                </View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    marginLeft: '5%',
-                  }}>
-                  <Text
+                  <View
                     style={{
-                      ...CustomFonts.header.medium20,
-                      fontSize: 16,
-                      color: 'black',
+                      height: 48,
+                      width: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 12,
+                      backgroundColor: item.imageBG,
+                      marginHorizontal: 8,
                     }}>
-                    {item.title}{' '}
-                  </Text>
+                    <Image
+                      source={item.image}
+                      style={{height: 24, width: 24}}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      marginLeft: '2%',
+                    }}>
+                    <Text
+                      style={{
+                        ...CustomFonts.header.medium20,
+                        fontSize: 16,
+                        color: 'black',
+                      }}>
+                      {item.title}{' '}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

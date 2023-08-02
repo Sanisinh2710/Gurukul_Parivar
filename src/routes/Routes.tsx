@@ -16,7 +16,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, View} from 'react-native';
 import {HomeScreen} from '../screens/core/Home/home';
 import {ProfileScreen} from '../screens/core/Profile/Profile';
-import {FrontDeskScreen} from '../screens/core/FrontDesk/frontDesk';
+import {FrontDeskScreen} from '../screens/core/FrontDesk/FrontDesk';
 import {styles} from './BottomTabStyles';
 import {DailyDarshan} from '../screens/other/HomeStack/DailyDarshan/DailyDarshan';
 import {DailyQuotes} from '../screens/other/HomeStack/DailyQuotes/DailyQuotes';
@@ -78,7 +78,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
+            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}

@@ -320,22 +320,27 @@ export const FrontDesk = [
   {
     image: require('../../assets/icons/Paper.png'),
     title: 'Go Form',
+    imageBG: 'rgba(172, 168, 123, 0.1)',
   },
   {
     image: require('../../assets/icons/Chat.png'),
     title: 'Special Speech',
+    imageBG: 'rgba(1, 163, 212, 0.1)',
   },
   {
     image: require('../../assets/icons/Video.png'),
     title: 'Gurukul Darshan',
+    imageBG: 'rgba(0, 166, 88, 0.1)',
   },
   {
     image: require('../../assets/icons/Ticket.png'),
     title: 'Gurukul Events',
+    imageBG: 'rgba(174, 73, 141, 0.1)',
   },
   {
     image: require('../../assets/icons/Star.png'),
     title: 'Daily Quiz',
+    imageBG: 'rgba(60, 42, 152, 0.1)',
   },
 ];
 
