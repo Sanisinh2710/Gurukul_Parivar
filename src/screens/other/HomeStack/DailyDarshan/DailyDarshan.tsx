@@ -3,12 +3,11 @@ import {Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {RadioLable, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {CustomFonts} from '../../../../utils';
+import {AllIcons} from '../../../../../assets/icons';
 
-export const DailyDarshan = React.memo(() => {
+export const DailyDarshan = () => {
   const commonStyle = CommonStyle();
   const [selectedItem, setselectedItem] = React.useState('');
-  const date = new Date('Mar 25 2015');
-  console.log(date);
 
   return (
     <ScreenWrapper>
@@ -17,7 +16,7 @@ export const DailyDarshan = React.memo(() => {
         headerTitleAlign={'left'}
         headerTitle={'Daily Darshan'}
         headerRight={{
-          icon: require('../../../../../assets/icons/CalendarIcon.png'),
+          icon: AllIcons.Calendar,
           onPress: () => {
             console.log('Notification recieved');
           },
@@ -43,7 +42,7 @@ export const DailyDarshan = React.memo(() => {
           }}>
           <Image
             style={{height: 40, width: 40}}
-            source={require('../../../../../assets/icons/arrowcircledown.png')}
+            source={AllIcons.RoundedArrow}
           />
           <Text
             style={{
@@ -55,10 +54,10 @@ export const DailyDarshan = React.memo(() => {
           </Text>
           <Image
             style={{height: 40, width: 40}}
-            source={require('../../../../../assets/icons/arrowcircledown2.png')}
+            source={AllIcons.RoundedArrow}
           />
         </View>
       </View>
     </ScreenWrapper>
   );
-});
+};

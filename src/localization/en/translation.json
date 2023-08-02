@@ -99,6 +99,34 @@
       "SKillsPlaceHolder": "Select your skills",
       "Other": "Others (Leave Comment)",
       "OtherPlaceHolder": "Leave your comments here..."
+    },
+    "homeScreen":{
+      "WelcomeText1":"Hello",
+      "Name":"Maheshbhai",
+      "WelcomeText2":"Have a Great Day",
+      "DailyDarshan":"Daily Darshan",
+      "DailyQuotes":"Daily Quotes",
+      "DailyUpdate":"Daily Update",
+      "Calendar":"Calendar"
+    },
+    "frontDesk":{
+      "Heading":"Front Desk",
+      "Form":"Go Form",
+      "Speech":"Special Speech",
+      "Darshan":"Gurukul Darshan",
+      "Event":"Gurukul Events",
+      "Quiz":"Daily Quiz"
+    },
+    "myProfile":{
+      "Heading":"My Profile",
+      "Name" :"Maheshbhai Desai",
+      "ID":"Family ID",
+      "Edit":"Edit Profile",
+      "Family":"My Family",
+      "Language":"Change Language",
+      "Help":"Need Help",
+      "Feedback":"Feedback",
+      "Logout":"Logout"
     }
   }
 }

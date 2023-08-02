@@ -2,6 +2,7 @@ import React, {useMemo} from 'react';
 import {Image, View} from 'react-native';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
+import {AllImages} from '../../../../assets/images';
 
 type PagerViewProps = {
   currentPage: number;
@@ -10,10 +11,10 @@ type PagerViewProps = {
 export const PagerView = ({currentPage}: PagerViewProps): React.JSX.Element => {
   const image = useMemo(() => {
     return currentPage === 1
-      ? require('../../../../assets/images/Rectangle.png')
+      ? AllImages.Rectangle
       : currentPage === 2
-      ? require('../../../../assets/images/Rectangle2.jpg')
-      : require('../../../../assets/images/Rectangle3.png');
+      ? AllImages.Rectangle2
+      : AllImages.Rectangle3;
   }, [currentPage]);
 
   return (

@@ -1,3 +1,6 @@
+import {useTranslation} from 'react-i18next';
+import {AllIcons} from '../../assets/icons';
+import {AllImages} from '../../assets/images';
 import {Theme} from '../types';
 import {COLORS} from './colors';
 
@@ -316,85 +319,102 @@ export const AllCountryCodes = [
   }),
 ];
 
-export const FrontDesk = [
-  {
-    image: require('../../assets/icons/Paper.png'),
-    title: 'Go Form',
-    imageBG: 'rgba(172, 168, 123, 0.1)',
-  },
-  {
-    image: require('../../assets/icons/Chat.png'),
-    title: 'Special Speech',
-    imageBG: 'rgba(1, 163, 212, 0.1)',
-  },
-  {
-    image: require('../../assets/icons/Video.png'),
-    title: 'Gurukul Darshan',
-    imageBG: 'rgba(0, 166, 88, 0.1)',
-  },
-  {
-    image: require('../../assets/icons/Ticket.png'),
-    title: 'Gurukul Events',
-    imageBG: 'rgba(174, 73, 141, 0.1)',
-  },
-  {
-    image: require('../../assets/icons/Star.png'),
-    title: 'Daily Quiz',
-    imageBG: 'rgba(60, 42, 152, 0.1)',
-  },
-];
+export const FrontDesk = (t: any) => {
+  return [
+    {
+      image: AllIcons.Paper,
+      title: t('frontDesk.Form'),
+      id: 'goform',
+      imageBG: 'rgba(172, 168, 123, 0.1)',
+    },
+    {
+      image: AllIcons.Chat,
+      title: t('frontDesk.Speech'),
+      id: 'speech',
+      imageBG: 'rgba(1, 163, 212, 0.1)',
+    },
+    {
+      image: AllIcons.Video,
+      title: t('frontDesk.Darshan'),
+      id: 'darshan',
+      imageBG: 'rgba(0, 166, 88, 0.1)',
+    },
+    {
+      image: AllIcons.Ticket,
+      title: t('frontDesk.Event'),
+      id: 'event',
+      imageBG: 'rgba(174, 73, 141, 0.1)',
+    },
+    {
+      image: AllIcons.Star,
+      title: t('frontDesk.Quiz'),
+      id: 'quiz',
+      imageBG: 'rgba(60, 42, 152, 0.1)',
+    },
+  ];
+};
 
-export const HomeGrid: {name: string; image: any}[] = [
-  {
-    name: 'Daily Darshan',
-    image: require('../../assets/images/Darshan.png'),
-  },
-  {
-    name: 'Daily Quotes',
-    image: require('../../assets/images/Quotes.png'),
-  },
-  {
-    name: 'Daily Update',
-    image: require('../../assets/images/Calendar.png'),
-  },
-  {
-    name: 'Calendar',
-    image: require('../../assets/images/Darshan.png'),
-  },
-];
-export const EditProfile: {
-  image: any;
-  name: string;
-  rightIcon?: any;
-  language?: string;
-}[] = [
-  {
-    image: require('../../assets/icons/ProfileUser.png'),
-    name: 'Edit Profile',
-    rightIcon: require('../../assets/icons/RightArrow.png'),
-  },
-  {
-    image: require('../../assets/icons/multiUser.png'),
-    name: 'My Family',
-    rightIcon: require('../../assets/icons/RightArrow.png'),
-  },
-  {
-    image: require('../../assets/icons/translation.png'),
-    name: 'Change Language',
-    rightIcon: require('../../assets/icons/RightArrow.png'),
-    language: 'EN',
-  },
-  {
-    image: require('../../assets/icons/question.png'),
-    name: 'Need Help',
-    rightIcon: require('../../assets/icons/RightArrow.png'),
-  },
-  {
-    image: require('../../assets/icons/EditSquare.png'),
-    name: 'Feedback',
-  },
-  {
-    image: require('../../assets/icons/Logout.png'),
-    name: 'Logout',
-  },
-];
+export const HomeGrid = (t: any) => {
+  return [
+    {
+      name: t('homeScreen.DailyDarshan'),
+      image: AllImages.Darshan,
+      id: 'darshan',
+    },
+    {
+      name: t('homeScreen.DailyQuotes'),
+      image: AllImages.Quotes,
+      id: 'quotes',
+    },
+    {
+      name: t('homeScreen.DailyUpdate'),
+      image: AllImages.CalendarImage,
+      id: 'update',
+    },
+    {
+      name: t('homeScreen.Calendar'),
+      image: AllImages.Darshan,
+      id: 'calendar',
+    },
+  ];
+  [];
+};
+export const EditProfile = (t: any) => {
+  return [
+    {
+      image: AllIcons.ProfileUser,
+      name: t('myProfile.Edit'),
+      rightIcon: AllIcons.RightArrow,
+      id: 'user',
+    },
+    {
+      image: AllIcons.MultiUser,
+      name: t('myProfile.Family'),
+      rightIcon: AllIcons.RightArrow,
+      id: 'family',
+    },
+    {
+      image: AllIcons.Translation,
+      name: t('myProfile.Language'),
+      rightIcon: AllIcons.RightArrow,
+      language: 'EN',
+      id: 'translation',
+    },
+    {
+      image: AllIcons.Question,
+      name: t('myProfile.Help'),
+      rightIcon: AllIcons.RightArrow,
+      id: 'help',
+    },
+    {
+      image: AllIcons.Edit,
+      name: t('myProfile.Feedback'),
+      id: 'feedback',
+    },
+    {
+      image: AllIcons.Logout,
+      name: t('myProfile.Logout'),
+      id: 'logout',
+    },
+  ];
+};

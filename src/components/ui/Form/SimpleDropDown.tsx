@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
@@ -71,7 +72,7 @@ export const SimpleDropDown = React.memo(
                 flex: 1,
                 resizeMode: 'contain',
               }}
-              source={require('../../../../assets/icons/ArrowCircleDown.png')}
+              source={AllIcons.RoundedArrow}
             />
           </View>
         </View>

@@ -7,6 +7,7 @@ import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts, FrontDesk} from '../../../utils';
 import {styles} from './styles';
+import {AllIcons} from '../../../../assets/icons';
 
 export const FrontDeskScreen = () => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -15,7 +16,7 @@ export const FrontDeskScreen = () => {
   const style = styles();
   const TouchX = React.useRef<any>();
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const commonStyle = CommonStyle();
   return (
     <ScreenWrapper>
@@ -24,11 +25,11 @@ export const FrontDeskScreen = () => {
         headerTitleAlign={'left'}
         customTitle={
           <View>
-            <Text style={style.title}>Front Desk</Text>
+            <Text style={style.title}>{t('frontDesk.Heading')}</Text>
           </View>
         }
         headerRight={{
-          icon: require('../../../../assets/icons/Notification.png'),
+          icon: AllIcons.Notification,
           onPress: () => {
             console.log('Notification recieved');
           },
@@ -54,7 +55,7 @@ export const FrontDeskScreen = () => {
         <View style={{marginTop: 24}}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={FrontDesk}
+            data={FrontDesk(t)}
             renderItem={({item, index}) => {
               return (
                 <View

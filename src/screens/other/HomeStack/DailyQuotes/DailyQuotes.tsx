@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {styles} from './styles';
 
-export const DailyQuotes = React.memo(() => {
+export const DailyQuotes = () => {
   const style = styles();
 
   return (
@@ -19,4 +19,4 @@ export const DailyQuotes = React.memo(() => {
       />
     </ScreenWrapper>
   );
-});
+};

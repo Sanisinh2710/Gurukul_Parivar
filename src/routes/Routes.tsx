@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -82,7 +81,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
+            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}

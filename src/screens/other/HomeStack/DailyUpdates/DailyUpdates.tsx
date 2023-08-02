@@ -5,7 +5,7 @@ import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader} from '../../../../components';
 import {styles} from './styles';
 
-export const DailyUpdates = React.memo(() => {
+export const DailyUpdates = () => {
   const style = styles();
   const commonStyle = CommonStyle();
 
@@ -22,4 +22,4 @@ export const DailyUpdates = React.memo(() => {
       />
     </SafeAreaView>
   );
-});
+};

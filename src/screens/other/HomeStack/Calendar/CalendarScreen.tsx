@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {styles} from './styles';
 
-export const CalendarScreen = React.memo(() => {
+export const CalendarScreen = () => {
   const style = styles();
 
   return (
@@ -19,4 +19,4 @@ export const CalendarScreen = React.memo(() => {
       />
     </ScreenWrapper>
   );
-});
+};

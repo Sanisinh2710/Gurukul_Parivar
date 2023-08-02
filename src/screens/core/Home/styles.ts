@@ -25,7 +25,7 @@ export const styles = () => {
     images: {
       justifyContent: 'flex-end',
       borderRadius: 12,
-      height: '34%',
+      height: '33%',
       width: '45%',
       marginTop: 24,
     },
