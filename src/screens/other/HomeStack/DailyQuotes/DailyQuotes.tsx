@@ -6,7 +6,7 @@ import {ScreenHeader} from '../../../../components';
 import {styles} from './styles';
 import {useAppSelector} from '../../../../redux/hooks';
 
-export const DailyQuotes = React.memo(() => {
+export const DailyQuotes = () => {
   const theme = useAppSelector(state => state.theme.theme);
   const style = styles();
   const commonStyle = CommonStyle();
@@ -30,4 +30,4 @@ export const DailyQuotes = React.memo(() => {
       />
     </SafeAreaView>
   );
-});
+};

@@ -6,7 +6,7 @@ import {ScreenHeader} from '../../../../components';
 import {styles} from './styles';
 import {useAppSelector} from '../../../../redux/hooks';
 
-export const CalendarScreen = React.memo(() => {
+export const CalendarScreen = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   const style = styles();
@@ -31,4 +31,4 @@ export const CalendarScreen = React.memo(() => {
       />
     </SafeAreaView>
   );
-});
+};

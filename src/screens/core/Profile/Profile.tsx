@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
 
-export const ProfileScreen = React.memo(() => {
+export const ProfileScreen = () => {
   const theme = useAppSelector(state => state.theme.theme);
   const {t} = useTranslation();
   const style = styles();
@@ -173,4 +173,4 @@ export const ProfileScreen = React.memo(() => {
       </ScrollView>
     </SafeAreaView>
   );
-});
+};

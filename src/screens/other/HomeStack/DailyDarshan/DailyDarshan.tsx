@@ -9,7 +9,7 @@ import {useAppSelector} from '../../../../redux/hooks';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 
-export const DailyDarshan = React.memo(() => {
+export const DailyDarshan = () => {
   const theme = useAppSelector(state => state.theme.theme);
   const style = styles();
   const commonStyle = CommonStyle();
@@ -66,4 +66,4 @@ export const DailyDarshan = React.memo(() => {
       </View>
     </SafeAreaView>
   );
-});
+};
