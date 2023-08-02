@@ -58,7 +58,7 @@ export const ProfileSignup = (): React.JSX.Element => {
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else if (formStep === 2) {
-      console.log('Form step 2');
+      console.log('form step greater than 2');
       let newFormData = JSON.parse(JSON.stringify(formData));
 
       newFormData.personalInfo = receivedData;
@@ -76,8 +76,6 @@ export const ProfileSignup = (): React.JSX.Element => {
   };
 
   console.log(formData);
-
-  const [calendarVisible, setCalendarVisible] = React.useState(true);
 
   const headerTitle = React.useMemo(() => {
     return formStep === 1

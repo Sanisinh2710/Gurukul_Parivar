@@ -113,7 +113,7 @@ export const CompleteYourProfile = React.memo(
                 return (
                   <View style={{marginTop: 24}}>
                     <FormInput
-                      dropDownList={[...GuruKulList]}
+                      menuList={[...GuruKulList]}
                       type={completeProfileInputList.gurukulName.type}
                       name={completeProfileInputList.gurukulName.name}
                       label={completeProfileInputList.gurukulName.label}

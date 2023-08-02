@@ -96,7 +96,7 @@ export const AdressInfo = React.memo(
               render={({field: {onBlur, onChange, value}}) => {
                 return (
                   <FormInput
-                    dropDownList={item.dropDownList}
+                    menuList={item.dropDownList}
                     type={item.type}
                     name={item.name}
                     label={item.lable}

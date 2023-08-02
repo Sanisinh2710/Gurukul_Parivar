@@ -1,4 +1,3 @@
-import {useTranslation} from 'react-i18next';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
 import {Theme} from '../types';
@@ -377,7 +376,6 @@ export const HomeGrid = (t: any) => {
       id: 'calendar',
     },
   ];
-  [];
 };
 export const EditProfile = (t: any) => {
   return [
