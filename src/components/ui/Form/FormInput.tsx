@@ -27,6 +27,7 @@ type FormInputProps = {
   error?: string;
   state?: {[key: string]: any};
   menuList?: any;
+  customProps?: object;
 };
 
 export const FormInput = React.memo(
@@ -42,6 +43,7 @@ export const FormInput = React.memo(
     state,
     menuList,
     error,
+    customProps,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -102,13 +104,14 @@ export const FormInput = React.memo(
       case 'radio':
         fieldblock = (
           <RadioLable
-            showHeading={true}
             list={menuList}
-            wantFullSpace={true}
-            customStyle={{}}
+            showHeading={true}
+            heading={label}
             value={value}
             onChange={onChange}
-            heading={label}
+            customStyle={{}}
+            wantFullSpace={true}
+            {...customProps}
           />
         );
         break;

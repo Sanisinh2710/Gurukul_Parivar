@@ -21,6 +21,7 @@ export const PersonalInfo = React.memo(
       placeholder: string;
       type: 'number' | 'select' | 'text' | 'phone' | 'photo' | 'radio';
       menuList?: {[key: string]: any; name: string; icon?: any}[];
+      customProps?: object;
     }[] = [
       {
         name: 'gender',
@@ -31,6 +32,10 @@ export const PersonalInfo = React.memo(
           {name: t('personalInfo.GenderOpt1')},
           {name: t('personalInfo.GenderOpt2')},
         ],
+        customProps: {
+          showHeading: true,
+          wantFullSpace: true,
+        },
       },
     ];
 
@@ -81,6 +86,7 @@ export const PersonalInfo = React.memo(
                       onChange={onChange}
                       error={errors[item.name]?.message?.toString()}
                       menuList={item.menuList}
+                      customProps={item.customProps}
                     />
                   );
                 }}
