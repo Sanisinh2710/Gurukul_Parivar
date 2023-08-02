@@ -6,7 +6,8 @@
       "Reset": "रीसेट",
       "EmptyError": "यह फ़ील्ड आवश्यक है",
       "Save&Exit": "सेव और बाहर",
-      "Save&Next": "सेव और आगे"
+      "Save&Next": "सेव और आगे",
+      "SkipNow": "अभी के लिए छोड़ दे"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",
@@ -73,11 +74,12 @@
     "addressInfo": {
       "AddressHeader": "पते की जानकारी",
       "CountryLbl": "देश",
+      "CountryPlaceHolder": "देश का चयन करें",
       "AddressLbl": "पता",
       "AddressPlaceholder": "अपना पता दर्ज करें",
       "PincodeLbl": "पिनकोड",
       "PincodePlaceholder": "अपना पिनकोड दर्ज करें",
-      "CityVillageLle": "शहर/गांव",
+      "CityVillageLbl": "शहर/गांव",
       "CityVillagePlaceholder": "अपना शहर / गांव दर्ज करें",
       "TypeofaddressLbl": "पते का प्रकार",
       "HomeField": "घर",
@@ -100,7 +102,7 @@
       "Other": "अन्य (टिप्पणी छोड़ दो)",
       "OtherPlaceHolder": "अपनी टिप्पणी यहाँ छोड़ दो ..."
     },
-    "homeScreen":{
+    "homeScreen": {
       "WelcomeText1": "नमस्ते",
       "Name": "महेशभाई",
       "WelcomeText2": "आपका दिन शुभ हो",
@@ -128,7 +130,5 @@
       "Feedback": "प्रतिक्रिया",
       "Logout": "लॉगआउट"
     }
-    
-    
   }
 }

@@ -32,6 +32,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
             flex: 0.85,
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 2,
           },
         ]}>
         <View style={style.logoView}>
@@ -59,7 +60,7 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
           bottom: 0,
           width: '100%',
           height: '30%',
-          zIndex: -1,
+          zIndex: 1,
         }}>
         <Image
           source={AllImages.Bgimage}

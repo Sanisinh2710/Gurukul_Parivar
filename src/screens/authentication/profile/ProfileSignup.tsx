@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {
+  AdressInfo,
   CompleteYourProfile,
   PersonalInfo,
   ScreenHeader,
@@ -38,6 +39,13 @@ export const ProfileSignup = (): React.JSX.Element => {
       email: '',
       secondaryEmail: '',
     },
+    addressInfo: {
+      country: '',
+      address: '',
+      pincode: '',
+      cityVillage: '',
+      // typeOfAdd: '',
+    },
   });
 
   const submitButton = (receivedData: any) => {
@@ -49,14 +57,37 @@ export const ProfileSignup = (): React.JSX.Element => {
       setFormData(newFormData);
       setwidth(width + 20);
       setFormStep(formStep + 1);
-    } else {
+    } else if (formStep === 2) {
       console.log('Form step 2');
+      let newFormData = JSON.parse(JSON.stringify(formData));
+
+      newFormData.personalInfo = receivedData;
+      setFormData(newFormData);
+      setwidth(width + 20);
+      setFormStep(formStep + 1);
+    } else {
+      let newFormData = JSON.parse(JSON.stringify(formData));
+
+      newFormData.addressInfo = receivedData;
+      setFormData(newFormData);
+      setwidth(width + 20);
+      setFormStep(formStep + 1);
     }
   };
 
   console.log(formData);
 
   const [calendarVisible, setCalendarVisible] = React.useState(true);
+
+  const headerTitle = React.useMemo(() => {
+    return formStep === 1
+      ? t('uploadPhoto.HederText')
+      : formStep === 2
+      ? t('personalInfo.personalInfoHeader')
+      : formStep === 3
+      ? t('addressInfo.AddressHeader')
+      : '';
+  }, [formStep]);
 
   return (
     <ScreenWrapper>
@@ -71,8 +102,8 @@ export const ProfileSignup = (): React.JSX.Element => {
 
       <ScreenHeader
         showLeft={true}
-        headerTitle={t('uploadPhoto.HederText')}
-        headerTitleAlign="center"
+        headerTitle={headerTitle}
+        headerTitleAlign="left"
         leftOnPress={() => {
           if (width > 20) {
             setwidth(width - 20);
@@ -86,10 +117,15 @@ export const ProfileSignup = (): React.JSX.Element => {
             initialValues={formData.completeProfile}
             onSubmitEvent={submitButton}
           />
+        ) : formStep === 2 ? (
+          <PersonalInfo
+            initialValues={formData.personalInfo}
+            onSubmitEvent={submitButton}
+          />
         ) : (
-          formStep === 2 && (
-            <PersonalInfo
-              initialValues={formData.personalInfo}
+          formStep === 3 && (
+            <AdressInfo
+              initialValues={formData.addressInfo}
               onSubmitEvent={submitButton}
             />
           )

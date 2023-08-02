@@ -6,7 +6,8 @@
       "Reset": "રીસેટ",
       "EmptyError": "આ ક્ષેત્ર જરૂરી છે",
       "Save&Exit": "સાચવો અને બહાર નીકળો",
-      "Save&Next": "સાચવો અને આગળ"
+      "Save&Next": "સાચવો અને આગળ",
+      "SkipNow": "હમણાં માટે છોડી દો"
     },
     "loginScreen": {
       "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -49,6 +50,7 @@
       "Verify&Login": "ચકાસો અને લૉગિન કરો"
     },
     "personalInfo": {
+      "personalInfoHeader": "વ્યક્તિગત માહિતી",
       "Gender": "જાતિ પસંદ કરો",
       "GenderOpt1": "પુરુષ",
       "GenderOpt2": "સ્ત્રી",
@@ -72,11 +74,12 @@
     "addressInfo": {
       "AddressHeader": "સરનામાની માહિતી",
       "CountryLbl": "દેશ",
+      "CountryPlaceHolder": "દેશ પસંદ કરો",
       "AddressLbl": "સરનામુ",
       "AddressPlaceholder": "તમારું સરનામું દાખલ કરો",
       "PincodeLbl": "પિનકોડ",
       "PincodePlaceholder": "તમારો પિનકોડ દાખલ કરો",
-      "CityVillageLle": "શહેર/ગામ",
+      "CityVillageLbl": "શહેર/ગામ",
       "CityVillagePlaceholder": "તમારા શહેર/ગામને દાખલ કરો",
       "TypeofaddressLbl": "સરનામાનાં પ્રકાર",
       "HomeField": "ઘર",
@@ -99,10 +102,10 @@
       "Other": "બીજાંઓ (ટિપ્પણી છોડો)",
       "OtherPlaceHolder": "તમારી ટિપ્પણીઓ અહીં મૂકો..."
     },
-    "homeScreen":{
+    "homeScreen": {
       "WelcomeText1": "નમસ્તે",
       "Name": "મહેશભાઈ",
-      "WelcomeText2": "તમારો દિવસ શુભ રહે" ,
+      "WelcomeText2": "તમારો દિવસ શુભ રહે",
       "DailyDarshan": "દૈનિક દર્શન",
       "DailyQuotes": "દૈનિક સુવાર્તાઓ",
       "DailyUpdate": "દૈનિક અપડેટ",
@@ -127,7 +130,5 @@
       "Feedback": "પ્રતિસાદ",
       "Logout": "લૉગઆઉટ"
     }
-    
-    
-  } 
+  }
 }

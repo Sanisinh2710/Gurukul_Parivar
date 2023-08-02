@@ -1,6 +1,7 @@
 import {useTranslation} from 'react-i18next';
 import * as yup from 'yup';
 import {
+  AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
   LoginFormValidationSchemaType,
 } from '../types';
@@ -35,6 +36,17 @@ export const PersonalInfoFormValidationSchema =
       gurukulName: yup
         .string()
         .trim()
-        .required(`**Please select your Gurukul branch`),
+        .required(`Please select your Gurukul branch`),
+    });
+  };
+
+export const AddressFormValidationSchema =
+  (): yup.ObjectSchema<AddressFormValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      country: yup.string().trim().required(t('common.EmptyError')),
+      address: yup.string().trim().required(t('common.EmptyError')),
+      pincode: yup.string().trim().required(t('common.EmptyError')),
+      cityVillage: yup.string().trim().required(t('common.EmptyError')),
     });
   };

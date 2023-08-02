@@ -24,4 +24,11 @@ export type CompleteProfileFormValidationSchemaType = {
   gurukulName: string;
 };
 
+export type AddressFormValidationSchemaType = {
+  [key: string]: any;
+  country: string | undefined;
+  address: string;
+  pincode: string;
+  cityVillage: string;
+};
 export type InitialThemeType = {theme: Theme; themeMode: string};
