@@ -81,7 +81,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
+            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}

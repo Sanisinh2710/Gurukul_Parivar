@@ -376,6 +376,26 @@ export const HomeGrid = (t: any) => {
       image: AllImages.Darshan,
       id: 'calendar',
     },
+    {
+      name: t('homeScreen.DailyUpdate'),
+      image: AllImages.CalendarImage,
+      id: 'update',
+    },
+    {
+      name: t('homeScreen.Calendar'),
+      image: AllImages.Darshan,
+      id: 'calendar',
+    },
+    {
+      name: t('homeScreen.DailyUpdate'),
+      image: AllImages.CalendarImage,
+      id: 'update',
+    },
+    {
+      name: t('homeScreen.Calendar'),
+      image: AllImages.Darshan,
+      id: 'calendar',
+    },
   ];
   [];
 };
@@ -415,6 +435,66 @@ export const EditProfile = (t: any) => {
       image: AllIcons.Logout,
       name: t('myProfile.Logout'),
       id: 'logout',
+    },
+  ];
+};
+export const DailyDarshanAllImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle28,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle29,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle31,
+      id: 4,
+    },
+  ];
+};
+export const DailyDarshanEveningImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle30,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 4,
+    },
+  ];
+};
+export const DailyDarshanMorningImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle28,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 4,
     },
   ];
 };

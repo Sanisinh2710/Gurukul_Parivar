@@ -30,17 +30,37 @@ const months = [
 type CalendarProps = {
   calendarVisible: boolean;
   setCalendarVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  // saveParentDate: (...event: any[]) => void;
+  selectedParentDate: Date;
+  setSelectedParentDate: React.Dispatch<React.SetStateAction<Date>>;
 };
 
 export const Calendar = ({
   calendarVisible,
   setCalendarVisible,
+  // saveParentDate,
+  selectedParentDate,
+  setSelectedParentDate,
 }: CalendarProps) => {
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
+  const [selectedDate, setSelectedDate] = React.useState(
+    selectedParentDate || new Date(),
   );
+  console.log(selectedParentDate, 'in componet');
+  const [currentMonth, setCurrentMonth] = React.useState(
+    selectedParentDate.getMonth() || new Date().getMonth(),
+  );
+  const [currentYear, setCurrentYear] = React.useState(
+    selectedParentDate.getFullYear() || new Date().getFullYear(),
+  );
+
+  React.useMemo(() => {
+    if (selectedParentDate) {
+      setSelectedDate(selectedParentDate);
+      setCurrentMonth(selectedParentDate.getMonth());
+      setCurrentYear(selectedParentDate.getFullYear());
+    }
+  }, [selectedParentDate]);
+
   const [isModalVisible, setModalVisible] = React.useState(false);
 
   const handlePreviousMonth = () => {
@@ -60,6 +80,7 @@ export const Calendar = ({
   };
 
   const handleDateSelect = (date: any) => {
+    console.log(date, 'in second save');
     setSelectedDate(date);
   };
 
@@ -77,8 +98,10 @@ export const Calendar = ({
   };
 
   const saveDate = () => {
-    console.log(selectedDate.toLocaleDateString());
+    console.log(selectedDate, 'in savwe butrfdjshgkm');
+
     setCalendarVisible(false);
+    setSelectedParentDate(selectedDate);
   };
 
   const renderCalendarDays = () => {
@@ -103,7 +126,11 @@ export const Calendar = ({
           key={i}
           onPress={
             day
-              ? () => handleDateSelect(new Date(currentYear, currentMonth, day))
+              ? () => {
+                  handleDateSelect(
+                    new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                  );
+                }
               : () => {}
           }
           style={[
