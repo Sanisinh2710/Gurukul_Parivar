@@ -57,8 +57,8 @@ export const CompleteYourProfile = React.memo(
 
     const onSubmit = (data: CompleteProfileFormValidationSchemaType) => {
       const formSubmitData = {
-        profilePic: data.profilePic,
-        gurukulName: data.gurukulName,
+        profilePic: data.profilePic || '',
+        gurukulName: data.gurukulName || '',
       };
 
       onSubmitEvent(formSubmitData);
