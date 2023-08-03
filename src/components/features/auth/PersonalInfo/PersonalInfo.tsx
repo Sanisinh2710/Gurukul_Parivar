@@ -4,6 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
 import {PersonalInfoFormValidationSchemaType} from '../../../../types';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton} from '../../../ui';
@@ -19,8 +20,18 @@ export const PersonalInfo = React.memo(
       name: string;
       lable: string;
       placeholder: string;
-      type: 'number' | 'select' | 'text' | 'phone' | 'photo' | 'radio';
-      menuList?: {[key: string]: any; name: string; icon?: any}[];
+      icon?: any;
+      type:
+        | 'number'
+        | 'select'
+        | 'text'
+        | 'phone'
+        | 'photo'
+        | 'radio'
+        | 'date'
+        | 'dob'
+        | 'textarea';
+      menuList?: any;
       customProps?: object;
     }[] = [
       {
@@ -29,13 +40,42 @@ export const PersonalInfo = React.memo(
         placeholder: '',
         type: 'radio',
         menuList: [
-          {name: t('personalInfo.GenderOpt1')},
-          {name: t('personalInfo.GenderOpt2')},
+          {name: 'Male', icon: AllIcons.Male},
+          {name: 'Female', icon: AllIcons.Female},
         ],
         customProps: {
           showHeading: true,
           wantFullSpace: true,
+          customStyle: {
+            justifyContent: 'flex-start',
+            gap: 10,
+          },
         },
+      },
+      {
+        name: 'fullname',
+        lable: t('personalInfo.FullNameLable'),
+        placeholder: t('personalInfo.FullNamePlaceholder'),
+        type: 'text',
+      },
+      {
+        name: 'fatherFullName',
+        lable: t('personalInfo.FatherNameLable'),
+        placeholder: t('personalInfo.FatherNamePlaceholder'),
+        type: 'text',
+      },
+      {
+        name: 'dob',
+        lable: t('personalInfo.DOB'),
+        placeholder: 'DD/MM/YYYY',
+        type: 'dob',
+      },
+      {
+        name: 'bloodGroup',
+        lable: t('personalInfo.BloodGroup'),
+        placeholder: t('personalInfo.BloodGroupDropDown'),
+        type: 'select',
+        menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+'],
       },
     ];
 
@@ -67,7 +107,9 @@ export const PersonalInfo = React.memo(
 
     return (
       <View>
-        {/* <FlatList
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{gap: 15}}
           data={[...PerosnalInfoFormInputList]}
           renderItem={({item, index}) => {
             return (
@@ -77,6 +119,7 @@ export const PersonalInfo = React.memo(
                 render={({field: {onChange, onBlur, value}}) => {
                   return (
                     <FormInput
+                      icon={item.icon}
                       type={item.type}
                       name={item.name}
                       label={item.lable}
@@ -93,8 +136,11 @@ export const PersonalInfo = React.memo(
               />
             );
           }}
-        /> */}
-        <PrimaryButton title={t('common.Save&Next')} onPress={onSubmit} />
+        />
+        <PrimaryButton
+          title={t('common.Save&Next')}
+          onPress={handleSubmit(onSubmit)}
+        />
       </View>
     );
   },

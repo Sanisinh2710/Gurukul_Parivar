@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Image,
   Keyboard,
   Text,
   TextInput,
@@ -10,16 +11,26 @@ import {
 import {useAppSelector} from '../../../redux/hooks';
 import {COLORS} from '../../../utils';
 import {RadioLable} from '../Radio';
+import {DatePicker} from './DatePicker';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
 import {PhotoPicker} from './PhotoPicker';
 import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
 type FormInputProps = {
-  type: 'phone' | 'number' | 'text' | 'select' | 'photo' | 'radio';
+  type:
+    | 'phone'
+    | 'number'
+    | 'text'
+    | 'select'
+    | 'photo'
+    | 'radio'
+    | 'dob'
+    | 'date'
+    | 'textarea';
   name: string;
   label: string;
-  icon?: string;
+  icon?: any;
   placeholder: string;
   value: any;
   onBlur: (...event: any[]) => void;
@@ -97,6 +108,7 @@ export const FormInput = React.memo(
             placeholder={placeholder}
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
+            customIcon={icon}
           />
         );
         break;
@@ -116,11 +128,58 @@ export const FormInput = React.memo(
         );
         break;
 
+      case 'dob':
+        fieldblock = (
+          <DatePicker
+            type={type}
+            value={value}
+            label={label}
+            onChange={onChange}
+            onBlur={onBlur}
+            focused={focused}
+            placeholder={placeholder}
+            setFocused={setFocused}
+          />
+        );
+        break;
+
+      case 'date':
+        fieldblock = (
+          <DatePicker
+            type={type}
+            value={value}
+            label={label}
+            onChange={onChange}
+            onBlur={onBlur}
+            focused={focused}
+            placeholder={placeholder}
+            setFocused={setFocused}
+          />
+        );
+        break;
+
       case 'number':
         fieldblock = (
           <TextInput
             keyboardType="numeric"
             inputMode="numeric"
+            onFocus={() => setFocused(true)}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={theme.textColor}
+            style={style.formTextInput}
+            onBlur={onBlur}
+            onChangeText={newvalue => {
+              onChange(newvalue);
+            }}
+          />
+        );
+        break;
+
+      case 'textarea':
+        fieldblock = (
+          <TextInput
+            multiline={true}
             onFocus={() => setFocused(true)}
             value={value}
             placeholder={placeholder}
@@ -171,8 +230,38 @@ export const FormInput = React.memo(
                         : COLORS.primaryInputBorderColor,
                       justifyContent: 'space-between',
                     },
+                    type === 'textarea' && {
+                      height: 80,
+                      alignItems: 'flex-start',
+                    },
+                    icon &&
+                      type !== 'select' && {
+                        gap: 3,
+                      },
                   ]}>
-                  {fieldblock}
+                  {icon && type !== 'select' ? (
+                    <View style={{width: '90%'}}>{fieldblock}</View>
+                  ) : (
+                    fieldblock
+                  )}
+                  {icon && type !== 'select' && (
+                    <View
+                      style={{
+                        height: '50%',
+                        width: '10%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={icon}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  )}
                 </View>
               </>
             ) : (
