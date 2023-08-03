@@ -30,9 +30,7 @@ export const FrontDeskScreen = () => {
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {
-            console.log('Notification recieved');
-          },
+          onPress: () => {},
         }}
       />
       <View style={commonStyle.commonContentView}>

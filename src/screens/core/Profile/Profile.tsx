@@ -32,9 +32,7 @@ export const ProfileScreen = () => {
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {
-            console.log('Notification recieved');
-          },
+          onPress: () => {},
         }}
       />
       <ScrollView
@@ -155,7 +153,7 @@ export const ProfileScreen = () => {
         <View>
           <PrimaryButton
             title="Delete Account"
-            onPress={() => console.log('hi')}
+            onPress={() => {}}
             buttonColor={'rgba(172, 43, 49, 0.1)'}
             titleColor={COLORS.primaryColor}
             buttonStyle={{

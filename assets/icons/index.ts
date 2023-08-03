@@ -23,4 +23,6 @@ export const AllIcons = {
   Ticket: require('../icons/Ticket.png'),
   Translation: require('../icons/Translation.png'),
   Video: require('../icons/Video.png'),
+  Download: require('../icons/Download.png'),
+  Share: require('../icons/Share.png'),
 };

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  Image,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Image, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
@@ -15,20 +8,24 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
-  CustomFonts,
   DailyDarshanAllImages,
   DailyDarshanEveningImages,
   DailyDarshanMorningImages,
 } from '../../../../utils';
 import {AllIcons} from '../../../../../assets/icons';
 import {styles} from './styles';
+import {RootStackParamList} from '../../../../types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
 const d = new Date();
 const options: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
 };
-export const DailyDarshan = () => {
+export const DailyDarshan = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList>) => {
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
@@ -41,13 +38,19 @@ export const DailyDarshan = () => {
     previousDate.setDate(selectedDate.getDate() - 1);
     return previousDate;
   };
+  const handlePrev = () => {
+    const previousDate = getPreviousDate();
+    setSelectedDate(previousDate);
+  };
   const getNextDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() + 1);
     return previousDate;
   };
-
-  console.log(selectedDate, 'Calendar');
+  const handleNext = () => {
+    const NextDate = getNextDate();
+    setSelectedDate(NextDate);
+  };
 
   return (
     <ScreenWrapper>
@@ -109,53 +112,27 @@ export const DailyDarshan = () => {
                   activeOpacity={0.8}
                   style={style.imageContainer}
                   onPress={() => {
-                    console.log('Daily Darshan Detail');
+                    navigation.navigate('dailyDarshanDetail', {
+                      image: item.item.image,
+                      date: selectedDate.toLocaleDateString('en-in', options),
+                    });
                   }}>
-                  {/* <View> */}
                   <Image source={item.item.image} style={style.images} />
-                  {/* </View> */}
                 </TouchableOpacity>
               );
             }}
           />
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <View style={style.navigationContainer}>
-            <Pressable
-              onPress={() => {
-                const previousDate = getPreviousDate();
-                setSelectedDate(previousDate);
-              }}>
-              <Image
-                style={{height: 40, width: 40, transform: [{rotate: '90deg'}]}}
-                source={AllIcons.RoundedArrow}
-              />
-            </Pressable>
-
-            <Text
-              style={{
-                ...CustomFonts.header.small18,
-                fontSize: 20,
-                color: 'black',
-                alignSelf: 'center',
-              }}>
-              {selectedDate !== undefined
-                ? selectedDate.toLocaleDateString('en-in', options)
-                : d.toLocaleDateString('en-in', options)}
-            </Text>
-            <Pressable
-              onPress={() => {
-                const NextDate = getNextDate();
-                setSelectedDate(NextDate);
-              }}>
-              <Image
-                style={{height: 40, width: 40, transform: [{rotate: '270deg'}]}}
-                source={AllIcons.RoundedArrow}
-              />
-            </Pressable>
-          </View>
-        </View>
       </View>
+      <CustomNavigate
+        text={
+          selectedDate !== undefined
+            ? selectedDate.toLocaleDateString('en-in', options)
+            : d.toLocaleDateString('en-in', options)
+        }
+        handlePrevPress={handlePrev}
+        handleNextPress={handleNext}
+      />
     </ScreenWrapper>
   );
 };

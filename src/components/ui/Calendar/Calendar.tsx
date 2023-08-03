@@ -45,7 +45,7 @@ export const Calendar = ({
   const [selectedDate, setSelectedDate] = React.useState(
     selectedParentDate || new Date(),
   );
-  console.log(selectedParentDate, 'in componet');
+
   const [currentMonth, setCurrentMonth] = React.useState(
     selectedParentDate.getMonth() || new Date().getMonth(),
   );
@@ -80,7 +80,6 @@ export const Calendar = ({
   };
 
   const handleDateSelect = (date: any) => {
-    console.log(date, 'in second save');
     setSelectedDate(date);
   };
 
@@ -98,8 +97,6 @@ export const Calendar = ({
   };
 
   const saveDate = () => {
-    console.log(selectedDate, 'in savwe butrfdjshgkm');
-
     setCalendarVisible(false);
     setSelectedParentDate(selectedDate);
   };
@@ -232,13 +229,14 @@ export const Calendar = ({
               color: COLORS.primaryRippleColor,
             }}
             style={{
-              position: 'absolute',
+              // position: 'absolute',
               right: 10,
-              bottom: 5,
+              bottom: 0,
               width: '23%',
               height: '10%',
               backgroundColor: COLORS.primaryColor,
               alignItems: 'center',
+              alignSelf: 'flex-end',
               justifyContent: 'center',
               borderRadius: 10,
             }}>
@@ -291,7 +289,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: COLORS.lightModeBackgroundColor,
     borderRadius: 13,
-    height: '55%',
   },
   header: {
     flexDirection: 'row',

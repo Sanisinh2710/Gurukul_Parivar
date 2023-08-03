@@ -25,6 +25,7 @@ import {
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
+import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -87,6 +88,10 @@ export const Routes = (): React.JSX.Element => {
               component={BottomTabNavigator}
             />
             <NativeStack.Screen name="dailyDarshan" component={DailyDarshan} />
+            <NativeStack.Screen
+              name="dailyDarshanDetail"
+              component={DailyDarshanDetail}
+            />
             <NativeStack.Screen name="dailyUpdates" component={DailyUpdates} />
             <NativeStack.Screen name="dailyQuotes" component={DailyQuotes} />
             <NativeStack.Screen name="calendar" component={CalendarScreen} />

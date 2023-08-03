@@ -69,6 +69,7 @@ export const DropDownModel = React.memo(
         }
       }
     }, [searchvalue]);
+    console.log(customModelchild);
 
     return (
       <Modal
@@ -92,10 +93,10 @@ export const DropDownModel = React.memo(
               }}>
               <View style={style.modelCloserView} />
             </View>
-            <View style={style.modelInnerView}>
-              {customModelchild ? (
-                customModelchild
-              ) : (
+            {customModelchild ? (
+              customModelchild
+            ) : (
+              <View style={style.modelInnerView}>
                 <>
                   {wantResetButton ? (
                     <View
@@ -242,8 +243,8 @@ export const DropDownModel = React.memo(
                     }}
                   />
                 </>
-              )}
-            </View>
+              </View>
+            )}
           </View>
         </View>
       </Modal>

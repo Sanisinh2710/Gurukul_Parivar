@@ -4,6 +4,7 @@ export type RootStackParamList = {
   Auth: undefined;
   BottomNavBar: undefined;
   dailyDarshan: undefined;
+  dailyDarshanDetail: {image: any; date: string};
   dailyQuotes: undefined;
   dailyUpdates: undefined;
   calendar: undefined;

@@ -50,11 +50,8 @@ export const ProfileSignup = (): React.JSX.Element => {
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else {
-      console.log('Form step 2');
     }
   };
-
-  console.log(formData);
 
   const [calendarVisible, setCalendarVisible] = React.useState(true);
 

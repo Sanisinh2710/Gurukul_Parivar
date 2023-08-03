@@ -76,9 +76,7 @@ export const HomeScreen = ({
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {
-            console.log('Notification recieved');
-          },
+          onPress: () => {},
         }}
       />
       <ScrollView
@@ -104,9 +102,6 @@ export const HomeScreen = ({
           </View>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
-              // <TouchableOpacity
-              //   onPress={() => console.log('hi')}
-              //   style={style.gridItem}>
               <ImageBackground
                 key={index}
                 imageStyle={{
