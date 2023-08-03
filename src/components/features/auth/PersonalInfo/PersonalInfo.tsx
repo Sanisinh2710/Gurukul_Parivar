@@ -51,15 +51,15 @@ export const PersonalInfo = React.memo(
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
       const formSubmitData = {
-        gender: data.gender,
-        fullname: data.fullname,
-        fatherFullName: data.fatherFullName,
-        dob: data.dob,
-        bloodGroup: data.bloodGroup,
-        mobilenum: data.mobilenum,
-        secondaryMobileNum: data.secondaryMobileNum,
-        email: data.email,
-        secondaryEmail: data.secondaryEmail,
+        gender: data.gender || '',
+        fullname: data.fullname || '',
+        fatherFullName: data.fatherFullName || '',
+        dob: data.dob || '',
+        bloodGroup: data.bloodGroup || '',
+        mobilenum: data.mobilenum || '',
+        secondaryMobileNum: data.secondaryMobileNum || '',
+        email: data.email || '',
+        secondaryEmail: data.secondaryEmail || '',
       };
 
       onSubmitEvent(formSubmitData);
