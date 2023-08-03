@@ -7,7 +7,8 @@
       "EmptyError": "This Field is required",
       "Save&Exit": "Save & Exit",
       "Save&Next": "Save & Next",
-      "SkipNow": "Skip for Now"
+      "SkipNow": "Skip for Now",
+      "AddAddress": "+Add Another Address"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",

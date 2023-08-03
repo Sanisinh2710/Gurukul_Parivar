@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  Image,
   Keyboard,
   Text,
   TextInput,
@@ -8,15 +9,16 @@ import {
   View,
 } from 'react-native';
 import {useAppSelector} from '../../../redux/hooks';
-import {COLORS} from '../../../utils';
+import {COLORS, CustomFonts} from '../../../utils';
 import {RadioLable} from '../Radio';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
 import {PhotoPicker} from './PhotoPicker';
 import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
+import {AllIcons} from '../../../../assets/icons';
 
 type FormInputProps = {
-  type: 'phone' | 'number' | 'text' | 'select' | 'photo' | 'radio';
+  type: 'phone' | 'number' | 'text' | 'select' | 'photo' | 'radio' | 'checkbox';
   name: string;
   label: string;
   icon?: string;
@@ -116,6 +118,53 @@ export const FormInput = React.memo(
         );
         break;
 
+      case 'checkbox':
+        fieldblock = (
+          <>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+                marginBottom: '5%',
+              }}>
+              <View
+                style={{
+                  height: 20,
+                  width: 20,
+                  alignItems: 'center',
+                  borderRadius: 5,
+                  borderColor: COLORS.primaryColor,
+                  borderWidth: value ? 0 : 1,
+                }}
+                onTouchEnd={() => {
+                  onChange(!value);
+                }}>
+                {value ? (
+                  <Image
+                    source={AllIcons.checkbox}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
+                  />
+                ) : null}
+              </View>
+              <Text
+                style={{
+                  ...CustomFonts.body.medium12,
+                  fontSize: 14,
+                  fontWeight: '400',
+                  color: theme.textColor,
+                  lineHeight: 18.9,
+                }}>
+                {/* This address is my preferred communication address */}
+                {label}
+              </Text>
+            </View>
+          </>
+        );
+        break;
+
       case 'number':
         fieldblock = (
           <TextInput
@@ -159,7 +208,7 @@ export const FormInput = React.memo(
             setFocused(false);
           }}>
           <>
-            {type !== 'photo' && type !== 'radio' ? (
+            {type !== 'photo' && type !== 'radio' && type !== 'checkbox' ? (
               <>
                 <Text style={style.labelText}>{label}</Text>
                 <View

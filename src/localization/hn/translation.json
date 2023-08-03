@@ -7,7 +7,8 @@
       "EmptyError": "यह फ़ील्ड आवश्यक है",
       "Save&Exit": "सेव और बाहर",
       "Save&Next": "सेव और आगे",
-      "SkipNow": "अभी के लिए छोड़ दे"
+      "SkipNow": "अभी के लिए छोड़ दे",
+      "AddAddress": "+ दूसरा पता जोड़ें"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",

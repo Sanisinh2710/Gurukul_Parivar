@@ -22,11 +22,14 @@ export type CompleteProfileFormValidationSchemaType = {
 
 export type AddressFormValidationSchemaType = {
   [key: string]: any;
-  country: string | undefined;
-  address: string;
-  pincode: string;
-  cityVillage: string;
-  typeofAddress: string;
+  addressInfo: {
+    [key: string]: any;
+    country: string | undefined;
+    address: string;
+    pincode: string;
+    cityVillage: string;
+    typeofAddress: string;
+  }[];
 };
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
