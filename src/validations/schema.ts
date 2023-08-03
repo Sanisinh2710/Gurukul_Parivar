@@ -81,5 +81,6 @@ export const AddressFormValidationSchema =
       address: yup.string().trim().required(t('common.EmptyError')),
       pincode: yup.string().trim().required(t('common.EmptyError')),
       cityVillage: yup.string().trim().required(t('common.EmptyError')),
+      typeofAddress: yup.string().trim().required(t('common.EmptyError')),
     });
   };

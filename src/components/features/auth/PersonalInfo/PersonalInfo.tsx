@@ -67,7 +67,7 @@ export const PersonalInfo = React.memo(
 
     return (
       <View>
-        <FlatList
+        {/* <FlatList
           data={[...PerosnalInfoFormInputList]}
           renderItem={({item, index}) => {
             return (
@@ -93,11 +93,8 @@ export const PersonalInfo = React.memo(
               />
             );
           }}
-        />
-        <PrimaryButton
-          title={t('common.Save&Next')}
-          onPress={handleSubmit(onSubmit)}
-        />
+        /> */}
+        <PrimaryButton title={t('common.Save&Next')} onPress={onSubmit} />
       </View>
     );
   },

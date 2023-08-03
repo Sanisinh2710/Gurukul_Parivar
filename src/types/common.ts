@@ -26,6 +26,7 @@ export type AddressFormValidationSchemaType = {
   address: string;
   pincode: string;
   cityVillage: string;
+  typeofAddress: string;
 };
 export type InitialThemeType = {theme: Theme; themeMode: string};
 

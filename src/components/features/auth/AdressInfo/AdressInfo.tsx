@@ -18,15 +18,16 @@ export const AdressInfo = React.memo(
       name: string;
       lable: string;
       placeholder: string;
-      type: 'number' | 'select' | 'text' | 'phone' | 'photo';
-      dropDownList?: string[];
+      type: 'number' | 'select' | 'text' | 'phone' | 'photo' | 'radio';
+      menuList?: any;
+      customProps?: object;
     }[] = [
       {
         name: 'country',
         lable: t('addressInfo.CountryLbl'),
         placeholder: t('addressInfo.CountryPlaceHolder'),
         type: 'select',
-        dropDownList: [
+        menuList: [
           ...countries.map(item => {
             return item.country;
           }),
@@ -50,12 +51,21 @@ export const AdressInfo = React.memo(
         placeholder: t('addressInfo.CityVillagePlaceholder'),
         type: 'text',
       },
-      //   {
-      //     name:
-      //     lable: t('addressInfo.TypeofaddressLbl'),
-      //     placeholder: '',
-      //     type: '',
-      //   },
+      {
+        name: 'typeofAddress',
+        lable: t('addressInfo.TypeofaddressLbl'),
+        placeholder: '',
+        type: 'radio',
+        menuList: [
+          {name: t('addressInfo.HomeField')},
+          {name: t('addressInfo.NativeField')},
+          {name: t('addressInfo.Work/BusinessField')},
+        ],
+        customProps: {
+          wantFullSpace: false,
+          customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
+        },
+      },
     ];
 
     const {
@@ -75,6 +85,7 @@ export const AdressInfo = React.memo(
         address: data.address || '',
         pincode: data.pincode || '',
         cityVillage: data.cityVillage || '',
+        typeofAddress: data.typeofAddress,
       };
 
       onSubmitEvent(formSubmitData);
@@ -96,7 +107,7 @@ export const AdressInfo = React.memo(
               render={({field: {onBlur, onChange, value}}) => {
                 return (
                   <FormInput
-                    menuList={item.dropDownList}
+                    menuList={item.menuList}
                     type={item.type}
                     name={item.name}
                     label={item.lable}
@@ -104,6 +115,7 @@ export const AdressInfo = React.memo(
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
+                    customProps={item.customProps}
                     error={errors[item.name]?.message?.toString()}
                   />
                 );
