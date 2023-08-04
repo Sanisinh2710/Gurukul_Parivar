@@ -96,14 +96,14 @@ export const DropDownModel = React.memo(
               }}>
               <View style={style.modelCloserView} />
             </View>
-            <View
-              style={style.modelInnerView}
-              onTouchEnd={e => {
-                e.stopPropagation();
-              }}>
-              {customModelchild ? (
-                customModelchild
-              ) : (
+            {customModelchild ? (
+              customModelchild
+            ) : (
+              <View
+                style={style.modelInnerView}
+                onTouchEnd={e => {
+                  e.stopPropagation();
+                }}>
                 <>
                   {wantResetButton ? (
                     <View
@@ -250,8 +250,8 @@ export const DropDownModel = React.memo(
                     }}
                   />
                 </>
-              )}
-            </View>
+              </View>
+            )}
           </View>
         </View>
       </Modal>
