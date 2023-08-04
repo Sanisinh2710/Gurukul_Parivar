@@ -27,7 +27,8 @@ type FormInputProps = {
     | 'radio'
     | 'dob'
     | 'date'
-    | 'textarea';
+    | 'textarea'
+    | 'email';
   name: string;
   label: string;
   icon?: any;
@@ -39,6 +40,9 @@ type FormInputProps = {
   state?: {[key: string]: any};
   menuList?: any;
   customProps?: object;
+  rightText?: string;
+  rightTextOnPress?: (...event: any[]) => void;
+  defaultPhoneCountryCode?: any;
 };
 
 export const FormInput = React.memo(
@@ -55,6 +59,9 @@ export const FormInput = React.memo(
     menuList,
     error,
     customProps,
+    rightText,
+    rightTextOnPress,
+    defaultPhoneCountryCode,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -82,6 +89,7 @@ export const FormInput = React.memo(
             placeholder={placeholder}
             setFocused={setFocused}
             state={state}
+            defaultPhoneCountryCode={defaultPhoneCountryCode}
           />
         );
         break;
@@ -193,6 +201,24 @@ export const FormInput = React.memo(
         );
         break;
 
+      case 'email':
+        fieldblock = (
+          <TextInput
+            inputMode={'email'}
+            keyboardType={'email-address'}
+            onFocus={() => setFocused(true)}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={theme.textColor}
+            style={style.formTextInput}
+            onBlur={onBlur}
+            onChangeText={newvalue => {
+              onChange(newvalue);
+            }}
+          />
+        );
+        break;
+
       default:
         fieldblock = (
           <TextInput
@@ -220,7 +246,21 @@ export const FormInput = React.memo(
           <>
             {type !== 'photo' && type !== 'radio' ? (
               <>
-                <Text style={style.labelText}>{label}</Text>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={style.labelText}>{label}</Text>
+                  {(type === 'phone' || type === 'email') && rightText && (
+                    <Text
+                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
+                      style={[style.labelText, {color: COLORS.primaryColor}]}>
+                      {rightText}
+                    </Text>
+                  )}
+                </View>
                 <View
                   style={[
                     style.fieldBlockView,

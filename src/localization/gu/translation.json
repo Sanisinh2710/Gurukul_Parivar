@@ -7,7 +7,9 @@
       "EmptyError": "આ ક્ષેત્ર જરૂરી છે",
       "Save&Exit": "સાચવો અને બહાર નીકળો",
       "Save&Next": "સાચવો અને આગળ",
-      "SkipNow": "હમણાં માટે છોડી દો"
+      "SkipNow": "હમણાં માટે છોડી દો",
+      "MobileErr": "કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો..!",
+      "EnterMobileNum": "મોબાઇલ નંબર દાખલ કરો"
     },
     "loginScreen": {
       "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -66,6 +68,7 @@
       "AddSecondaryNumber": "+ બીજો સંપર્ક ઉમેરો",
       "MobileFieldCheckbox": "હું આ નંબરનો વોટ્સએપ નંબર તરીકે ઉપયોગ કરું છું",
       "EmailAddress": "ઈ-મેઈલ સરનામું",
+      "EnterYourEmailPlaceholder": "તમારુ ઇમેઇલ દાખલ કરો",
       "AddSecondaryEmail": "+ બીજો ઈમેઈલ ઉમેરો",
       "NameErr": "કૃપા કરીને માત્ર વર્ણમાળાનો ઉપયોગ કરીને માન્ય નામ દાખલ કરો.",
       "EmailErr": "કૃપા કરીને માન્ય ઇમેઇલ દાખલ કરો.",

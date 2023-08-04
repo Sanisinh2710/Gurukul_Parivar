@@ -28,8 +28,6 @@ export const Calendar = ({
   setSelectedParentDate,
   type,
 }: CalendarProps) => {
-  console.log(selectedParentDate, 'in calendar coming date');
-
   const [selectedDate, setSelectedDate] = React.useState(
     selectedParentDate || new Date(),
   );
@@ -48,6 +46,16 @@ export const Calendar = ({
       setCurrentYear(selectedParentDate.getFullYear());
     }
   }, [selectedParentDate]);
+
+  React.useEffect(() => {
+    if (currentMonth && currentYear) {
+      setSelectedDate(
+        new Date(
+          `${currentYear}-${currentMonth + 1}-${selectedDate.getDate()}`,
+        ),
+      );
+    }
+  }, [currentMonth, currentYear]);
 
   const [isModalVisible, setModalVisible] = React.useState(false);
 
@@ -85,8 +93,14 @@ export const Calendar = ({
   };
 
   const saveDate = () => {
+    setSelectedParentDate(
+      new Date(
+        `${selectedDate.getFullYear()}-${
+          selectedDate.getMonth() + 1
+        }-${selectedDate.getDate()}`,
+      ),
+    );
     setCalendarVisible(false);
-    setSelectedParentDate(selectedDate);
   };
 
   const renderCalendarDays = () => {
@@ -122,7 +136,9 @@ export const Calendar = ({
               ? type === 'dob'
                 ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate
-                  ? () => {}
+                  ? () => {
+                      console.log('aa callede');
+                    }
                   : () => {
                       handleDateSelect(
                         new Date(`${currentYear}-${currentMonth + 1}-${day}`),
@@ -186,8 +202,8 @@ export const Calendar = ({
   };
 
   const renderYearRange = () => {
-    const startYear = currentYear - 70;
-    const endYear = currentYear + 20;
+    const startYear = new Date().getFullYear() - 70;
+    const endYear = new Date().getFullYear();
 
     const years = [];
     for (let year = startYear; year <= endYear; year++) {
@@ -270,11 +286,13 @@ export const Calendar = ({
               <View style={styles.modal}>
                 <View
                   style={{
-                    width: '100%',
-                    height: '50%',
+                    width: '50%',
+                    height: '40%',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    borderRadius: 20,
                     backgroundColor: COLORS.lightModeBackgroundColor,
+                    padding: '5%',
                   }}>
                   <Text style={styles.modalTitle}>Select Year</Text>
                   <ScrollView
@@ -282,7 +300,18 @@ export const Calendar = ({
                     contentContainerStyle={styles.yearRange}>
                     {renderYearRange()}
                   </ScrollView>
-                  <TouchableOpacity onPress={handleCloseYearModal}>
+                  <TouchableOpacity
+                    onPress={handleCloseYearModal}
+                    style={{
+                      width: '50%',
+                      height: '14%',
+                      backgroundColor: COLORS.primaryColor,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                      top: 10,
+                      alignSelf: 'center',
+                    }}>
                     <Text style={styles.modalCancel}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
@@ -363,7 +392,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: COLORS.lightModetextColor,
+    color: COLORS.primaryColor,
   },
   modalYear: {
     fontSize: 16,
@@ -372,8 +401,7 @@ const styles = StyleSheet.create({
   },
   modalCancel: {
     fontSize: 16,
-    color: 'red',
-    marginTop: 10,
+    color: COLORS.darkModetextColor,
   },
   weekdayContainer: {
     flexDirection: 'row',

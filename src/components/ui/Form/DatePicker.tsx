@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Image, Text, View } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { Calendar } from '../Calendar';
-import { FormInputStyle } from './style';
+import {Image, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
+import {Calendar} from '../Calendar';
+import {FormInputStyle} from './style';
 
 type DatePickerProps = {
   value: any;
@@ -37,7 +37,7 @@ export const DatePicker = React.memo(
 
     const [calendarVisible, setCalendarVisible] = React.useState(false);
 
-    const [selectedDate, setSelectedDate] = React.useState<any>();
+    const [selectedDate, setSelectedDate] = React.useState<Date>();
 
     React.useMemo(() => {
       if (type === 'dob') {
@@ -50,7 +50,17 @@ export const DatePicker = React.memo(
 
     React.useEffect(() => {
       if (selectedDate && focused) {
-        onChange(selectedDate.toLocaleDateString());
+        onChange(
+          `${
+            selectedDate.getDate().toString().length <= 1
+              ? '0' + selectedDate.getDate().toString()
+              : selectedDate.getDate().toString()
+          }/${
+            (selectedDate.getMonth() + 1).toString().length <= 1
+              ? '0' + (selectedDate.getMonth() + 1).toString()
+              : (selectedDate.getMonth() + 1).toString()
+          }/${selectedDate.getFullYear()}`,
+        );
       }
     }, [selectedDate]);
 
@@ -82,13 +92,6 @@ export const DatePicker = React.memo(
                 alignItems: 'center',
                 justifyContent: 'center',
               },
-              calendarVisible && {
-                transform: [
-                  {
-                    rotate: '180deg',
-                  },
-                ],
-              },
             ]}>
             <Image
               style={{
@@ -104,7 +107,7 @@ export const DatePicker = React.memo(
           type={type}
           calendarVisible={calendarVisible}
           setCalendarVisible={setCalendarVisible}
-          selectedParentDate={selectedDate || new Date()}
+          selectedParentDate={selectedDate}
           setSelectedParentDate={setSelectedDate}
         />
       </>

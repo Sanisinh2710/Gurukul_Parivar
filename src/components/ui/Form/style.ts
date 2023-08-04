@@ -3,7 +3,6 @@ import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
 export const FormInputStyle = (value?: any) => {
-  // const {theme} = useCustomTheme();
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
@@ -71,7 +70,8 @@ export const FormInputStyle = (value?: any) => {
       borderStyle: 'dashed',
       borderColor: COLORS.primaryColor,
       borderRadius: 60,
-      padding: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     photoView: {
       backgroundColor: 'rgba(172, 43, 49, 0.1)',

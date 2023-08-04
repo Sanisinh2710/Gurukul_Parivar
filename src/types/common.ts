@@ -37,8 +37,18 @@ export type PersonalInfoFormValidationSchemaType = {
   fatherFullName: string;
   dob: string;
   bloodGroup: string;
-  mobilenum: string;
-  secondaryMobileNum: string | undefined;
-  email: string;
-  secondaryEmail: string | undefined;
+  mobilenumInfo:
+    | {
+        mobilenum: string | undefined;
+        whatsappNum?: boolean | undefined;
+        secondary?: boolean | undefined;
+        countryCode?: string | undefined;
+      }[]
+    | undefined;
+  emailInfo:
+    | {
+        email: string;
+        secondary?: boolean | undefined;
+      }[]
+    | undefined;
 };

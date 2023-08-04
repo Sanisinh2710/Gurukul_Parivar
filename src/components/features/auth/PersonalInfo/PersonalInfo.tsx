@@ -1,22 +1,32 @@
 import React from 'react';
 
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useForm} from 'react-hook-form';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {FlatList, View} from 'react-native';
+import {FlatList, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {PersonalInfoFormValidationSchemaType} from '../../../../types';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton} from '../../../ui';
 import {PersonalInfoStyle} from './styles';
 
+type PersonalInfoProps = {
+  initialValues: PersonalInfoFormValidationSchemaType;
+  onSubmitEvent: any;
+};
+
 export const PersonalInfo = React.memo(
-  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
+  ({initialValues, onSubmitEvent}: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
 
     const style = PersonalInfoStyle();
 
-    const PerosnalInfoFormInputList: {
+    const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
+      React.useState('');
+    const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =
+      React.useState('');
+
+    const PerosnalInfoForm1InputList: {
       name: string;
       lable: string;
       placeholder: string;
@@ -82,6 +92,7 @@ export const PersonalInfo = React.memo(
     const {
       control,
       handleSubmit,
+      getValues,
       formState: {errors},
     } = useForm<PersonalInfoFormValidationSchemaType>({
       defaultValues: initialValues,
@@ -89,28 +100,84 @@ export const PersonalInfo = React.memo(
       mode: 'onBlur',
     });
 
-    const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      const formSubmitData = {
-        gender: data.gender || '',
-        fullname: data.fullname || '',
-        fatherFullName: data.fatherFullName || '',
-        dob: data.dob || '',
-        bloodGroup: data.bloodGroup || '',
-        mobilenum: data.mobilenum || '',
-        secondaryMobileNum: data.secondaryMobileNum || '',
-        email: data.email || '',
-        secondaryEmail: data.secondaryEmail || '',
-      };
+    const {
+      fields: mobilefield,
+      append: mobileappend,
+      remove: mobileremove,
+      update: mobileupdate,
+    } = useFieldArray({
+      control,
+      name: 'mobilenumInfo',
+    });
 
-      onSubmitEvent(formSubmitData);
+    const {
+      fields: emailfield,
+      append: emailappend,
+      remove: emialremove,
+    } = useFieldArray({
+      control,
+      name: 'emailInfo',
+    });
+
+    const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
+      if (data && data.mobilenumInfo && data.emailInfo) {
+        const formSubmitData = {
+          gender: data.gender || '',
+          fullname: data.fullname || '',
+          fatherFullName: data.fatherFullName || '',
+          dob: data.dob || '',
+          bloodGroup: data.bloodGroup || '',
+          mobilenumInfo:
+            [...data.mobilenumInfo].map((item: any, index: any) => {
+              let newItem: any = {};
+
+              newItem.mobilenum = item.countryCode + item.mobilenum;
+              newItem.secondary = item.secondary;
+              newItem.whatsappNum = item.whatsappNum;
+              newItem.countryCode = item.countryCode;
+
+              return newItem;
+            }) || [],
+          emailInfo: data.emailInfo,
+        };
+        onSubmitEvent(formSubmitData);
+      }
     };
 
+    React.useEffect(() => {
+      if (primarycountryCodeSelect) {
+        mobileupdate(0, {
+          mobilenum: getValues()?.mobilenumInfo?.[0].mobilenum,
+          whatsappNum: getValues()?.mobilenumInfo?.[0].whatsappNum,
+          countryCode: primarycountryCodeSelect,
+          secondary: false,
+        });
+      }
+    }, [primarycountryCodeSelect]);
+
+    React.useEffect(() => {
+      if (secondarycountryCodeSelect) {
+        mobileupdate(1, {
+          mobilenum: getValues()?.mobilenumInfo?.[1].mobilenum,
+          whatsappNum: getValues()?.mobilenumInfo?.[1].whatsappNum,
+          countryCode: secondarycountryCodeSelect,
+          secondary: false,
+        });
+      }
+    }, [secondarycountryCodeSelect]);
+
     return (
-      <View>
+      <ScrollView
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: '40%',
+        }}>
         <FlatList
+          scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{gap: 15}}
-          data={[...PerosnalInfoFormInputList]}
+          data={[...PerosnalInfoForm1InputList]}
           renderItem={({item, index}) => {
             return (
               <Controller
@@ -136,12 +203,127 @@ export const PersonalInfo = React.memo(
               />
             );
           }}
+          ListFooterComponent={() => {
+            return (
+              <View>
+                {mobilefield.map((mainitem, mainindex) => {
+                  return (
+                    <View key={mainindex}>
+                      <Controller
+                        control={control}
+                        name={`mobilenumInfo.${mainindex}.mobilenum`}
+                        render={({field: {onChange, onBlur, value}}) => {
+                          return (
+                            <FormInput
+                              type={'phone'}
+                              name={`mobilenumInfo.${mainindex}.mobilenum`}
+                              label={t('personalInfo.MobileNumber')}
+                              placeholder={t('common.EnterMobileNum')}
+                              value={value}
+                              onBlur={onBlur}
+                              onChange={onChange}
+                              error={errors?.mobilenumInfo?.[
+                                mainindex
+                              ]?.mobilenum?.message?.toString()}
+                              state={
+                                mainindex === 0
+                                  ? {
+                                      countryCodeSelect:
+                                        primarycountryCodeSelect,
+                                      setCountryCodeSelect:
+                                        setPrimaryCountryCodeSelect,
+                                    }
+                                  : {
+                                      countryCodeSelect:
+                                        secondarycountryCodeSelect,
+                                      setCountryCodeSelect:
+                                        setSecondaryCountryCodeSelect,
+                                    }
+                              }
+                              defaultPhoneCountryCode={
+                                getValues()?.mobilenumInfo?.[mainindex]
+                                  .countryCode
+                              }
+                              rightText={
+                                mainindex === 0
+                                  ? t('personalInfo.AddSecondaryNumber')
+                                  : ''
+                              }
+                              rightTextOnPress={
+                                mainindex === 0
+                                  ? () => {
+                                      if (mobilefield.length <= 1) {
+                                        mobileappend({
+                                          mobilenum: '',
+                                          secondary: true,
+                                          whatsappNum: false,
+                                          countryCode: '',
+                                        });
+                                      }
+                                    }
+                                  : () => {}
+                              }
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  );
+                })}
+                {emailfield.map((mainitem, mainindex) => {
+                  return (
+                    <View key={mainindex}>
+                      <Controller
+                        control={control}
+                        name={`emailInfo.${mainindex}.email`}
+                        render={({field: {onChange, onBlur, value}}) => {
+                          return (
+                            <FormInput
+                              type={'email'}
+                              name={`emailInfo.${mainindex}.email`}
+                              label={t('personalInfo.EmailAddress')}
+                              placeholder={t(
+                                'personalInfo.EnterYourEmailPlaceholder',
+                              )}
+                              value={value}
+                              onBlur={onBlur}
+                              onChange={onChange}
+                              error={errors?.emailInfo?.[
+                                mainindex
+                              ]?.email?.message?.toString()}
+                              rightText={
+                                mainindex === 0
+                                  ? t('personalInfo.AddSecondaryEmail')
+                                  : ''
+                              }
+                              rightTextOnPress={
+                                mainindex === 0
+                                  ? () => {
+                                      if (emailfield.length <= 1) {
+                                        emailappend({
+                                          email: '',
+                                          secondary: true,
+                                        });
+                                      }
+                                    }
+                                  : () => {}
+                              }
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            );
+          }}
         />
         <PrimaryButton
           title={t('common.Save&Next')}
           onPress={handleSubmit(onSubmit)}
         />
-      </View>
+      </ScrollView>
     );
   },
 );

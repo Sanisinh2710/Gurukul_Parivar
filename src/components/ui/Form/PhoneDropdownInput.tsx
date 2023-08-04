@@ -16,7 +16,10 @@ type PhoneDropdownInputProps = {
   setFocused: React.Dispatch<React.SetStateAction<boolean>>;
   state?: {
     [key: string]: any;
+    countryCodeSelect?: string;
+    setCountryCodeSelect?: React.Dispatch<React.SetStateAction<string>>;
   };
+  defaultPhoneCountryCode?: any;
 };
 
 export const PhoneDropdownInput = React.memo(
@@ -27,6 +30,7 @@ export const PhoneDropdownInput = React.memo(
     placeholder,
     setFocused,
     state,
+    defaultPhoneCountryCode,
   }: PhoneDropdownInputProps) => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -36,19 +40,38 @@ export const PhoneDropdownInput = React.memo(
 
     const [modelVisible, setModelVisible] = React.useState(false);
 
+    const [modelValuechoosed, setModelValueChoosed] = React.useState(false);
+
     const [localval, setLocalVal] = React.useState(
-      '+' +
-        countries.find(val => val.iso === 'IN' && val)?.code +
-        ' (' +
-        countries.find(val => val.iso === 'IN' && val)?.iso +
-        ')',
+      defaultPhoneCountryCode ||
+        '+' +
+          countries.find(val => val.iso === 'IN' && val)?.code +
+          ' (' +
+          countries.find(val => val.iso === 'IN' && val)?.iso +
+          ')',
     );
 
     React.useEffect(() => {
-      if (state) {
-        state.setCountryCodeSelect(localval);
+      if (defaultPhoneCountryCode) {
+        if (modelValuechoosed) {
+          if (state) {
+            if (state?.setCountryCodeSelect && localval) {
+              state?.setCountryCodeSelect(
+                localval?.split(' ')?.[0] + localval?.split(' ')?.[1],
+              );
+            }
+          }
+        }
+      } else {
+        if (state) {
+          if (state?.setCountryCodeSelect && localval) {
+            state?.setCountryCodeSelect(
+              localval?.split(' ')?.[0] + localval?.split(' ')?.[1],
+            );
+          }
+        }
       }
-    }, [localval]);
+    }, [modelValuechoosed, localval]);
 
     return (
       <>
@@ -58,22 +81,9 @@ export const PhoneDropdownInput = React.memo(
           }}
           style={style.phoneDropFirstView}>
           <Text style={style.phoneDropFirstViewText}>
-            {state?.countryCodeSelect?.split(' ')?.[0] +
-              state?.countryCodeSelect?.split(' ')?.[1] !==
-              undefined &&
-            state?.countryCodeSelect?.split(' ')?.[0] +
-              state?.countryCodeSelect?.split(' ')?.[1] !==
-              '' &&
-            state?.countryCodeSelect?.split(' ')?.[0] +
-              state?.countryCodeSelect?.split(' ')?.[1] !==
-              'undefined'
-              ? state?.countryCodeSelect?.split(' ')?.[0] +
-                state?.countryCodeSelect?.split(' ')?.[1]
-              : '+' +
-                countries.find(val => val.iso === 'IN' && val)?.code +
-                ' (' +
-                countries.find(val => val.iso === 'IN' && val)?.iso +
-                ')'}
+            {state && state.countryCodeSelect
+              ? state?.countryCodeSelect
+              : localval}
           </Text>
           <MaterialCommunityIcon
             name={modelVisible ? 'chevron-up' : 'chevron-down'}
@@ -107,6 +117,8 @@ export const PhoneDropdownInput = React.memo(
           setSelectedItem={setLocalVal}
           modalHeight={'90%'}
           label={t('loginScreen.SelectCountryLabel')}
+          modelValuechoosed={modelValuechoosed}
+          setModelValueChoosed={setModelValueChoosed}
         />
       </>
     );

@@ -19,7 +19,10 @@ type DropDownModelProps = {
   modalHeight: string;
   label?: string;
   customModelchild?: React.JSX.Element;
+  modelValuechoosed?: any;
+  setModelValueChoosed?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 export const DropDownModel = React.memo(
   ({
     modelVisible,
@@ -33,6 +36,8 @@ export const DropDownModel = React.memo(
     modalHeight,
     label,
     customModelchild,
+    modelValuechoosed,
+    setModelValueChoosed,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
@@ -174,6 +179,9 @@ export const DropDownModel = React.memo(
                                 }
                               } else {
                                 setSelectedItem(item);
+                              }
+                              if (setModelValueChoosed) {
+                                setModelValueChoosed(true);
                               }
                             }
                           }}

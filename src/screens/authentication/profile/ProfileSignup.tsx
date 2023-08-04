@@ -34,10 +34,10 @@ export const ProfileSignup = (): React.JSX.Element => {
       fatherFullName: '',
       dob: '',
       bloodGroup: '',
-      mobilenum: '',
-      secondaryMobileNum: '',
-      email: '',
-      secondaryEmail: '',
+      mobilenumInfo: [
+        {mobilenum: '', secondary: false, whatsappNum: false, countryCode: ''},
+      ],
+      emailInfo: [{email: '', secondary: false}],
     },
     addressInfo: {
       country: '',
@@ -74,8 +74,6 @@ export const ProfileSignup = (): React.JSX.Element => {
       setFormStep(formStep + 1);
     }
   };
-
-  console.log(formData);
 
   const headerTitle = React.useMemo(() => {
     return formStep === 1
@@ -117,7 +115,26 @@ export const ProfileSignup = (): React.JSX.Element => {
           />
         ) : formStep === 2 ? (
           <PersonalInfo
-            initialValues={formData.personalInfo}
+            initialValues={{
+              gender: formData.personalInfo.gender,
+              fullname: formData.personalInfo.fullname,
+              fatherFullName: formData.personalInfo.fatherFullName,
+              dob: formData.personalInfo.dob,
+              bloodGroup: formData.personalInfo.bloodGroup,
+              mobilenumInfo: [...formData.personalInfo.mobilenumInfo].map(
+                (item, index) => {
+                  let newItem: any = {};
+
+                  newItem.mobilenum = item.mobilenum.split(')')[1] || '';
+                  newItem.countryCode = item.countryCode;
+                  newItem.secondary = item.secondary;
+                  newItem.whatsappNum = item.whatsappNum;
+
+                  return newItem;
+                },
+              ),
+              emailInfo: formData.personalInfo.emailInfo,
+            }}
             onSubmitEvent={submitButton}
           />
         ) : (
