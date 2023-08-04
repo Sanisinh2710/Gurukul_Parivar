@@ -63,6 +63,7 @@ export const FormInputStyle = (value?: any) => {
     photoMainView: {
       alignItems: 'center',
       marginTop: 40,
+      justifyContent: 'center',
     },
     photOutSideView: {
       height: 110,
@@ -71,7 +72,8 @@ export const FormInputStyle = (value?: any) => {
       borderStyle: 'dashed',
       borderColor: COLORS.primaryColor,
       borderRadius: 60,
-      padding: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     photoView: {
       backgroundColor: 'rgba(172, 43, 49, 0.1)',

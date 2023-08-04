@@ -26,7 +26,9 @@ export const AdressInfo = React.memo(
         | 'phone'
         | 'photo'
         | 'radio'
-        | 'checkbox';
+        | 'textarea'
+        | 'date'
+        | 'dob';
       menuList?: any;
       customProps?: object;
     }[] = [
@@ -106,15 +108,17 @@ export const AdressInfo = React.memo(
     );
 
     const onSubmit = (data: AddressFormValidationSchemaType) => {
-      console.log(data, 'in dadrese ');
+      console.log(data.addressInfo, 'in dadrese ');
 
-      let newData = [...data.addressInfo].map((item, index) => {
-        item.communicationAddr = checkedArray[index];
-
-        return item;
-      });
-
-      onSubmitEvent([...newData]);
+      if (data.addressInfo !== undefined) {
+        let newData = [...data.addressInfo].map((item, index) => {
+          item.communicationAddr = checkedArray[index];
+          return item;
+        });
+        onSubmitEvent([...newData]);
+      } else {
+        onSubmitEvent();
+      }
     };
 
     return (
@@ -130,6 +134,23 @@ export const AdressInfo = React.memo(
               contentContainerStyle={{
                 gap: 16,
                 marginTop: '5%',
+              }}
+              ListHeaderComponent={() => {
+                return (
+                  mainindex >= 1 && (
+                    <View
+                      style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                      onTouchEnd={() => remove(mainindex)}>
+                      <Image
+                        source={AllIcons.cancel}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </View>
+                  )
+                );
               }}
               showsVerticalScrollIndicator={false}
               data={addressFormINputList}
@@ -160,7 +181,7 @@ export const AdressInfo = React.memo(
                   {(index + 1) % 5 === 0 ? (
                     <View
                       style={{
-                        marginVertical: '5%',
+                        marginTop: '5%',
                       }}>
                       <View
                         style={{
@@ -212,26 +233,6 @@ export const AdressInfo = React.memo(
                           {'This address is my preferred communication address'}
                         </Text>
                       </View>
-                      <SecondaryButton
-                        title={t('common.AddAddress')}
-                        onPress={() => {
-                          console.log('cldnhfikajn');
-                          append({
-                            country: '',
-                            address: '',
-                            pincode: '',
-                            cityVillage: '',
-                            typeofAddress: '',
-                          });
-
-                          let newArr = JSON.parse(JSON.stringify(checkedArray));
-                          newArr.push(false);
-                          setCheckedArray(newArr);
-                        }}
-                        buttonColor={'transparent'}
-                        titleColor={COLORS.primaryColor}
-                        borderColor={COLORS.primaryColor}
-                      />
                     </View>
                   ) : null}
                 </View>
@@ -239,6 +240,27 @@ export const AdressInfo = React.memo(
             />
           );
         })}
+        <SecondaryButton
+          title={t('common.AddAddress')}
+          onPress={() => {
+            console.log('cldnhfikajn');
+            append({
+              country: '',
+              address: '',
+              pincode: '',
+              cityVillage: '',
+              typeofAddress: '',
+            });
+
+            let newArr = JSON.parse(JSON.stringify(checkedArray));
+            newArr.push(false);
+            setCheckedArray(newArr);
+          }}
+          buttonColor={'transparent'}
+          titleColor={COLORS.primaryColor}
+          borderColor={COLORS.primaryColor}
+          buttonStyle={{marginBottom: '5%'}}
+        />
         <View
           style={{
             flexDirection: 'row',

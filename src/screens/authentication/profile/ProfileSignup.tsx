@@ -71,8 +71,10 @@ export const ProfileSignup = (): React.JSX.Element => {
     } else {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
-      newFormData.addressInfo = receivedData;
-      setFormData(newFormData);
+      if (receivedData !== undefined) {
+        newFormData.addressInfo = receivedData;
+        setFormData(newFormData);
+      }
       setwidth(width + 20);
       setFormStep(formStep + 1);
     }

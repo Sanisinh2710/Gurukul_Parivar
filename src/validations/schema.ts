@@ -34,42 +34,42 @@ export const PersonalInfoFormValidationSchema =
     const {t} = useTranslation();
     return yup.object().shape({
       gender: yup.string().trim().required(t('common.EmptyError')),
-      fullname: yup
-        .string()
-        .trim()
-        .required(t('common.EmptyError'))
-        .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      fatherFullName: yup
-        .string()
-        .trim()
-        .required(t('common.EmptyError'))
-        .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      dob: yup
-        .string()
-        .trim()
-        .required(t('common.EmptyError'))
-        .test({
-          name: 'dob',
-          skipAbsent: true,
-          test(value, ctx) {
-            if (value) {
-              console.log(value);
-              // return ctx.createError({
-              //   message: ''
-              // })
-            }
-            return true;
-          },
-        }),
-      bloodGroup: yup.string().trim().required(t('common.EmptyError')),
-      mobilenum: yup.string().trim().required(t('common.EmptyError')),
-      secondaryMobileNum: yup.string().trim(),
-      email: yup
-        .string()
-        .trim()
-        .required(t('common.EmptyError'))
-        .matches(nameRegex, {message: t('personalInfo.EmailErr')}),
-      secondaryEmail: yup.string().trim(),
+      // fullname: yup
+      //   .string()
+      //   .trim()
+      //   .required(t('common.EmptyError'))
+      //   .matches(nameRegex, {message: t('personalInfo.NameErr')}),
+      // fatherFullName: yup
+      //   .string()
+      //   .trim()
+      //   .required(t('common.EmptyError'))
+      //   .matches(nameRegex, {message: t('personalInfo.NameErr')}),
+      // dob: yup
+      //   .string()
+      //   .trim()
+      //   .required(t('common.EmptyError'))
+      //   .test({
+      //     name: 'dob',
+      //     skipAbsent: true,
+      //     test(value, ctx) {
+      //       if (value) {
+      //         console.log(value);
+      //         // return ctx.createError({
+      //         //   message: ''
+      //         // })
+      //       }
+      //       return true;
+      //     },
+      //   }),
+      // bloodGroup: yup.string().trim().required(t('common.EmptyError')),
+      // mobilenum: yup.string().trim().required(t('common.EmptyError')),
+      // secondaryMobileNum: yup.string().trim(),
+      // email: yup
+      //   .string()
+      //   .trim()
+      //   .required(t('common.EmptyError'))
+      //   .matches(nameRegex, {message: t('personalInfo.EmailErr')}),
+      // secondaryEmail: yup.string().trim(),
     });
   };
 

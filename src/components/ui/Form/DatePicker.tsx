@@ -1,10 +1,11 @@
 import React from 'react';
+
 import {Image, Text, View} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
-import {DropDownModel} from '../Modal';
+import {Calendar} from '../Calendar';
 import {FormInputStyle} from './style';
 
-type SimpleDropdownProps = {
+type DatePickerProps = {
   value: any;
   label: string;
   onChange: (...event: any[]) => void;
@@ -14,25 +15,46 @@ type SimpleDropdownProps = {
   state?: {
     [key: string]: any;
   };
-  dropDownList: string[];
   customIcon?: any;
+  type?: string;
+  focused: boolean;
 };
 
-export const SimpleDropDown = React.memo(
+export const DatePicker = React.memo(
   ({
-    value,
     label,
-    onChange,
     onBlur,
+    onChange,
     placeholder,
     setFocused,
-    state,
-    dropDownList,
+    value,
     customIcon,
-  }: SimpleDropdownProps): React.JSX.Element => {
+    state,
+    type,
+    focused,
+  }: DatePickerProps): React.JSX.Element => {
     const style = FormInputStyle(value);
 
-    const [modelVisible, setModelVisible] = React.useState(false);
+    console.log(value, 'hello');
+
+    const [calendarVisible, setCalendarVisible] = React.useState(false);
+
+    const [selectedDate, setSelectedDate] = React.useState<any>();
+
+    React.useMemo(() => {
+      if (type === 'dob') {
+        const minAllowedDate = new Date();
+        minAllowedDate.setFullYear(minAllowedDate.getFullYear() - 18);
+
+        setSelectedDate(minAllowedDate);
+      }
+    }, []);
+
+    React.useEffect(() => {
+      if (selectedDate && focused) {
+        onChange(selectedDate.toLocaleDateString());
+      }
+    }, [selectedDate]);
 
     return (
       <>
@@ -45,7 +67,8 @@ export const SimpleDropDown = React.memo(
             height: '100%',
           }}
           onTouchEnd={() => {
-            setModelVisible(!modelVisible);
+            setCalendarVisible(!calendarVisible);
+            setFocused(!calendarVisible);
           }}>
           <Text style={style.placeholderFonts}>
             {value === '' || value === undefined || value === 'undefined'
@@ -61,7 +84,7 @@ export const SimpleDropDown = React.memo(
                 alignItems: 'center',
                 justifyContent: 'center',
               },
-              modelVisible && {
+              calendarVisible && {
                 transform: [
                   {
                     rotate: '180deg',
@@ -74,21 +97,17 @@ export const SimpleDropDown = React.memo(
                 flex: 1,
                 resizeMode: 'contain',
               }}
-              source={customIcon || AllIcons.RoundedArrow}
+              source={customIcon || AllIcons.Calendar}
             />
           </View>
         </View>
 
-        <DropDownModel
-          modelVisible={modelVisible}
-          setModelVisible={setModelVisible}
-          inputList={dropDownList}
-          wantSearchBar={true}
-          type={'simple'}
-          selectedItem={value}
-          setSelectedItem={onChange}
-          modalHeight={'90%'}
-          label={label}
+        <Calendar
+          type={type}
+          calendarVisible={calendarVisible}
+          setCalendarVisible={setCalendarVisible}
+          selectedParentDate={selectedDate || new Date()}
+          setSelectedParentDate={setSelectedDate}
         />
       </>
     );

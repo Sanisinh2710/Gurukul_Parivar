@@ -9,24 +9,33 @@ import {
   View,
 } from 'react-native';
 import {useAppSelector} from '../../../redux/hooks';
-import {COLORS, CustomFonts} from '../../../utils';
+import {COLORS} from '../../../utils';
 import {RadioLable} from '../Radio';
+import {DatePicker} from './DatePicker';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
 import {PhotoPicker} from './PhotoPicker';
 import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
-import {AllIcons} from '../../../../assets/icons';
 
 type FormInputProps = {
-  type: 'phone' | 'number' | 'text' | 'select' | 'photo' | 'radio' | 'checkbox';
+  type:
+    | 'phone'
+    | 'number'
+    | 'text'
+    | 'select'
+    | 'photo'
+    | 'radio'
+    | 'dob'
+    | 'date'
+    | 'textarea';
   name: string;
   label: string;
-  icon?: string;
+  icon?: any;
   placeholder: string;
   value: any;
   onBlur: (...event: any[]) => void;
   onChange: (...event: any[]) => void;
-  error?: string;
+  error?: any | unde;
   state?: {[key: string]: any};
   menuList?: any;
   customProps?: object;
@@ -99,6 +108,7 @@ export const FormInput = React.memo(
             placeholder={placeholder}
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
+            customIcon={icon}
           />
         );
         break;
@@ -118,50 +128,33 @@ export const FormInput = React.memo(
         );
         break;
 
-      case 'checkbox':
+      case 'dob':
         fieldblock = (
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 10,
-                marginBottom: '5%',
-              }}>
-              <View
-                style={{
-                  height: 20,
-                  width: 20,
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  borderColor: COLORS.primaryColor,
-                  borderWidth: value ? 0 : 1,
-                }}
-                onTouchEnd={() => {
-                  onChange(!value);
-                }}>
-                {value ? (
-                  <Image
-                    source={AllIcons.checkbox}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                    }}
-                  />
-                ) : null}
-              </View>
-              <Text
-                style={{
-                  ...CustomFonts.body.medium12,
-                  fontSize: 14,
-                  fontWeight: '400',
-                  color: theme.textColor,
-                  lineHeight: 18.9,
-                }}>
-                {/* This address is my preferred communication address */}
-                {label}
-              </Text>
-            </View>
-          </>
+          <DatePicker
+            type={type}
+            value={value}
+            label={label}
+            onChange={onChange}
+            onBlur={onBlur}
+            focused={focused}
+            placeholder={placeholder}
+            setFocused={setFocused}
+          />
+        );
+        break;
+
+      case 'date':
+        fieldblock = (
+          <DatePicker
+            type={type}
+            value={value}
+            label={label}
+            onChange={onChange}
+            onBlur={onBlur}
+            focused={focused}
+            placeholder={placeholder}
+            setFocused={setFocused}
+          />
         );
         break;
 
@@ -170,6 +163,23 @@ export const FormInput = React.memo(
           <TextInput
             keyboardType="numeric"
             inputMode="numeric"
+            onFocus={() => setFocused(true)}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={theme.textColor}
+            style={style.formTextInput}
+            onBlur={onBlur}
+            onChangeText={newvalue => {
+              onChange(newvalue);
+            }}
+          />
+        );
+        break;
+
+      case 'textarea':
+        fieldblock = (
+          <TextInput
+            multiline={true}
             onFocus={() => setFocused(true)}
             value={value}
             placeholder={placeholder}
@@ -208,7 +218,7 @@ export const FormInput = React.memo(
             setFocused(false);
           }}>
           <>
-            {type !== 'photo' && type !== 'radio' && type !== 'checkbox' ? (
+            {type !== 'photo' && type !== 'radio' ? (
               <>
                 <Text style={style.labelText}>{label}</Text>
                 <View
@@ -220,8 +230,38 @@ export const FormInput = React.memo(
                         : COLORS.primaryInputBorderColor,
                       justifyContent: 'space-between',
                     },
+                    type === 'textarea' && {
+                      height: 80,
+                      alignItems: 'flex-start',
+                    },
+                    icon &&
+                      type !== 'select' && {
+                        gap: 3,
+                      },
                   ]}>
-                  {fieldblock}
+                  {icon && type !== 'select' ? (
+                    <View style={{width: '90%'}}>{fieldblock}</View>
+                  ) : (
+                    fieldblock
+                  )}
+                  {icon && type !== 'select' && (
+                    <View
+                      style={{
+                        height: '50%',
+                        width: '10%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={icon}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  )}
                 </View>
               </>
             ) : (
