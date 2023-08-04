@@ -8,21 +8,19 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
+  d,
   DailyDarshanAllImages,
   DailyDarshanEveningImages,
   DailyDarshanMorningImages,
+  options,
 } from '../../../../utils';
 import {AllIcons} from '../../../../../assets/icons';
 import {styles} from './styles';
 import {RootStackParamList} from '../../../../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-const d = new Date();
-const options: Intl.DateTimeFormatOptions = {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-};
+import {useTranslation} from 'react-i18next';
+
 export const DailyDarshan = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -30,6 +28,7 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [selectedItem, setselectedItem] = React.useState('');
+  const {t} = useTranslation();
 
   const style = styles();
 
@@ -57,7 +56,10 @@ export const DailyDarshan = ({
       <ScreenHeader
         showLeft={true}
         headerTitleAlign={'left'}
-        headerTitle={'Daily Darshan'}
+        leftOnPress={() => {
+          navigation.goBack();
+        }}
+        headerTitle={t('DailyDarshan.Heading')}
         headerRight={{
           icon: AllIcons.Calendar,
           onPress: () => {
@@ -76,7 +78,11 @@ export const DailyDarshan = ({
           selectedItem={selectedItem}
           setselectedItem={setselectedItem}
           heading={''}
-          list={[{name: 'All'}, {name: 'Morning'}, {name: 'Evening'}]}
+          list={[
+            {name: t('DailyDarshan.All')},
+            {name: t('DailyDarshan.Morning')},
+            {name: t('DailyDarshan.Evening')},
+          ]}
         />
 
         <View>
@@ -92,11 +98,11 @@ export const DailyDarshan = ({
         <View style={{height: '80%'}}>
           <FlatList
             data={
-              selectedItem === 'All'
+              selectedItem === t('DailyDarshan.All')
                 ? DailyDarshanAllImages()
-                : selectedItem === 'Morning'
+                : selectedItem === t('DailyDarshan.Morning')
                 ? DailyDarshanMorningImages()
-                : selectedItem === 'Evening'
+                : selectedItem === t('DailyDarshan.Evening')
                 ? DailyDarshanEveningImages()
                 : DailyDarshanAllImages()
             }

@@ -127,6 +127,21 @@
       "Help":"Need Help",
       "Feedback":"Feedback",
       "Logout":"Logout"
-    }
-  }
+    },
+    "DailyDarshan":{
+      "Heading":"Daily Darshan",
+      "All":"All",
+      "Morning":"Morning",
+      "Evening":"Evening"
+    },
+    "DailyDarshanDetail":{
+      "Ghanshyam Maharaj":"Ghanshyam Maharaj",
+      "Subtext":"Practice remembering today's darshan"
+    },
+    "DailyQuote":{
+      "Heading":"Daily Quotes"
+  },
+  "DailyUpdate":{
+    "Heading":"Daily Updates"
 }
+}}

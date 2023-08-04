@@ -127,7 +127,23 @@
       "Help": "मदद चाहिए",
       "Feedback": "प्रतिक्रिया",
       "Logout": "लॉगआउट"
-    }
+    },
+    "DailyDarshan":{
+      "Heading":"दैनिक दर्शन",
+      "All":"सभी",
+      "Morning":"सुबह",
+      "Evening":"शाम"
+      },
+      "DailyDarshanDetail":{
+      "Ghanshyam Maharaj":"घनश्याम महाराज",
+      "Subtext":"आज के दर्शन को याद करने का अभ्यास करें"
+      },
+      "DailyQuote":{
+      "Heading":"दैनिक उद्धरण"
+      },
+      "DailyUpdate":{
+      "Heading":"दैनिक अपडेट"
+      }
     
     
   }

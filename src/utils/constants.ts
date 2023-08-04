@@ -498,3 +498,61 @@ export const DailyDarshanMorningImages = () => {
     },
   ];
 };
+export const d = new Date();
+export const options: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+};
+export const DailyUpdate = [
+  {
+    image: AllImages.AppLogo,
+    title: 'Guru Purnima Celebration at Nikol Gurukul',
+    time: '9:29 AM',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Click This Image To Get Chaturmas Niyam Form',
+    time: '4:50 AM',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Praying Saints and students to Lord Shri Swaminarayan...',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'World Tobacco Day Celebration at Gurukul',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Ravi Sabha was organized at Nikol Gurukul in the presence...',
+    time: '25,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: `200 Saint's Bhojan Pankti Darshan at Nikol Gurukul`,
+    time: '25,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Guru Purnima Celebration at Nikol Gurukul',
+    time: '24,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Click This Image To Get Chaturmas Niyam Form',
+    time: '23,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
+    time: '22,July',
+  },
+];

@@ -7,7 +7,7 @@ import {CustomFonts} from '../../../utils';
 import {styles} from './styles';
 
 type CustomNavigateProps = {
-  text: string;
+  text: string | number;
   handlePrevPress?: (...event: any[]) => void;
   handleNextPress?: (...event: any[]) => void;
   selectedDate?: Date;

@@ -47,8 +47,8 @@ export const ModalStyle = (modalHeight: any) => {
     },
     modelInnerView: {
       elevation: 5,
-      // marginTop: 20,
-      // paddingHorizontal: 30,
+      marginTop: 20,
+      paddingHorizontal: 30,
     },
     modelSearchView: {
       width: '100%',

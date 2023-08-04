@@ -172,7 +172,7 @@ export const LoginScreen = ({
               </Text>{' '}
               {t('loginScreen.FooterText2')
                 .split(' ')
-                .filter((val, index) => {
+                .filter((val: any, index: number) => {
                   return index !== 0 && val;
                 })
                 .join(' ')}

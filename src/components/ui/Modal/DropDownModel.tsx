@@ -69,7 +69,6 @@ export const DropDownModel = React.memo(
         }
       }
     }, [searchvalue]);
-    console.log(customModelchild);
 
     return (
       <Modal
