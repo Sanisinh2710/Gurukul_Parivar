@@ -8,16 +8,12 @@ import {AddressFormValidationSchemaType} from '../../../../types';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 import {COLORS, CustomFonts, countries} from '../../../../utils';
-import {} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {changeLanguage} from 'i18next';
 
 export const AdressInfo = React.memo(
   ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
     const {t} = useTranslation();
     const style = styles();
-
-    // const [checkbox, setCheckbox] = React.useState<boolean>(false);
 
     const addressFormINputList: {
       name: string;
@@ -103,21 +99,13 @@ export const AdressInfo = React.memo(
 
     const [checkedArray, setCheckedArray] = React.useState<boolean[]>(
       [
-        ...initialValues?.addressInfo?.map(item => {
+        ...initialValues?.addressInfo?.map((item: {communicationAddr: any}) => {
           return item.communicationAddr;
         }),
       ] || [false],
     );
 
     const onSubmit = (data: AddressFormValidationSchemaType) => {
-      //   console.log(data);
-      // const formSubmitData = {
-      //   country: data.country || '',
-      //   address: data.address || '',
-      //   pincode: data.pincode || '',
-      //   cityVillage: data.cityVillage || '',
-      //   typeofAddress: data.typeofAddress || '',
-      // };
       console.log(data, 'in dadrese ');
 
       let newData = [...data.addressInfo].map((item, index) => {
@@ -195,9 +183,11 @@ export const AdressInfo = React.memo(
                               JSON.stringify(checkedArray),
                             );
 
-                            let returnArr = newArr.map((item, index) => {
-                              return mainindex === index ? !item : false;
-                            });
+                            let returnArr = newArr.map(
+                              (item: any, index: number) => {
+                                return mainindex === index ? !item : false;
+                              },
+                            );
 
                             setCheckedArray(returnArr);
                           }}>
@@ -216,7 +206,6 @@ export const AdressInfo = React.memo(
                             ...CustomFonts.body.medium12,
                             fontSize: 14,
                             fontWeight: '400',
-                            // color: theme.textColor,
                             lineHeight: 18.9,
                           }}>
                           {/* This address is my preferred communication address */}
