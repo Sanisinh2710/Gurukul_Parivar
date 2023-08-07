@@ -41,7 +41,8 @@ export const PersonalInfo = React.memo(
         | 'radio'
         | 'date'
         | 'dob'
-        | 'textarea';
+        | 'textarea'
+        | 'multi-select';
       menuList?: any;
       customProps?: object;
     }[] = [
@@ -132,7 +133,7 @@ export const PersonalInfo = React.memo(
             [...data.mobilenumInfo].map((item: any, index: any) => {
               let newItem: any = {};
 
-              newItem.mobilenum = item.countryCode + item.mobilenum;
+              newItem.mobilenum = item.mobilenum;
               newItem.secondary = item.secondary;
               newItem.whatsappNum = checkedArray[index];
               newItem.countryCode = item.countryCode;

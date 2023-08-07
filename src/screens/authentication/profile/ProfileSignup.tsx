@@ -61,7 +61,6 @@ export const ProfileSignup = (): React.JSX.Element => {
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else if (formStep === 2) {
-      // console.log('form step greater than 2');
       let newFormData = JSON.parse(JSON.stringify(formData));
 
       newFormData.personalInfo = receivedData;
@@ -132,7 +131,7 @@ export const ProfileSignup = (): React.JSX.Element => {
                 (item, index) => {
                   let newItem: any = {};
 
-                  newItem.mobilenum = item.mobilenum.split(')')[1] || '';
+                  newItem.mobilenum = item.mobilenum || '';
                   newItem.countryCode = item.countryCode;
                   newItem.secondary = item.secondary;
                   newItem.whatsappNum = item.whatsappNum;

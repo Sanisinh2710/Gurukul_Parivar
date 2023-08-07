@@ -168,10 +168,7 @@ export const DropDownModel = React.memo(
                         <View
                           onTouchEnd={() => {
                             if (setSelectedItem) {
-                              if (
-                                Array.isArray(selectedItem) &&
-                                type === 'multi-select'
-                              ) {
+                              if (type === 'multi-select') {
                                 const newArr = [...selectedItem];
                                 if (newArr.includes(item) === false) {
                                   newArr.push(item);

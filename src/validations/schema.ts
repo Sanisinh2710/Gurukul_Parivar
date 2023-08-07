@@ -45,7 +45,7 @@ export const PersonalInfoFormValidationSchema =
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
-      bloodGroup: yup.string().trim().required(t('common.EmptyError')),
+      bloodGroup: yup.string().required(t('common.EmptyError')),
       mobilenumInfo: yup.array().of(
         yup.object().shape({
           mobilenum: yup

@@ -8,8 +8,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {useAppSelector} from '../../../redux/hooks';
-import {COLORS} from '../../../utils';
+import {COLORS, CustomFonts} from '../../../utils';
 import {RadioLable} from '../Radio';
 import {DatePicker} from './DatePicker';
 import {PhoneDropdownInput} from './PhoneDropdownInput';
@@ -28,7 +29,8 @@ type FormInputProps = {
     | 'dob'
     | 'date'
     | 'textarea'
-    | 'email';
+    | 'email'
+    | 'multi-select';
   name: string;
   label: string;
   icon?: any;
@@ -109,6 +111,23 @@ export const FormInput = React.memo(
       case 'select':
         fieldblock = (
           <SimpleDropDown
+            type={'simple'}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            label={label}
+            placeholder={placeholder}
+            setFocused={setFocused}
+            dropDownList={menuList ? [...menuList] : []}
+            customIcon={icon}
+          />
+        );
+        break;
+
+      case 'multi-select':
+        fieldblock = (
+          <SimpleDropDown
+            type={type}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
@@ -313,6 +332,63 @@ export const FormInput = React.memo(
                       </View>
                     )}
                 </View>
+                {Array.isArray(value) && type === 'multi-select' && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      top: 10,
+                      gap: 8,
+                    }}>
+                    {value.map((item, index) => {
+                      return (
+                        <View
+                          key={index}
+                          style={{
+                            flexDirection: 'row',
+                            backgroundColor: COLORS.primaryColor,
+                            paddingHorizontal: 16,
+                            height: 35,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 60,
+                            gap: 10,
+                          }}>
+                          <Text
+                            style={{
+                              ...CustomFonts.body.large14,
+                              lineHeight: 18.9,
+                              color: COLORS.darkModetextColor,
+                            }}>
+                            {item}
+                          </Text>
+                          <View
+                            onTouchEnd={() => {
+                              let newValues: string[] = JSON.parse(
+                                JSON.stringify(value),
+                              );
+                              newValues.splice(index, 1);
+                              onChange(newValues);
+                            }}
+                            style={{
+                              width: 14,
+                              height: 14,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}>
+                            <Image
+                              source={AllIcons.RoundCross}
+                              style={{
+                                flex: 1,
+                                tintColor: COLORS.darkModeIconColor,
+                                resizeMode: 'contain',
+                              }}
+                            />
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
               </>
             ) : (
               fieldblock
