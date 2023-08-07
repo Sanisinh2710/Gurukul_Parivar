@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-
 import * as Progress from 'react-native-progress';
-
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   AdressInfo,
   CompleteYourProfile,
+  GurukulInfo,
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
@@ -54,7 +53,7 @@ export const ProfileSignup = ({
       },
     ],
     gurukulInfo: {
-      exGurukulStudent: 'no',
+      exGurukulStudent: 'No',
       data: [
         {
           gurukulBranch: '',
@@ -63,10 +62,12 @@ export const ProfileSignup = ({
           stdTo: '',
           sscYear: '',
           hscYear: '',
-          knowSaint: '',
-          FromFamilySaint: '',
+          knowSaintPersonally: '',
+          knowHaribhakt: '',
+          RelativeOfSaint: 'no',
+          FromFamily: '',
           SaintName: '',
-          SaintRelation: '',
+          YourRelation: '',
         },
       ],
     },
@@ -119,6 +120,8 @@ export const ProfileSignup = ({
       ? t('personalInfo.personalInfoHeader')
       : formStep === 3
       ? t('addressInfo.AddressHeader')
+      : formStep === 4
+      ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep]);
 
@@ -164,7 +167,7 @@ export const ProfileSignup = ({
                 item => {
                   let newItem: any = {};
 
-                  newItem.mobilenum = item.mobilenum.split(')')[1] || '';
+                  newItem.mobilenum = item.mobilenum || '';
                   newItem.countryCode = item.countryCode;
                   newItem.secondary = item.secondary;
                   newItem.whatsappNum = item.whatsappNum;
@@ -176,10 +179,15 @@ export const ProfileSignup = ({
             }}
             onSubmitEvent={submitButton}
           />
+        ) : formStep === 3 ? (
+          <AdressInfo
+            initialValues={{addressInfo: [...formData.addressInfo]}}
+            onSubmitEvent={submitButton}
+          />
         ) : (
-          formStep === 3 && (
-            <AdressInfo
-              initialValues={{addressInfo: [...formData.addressInfo]}}
+          formStep === 4 && (
+            <GurukulInfo
+              initialValues={formData.gurukulInfo}
               onSubmitEvent={submitButton}
             />
           )

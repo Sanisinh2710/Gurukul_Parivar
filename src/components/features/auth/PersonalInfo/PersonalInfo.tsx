@@ -11,11 +11,7 @@ import {PersonalInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 
 export const PersonalInfo = React.memo(
-  ({
-    initialValues,
-    onSubmitEvent,
-    onLeftButtonPress,
-  }: any): React.JSX.Element => {
+  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
     const {t} = useTranslation();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
@@ -136,7 +132,7 @@ export const PersonalInfo = React.memo(
             [...data.mobilenumInfo].map((item: any, index: any) => {
               let newItem: any = {};
 
-              newItem.mobilenum = item.countryCode + item.mobilenum;
+              newItem.mobilenum = item.mobilenum;
               newItem.secondary = item.secondary;
               newItem.whatsappNum = checkedArray[index];
               newItem.countryCode = item.countryCode;
@@ -161,7 +157,7 @@ export const PersonalInfo = React.memo(
             [...data.mobilenumInfo].map((item: any, index: any) => {
               let newItem: any = {};
 
-              newItem.mobilenum = item.countryCode + item.mobilenum;
+              newItem.mobilenum = item.mobilenum;
               newItem.secondary = item.secondary;
               newItem.whatsappNum = checkedArray[index];
               newItem.countryCode = item.countryCode;
@@ -183,7 +179,7 @@ export const PersonalInfo = React.memo(
           secondary: false,
         });
       }
-    }, [primarycountryCodeSelect]);
+    }, [getValues, mobileupdate, primarycountryCodeSelect]);
 
     React.useEffect(() => {
       if (secondarycountryCodeSelect) {
@@ -194,7 +190,7 @@ export const PersonalInfo = React.memo(
           secondary: true,
         });
       }
-    }, [secondarycountryCodeSelect]);
+    }, [getValues, mobileupdate, secondarycountryCodeSelect]);
 
     return (
       <ScrollView
@@ -208,7 +204,7 @@ export const PersonalInfo = React.memo(
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{gap: 15, paddingBottom: '15%'}}
           data={[...PerosnalInfoForm1InputList]}
-          renderItem={({item, index}) => {
+          renderItem={({item}) => {
             return (
               <Controller
                 control={control}
