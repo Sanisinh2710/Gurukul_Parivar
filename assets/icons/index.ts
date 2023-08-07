@@ -25,6 +25,8 @@ export const AllIcons = {
   Video: require('../icons/Video.png'),
   Download: require('../icons/Download.png'),
   Share: require('../icons/Share.png'),
+  Search: require('../icons/Search.png'),
   SetWallPaper: require('../icons/SetWallpaper.png'),
   Filter: require('../icons/Filter.png'),
+  Donation: require('../icons/Donation.png'),
 };

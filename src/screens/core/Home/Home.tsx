@@ -49,6 +49,9 @@ export const HomeScreen = ({
       case 'calendar':
         navigation.navigate('calendar');
         break;
+      case 'satsang':
+        navigation.navigate('liveSatsang');
+        break;
 
       default:
         break;
@@ -80,8 +83,9 @@ export const HomeScreen = ({
         }}
       />
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: '180%',
+          paddingBottom: '30%',
         }}>
         <View style={[commonStyle.commonContentView, {height: '100%'}]}>
           <View

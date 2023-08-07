@@ -15,7 +15,7 @@ export const styles = () => {
     updateContainer: {
       flexDirection: 'row',
       width: '100%',
-      // paddingVertical: 15,
+      padding: 5,
       backgroundColor: 'white',
       borderWidth: 1,
       marginTop: 20,
@@ -34,18 +34,18 @@ export const styles = () => {
       lineHeight: 16.5,
     },
     image: {
-      height: 54,
-      width: 54,
+      height: 44,
+      width: 44,
     },
     imageContainer: {
-      // width: '20%',
       borderRadius: 60,
       borderWidth: 1,
       borderColor: COLORS.primaryColor,
-      padding: 8,
       justifyContent: 'center',
       alignItems: 'center',
-      // marginLeft: '2%',
+      marginTop: '5%',
+      marginBottom: '20%',
+      padding: 5,
     },
   });
 };

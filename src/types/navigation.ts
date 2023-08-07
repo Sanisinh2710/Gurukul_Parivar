@@ -7,7 +7,11 @@ export type RootStackParamList = {
   dailyDarshanDetail: {image: any; date: string};
   dailyQuotes: undefined;
   dailyUpdates: undefined;
+  dailyUpdateDetail: {title: string};
   calendar: undefined;
+  liveSatsang: undefined;
+  changeLanguage: undefined;
+  editProfile: undefined;
 };
 
 export type RootBottomTabParamList = {

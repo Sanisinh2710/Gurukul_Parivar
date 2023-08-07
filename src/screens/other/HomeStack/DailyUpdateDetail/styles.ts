@@ -10,26 +10,29 @@ export const styles = () => {
       ...CustomFonts.header.medium20,
       fontSize: 18,
       color: 'black',
+      lineHeight: 25.92,
     },
-    date: {
-      ...CustomFonts.header.medium20,
-      color: 'white',
-    },
-    day: {
-      ...CustomFonts.body.small10,
-      fontSize: 16,
-      color: 'white',
-    },
-    content1: {
-      ...CustomFonts.header.medium20,
+    content: {
       fontSize: 16,
       color: 'black',
-      lineHeight: 18.9,
+      lineHeight: 25.92,
     },
-    content2: {
+    titleContainer: {
+      marginTop: 20,
+    },
+    date: {
+      marginTop: 8,
       fontSize: 14,
       color: 'rgba(23,23,23,0.5)',
       lineHeight: 18.9,
+    },
+    image: {
+      height: 250,
+      width: 355,
+      borderRadius: 12,
+    },
+    imageContainer: {
+      marginTop: '3%',
     },
   });
 };

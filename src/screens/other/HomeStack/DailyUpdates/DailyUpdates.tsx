@@ -49,21 +49,17 @@ export const DailyUpdates = ({
             return (
               <TouchableOpacity
                 activeOpacity={0.5}
-                // style={style.imageContainer}
-                // onPress={() => {
-                //   navigation.navigate('dailyDarshanDetail', {
-                //     image: item.item.image,
-
-                //   });
-                // }}
-              >
+                onPress={() => {
+                  navigation.navigate('dailyUpdateDetail', {
+                    title: item.item.title,
+                  });
+                }}>
                 <View style={style.updateContainer}>
                   <View
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
                       width: '20%',
-                      // backgroundColor: 'yellow',
                     }}>
                     <View style={style.imageContainer}>
                       <Image source={item.item.image} style={style.image} />

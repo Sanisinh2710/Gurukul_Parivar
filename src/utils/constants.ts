@@ -333,12 +333,7 @@ export const FrontDesk = (t: any) => {
       id: 'speech',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
-    {
-      image: AllIcons.Video,
-      title: t('frontDesk.Darshan'),
-      id: 'darshan',
-      imageBG: 'rgba(0, 166, 88, 0.1)',
-    },
+
     {
       image: AllIcons.Ticket,
       title: t('frontDesk.Event'),
@@ -351,9 +346,14 @@ export const FrontDesk = (t: any) => {
       id: 'quiz',
       imageBG: 'rgba(60, 42, 152, 0.1)',
     },
+    {
+      image: AllIcons.Donation,
+      title: t('frontDesk.Donation'),
+      id: 'donation',
+      imageBG: 'rgba(0, 166, 88, 0.1)',
+    },
   ];
 };
-
 export const HomeGrid = (t: any) => {
   return [
     {
@@ -368,38 +368,29 @@ export const HomeGrid = (t: any) => {
     },
     {
       name: t('homeScreen.DailyUpdate'),
-      image: AllImages.CalendarImage,
+      image: AllImages.DailyUpdate,
       id: 'update',
     },
     {
       name: t('homeScreen.Calendar'),
-      image: AllImages.Darshan,
-      id: 'calendar',
-    },
-    {
-      name: t('homeScreen.DailyUpdate'),
       image: AllImages.CalendarImage,
-      id: 'update',
-    },
-    {
-      name: t('homeScreen.Calendar'),
-      image: AllImages.Darshan,
       id: 'calendar',
     },
     {
-      name: t('homeScreen.DailyUpdate'),
-      image: AllImages.CalendarImage,
-      id: 'update',
+      name: t('homeScreen.DailyProgram'),
+      image: AllImages.DailyProgram,
+      id: 'program',
     },
     {
-      name: t('homeScreen.Calendar'),
-      image: AllImages.Darshan,
-      id: 'calendar',
+      name: t('homeScreen.LiveSatsang'),
+      image: AllImages.LiveSatsang,
+      id: 'satsang',
     },
   ];
   [];
 };
 export const EditProfile = (t: any) => {
+  const {i18n} = useTranslation();
   return [
     {
       image: AllIcons.ProfileUser,
@@ -417,7 +408,7 @@ export const EditProfile = (t: any) => {
       image: AllIcons.Translation,
       name: t('myProfile.Language'),
       rightIcon: AllIcons.RightArrow,
-      language: 'EN',
+      language: i18n.language.toLocaleUpperCase(),
       id: 'translation',
     },
     {
@@ -438,6 +429,13 @@ export const EditProfile = (t: any) => {
     },
   ];
 };
+
+export const MyProfileData = (t: any) => [
+  {title: 'Personal Info', icon: AllIcons.RightArrow},
+  {title: 'Address Info', icon: AllIcons.RightArrow},
+  {title: 'Education/Business Info', icon: AllIcons.RightArrow},
+  {title: 'Gurukul Connect', icon: AllIcons.RightArrow},
+];
 export const DailyDarshanAllImages = () => {
   return [
     {
@@ -498,12 +496,45 @@ export const DailyDarshanMorningImages = () => {
     },
   ];
 };
+export const PhotoGallery = () => {
+  return [
+    {
+      image: AllImages.Rectangle75,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle76,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle77,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle75,
+      id: 4,
+    },
+    {
+      image: AllImages.Rectangle76,
+      id: 5,
+    },
+    {
+      image: AllImages.Rectangle77,
+      id: 6,
+    },
+  ];
+};
 export const d = new Date();
 export const options: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
 };
+export const options2: Intl.DateTimeFormatOptions = {
+  month: 'short',
+  year: 'numeric',
+};
+export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const DailyUpdate = [
   {
     image: AllImages.AppLogo,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   PrimaryButton,
@@ -13,12 +13,47 @@ import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
 import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({
+  navigation,
+}: CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, 'Profile'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
   const theme = useAppSelector(state => state.theme.theme);
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
+
+  React.useEffect(() => {
+    const language = i18n.language;
+  }, []);
+  const handlePress = (val: string) => {
+    switch (val) {
+      case 'user':
+        navigation.navigate('editProfile');
+        break;
+      case 'family':
+        navigation.navigate('dailyQuotes');
+        break;
+      case 'translation':
+        navigation.navigate('changeLanguage');
+        break;
+      case 'help':
+        navigation.navigate('calendar');
+        break;
+      case 'feedback':
+        navigation.navigate('liveSatsang');
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -92,61 +127,66 @@ export const ProfileScreen = () => {
           }}>
           {EditProfile(t).map((item, index) => {
             return (
-              <View
+              <TouchableOpacity
                 key={index}
-                style={{
-                  borderBottomWidth: item.name === 'Logout' ? 0 : 1,
-                  borderColor: 'rgba(23, 23, 23,0.1)',
-                  flexDirection: 'row',
-                  marginHorizontal: '5%',
-                  marginVertical: '3.5%',
-                  paddingBottom: '2.5%',
+                onPress={() => {
+                  handlePress(item.id);
                 }}>
-                <RoundedIcon
-                  icon={item.image}
-                  onPress={() => {}}
-                  imageStyle={{
-                    width: 20,
-                    height: 20,
-                  }}
-                />
                 <View
                   style={{
-                    justifyContent: 'center',
-                    marginLeft: '5%',
+                    borderBottomWidth: item.name === 'Logout' ? 0 : 1,
+                    borderColor: 'rgba(23, 23, 23,0.1)',
+                    flexDirection: 'row',
+                    marginHorizontal: '5%',
+                    marginVertical: '3.5%',
+                    paddingBottom: '2.5%',
                   }}>
-                  <Text
+                  <RoundedIcon
+                    icon={item.image}
+                    onPress={() => {}}
+                    imageStyle={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                  <View
                     style={{
-                      ...CustomFonts.body.medium12,
-                      fontSize: 16,
-                      color: 'black',
+                      justifyContent: 'center',
+                      marginLeft: '5%',
                     }}>
-                    {item.name}{' '}
-                  </Text>
+                    <Text
+                      style={{
+                        ...CustomFonts.body.medium12,
+                        fontSize: 16,
+                        color: 'black',
+                      }}>
+                      {item.name}{' '}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
+                      {item.language}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-end',
+                    }}>
+                    {item.rightIcon && (
+                      <Image
+                        source={item.rightIcon}
+                        style={{height: 24, width: 24}}
+                      />
+                    )}
+                  </View>
                 </View>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
-                    {item.language}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  {item.rightIcon && (
-                    <Image
-                      source={item.rightIcon}
-                      style={{height: 24, width: 24}}
-                    />
-                  )}
-                </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>

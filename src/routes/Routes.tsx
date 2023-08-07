@@ -9,6 +9,7 @@ import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {
   CalendarScreen,
+  ChangeLanguage,
   DailyDarshan,
   DailyQuotes,
   DailyUpdates,
@@ -26,6 +27,9 @@ import {
   RootStackParamList,
 } from '../types';
 import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
+import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
+import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
+import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -93,8 +97,18 @@ export const Routes = (): React.JSX.Element => {
               component={DailyDarshanDetail}
             />
             <NativeStack.Screen name="dailyUpdates" component={DailyUpdates} />
+            <NativeStack.Screen
+              name="dailyUpdateDetail"
+              component={DailyUpdateDetail}
+            />
             <NativeStack.Screen name="dailyQuotes" component={DailyQuotes} />
             <NativeStack.Screen name="calendar" component={CalendarScreen} />
+            <NativeStack.Screen name="liveSatsang" component={LiveSatsang} />
+            <NativeStack.Screen
+              name="changeLanguage"
+              component={ChangeLanguage}
+            />
+            <NativeStack.Screen name="editProfile" component={EditProfile} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

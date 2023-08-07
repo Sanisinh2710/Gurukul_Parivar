@@ -50,7 +50,12 @@ export const FrontDeskScreen = () => {
           }}>
           <PagerView currentPage={currentPage} />
         </View>
-        <View style={{marginTop: 24}}>
+
+        <View
+          style={{
+            marginTop: 24,
+            paddingBottom: 550,
+          }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={FrontDesk(t)}
