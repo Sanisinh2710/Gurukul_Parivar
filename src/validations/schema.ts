@@ -44,23 +44,7 @@ export const PersonalInfoFormValidationSchema =
         .trim()
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      dob: yup
-        .string()
-        .trim()
-        .required(t('common.EmptyError'))
-        .test({
-          name: 'dob',
-          skipAbsent: true,
-          test(value, ctx) {
-            if (value) {
-              console.log(value);
-              // return ctx.createError({
-              //   message: ''
-              // })
-            }
-            return true;
-          },
-        }),
+      dob: yup.string().trim().required(t('common.EmptyError')),
       bloodGroup: yup.string().trim().required(t('common.EmptyError')),
       mobilenumInfo: yup.array().of(
         yup.object().shape({
