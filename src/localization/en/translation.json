@@ -8,7 +8,9 @@
       "Save&Exit": "Save & Exit",
       "Save&Next": "Save & Next",
       "SkipNow": "Skip for Now",
-      "AddAddress": "+Add Another Address"
+      "AddAddress": "+Add Another Address",
+      "MobileErr": "Please enter valid mobile number..!",
+      "EnterMobileNum": "Enter mobile number"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -67,6 +69,7 @@
       "AddSecondaryNumber": "+ Add secondary number",
       "MobileFieldCheckbox": "I use this number as a WhatsApp number",
       "EmailAddress": "Email address",
+      "EnterYourEmailPlaceholder": "Enter your email address",
       "AddSecondaryEmail": "+ Add secondary Email",
       "NameErr": "Please enter a valid name using alphabets only",
       "EmailErr": "Please enter a valid email",

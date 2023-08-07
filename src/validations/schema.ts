@@ -6,7 +6,7 @@ import {
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
 } from '../types';
-import {nameRegex, phoneRegex} from '../utils';
+import {mailRegex, nameRegex, phoneRegex} from '../utils';
 
 export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {
@@ -34,42 +34,54 @@ export const PersonalInfoFormValidationSchema =
     const {t} = useTranslation();
     return yup.object().shape({
       gender: yup.string().trim().required(t('common.EmptyError')),
-      // fullname: yup
-      //   .string()
-      //   .trim()
-      //   .required(t('common.EmptyError'))
-      //   .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      // fatherFullName: yup
-      //   .string()
-      //   .trim()
-      //   .required(t('common.EmptyError'))
-      //   .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      // dob: yup
-      //   .string()
-      //   .trim()
-      //   .required(t('common.EmptyError'))
-      //   .test({
-      //     name: 'dob',
-      //     skipAbsent: true,
-      //     test(value, ctx) {
-      //       if (value) {
-      //         console.log(value);
-      //         // return ctx.createError({
-      //         //   message: ''
-      //         // })
-      //       }
-      //       return true;
-      //     },
-      //   }),
-      // bloodGroup: yup.string().trim().required(t('common.EmptyError')),
-      // mobilenum: yup.string().trim().required(t('common.EmptyError')),
-      // secondaryMobileNum: yup.string().trim(),
-      // email: yup
-      //   .string()
-      //   .trim()
-      //   .required(t('common.EmptyError'))
-      //   .matches(nameRegex, {message: t('personalInfo.EmailErr')}),
-      // secondaryEmail: yup.string().trim(),
+      fullname: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .matches(nameRegex, {message: t('personalInfo.NameErr')}),
+      fatherFullName: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .matches(nameRegex, {message: t('personalInfo.NameErr')}),
+      dob: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .test({
+          name: 'dob',
+          skipAbsent: true,
+          test(value, ctx) {
+            if (value) {
+              console.log(value);
+              // return ctx.createError({
+              //   message: ''
+              // })
+            }
+            return true;
+          },
+        }),
+      bloodGroup: yup.string().trim().required(t('common.EmptyError')),
+      mobilenumInfo: yup.array().of(
+        yup.object().shape({
+          mobilenum: yup
+            .string()
+            .required(t('common.EmptyError'))
+            .matches(phoneRegex, {message: t('common.MobileErr')}),
+          whatsappNum: yup.boolean(),
+          secondary: yup.boolean(),
+          countryCode: yup.string(),
+        }),
+      ),
+      emailInfo: yup.array().of(
+        yup.object().shape({
+          email: yup
+            .string()
+            .required(t('common.EmptyError'))
+            .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+          secondary: yup.boolean(),
+        }),
+      ),
     });
   };
 

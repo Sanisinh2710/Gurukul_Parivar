@@ -8,7 +8,9 @@
       "Save&Exit": "सेव और बाहर",
       "Save&Next": "सेव और आगे",
       "SkipNow": "अभी के लिए छोड़ दे",
-      "AddAddress": "+ दूसरा पता जोड़ें"
+      "AddAddress": "+ दूसरा पता जोड़ें",
+      "MobileErr": "कृपया मान्य मोबाइल नंबर दर्ज करें..!",
+      "MobileEmptyErrMsg": "मोबाइल नंबर खाली नहीं हो सकता..!"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",
@@ -67,6 +69,7 @@
       "AddSecondaryNumber": "+ दूसरा फ़ोन नंबर जोड़ें",
       "MobileFieldCheckbox": "मैं इस नंबर का उपयोग व्हाट्सएप नंबर के रूप में करता हूं।",
       "EmailAddress": "ईमेल",
+      "EnterYourEmailPlaceholder": "अपना ईमेल दर्ज करें",
       "AddSecondaryEmail": "+ दूसरा ईमेल जोड़ें",
       "NameErr": "कृपया केवल वर्णमाला का उपयोग करके एक वैध नाम दर्ज करें।",
       "EmailErr": "कृपया एक वैध ईमेल दर्ज करें।",

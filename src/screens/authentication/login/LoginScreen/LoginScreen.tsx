@@ -103,6 +103,8 @@ export const LoginScreen = ({
     data.mobileNumber =
       countryCodeSelect.toString() + data.mobileNumber.toString();
 
+    console.log(data);
+
     // Do something with mobile number and than navigate to OTP Screen;
 
     navigation.navigate('MobileLoginOTP');
@@ -148,7 +150,10 @@ export const LoginScreen = ({
                     onBlur={onBlur}
                     onChange={onChange}
                     error={errors['mobileNumber']?.message?.toString()}
-                    state={{countryCodeSelect, setCountryCodeSelect}}
+                    state={{
+                      countryCodeSelect,
+                      setCountryCodeSelect,
+                    }}
                   />
                 );
               }}

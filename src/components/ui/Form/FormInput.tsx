@@ -27,7 +27,8 @@ type FormInputProps = {
     | 'radio'
     | 'dob'
     | 'date'
-    | 'textarea';
+    | 'textarea'
+    | 'email';
   name: string;
   label: string;
   icon?: any;
@@ -39,6 +40,9 @@ type FormInputProps = {
   state?: {[key: string]: any};
   menuList?: any;
   customProps?: object;
+  rightText?: string;
+  rightTextOnPress?: (...event: any[]) => void;
+  defaultPhoneCountryCode?: any;
 };
 
 export const FormInput = React.memo(
@@ -55,6 +59,9 @@ export const FormInput = React.memo(
     menuList,
     error,
     customProps,
+    rightText,
+    rightTextOnPress,
+    defaultPhoneCountryCode,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -82,6 +89,7 @@ export const FormInput = React.memo(
             placeholder={placeholder}
             setFocused={setFocused}
             state={state}
+            defaultPhoneCountryCode={defaultPhoneCountryCode}
           />
         );
         break;
@@ -139,6 +147,7 @@ export const FormInput = React.memo(
             focused={focused}
             placeholder={placeholder}
             setFocused={setFocused}
+            customIcon={icon}
           />
         );
         break;
@@ -154,6 +163,7 @@ export const FormInput = React.memo(
             focused={focused}
             placeholder={placeholder}
             setFocused={setFocused}
+            customIcon={icon}
           />
         );
         break;
@@ -180,6 +190,24 @@ export const FormInput = React.memo(
         fieldblock = (
           <TextInput
             multiline={true}
+            onFocus={() => setFocused(true)}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={theme.textColor}
+            style={style.formTextInput}
+            onBlur={onBlur}
+            onChangeText={newvalue => {
+              onChange(newvalue);
+            }}
+          />
+        );
+        break;
+
+      case 'email':
+        fieldblock = (
+          <TextInput
+            inputMode={'email'}
+            keyboardType={'email-address'}
             onFocus={() => setFocused(true)}
             value={value}
             placeholder={placeholder}
@@ -220,7 +248,21 @@ export const FormInput = React.memo(
           <>
             {type !== 'photo' && type !== 'radio' ? (
               <>
-                <Text style={style.labelText}>{label}</Text>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={style.labelText}>{label}</Text>
+                  {(type === 'phone' || type === 'email') && rightText && (
+                    <Text
+                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
+                      style={[style.labelText, {color: COLORS.primaryColor}]}>
+                      {rightText}
+                    </Text>
+                  )}
+                </View>
                 <View
                   style={[
                     style.fieldBlockView,
@@ -235,33 +277,41 @@ export const FormInput = React.memo(
                       alignItems: 'flex-start',
                     },
                     icon &&
-                      type !== 'select' && {
+                      type !== 'select' &&
+                      type !== 'date' &&
+                      type !== 'dob' && {
                         gap: 3,
                       },
                   ]}>
-                  {icon && type !== 'select' ? (
+                  {icon &&
+                  type !== 'select' &&
+                  type !== 'date' &&
+                  type !== 'dob' ? (
                     <View style={{width: '90%'}}>{fieldblock}</View>
                   ) : (
                     fieldblock
                   )}
-                  {icon && type !== 'select' && (
-                    <View
-                      style={{
-                        height: '50%',
-                        width: '10%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={icon}
+                  {icon &&
+                    type !== 'select' &&
+                    type !== 'date' &&
+                    type !== 'dob' && (
+                      <View
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
-                  )}
+                          height: '50%',
+                          width: '10%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={icon}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    )}
                 </View>
               </>
             ) : (
