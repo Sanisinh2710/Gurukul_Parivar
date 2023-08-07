@@ -12,10 +12,14 @@ import {
 import {LoginSuccessStackScreenProps} from '../../../../types';
 import {styles} from './styles';
 
-export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
+export const LoginSuccess = ({
+  navigation,
+  route,
+}: LoginSuccessStackScreenProps) => {
   const commonStyle = CommonStyle();
   const style = styles();
   const {t} = useTranslation();
+  const type = route.params?.type;
 
   return (
     <ScreenWrapper>
@@ -38,17 +42,31 @@ export const LoginSuccess = ({navigation}: LoginSuccessStackScreenProps) => {
         <View style={style.logoView}>
           <Image source={AllImages.GurukulLogo} style={style.logo} />
         </View>
-        <Text style={style.title}>{t('loginSuccess.LoginSuccess')}</Text>
+        <Text style={style.title}>
+          {type === 'Login'
+            ? t('loginSuccess.LoginSuccess')
+            : t('loginSuccess.ProfileSuccess')}
+        </Text>
         <View style={style.subtitleView}>
           <Text style={style.subtitle}>
             {t('loginSuccess.SuccessSubtitle')}
           </Text>
           <Text style={[style.subtitle, {textAlign: 'center'}]}>
-            {t('loginSuccess.SuccessSubtitle2')}
+            {type === 'Login'
+              ? t('loginSuccess.SuccessSubtitle2')
+              : t('loginSuccess.ProfileSuccessSubtitle2')}
           </Text>
           <PrimaryButton
-            title={t('loginSuccess.LoginSuccessBTN')}
-            onPress={() => navigation.replace('ProfileSignup')}
+            title={
+              type === 'Login'
+                ? t('loginSuccess.LoginSuccessBTN')
+                : t('loginSuccess.ProfileSuccessBTN')
+            }
+            onPress={() => {
+              type === 'Login'
+                ? navigation.replace('ProfileSignup')
+                : navigation.replace('BottomNavBar');
+            }}
             buttonStyle={{marginTop: 40}}
           />
         </View>

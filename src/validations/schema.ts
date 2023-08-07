@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import {
   AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
+  EduBusinessInfoValidationSchemaType,
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
 } from '../types';
@@ -83,5 +84,20 @@ export const AddressFormValidationSchema =
           typeofAddress: yup.string().trim().required(t('common.EmptyError')),
         }),
       ),
+    });
+  };
+
+export const EduBusinessInfoFormValidationSchema =
+  (): yup.ObjectSchema<EduBusinessInfoValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      maxEduLevel: yup.string().trim().required(t('common.EmptyError')),
+      occupation: yup.string().trim().required(t('common.EmptyError')),
+      occupationType: yup.string().trim().required(t('common.EmptyError')),
+      skills: yup
+        .array()
+        .min(1, t('common.EmptyError'))
+        .required(t('common.EmptyError')),
+      otherComment: yup.string().trim().required(t('common.EmptyError')),
     });
   };

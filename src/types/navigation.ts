@@ -1,3 +1,4 @@
+import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
@@ -18,7 +19,7 @@ export type RootBottomTabParamList = {
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
   MobileLoginOTP: undefined;
-  LoginSuccess: undefined;
+  LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
   ProfileSignup: undefined;
 };
 export type LoginOtpScreenProps = NativeStackScreenProps<
@@ -26,7 +27,11 @@ export type LoginOtpScreenProps = NativeStackScreenProps<
   'MobileLoginOTP'
 >;
 
-export type LoginSuccessStackScreenProps = NativeStackScreenProps<
+export type LoginSuccessStackScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootAuthStackParamList, 'LoginSuccess'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+export type ProfileSignupProps = NativeStackScreenProps<
   RootAuthStackParamList,
-  'LoginSuccess'
+  'ProfileSignup'
 >;

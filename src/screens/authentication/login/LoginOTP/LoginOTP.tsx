@@ -36,7 +36,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       return;
     } else {
       setOtp([num.join('')]);
-      navigation.replace('LoginSuccess');
+      navigation.replace('LoginSuccess', {type: 'Login'});
     }
   };
   React.useEffect(() => {

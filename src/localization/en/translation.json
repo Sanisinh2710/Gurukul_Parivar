@@ -10,7 +10,9 @@
       "SkipNow": "Skip for Now",
       "AddAddress": "+Add Another Address",
       "MobileErr": "Please enter valid mobile number..!",
-      "EnterMobileNum": "Enter mobile number"
+      "EnterMobileNum": "Enter mobile number",
+      "Yes": "Yes",
+      "No": "No"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -29,9 +31,12 @@
     },
     "loginSuccess": {
       "LoginSuccess": "Login Successful!",
+      "ProfileSuccess": "Profile Completed!",
       "SuccessSubtitle": "Welcome to a world of spirituality and serenity.",
       "SuccessSubtitle2": "Begin your journey now. 🌟",
-      "LoginSuccessBTN": "Let’s Complete your Profile"
+      "ProfileSuccessSubtitle2": "Start your journey now. 🌟",
+      "LoginSuccessBTN": "Let’s Complete your Profile",
+      "ProfileSuccessBTN": "Let’s Start Your Journey"
     },
     "uploadPhoto": {
       "HederText": "Complete your profile",
@@ -105,6 +110,31 @@
       "SKillsPlaceHolder": "Select your skills",
       "Other": "Others (Leave Comment)",
       "OtherPlaceHolder": "Leave your comments here..."
+    },
+    "gurukulConnect": {
+      "GurukulHeader": "Gurukul Connect",
+      "ExGurukulLbl": "Are you a ex-Gurukul student?",
+      "SelectGurukul": "Which Gurukul branch?",
+      "AddGurukul": "+Add another gurukul",
+      "StayGurukul": "Did you stay in gurukul hostel or just attended gurukul school?",
+      "StayGurukulOpt1": "I stayed in gurukul hostel",
+      "StayGurukulOpt2": "I just attended gurukul school",
+      "StayGurukulOpt3": "Both",
+      "StdFrom": "Standard from",
+      "StdTo": "Standard To",
+      "Select": "Select",
+      "SSCYear": "SSC Year",
+      "HSCYear": "HSC Year",
+      "KnowSaint": "Do you know any saint from this branch personally?",
+      "KnowHaribhakta": "Do you know any Haribhakta from this branch?",
+      "RelativeOfSaint": "Are you a relative of any gurukul saint?",
+      "FromFamily": "is any gurukul saint / sankyayogi bahen come from your family?",
+      "FromFamilyOpt1": "Saint",
+      "FromFamilyOpt2": "Sankyayogi bahen",
+      "NameSaint": "Name of the saint",
+      "NameSaintLbl": "Select Saint",
+      "YourRelation": "Which is your relation?",
+      "YourRelationLbl": "Select relation"
     },
     "homeScreen": {
       "WelcomeText1": "Hello",

@@ -8,18 +8,22 @@ import {CommonStyle} from '../../../../assets/styles';
 import {
   AdressInfo,
   CompleteYourProfile,
+  EduBusinessInfo,
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
+import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
 
-export const ProfileSignup = (): React.JSX.Element => {
+export const ProfileSignup = ({
+  navigation,
+}: ProfileSignupProps): React.JSX.Element => {
   const commonStyle = CommonStyle();
 
   const [width, setwidth] = React.useState(20);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const [formStep, setFormStep] = React.useState(1);
 
@@ -49,9 +53,36 @@ export const ProfileSignup = (): React.JSX.Element => {
         communicationAddr: false,
       },
     ],
+    edu_businessInfo: {
+      maxEduLevel: '',
+      occupation: '',
+      occupationType: '',
+      skills: [],
+      otherComment: '',
+    },
+    gurukulInfo: {
+      exGurukulStudent: 'no',
+      data: [
+        {
+          gurukulBranch: '',
+          attendGurukul: '',
+          stdFrom: '',
+          stdTo: '',
+          sscYear: '',
+          hscYear: '',
+          knowSaint: '',
+          FromFamilySaint: '',
+          SaintName: '',
+          SaintRelation: '',
+        },
+      ],
+    },
   });
 
-  const submitButton = (receivedData: any) => {
+  const submitButton = (
+    receivedData: any,
+    typecase: 'next' | 'skip' | 'exit',
+  ) => {
     if (formStep === 1) {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
@@ -61,17 +92,35 @@ export const ProfileSignup = (): React.JSX.Element => {
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else if (formStep === 2) {
+      if (typecase === 'next') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        newFormData.personalInfo = receivedData;
+        setFormData(newFormData);
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+      if (typecase === 'exit') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        newFormData.personalInfo = receivedData;
+        setFormData(newFormData);
+        navigation.navigate('LoginSuccess', {type: 'Profile'});
+      }
+    } else if (formStep === 3) {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
-      newFormData.personalInfo = receivedData;
-      setFormData(newFormData);
+      if (receivedData !== undefined) {
+        newFormData.addressInfo = receivedData;
+        setFormData(newFormData);
+      }
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
       if (receivedData !== undefined) {
-        newFormData.addressInfo = receivedData;
+        newFormData.edu_businessInfo = receivedData;
         setFormData(newFormData);
       }
       setwidth(width + 20);
@@ -86,10 +135,10 @@ export const ProfileSignup = (): React.JSX.Element => {
       ? t('personalInfo.personalInfoHeader')
       : formStep === 3
       ? t('addressInfo.AddressHeader')
+      : formStep === 4
+      ? t('education/BusinessInfo.EduHeader')
       : '';
   }, [formStep]);
-
-  console.log(formData.personalInfo, 'whole state');
 
   return (
     <ScreenWrapper>
@@ -128,7 +177,7 @@ export const ProfileSignup = (): React.JSX.Element => {
               dob: formData.personalInfo.dob,
               bloodGroup: formData.personalInfo.bloodGroup,
               mobilenumInfo: [...formData.personalInfo.mobilenumInfo].map(
-                (item, index) => {
+                item => {
                   let newItem: any = {};
 
                   newItem.mobilenum = item.mobilenum || '';
@@ -143,10 +192,15 @@ export const ProfileSignup = (): React.JSX.Element => {
             }}
             onSubmitEvent={submitButton}
           />
+        ) : formStep === 3 ? (
+          <AdressInfo
+            initialValues={{addressInfo: [...formData.addressInfo]}}
+            onSubmitEvent={submitButton}
+          />
         ) : (
-          formStep === 3 && (
-            <AdressInfo
-              initialValues={{addressInfo: [...formData.addressInfo]}}
+          formStep === 4 && (
+            <EduBusinessInfo
+              initialValues={formData.edu_businessInfo}
               onSubmitEvent={submitButton}
             />
           )
