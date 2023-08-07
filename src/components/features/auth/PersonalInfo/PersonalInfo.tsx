@@ -8,10 +8,14 @@ import {AllIcons} from '../../../../../assets/icons';
 import {PersonalInfoFormValidationSchemaType} from '../../../../types';
 import {COLORS, CustomFonts} from '../../../../utils';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, PrimaryButton} from '../../../ui';
+import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 
 export const PersonalInfo = React.memo(
-  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
+  ({
+    initialValues,
+    onSubmitEvent,
+    onLeftButtonPress,
+  }: any): React.JSX.Element => {
     const {t} = useTranslation();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
@@ -141,7 +145,32 @@ export const PersonalInfo = React.memo(
             }) || [],
           emailInfo: data.emailInfo,
         };
-        onSubmitEvent(formSubmitData);
+        onSubmitEvent(formSubmitData, 'next');
+      }
+    };
+
+    const leftOnSubmit = (data: PersonalInfoFormValidationSchemaType) => {
+      if (data && data.mobilenumInfo && data.emailInfo) {
+        const formSubmitData = {
+          gender: data.gender || '',
+          fullname: data.fullname || '',
+          fatherFullName: data.fatherFullName || '',
+          dob: data.dob || '',
+          bloodGroup: data.bloodGroup || '',
+          mobilenumInfo:
+            [...data.mobilenumInfo].map((item: any, index: any) => {
+              let newItem: any = {};
+
+              newItem.mobilenum = item.countryCode + item.mobilenum;
+              newItem.secondary = item.secondary;
+              newItem.whatsappNum = checkedArray[index];
+              newItem.countryCode = item.countryCode;
+
+              return newItem;
+            }) || [],
+          emailInfo: data.emailInfo,
+        };
+        onSubmitEvent(formSubmitData, 'exit');
       }
     };
 
@@ -403,10 +432,24 @@ export const PersonalInfo = React.memo(
             );
           }}
         />
-        <PrimaryButton
-          title={t('common.Save&Next')}
-          onPress={handleSubmit(onSubmit)}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <SecondaryButton
+            title={t('common.Save&Exit')}
+            onPress={handleSubmit(leftOnSubmit)}
+            buttonStyle={{
+              width: '47%',
+            }}
+          />
+          <PrimaryButton
+            title={t('common.Save&Next')}
+            onPress={handleSubmit(onSubmit)}
+            buttonStyle={{width: '47%'}}
+          />
+        </View>
       </ScrollView>
     );
   },

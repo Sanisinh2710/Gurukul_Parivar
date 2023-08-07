@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 
 import * as Progress from 'react-native-progress';
@@ -13,13 +14,16 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {COLORS} from '../../../utils';
+import {ProfileSignupProps} from '../../../types';
 
-export const ProfileSignup = (): React.JSX.Element => {
+export const ProfileSignup = ({
+  navigation,
+}: ProfileSignupProps): React.JSX.Element => {
   const commonStyle = CommonStyle();
 
   const [width, setwidth] = React.useState(20);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const [formStep, setFormStep] = React.useState(1);
 
@@ -49,9 +53,29 @@ export const ProfileSignup = (): React.JSX.Element => {
         communicationAddr: false,
       },
     ],
+    gurukulInfo: {
+      exGurukulStudent: 'no',
+      data: [
+        {
+          gurukulBranch: '',
+          attendGurukul: '',
+          stdFrom: '',
+          stdTo: '',
+          sscYear: '',
+          hscYear: '',
+          knowSaint: '',
+          FromFamilySaint: '',
+          SaintName: '',
+          SaintRelation: '',
+        },
+      ],
+    },
   });
 
-  const submitButton = (receivedData: any) => {
+  const submitButton = (
+    receivedData: any,
+    typecase: 'next' | 'skip' | 'exit',
+  ) => {
     if (formStep === 1) {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
@@ -61,13 +85,21 @@ export const ProfileSignup = (): React.JSX.Element => {
       setwidth(width + 20);
       setFormStep(formStep + 1);
     } else if (formStep === 2) {
-      // console.log('form step greater than 2');
-      let newFormData = JSON.parse(JSON.stringify(formData));
+      if (typecase === 'next') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
 
-      newFormData.personalInfo = receivedData;
-      setFormData(newFormData);
-      setwidth(width + 20);
-      setFormStep(formStep + 1);
+        newFormData.personalInfo = receivedData;
+        setFormData(newFormData);
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+      if (typecase === 'exit') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        newFormData.personalInfo = receivedData;
+        setFormData(newFormData);
+        navigation.navigate('LoginSuccess', {type: 'Profile'});
+      }
     } else {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
@@ -129,7 +161,7 @@ export const ProfileSignup = (): React.JSX.Element => {
               dob: formData.personalInfo.dob,
               bloodGroup: formData.personalInfo.bloodGroup,
               mobilenumInfo: [...formData.personalInfo.mobilenumInfo].map(
-                (item, index) => {
+                item => {
                   let newItem: any = {};
 
                   newItem.mobilenum = item.mobilenum.split(')')[1] || '';
