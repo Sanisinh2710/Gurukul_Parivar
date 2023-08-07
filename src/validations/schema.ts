@@ -73,18 +73,19 @@ export const PersonalInfoFormValidationSchema =
     });
   };
 
-export const AddressFormValidationSchema = () => {
-  const {t} = useTranslation();
-  return yup.object({
-    addressInfo: yup.array().of(
-      yup.object().shape({
-        id: yup.string(),
-        country: yup.string().trim().required(t('common.EmptyError')),
-        address: yup.string().trim().required(t('common.EmptyError')),
-        pincode: yup.string().trim().required(t('common.EmptyError')),
-        cityVillage: yup.string().trim().required(t('common.EmptyError')),
-        typeofAddress: yup.string().trim().required(t('common.EmptyError')),
-      }),
-    ),
-  });
-};
+export const AddressFormValidationSchema =
+  (): yup.ObjectSchema<AddressFormValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      addressInfo: yup.array().of(
+        yup.object().shape({
+          id: yup.string(),
+          country: yup.string().trim().required(t('common.EmptyError')),
+          address: yup.string().trim().required(t('common.EmptyError')),
+          pincode: yup.string().trim().required(t('common.EmptyError')),
+          cityVillage: yup.string().trim().required(t('common.EmptyError')),
+          typeofAddress: yup.string().trim().required(t('common.EmptyError')),
+        }),
+      ),
+    });
+  };

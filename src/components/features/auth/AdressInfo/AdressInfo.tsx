@@ -88,7 +88,7 @@ export const AdressInfo = React.memo(
       control,
       handleSubmit,
       formState: {errors},
-    } = useForm({
+    } = useForm<AddressFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(AddressFormValidationSchema()),
       mode: 'onBlur',
@@ -101,9 +101,11 @@ export const AdressInfo = React.memo(
 
     const [checkedArray, setCheckedArray] = React.useState<boolean[]>(
       [
-        ...initialValues?.addressInfo?.map((item: {communicationAddr: any}) => {
-          return item.communicationAddr;
-        }),
+        ...initialValues?.addressInfo?.map(
+          (item: {communicationAddr: string}) => {
+            return item.communicationAddr;
+          },
+        ),
       ] || [false],
     );
 
@@ -142,7 +144,7 @@ export const AdressInfo = React.memo(
                       style={{height: 30, width: 30, alignSelf: 'flex-end'}}
                       onTouchEnd={() => remove(mainindex)}>
                       <Image
-                        source={AllIcons.cancel}
+                        source={AllIcons.Cancel}
                         style={{
                           width: '100%',
                           height: '100%',
@@ -199,7 +201,6 @@ export const AdressInfo = React.memo(
                             borderWidth: checkedArray[mainindex] ? 0 : 1,
                           }}
                           onTouchEnd={() => {
-                            // onChange(!value);
                             let newArr = JSON.parse(
                               JSON.stringify(checkedArray),
                             );
@@ -214,7 +215,7 @@ export const AdressInfo = React.memo(
                           }}>
                           {checkedArray[mainindex] ? (
                             <Image
-                              source={AllIcons.checkbox}
+                              source={AllIcons.Checkbox}
                               style={{
                                 height: '100%',
                                 width: '100%',
@@ -229,7 +230,6 @@ export const AdressInfo = React.memo(
                             fontWeight: '400',
                             lineHeight: 18.9,
                           }}>
-                          {/* This address is my preferred communication address */}
                           {'This address is my preferred communication address'}
                         </Text>
                       </View>

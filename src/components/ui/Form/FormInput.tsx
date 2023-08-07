@@ -35,7 +35,7 @@ type FormInputProps = {
   value: any;
   onBlur: (...event: any[]) => void;
   onChange: (...event: any[]) => void;
-  error?: any | unde;
+  error?: string;
   state?: {[key: string]: any};
   menuList?: any;
   customProps?: object;

@@ -21,15 +21,17 @@ export type CompleteProfileFormValidationSchemaType = {
 };
 
 export type AddressFormValidationSchemaType = {
-  [key: string]: any;
-  addressInfo: {
-    [key: string]: any;
-    country: string | undefined;
-    address: string;
-    pincode: string;
-    cityVillage: string;
-    typeofAddress: string;
-  }[];
+  addressInfo:
+    | {
+        [key: string]: any;
+        id?: string | undefined;
+        country: string;
+        address: string;
+        pincode: string;
+        cityVillage: string;
+        typeofAddress: string;
+      }[]
+    | undefined;
 };
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
