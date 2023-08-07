@@ -136,9 +136,7 @@ export const Calendar = ({
               ? type === 'dob'
                 ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate
-                  ? () => {
-                      console.log('aa callede');
-                    }
+                  ? () => {}
                   : () => {
                       handleDateSelect(
                         new Date(`${currentYear}-${currentMonth + 1}-${day}`),

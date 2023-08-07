@@ -3,28 +3,29 @@ import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {FlatList, ScrollView, View} from 'react-native';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {PersonalInfoFormValidationSchemaType} from '../../../../types';
+import {COLORS, CustomFonts} from '../../../../utils';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton} from '../../../ui';
-import {PersonalInfoStyle} from './styles';
-
-type PersonalInfoProps = {
-  initialValues: PersonalInfoFormValidationSchemaType;
-  onSubmitEvent: any;
-};
 
 export const PersonalInfo = React.memo(
-  ({initialValues, onSubmitEvent}: PersonalInfoProps): React.JSX.Element => {
+  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
     const {t} = useTranslation();
-
-    const style = PersonalInfoStyle();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
     const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =
       React.useState('');
+
+    const [checkedArray, setCheckedArray] = React.useState(
+      [
+        ...initialValues?.mobilenumInfo?.map((item: {whatsappNum: any}) => {
+          return item.whatsappNum;
+        }),
+      ] || [true],
+    );
 
     const PerosnalInfoForm1InputList: {
       name: string;
@@ -133,7 +134,7 @@ export const PersonalInfo = React.memo(
 
               newItem.mobilenum = item.countryCode + item.mobilenum;
               newItem.secondary = item.secondary;
-              newItem.whatsappNum = item.whatsappNum;
+              newItem.whatsappNum = checkedArray[index];
               newItem.countryCode = item.countryCode;
 
               return newItem;
@@ -161,7 +162,7 @@ export const PersonalInfo = React.memo(
           mobilenum: getValues()?.mobilenumInfo?.[1].mobilenum,
           whatsappNum: getValues()?.mobilenumInfo?.[1].whatsappNum,
           countryCode: secondarycountryCodeSelect,
-          secondary: false,
+          secondary: true,
         });
       }
     }, [secondarycountryCodeSelect]);
@@ -176,7 +177,7 @@ export const PersonalInfo = React.memo(
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{gap: 15}}
+          contentContainerStyle={{gap: 15, paddingBottom: '15%'}}
           data={[...PerosnalInfoForm1InputList]}
           renderItem={({item, index}) => {
             return (
@@ -205,10 +206,23 @@ export const PersonalInfo = React.memo(
           }}
           ListFooterComponent={() => {
             return (
-              <View>
+              <View style={{gap: 15, top: 10}}>
                 {mobilefield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainindex}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          onTouchEnd={() => mobileremove(mainindex)}>
+                          <Image
+                            source={AllIcons.Cancel}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </View>
+                      )}
                       <Controller
                         control={control}
                         name={`mobilenumInfo.${mainindex}.mobilenum`}
@@ -259,6 +273,12 @@ export const PersonalInfo = React.memo(
                                           whatsappNum: false,
                                           countryCode: '',
                                         });
+
+                                        let newArr = JSON.parse(
+                                          JSON.stringify(checkedArray),
+                                        );
+                                        newArr.push(false);
+                                        setCheckedArray(newArr);
                                       }
                                     }
                                   : () => {}
@@ -267,12 +287,76 @@ export const PersonalInfo = React.memo(
                           );
                         }}
                       />
+                      <View
+                        style={{
+                          marginTop: '5%',
+                        }}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            gap: 10,
+                            marginBottom: '5%',
+                          }}>
+                          <View
+                            style={{
+                              height: 20,
+                              width: 20,
+                              alignItems: 'center',
+                              borderRadius: 5,
+                              borderColor: COLORS.primaryColor,
+                              borderWidth: checkedArray[mainindex] ? 0 : 1,
+                            }}
+                            onTouchEnd={() => {
+                              let newArr = JSON.parse(
+                                JSON.stringify(checkedArray),
+                              );
+                              let returnArr = newArr.map(
+                                (item: any, index: number) => {
+                                  return mainindex === index ? !item : false;
+                                },
+                              );
+                              setCheckedArray(returnArr);
+                            }}>
+                            {checkedArray[mainindex] ? (
+                              <Image
+                                source={AllIcons.Checkbox}
+                                style={{
+                                  height: '100%',
+                                  width: '100%',
+                                }}
+                              />
+                            ) : null}
+                          </View>
+                          <Text
+                            style={{
+                              ...CustomFonts.body.medium12,
+                              fontSize: 14,
+                              fontWeight: '400',
+                              lineHeight: 18.9,
+                            }}>
+                            {t('personalInfo.MobileFieldCheckbox')}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   );
                 })}
                 {emailfield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainindex}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          onTouchEnd={() => emialremove(mainindex)}>
+                          <Image
+                            source={AllIcons.Cancel}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </View>
+                      )}
                       <Controller
                         control={control}
                         name={`emailInfo.${mainindex}.email`}

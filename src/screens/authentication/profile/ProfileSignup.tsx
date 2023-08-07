@@ -35,7 +35,7 @@ export const ProfileSignup = (): React.JSX.Element => {
       dob: '',
       bloodGroup: '',
       mobilenumInfo: [
-        {mobilenum: '', secondary: false, whatsappNum: false, countryCode: ''},
+        {mobilenum: '', secondary: false, whatsappNum: true, countryCode: ''},
       ],
       emailInfo: [{email: '', secondary: false}],
     },
@@ -84,6 +84,8 @@ export const ProfileSignup = (): React.JSX.Element => {
       ? t('addressInfo.AddressHeader')
       : '';
   }, [formStep]);
+
+  console.log(formData.personalInfo, 'whole state');
 
   return (
     <ScreenWrapper>

@@ -147,6 +147,7 @@ export const FormInput = React.memo(
             focused={focused}
             placeholder={placeholder}
             setFocused={setFocused}
+            customIcon={icon}
           />
         );
         break;
@@ -162,6 +163,7 @@ export const FormInput = React.memo(
             focused={focused}
             placeholder={placeholder}
             setFocused={setFocused}
+            customIcon={icon}
           />
         );
         break;
@@ -275,33 +277,41 @@ export const FormInput = React.memo(
                       alignItems: 'flex-start',
                     },
                     icon &&
-                      type !== 'select' && {
+                      type !== 'select' &&
+                      type !== 'date' &&
+                      type !== 'dob' && {
                         gap: 3,
                       },
                   ]}>
-                  {icon && type !== 'select' ? (
+                  {icon &&
+                  type !== 'select' &&
+                  type !== 'date' &&
+                  type !== 'dob' ? (
                     <View style={{width: '90%'}}>{fieldblock}</View>
                   ) : (
                     fieldblock
                   )}
-                  {icon && type !== 'select' && (
-                    <View
-                      style={{
-                        height: '50%',
-                        width: '10%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={icon}
+                  {icon &&
+                    type !== 'select' &&
+                    type !== 'date' &&
+                    type !== 'dob' && (
+                      <View
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
-                  )}
+                          height: '50%',
+                          width: '10%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={icon}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    )}
                 </View>
               </>
             ) : (
