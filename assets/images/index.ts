@@ -15,6 +15,7 @@ export const AllImages = {
   Rectangle29: require('../images/Rectangle29.png'),
   Rectangle30: require('../images/Rectangle30.png'),
   Rectangle31: require('../images/Rectangle31.png'),
+  Rectangle68: require('../images/Rectangle68.png'),
   Rectangle74: require('../images/Rectangle74.png'),
   Rectangle75: require('../images/Rectangle75.png'),
   Rectangle76: require('../images/Rectangle76.png'),

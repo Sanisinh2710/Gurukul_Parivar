@@ -12,6 +12,9 @@ export type RootStackParamList = {
   liveSatsang: undefined;
   changeLanguage: undefined;
   editProfile: undefined;
+  status: undefined;
+  dailyQuiz: undefined;
+  dailyQuizDetail: undefined;
 };
 
 export type RootBottomTabParamList = {

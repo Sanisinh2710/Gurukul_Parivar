@@ -1,5 +1,5 @@
 import React from 'react';
-import {DimensionValue, Image, Text, View} from 'react-native';
+import {Dimensions, DimensionValue, Image, Text, View} from 'react-native';
 import {COLORS} from '../../../utils';
 import {genstyle} from './style';
 
@@ -10,6 +10,7 @@ interface Props {
   setselectedItem: React.Dispatch<React.SetStateAction<string>>;
   heading: string;
   list: {name: string; icon?: any}[];
+  dailyQuiz: boolean;
 }
 
 export const RadioLable = ({
@@ -19,6 +20,7 @@ export const RadioLable = ({
   list,
   selectedItem,
   setselectedItem,
+  dailyQuiz,
 }: Props) => {
   const style = genstyle();
 
@@ -29,7 +31,14 @@ export const RadioLable = ({
   return (
     <View>
       <Text style={style.heading}>{heading}</Text>
-      <View style={style.innerView}>
+      <View
+        style={[
+          style.innerView,
+          dailyQuiz && {
+            flexWrap: 'wrap',
+            width: Dimensions.get('window').width * 0.8,
+          },
+        ]}>
         {list.map(item => (
           <View
             style={[

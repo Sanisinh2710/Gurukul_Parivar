@@ -30,6 +30,8 @@ import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail'
 import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
 import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
 import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
+import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
+import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -109,6 +111,12 @@ export const Routes = (): React.JSX.Element => {
               component={ChangeLanguage}
             />
             <NativeStack.Screen name="editProfile" component={EditProfile} />
+            <NativeStack.Screen name="status" component={Status} />
+            <NativeStack.Screen name="dailyQuiz" component={DailyQuiz} />
+            <NativeStack.Screen
+              name="dailyQuizDetail"
+              component={DailyQuizDetail}
+            />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

@@ -1,7 +1,15 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {
+  DropDownModel,
   PrimaryButton,
   RoundedIcon,
   ScreenHeader,
@@ -17,6 +25,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import LinearGradient from 'react-native-linear-gradient';
 
 export const ProfileScreen = ({
   navigation,
@@ -25,6 +34,9 @@ export const ProfileScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const theme = useAppSelector(state => state.theme.theme);
+  const [modelVisible, setModelVisible] = React.useState(false);
+  const [modalType, setModelType] = React.useState('');
+
   const {t, i18n} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
@@ -37,17 +49,22 @@ export const ProfileScreen = ({
       case 'user':
         navigation.navigate('editProfile');
         break;
-      case 'family':
-        navigation.navigate('dailyQuotes');
-        break;
+      // case 'family':
+      //   navigation.navigate('dailyQuotes');
+      //   break;
       case 'translation':
         navigation.navigate('changeLanguage');
         break;
-      case 'help':
-        navigation.navigate('calendar');
-        break;
-      case 'feedback':
-        navigation.navigate('liveSatsang');
+      // case 'help':
+      //   navigation.navigate('calendar');
+      //   break;
+      // case 'feedback':
+      //   navigation.navigate('liveSatsang');
+      //   break;
+      case 'logout':
+        setModelType('logout');
+        setModelVisible(!modelVisible);
+
         break;
 
       default:
@@ -193,7 +210,10 @@ export const ProfileScreen = ({
         <View>
           <PrimaryButton
             title="Delete Account"
-            onPress={() => {}}
+            onPress={() => {
+              setModelType('deleteAcc');
+              setModelVisible(!modelVisible);
+            }}
             buttonColor={'rgba(172, 43, 49, 0.1)'}
             titleColor={COLORS.primaryColor}
             buttonStyle={{
@@ -206,6 +226,122 @@ export const ProfileScreen = ({
             textStyle={{fontSize: 16}}
           />
         </View>
+        <DropDownModel
+          modelVisible={modelVisible}
+          setModelVisible={setModelVisible}
+          type={'phone'}
+          modalHeight={'50%'}
+          customModelchild={
+            <View style={{alignItems: 'center', marginTop: '5%'}}>
+              <View style={{height: 80, width: 80}}>
+                <LinearGradient
+                  colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
+                  locations={[0, 1]}
+                  style={{
+                    flex: 1,
+                    borderRadius: 60,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  {modalType === 'logout' ? (
+                    <View
+                      style={{
+                        height: '40%',
+                        width: '30%',
+                        backgroundColor: 'rgba(172, 43, 49, 0.4)',
+                        borderRadius: 7,
+                        justifyContent: 'center',
+                      }}>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          right: -12,
+                          height: '50%',
+                          width: '90%',
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={AllIcons.LogoutArrow}
+                          style={{
+                            flex: 1,
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    <Image
+                      source={AllIcons.Delete}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}
+                    />
+                  )}
+                </LinearGradient>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    ...CustomFonts.header.small18,
+                    marginTop: 24,
+                    color: 'black',
+                    fontSize: 20,
+                    textAlign: 'center',
+                  }}>
+                  {modalType === 'logout'
+                    ? 'Come back soon!'
+                    : ' Confirm Account Deletion'}
+                </Text>
+                <Text
+                  style={{
+                    color: 'rgba(23,23,23,0.5)',
+                    fontSize: 14,
+                    textAlign: 'center',
+                    lineHeight: 20,
+                    marginTop: 8,
+                  }}>
+                  {modalType === 'logout'
+                    ? 'You will be signed out of your account \n and any unsaved changes will be lost.'
+                    : 'Are you sure you want to delete your \n account? This action cannot be undone.'}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '100%',
+                  marginTop: '8%',
+                }}>
+                <PrimaryButton
+                  onPress={() => {
+                    setModelVisible(!modelVisible);
+                  }}
+                  buttonColor="rgba(172, 43, 49, 0.05)"
+                  buttonStyle={{
+                    width: '42%',
+                    borderWidth: 0.25,
+                    borderColor: 'rgba(172,43,49,0.3)',
+                    borderRadius: 12,
+                  }}
+                  titleColor="black"
+                  title="Cancel"
+                />
+                <PrimaryButton
+                  onPress={() => {}}
+                  buttonStyle={{width: '42%'}}
+                  title={
+                    modalType === 'logout' ? 'Yes,log me out' : 'Delete Account'
+                  }
+                />
+              </View>
+            </View>
+          }
+        />
       </ScrollView>
     </ScreenWrapper>
   );

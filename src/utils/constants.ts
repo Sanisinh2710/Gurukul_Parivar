@@ -587,3 +587,44 @@ export const DailyUpdate = [
     time: '22,July',
   },
 ];
+export const QuizStatus = [
+  {date: '01,Jul 2023', percent: 75},
+  {date: '02,Jul 2023', percent: 30},
+  {date: '03,Jul 2023', percent: 55},
+  {date: '04,Jul 2023', percent: 45},
+  {date: '05,Jul 2023', percent: 95},
+  {date: '06,Jul 2023', percent: 75},
+  {date: '07,Jul 2023', percent: 60},
+  {date: '08,Jul 2023', percent: 75},
+  {date: '09,Jul 2023', percent: 51},
+  {date: '10,Jul 2023', percent: 60},
+];
+export const Quiz = [
+  {
+    questionText: '1. આજે સવારે ઠાકોર જગાડવાનો મારો સમય.',
+    answerOptions: [
+      {answerText: '05:00 પહેલા', isCorrect: false},
+      {answerText: '05:00 થી 05:15', isCorrect: false},
+      {answerText: '05:15 થી 05:30', isCorrect: true},
+      {answerText: '05:30 પછી', isCorrect: false},
+    ],
+  },
+  {
+    questionText: '2. આજે બપોરે ઠાકોર જગાડવાનો મારો સમય.',
+    answerOptions: [
+      {answerText: 'બપોરે સૂતા નથી', isCorrect: false},
+      {answerText: '03:00 વાગ્યા પહેલા', isCorrect: false},
+      {answerText: '03:00 થી 03:30', isCorrect: true},
+      {answerText: '03:30 પછી', isCorrect: false},
+    ],
+  },
+  {
+    questionText: '3. ગઈ રાત્રે ઠાકોર પોંઢાડવાનો મારો સમય. ',
+    answerOptions: [
+      {answerText: '11:00 પહેલા', isCorrect: true},
+      {answerText: '1:00 થી 1:30', isCorrect: false},
+      {answerText: '1:30 થી 12:00', isCorrect: false},
+      {answerText: '12:00 પછી', isCorrect: false},
+    ],
+  },
+];
