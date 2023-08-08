@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
 import {useAppSelector} from '../../../redux/hooks';
+import {SupportedFormInputTypes} from '../../../types';
 import {COLORS, CustomFonts} from '../../../utils';
 import {RadioLable} from '../Radio';
 import {DatePicker} from './DatePicker';
@@ -18,19 +19,8 @@ import {PhotoPicker} from './PhotoPicker';
 import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
-type FormInputProps = {
-  type:
-    | 'phone'
-    | 'number'
-    | 'text'
-    | 'select'
-    | 'photo'
-    | 'radio'
-    | 'dob'
-    | 'date'
-    | 'textarea'
-    | 'email'
-    | 'multi-select';
+export type FormInputProps = {
+  type: SupportedFormInputTypes;
   name: string;
   label: string;
   icon?: any;

@@ -5,13 +5,24 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {PersonalInfoFormValidationSchemaType} from '../../../../types';
+import {
+  PersonalInfoFormValidationSchemaType,
+  SupportedFormInputTypes,
+} from '../../../../types';
 import {COLORS, CustomFonts} from '../../../../utils';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 
+type PersonalInfoProps = {
+  initialValues: PersonalInfoFormValidationSchemaType;
+  onSubmitEvent: (
+    receivedData: any,
+    typecase: 'next' | 'skip' | 'exit',
+  ) => void;
+};
+
 export const PersonalInfo = React.memo(
-  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
+  ({initialValues, onSubmitEvent}: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
@@ -21,28 +32,18 @@ export const PersonalInfo = React.memo(
 
     const [checkedArray, setCheckedArray] = React.useState(
       [
-        ...initialValues?.mobilenumInfo?.map((item: {whatsappNum: any}) => {
+        ...initialValues?.mobilenumInfo?.map(item => {
           return item.whatsappNum;
         }),
       ] || [true],
     );
 
     const PerosnalInfoForm1InputList: {
-      name: string;
+      name: keyof PersonalInfoFormValidationSchemaType;
       lable: string;
       placeholder: string;
       icon?: any;
-      type:
-        | 'number'
-        | 'select'
-        | 'text'
-        | 'phone'
-        | 'photo'
-        | 'radio'
-        | 'date'
-        | 'dob'
-        | 'textarea'
-        | 'multi-select';
+      type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
     }[] = [

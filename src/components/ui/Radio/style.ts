@@ -15,8 +15,6 @@ export const genstyle = () => {
     },
     innerView: {
       flexDirection: 'row',
-      gap: 10,
-      // justifyContent: 'space-between',
     },
     itemView: {
       borderWidth: 1,
@@ -27,7 +25,6 @@ export const genstyle = () => {
       justifyContent: 'center',
       height: 60,
       paddingHorizontal: 16,
-      gap: 2,
     },
     icon: {
       height: 20,

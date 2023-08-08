@@ -20,42 +20,37 @@ export type CompleteProfileFormValidationSchemaType = {
   gurukulName: string;
 };
 
+export type UserAddress = {
+  id?: string | undefined;
+  country: string;
+  address: string;
+  pincode: string;
+  cityVillage: string;
+  typeofAddress: string;
+  communicationAddr?: boolean;
+};
+
 export type AddressFormValidationSchemaType = {
-  addressInfo:
-    | {
-        [key: string]: any;
-        id?: string | undefined;
-        country: string;
-        address: string;
-        pincode: string;
-        cityVillage: string;
-        typeofAddress: string;
-      }[]
-    | undefined;
+  addressInfo: UserAddress[];
 };
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
 export type PersonalInfoFormValidationSchemaType = {
-  [key: string]: any;
   gender: string;
   fullname: string;
   fatherFullName: string;
   dob: string;
   bloodGroup: string;
-  mobilenumInfo:
-    | {
-        mobilenum: string | undefined;
-        whatsappNum?: boolean | undefined;
-        secondary?: boolean | undefined;
-        countryCode?: string | undefined;
-      }[]
-    | undefined;
-  emailInfo:
-    | {
-        email: string;
-        secondary?: boolean | undefined;
-      }[]
-    | undefined;
+  mobilenumInfo: {
+    mobilenum: string | undefined;
+    whatsappNum?: boolean | undefined;
+    secondary?: boolean | undefined;
+    countryCode?: string | undefined;
+  }[];
+  emailInfo: {
+    email: string;
+    secondary?: boolean | undefined;
+  }[];
 };
 
 export type EduBusinessInfoValidationSchemaType = {
@@ -65,3 +60,16 @@ export type EduBusinessInfoValidationSchemaType = {
   skills: string[];
   otherComment: string;
 };
+
+export type SupportedFormInputTypes =
+  | 'phone'
+  | 'number'
+  | 'text'
+  | 'select'
+  | 'photo'
+  | 'radio'
+  | 'dob'
+  | 'date'
+  | 'textarea'
+  | 'email'
+  | 'multi-select';

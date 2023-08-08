@@ -4,7 +4,10 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList} from 'react-native';
-import {EduBusinessInfoValidationSchemaType} from '../../../../types';
+import {
+  EduBusinessInfoValidationSchemaType,
+  SupportedFormInputTypes,
+} from '../../../../types';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton} from '../../../ui';
 
@@ -25,17 +28,7 @@ export const EduBusinessInfo = React.memo(
       lable: string;
       placeholder: string;
       icon?: any;
-      type:
-        | 'number'
-        | 'select'
-        | 'text'
-        | 'phone'
-        | 'photo'
-        | 'radio'
-        | 'date'
-        | 'dob'
-        | 'textarea'
-        | 'multi-select';
+      type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
     }[] = [
@@ -104,7 +97,6 @@ export const EduBusinessInfo = React.memo(
     const {
       control,
       handleSubmit,
-      getValues,
       formState: {errors},
     } = useForm<EduBusinessInfoValidationSchemaType>({
       defaultValues: initialValues,

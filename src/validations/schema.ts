@@ -47,26 +47,32 @@ export const PersonalInfoFormValidationSchema =
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
       bloodGroup: yup.string().required(t('common.EmptyError')),
-      mobilenumInfo: yup.array().of(
-        yup.object().shape({
-          mobilenum: yup
-            .string()
-            .required(t('common.EmptyError'))
-            .matches(phoneRegex, {message: t('common.MobileErr')}),
-          whatsappNum: yup.boolean(),
-          secondary: yup.boolean(),
-          countryCode: yup.string(),
-        }),
-      ),
-      emailInfo: yup.array().of(
-        yup.object().shape({
-          email: yup
-            .string()
-            .required(t('common.EmptyError'))
-            .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
-          secondary: yup.boolean(),
-        }),
-      ),
+      mobilenumInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            mobilenum: yup
+              .string()
+              .required(t('common.EmptyError'))
+              .matches(phoneRegex, {message: t('common.MobileErr')}),
+            whatsappNum: yup.boolean(),
+            secondary: yup.boolean(),
+            countryCode: yup.string(),
+          }),
+        )
+        .required(),
+      emailInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            email: yup
+              .string()
+              .required(t('common.EmptyError'))
+              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+            secondary: yup.boolean(),
+          }),
+        )
+        .required(),
     });
   };
 
@@ -74,16 +80,20 @@ export const AddressFormValidationSchema =
   (): yup.ObjectSchema<AddressFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      addressInfo: yup.array().of(
-        yup.object().shape({
-          id: yup.string(),
-          country: yup.string().trim().required(t('common.EmptyError')),
-          address: yup.string().trim().required(t('common.EmptyError')),
-          pincode: yup.string().trim().required(t('common.EmptyError')),
-          cityVillage: yup.string().trim().required(t('common.EmptyError')),
-          typeofAddress: yup.string().trim().required(t('common.EmptyError')),
-        }),
-      ),
+      addressInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            id: yup.string(),
+            country: yup.string().trim().required(t('common.EmptyError')),
+            address: yup.string().trim().required(t('common.EmptyError')),
+            pincode: yup.string().trim().required(t('common.EmptyError')),
+            cityVillage: yup.string().trim().required(t('common.EmptyError')),
+            typeofAddress: yup.string().trim().required(t('common.EmptyError')),
+            communicationAddr: yup.boolean(),
+          }),
+        )
+        .required(),
     });
   };
 
