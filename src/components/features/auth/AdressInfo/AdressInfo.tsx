@@ -15,7 +15,7 @@ export const AdressInfo = React.memo(
     const {t} = useTranslation();
     const style = styles();
 
-    const addressFormINputList: {
+    const addressFormInputList: {
       name: string;
       lable: string;
       placeholder: string;
@@ -76,12 +76,6 @@ export const AdressInfo = React.memo(
           customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
         },
       },
-      // {
-      //   name: 'communicationAddr',
-      //   lable: 'This address is my preferred communication address',
-      //   type: 'checkbox',
-      //   placeholder: '',
-      // },
     ];
 
     const {
@@ -125,7 +119,7 @@ export const AdressInfo = React.memo(
 
     return (
       <ScrollView
-        contentContainerStyle={{paddingBottom: '50%'}}
+        contentContainerStyle={{paddingBottom: '30%'}}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         {fields.map((mainItem, mainindex) => {
@@ -155,7 +149,7 @@ export const AdressInfo = React.memo(
                 );
               }}
               showsVerticalScrollIndicator={false}
-              data={addressFormINputList}
+              data={addressFormInputList}
               renderItem={({item, index}) => (
                 <View>
                   <Controller
@@ -229,6 +223,7 @@ export const AdressInfo = React.memo(
                             fontSize: 14,
                             fontWeight: '400',
                             lineHeight: 18.9,
+                            color: COLORS.lightModetextColor,
                           }}>
                           {'This address is my preferred communication address'}
                         </Text>

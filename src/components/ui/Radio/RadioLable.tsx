@@ -38,7 +38,13 @@ export const RadioLable = ({
   return (
     <View>
       {showHeading && <Text style={style.heading}>{heading}</Text>}
-      <View style={style.innerView}>
+      <View
+        style={[
+          style.innerView,
+          wantFullSpace
+            ? {justifyContent: 'space-between'}
+            : {gap: 10, flexWrap: 'wrap'},
+        ]}>
         {list.map(item => (
           <View
             style={[

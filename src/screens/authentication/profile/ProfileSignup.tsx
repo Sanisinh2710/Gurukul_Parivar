@@ -54,7 +54,7 @@ export const ProfileSignup = ({
     ],
     gurukulInfo: {
       exGurukulStudent: 'No',
-      data: [
+      gurukulData: [
         {
           gurukulBranch: '',
           attendGurukul: '',
@@ -64,7 +64,7 @@ export const ProfileSignup = ({
           hscYear: '',
           knowSaintPersonally: '',
           knowHaribhakt: '',
-          RelativeOfSaint: 'no',
+          RelativeOfSaint: 'No',
           FromFamily: '',
           SaintName: '',
           YourRelation: '',

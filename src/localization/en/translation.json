@@ -12,7 +12,8 @@
       "MobileErr": "Please enter valid mobile number..!",
       "EnterMobileNum": "Enter mobile number",
       "Yes": "Yes",
-      "No": "No"
+      "No": "No",
+      "Complete": "Complete"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -127,14 +128,15 @@
       "HSCYear": "HSC Year",
       "KnowSaint": "Do you know any saint from this branch personally?",
       "KnowHaribhakta": "Do you know any Haribhakta from this branch?",
+      "KnowHaribhaktaPlaceholder": "Enter Haribhakta Name",
       "RelativeOfSaint": "Are you a relative of any gurukul saint?",
       "FromFamily": "is any gurukul saint / sankyayogi bahen come from your family?",
       "FromFamilyOpt1": "Saint",
       "FromFamilyOpt2": "Sankyayogi bahen",
-      "NameSaint": "Name of the saint",
-      "NameSaintLbl": "Select Saint",
-      "YourRelation": "Which is your relation?",
-      "YourRelationLbl": "Select relation"
+      "NameSaintlbl": "Name of the saint",
+      "NameSaint": "Select Saint",
+      "YourRelationLbl": "Which is your relation?",
+      "YourRelation": "Select relation"
     },
     "homeScreen": {
       "WelcomeText1": "Hello",

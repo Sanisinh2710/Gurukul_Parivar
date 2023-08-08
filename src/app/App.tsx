@@ -19,7 +19,7 @@ export const App = () => {
   React.useMemo(async () => {
     const timer = setTimeout(() => {
       SplashScreen.hide();
-    }, 2000);
+    }, 1500);
 
     const askingPerMissions = async () => {
       if (Platform.OS === 'android') {

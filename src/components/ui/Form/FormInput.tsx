@@ -255,13 +255,16 @@ export const FormInput = React.memo(
                     justifyContent: 'space-between',
                   }}>
                   <Text style={style.labelText}>{label}</Text>
-                  {(type === 'phone' || type === 'email') && rightText && (
-                    <Text
-                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
-                      style={[style.labelText, {color: COLORS.primaryColor}]}>
-                      {rightText}
-                    </Text>
-                  )}
+                  {(type === 'phone' ||
+                    type === 'email' ||
+                    type === 'select') &&
+                    rightText && (
+                      <Text
+                        onPress={rightTextOnPress ? rightTextOnPress : () => {}}
+                        style={[style.labelText, {color: COLORS.primaryColor}]}>
+                        {rightText}
+                      </Text>
+                    )}
                 </View>
                 <View
                   style={[

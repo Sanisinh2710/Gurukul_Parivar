@@ -10,7 +10,10 @@
       "SkipNow": "હમણાં માટે છોડી દો",
       "AddAddress": "+બીજું સરનામું ઉમેરો",
       "MobileErr": "કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો..!",
-      "EnterMobileNum": "મોબાઇલ નંબર દાખલ કરો"
+      "EnterMobileNum": "મોબાઇલ નંબર દાખલ કરો",
+      "Yes": "હા",
+      "No": "ના",
+      "Complete": "પૂર્ણ કરો"
     },
     "loginScreen": {
       "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -125,14 +128,15 @@
       "HSCYear": "HSC વર્ષ",
       "KnowSaint": "શું તમે આ શાખામાંથી કોઈ સંતને વ્યક્તિગત રીતે જાણો છો?",
       "KnowHaribhakta": "આ શાખામાંથી તમે કોઈ હરિભક્તને ઓળખો છો ?",
+      "KnowHaribhaktaPlaceholder": "હરિભક્તનું નામ દાખલ કરો",
       "RelativeOfSaint": "શું તમે કોઈ ગુરુકુળ સંતના સંબંધી છો?",
       "FromFamily": "શું તમારા કુટુંબમાંથી કોઈ ગુરુકુળ સંત/સંક્યયોગી બહેન આવ્યા છે?",
       "FromFamilyOpt1": "સંત",
       "FromFamilyOpt2": "સંક્યાયોગી બહેન",
-      "NameSaint": "સંતનું નામ",
-      "NameSaintLbl": "સંતનું નામ પસંદ કરો",
-      "YourRelation": "સંબંધ જણાવો?",
-      "YourRelationLbl": "સંબંધ પસંદ કરો"
+      "NameSaintlbl": "સંતનું નામ",
+      "NameSaint": "સંતનું નામ પસંદ કરો",
+      "YourRelationLbl": "સંબંધ જણાવો?",
+      "YourRelation": "સંબંધ પસંદ કરો"
     },
     "homeScreen": {
       "WelcomeText1": "નમસ્તે",

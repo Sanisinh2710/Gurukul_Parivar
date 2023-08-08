@@ -13,6 +13,7 @@ export const FormInputStyle = (value?: any) => {
       width: '100%',
       color: theme.textColor,
       opacity: value ? 1 : 0.5,
+      left: -4,
     },
     labelText: {
       ...CustomFonts.body.medium12,
@@ -24,12 +25,12 @@ export const FormInputStyle = (value?: any) => {
       marginTop: 8,
       width: '100%',
       height: 60,
-      paddingHorizontal: '3%',
+      paddingHorizontal: 10,
       borderRadius: 12,
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: COLORS.primaryInputBackgroundColor,
-      borderWidth: 2,
+      borderWidth: 1,
     },
     errorText: {
       ...CustomFonts.body.large14,

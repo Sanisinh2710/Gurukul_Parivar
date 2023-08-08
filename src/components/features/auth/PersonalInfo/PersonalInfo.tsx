@@ -197,7 +197,7 @@ export const PersonalInfo = React.memo(
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: '40%',
+          paddingBottom: '30%',
         }}>
         <FlatList
           scrollEnabled={false}
@@ -358,6 +358,7 @@ export const PersonalInfo = React.memo(
                               fontSize: 14,
                               fontWeight: '400',
                               lineHeight: 18.9,
+                              color: COLORS.lightModetextColor,
                             }}>
                             {t('personalInfo.MobileFieldCheckbox')}
                           </Text>

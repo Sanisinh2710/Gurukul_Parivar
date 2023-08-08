@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+
 import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';

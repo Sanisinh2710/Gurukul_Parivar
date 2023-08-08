@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import {
   AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
+  GurukulFormValidationSchemaType,
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
 } from '../types';
@@ -81,6 +82,80 @@ export const AddressFormValidationSchema =
           pincode: yup.string().trim().required(t('common.EmptyError')),
           cityVillage: yup.string().trim().required(t('common.EmptyError')),
           typeofAddress: yup.string().trim().required(t('common.EmptyError')),
+        }),
+      ),
+    });
+  };
+
+export const GurukulFormValidationSchema =
+  (): yup.ObjectSchema<GurukulFormValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      gurukulData: yup.array().of(
+        yup.object().shape({
+          gurukulBranch: yup.string().trim().required(t('common.EmptyError')),
+          attendGurukul: yup.string().trim().required(t('common.EmptyError')),
+          stdFrom: yup.string().trim().required(t('common.EmptyError')),
+          stdTo: yup.string().trim().required(t('common.EmptyError')),
+          sscYear: yup.string().trim().required(t('common.EmptyError')),
+          hscYear: yup.string().trim().required(t('common.EmptyError')),
+          knowSaintPersonally: yup
+            .string()
+            .trim()
+            .required(t('common.EmptyError')),
+          knowHaribhakt: yup.string().trim().required(t('common.EmptyError')),
+          RelativeOfSaint: yup.string().trim().required(t('common.EmptyError')),
+          FromFamily: yup.string().test({
+            name: 'FromFamily',
+            skipAbsent: true,
+            test(value, ctx) {
+              if (
+                this.parent.RelativeOfSaint === 'Yes' &&
+                (value?.trim() === '' ||
+                  value?.trim() === null ||
+                  value?.trim() === undefined)
+              ) {
+                return ctx.createError({
+                  message: t('common.EmptyError'),
+                });
+              }
+              return true;
+            },
+          }),
+          SaintName: yup.string().test({
+            name: 'SaintName',
+            skipAbsent: true,
+            test(value, ctx) {
+              if (
+                this.parent.RelativeOfSaint === 'Yes' &&
+                (value?.trim() === '' ||
+                  value?.trim() === null ||
+                  value?.trim() === undefined)
+              ) {
+                return ctx.createError({
+                  message: t('common.EmptyError'),
+                });
+              }
+              return true;
+            },
+          }),
+          YourRelation: yup.string().test({
+            name: 'YourRelation',
+            skipAbsent: true,
+            test(value, ctx) {
+              if (
+                this.parent.RelativeOfSaint === 'Yes' &&
+                (value?.trim() === '' ||
+                  value?.trim() === null ||
+                  value?.trim() === undefined)
+              ) {
+                return ctx.createError({
+                  message: t('common.EmptyError'),
+                });
+              }
+              return true;
+            },
+          }),
         }),
       ),
     });

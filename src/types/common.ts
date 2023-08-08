@@ -33,6 +33,28 @@ export type AddressFormValidationSchemaType = {
       }[]
     | undefined;
 };
+
+export type GurukulFormValidationSchemaType = {
+  [key: string]: any;
+  gurukulData:
+    | {
+        [key: string]: any;
+        gurukulBranch: string;
+        attendGurukul: string;
+        stdFrom: string;
+        stdTo: string;
+        sscYear: string;
+        hscYear: string;
+        knowSaintPersonally: string;
+        knowHaribhakt: string;
+        RelativeOfSaint: string;
+        FromFamily?: string | undefined;
+        SaintName?: string | undefined;
+        YourRelation?: string | undefined;
+      }[]
+    | undefined;
+};
+
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
 export type PersonalInfoFormValidationSchemaType = {
