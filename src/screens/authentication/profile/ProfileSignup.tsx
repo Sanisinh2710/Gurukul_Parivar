@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import * as Progress from 'react-native-progress';
 import {useTranslation} from 'react-i18next';
@@ -8,12 +7,13 @@ import {
   AdressInfo,
   CompleteYourProfile,
   GurukulInfo,
+  EduBusinessInfo,
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {COLORS} from '../../../utils';
 import {ProfileSignupProps} from '../../../types';
+import {COLORS} from '../../../utils';
 
 export const ProfileSignup = ({
   navigation,
@@ -52,6 +52,13 @@ export const ProfileSignup = ({
         communicationAddr: false,
       },
     ],
+    edu_businessInfo: {
+      maxEduLevel: '',
+      occupation: '',
+      occupationType: '',
+      skills: [],
+      otherComment: '',
+    },
     gurukulInfo: {
       exGurukulStudent: 'No',
       gurukulData: [
@@ -101,7 +108,7 @@ export const ProfileSignup = ({
         setFormData(newFormData);
         navigation.navigate('LoginSuccess', {type: 'Profile'});
       }
-    } else {
+    } else if (formStep === 3) {
       let newFormData = JSON.parse(JSON.stringify(formData));
 
       if (receivedData !== undefined) {
@@ -110,6 +117,39 @@ export const ProfileSignup = ({
       }
       setwidth(width + 20);
       setFormStep(formStep + 1);
+    } else if (formStep === 4) {
+      if (typecase === 'next') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.edu_businessInfo = receivedData;
+          setFormData(newFormData);
+        }
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+
+      if (typecase === 'skip') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.edu_businessInfo = receivedData;
+          setFormData(newFormData);
+        }
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+    } else {
+      if (typecase === 'next') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.gurukulInfo = receivedData;
+          console.log(newFormData);
+
+          // setFormData(newFormData);
+        }
+      }
     }
   };
 
@@ -121,11 +161,11 @@ export const ProfileSignup = ({
       : formStep === 3
       ? t('addressInfo.AddressHeader')
       : formStep === 4
+      ? t('education/BusinessInfo.EduHeader')
+      : formStep === 5
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep]);
-
-  console.log(formData.personalInfo, 'whole state');
 
   return (
     <ScreenWrapper>
@@ -184,8 +224,13 @@ export const ProfileSignup = ({
             initialValues={{addressInfo: [...formData.addressInfo]}}
             onSubmitEvent={submitButton}
           />
+        ) : formStep === 4 ? (
+          <EduBusinessInfo
+            initialValues={formData.edu_businessInfo}
+            onSubmitEvent={submitButton}
+          />
         ) : (
-          formStep === 4 && (
+          formStep === 5 && (
             <GurukulInfo
               initialValues={formData.gurukulInfo}
               onSubmitEvent={submitButton}

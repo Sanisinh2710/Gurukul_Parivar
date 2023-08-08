@@ -16,13 +16,12 @@ export const genstyle = () => {
     },
     innerView: {
       flexDirection: 'row',
-      // justifyContent: 'space-between',
     },
     itemView: {
       borderWidth: 1,
       borderColor: COLORS.primaryLightBorderColor,
-      flexDirection: 'row',
       borderRadius: 12,
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       height: 60,

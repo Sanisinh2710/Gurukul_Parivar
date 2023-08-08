@@ -5,6 +5,7 @@ import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
 type SimpleDropdownProps = {
+  type: 'phone' | 'radio' | 'multi-select' | 'simple' | 'none';
   value: any;
   label: string;
   onChange: (...event: any[]) => void;
@@ -20,6 +21,7 @@ type SimpleDropdownProps = {
 
 export const SimpleDropDown = React.memo(
   ({
+    type,
     value,
     label,
     onChange,
@@ -48,9 +50,11 @@ export const SimpleDropDown = React.memo(
             setModelVisible(!modelVisible);
           }}>
           <Text style={style.placeholderFonts}>
-            {value === '' || value === undefined || value === 'undefined'
-              ? placeholder
-              : value}
+            {type !== 'multi-select'
+              ? value === '' || value === undefined || value === 'undefined'
+                ? placeholder
+                : value
+              : placeholder}
           </Text>
           <View
             style={[
@@ -84,7 +88,7 @@ export const SimpleDropDown = React.memo(
           setModelVisible={setModelVisible}
           inputList={dropDownList}
           wantSearchBar={true}
-          type={'simple'}
+          type={type}
           selectedItem={value}
           setSelectedItem={onChange}
           modalHeight={'90%'}

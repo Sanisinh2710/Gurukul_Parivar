@@ -35,8 +35,6 @@ export const DatePicker = React.memo(
   }: DatePickerProps): React.JSX.Element => {
     const style = FormInputStyle(value);
 
-    console.log(value, 'hello');
-
     const [calendarVisible, setCalendarVisible] = React.useState(false);
 
     const [selectedDate, setSelectedDate] = React.useState<Date>();

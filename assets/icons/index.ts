@@ -25,4 +25,5 @@ export const AllIcons = {
   Video: require('../icons/Video.png'),
   Checkbox: require('../icons/Checkbox.png'),
   Cancel: require('../icons/Cancel.png'),
+  RoundCross: require('../icons/RoundCross.png'),
 };

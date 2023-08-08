@@ -40,34 +40,49 @@ export const RadioLable = ({
       {showHeading && <Text style={style.heading}>{heading}</Text>}
       <View
         style={[
-          style.innerView,
-          wantFullSpace
-            ? {justifyContent: 'space-between'}
-            : {gap: 10, flexWrap: 'wrap'},
+          [
+            style.innerView,
+            wantFullSpace
+              ? {justifyContent: 'space-between'}
+              : {gap: 10, flexWrap: 'wrap'},
+          ],
         ]}>
         {list.map(item => (
           <View
             style={[
               style.itemView,
-              wantFullSpace && {width: itemWidth},
               value === item.name
                 ? {backgroundColor: COLORS.primaryColor}
                 : {backgroundColor: COLORS.primaryLightColor},
-              !item.icon && {justifyContent: 'center'},
+              !item.icon && {
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
+              wantFullSpace && {width: itemWidth},
               customStyle,
             ]}
             key={item.name}
             onTouchEnd={() => onChange(item.name)}>
             {item.icon && (
-              <Image
-                source={item.icon}
+              <View
                 style={[
                   style.icon,
-                  value === item.name
-                    ? {tintColor: '#FFFFFF'}
-                    : {tintColor: COLORS.primaryColor},
-                ]}
-              />
+                  {alignItems: 'center', justifyContent: 'center'},
+                ]}>
+                <Image
+                  source={item.icon}
+                  style={[
+                    style.icon,
+                    {
+                      flex: 1,
+                      resizeMode: 'contain',
+                    },
+                    value === item.name
+                      ? {tintColor: '#FFFFFF'}
+                      : {tintColor: COLORS.primaryColor},
+                  ]}
+                />
+              </View>
             )}
 
             <Text

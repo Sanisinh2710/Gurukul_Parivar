@@ -1,34 +1,36 @@
-import {FlatList, View, Text, Image, ScrollView} from 'react-native';
-import {styles} from './style';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
+
 import {yupResolver} from '@hookform/resolvers/yup';
-import {AddressFormValidationSchemaType} from '../../../../types';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
+import {
+  AddressFormValidationSchemaType,
+  SupportedFormInputTypes,
+  UserAddress,
+} from '../../../../types';
+import {COLORS, CustomFonts, countries} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
-import {COLORS, CustomFonts, countries} from '../../../../utils';
-import {AllIcons} from '../../../../../assets/icons';
+
+type AddressInfoProps = {
+  initialValues: AddressFormValidationSchemaType;
+  onSubmitEvent: (
+    receivedData: any,
+    typecase: 'next' | 'skip' | 'exit',
+  ) => void;
+};
 
 export const AdressInfo = React.memo(
-  ({initialValues, onSubmitEvent}: any): React.JSX.Element => {
+  ({initialValues, onSubmitEvent}: AddressInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-    const style = styles();
 
     const addressFormInputList: {
-      name: string;
+      name: keyof UserAddress;
       lable: string;
       placeholder: string;
-      type:
-        | 'number'
-        | 'select'
-        | 'text'
-        | 'phone'
-        | 'photo'
-        | 'radio'
-        | 'textarea'
-        | 'date'
-        | 'dob';
+      type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
     }[] = [
@@ -93,27 +95,23 @@ export const AdressInfo = React.memo(
       name: 'addressInfo',
     });
 
-    const [checkedArray, setCheckedArray] = React.useState<boolean[]>(
+    const [checkedArray, setCheckedArray] = React.useState(
       [
-        ...initialValues?.addressInfo?.map(
-          (item: {communicationAddr: string}) => {
-            return item.communicationAddr;
-          },
-        ),
+        ...initialValues?.addressInfo?.map(item => {
+          return item?.communicationAddr;
+        }),
       ] || [false],
     );
 
     const onSubmit = (data: AddressFormValidationSchemaType) => {
-      console.log(data.addressInfo, 'in dadrese ');
-
       if (data.addressInfo !== undefined) {
         let newData = [...data.addressInfo].map((item, index) => {
           item.communicationAddr = checkedArray[index];
           return item;
         });
-        onSubmitEvent([...newData]);
+        onSubmitEvent([...newData], 'next');
       } else {
-        onSubmitEvent();
+        onSubmitEvent(initialValues.addressInfo, 'skip');
       }
     };
 
@@ -238,13 +236,13 @@ export const AdressInfo = React.memo(
         <SecondaryButton
           title={t('common.AddAddress')}
           onPress={() => {
-            console.log('cldnhfikajn');
             append({
               country: '',
               address: '',
               pincode: '',
               cityVillage: '',
               typeofAddress: '',
+              communicationAddr: false,
             });
 
             let newArr = JSON.parse(JSON.stringify(checkedArray));

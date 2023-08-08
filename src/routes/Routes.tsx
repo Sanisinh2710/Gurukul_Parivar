@@ -40,8 +40,8 @@ export const AuthStackNavigator = (): React.JSX.Element => {
         headerShown: false,
       }}>
       {/* <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
-      <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
-      <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} /> */}
+      <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} /> 
+    <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />*/}
       <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
     </AuthStack.Navigator>
   );

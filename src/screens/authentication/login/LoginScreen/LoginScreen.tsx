@@ -92,7 +92,7 @@ export const LoginScreen = ({
   }, [language]);
 
   React.useEffect(() => {
-    if (Object.keys(errors).length === 0 && getValues('mobileNumber')) {
+    if (Object.keys(errors).length === 0 && watch().mobileNumber) {
       setDisabled(false);
     } else {
       setDisabled(true);
@@ -101,7 +101,7 @@ export const LoginScreen = ({
 
   const onSubmit = (data: LoginFormValidationSchemaType) => {
     data.mobileNumber =
-      countryCodeSelect.toString() + data.mobileNumber.toString();
+      countryCodeSelect.split('(')[0].toString() + data.mobileNumber.toString();
 
     console.log(data);
 
