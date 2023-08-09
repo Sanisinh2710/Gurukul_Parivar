@@ -12,7 +12,7 @@ type PhoneDropdownInputProps = {
   value: any;
   onChange: (...event: any[]) => void;
   onBlur: (...event: any[]) => void;
-  placeholder: string;
+  placeholder?: string;
   setFocused: React.Dispatch<React.SetStateAction<boolean>>;
   state?: {
     [key: string]: any;
@@ -101,7 +101,7 @@ export const PhoneDropdownInput = React.memo(
         <View style={style.phoneTextView}>
           <TextInput
             value={value}
-            editable={editable}
+            editable={editable ? true : false}
             keyboardType="phone-pad"
             inputMode="tel"
             onFocus={() => setFocused(true)}

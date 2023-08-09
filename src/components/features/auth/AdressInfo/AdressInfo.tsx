@@ -225,7 +225,7 @@ export const AdressInfo = React.memo(
                             lineHeight: 18.9,
                             color: COLORS.lightModetextColor,
                           }}>
-                          {'This address is my preferred communication address'}
+                          {t('addressInfo.AddressCheckbox')}
                         </Text>
                       </View>
                     </View>

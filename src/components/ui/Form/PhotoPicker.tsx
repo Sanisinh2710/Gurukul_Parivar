@@ -8,7 +8,7 @@ type PhotoPickerProps = {
   value: any;
   onChange: (...event: any[]) => void;
   onBlur: (...event: any[]) => void;
-  placeholder: string;
+  placeholder?: string;
   setFocused: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

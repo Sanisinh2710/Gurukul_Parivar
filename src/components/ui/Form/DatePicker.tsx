@@ -7,10 +7,10 @@ import {FormInputStyle} from './style';
 
 type DatePickerProps = {
   value: any;
-  label: string;
+  label?: string;
   onChange: (...event: any[]) => void;
   onBlur: (...event: any[]) => void;
-  placeholder: string;
+  placeholder?: string;
   setFocused: React.Dispatch<React.SetStateAction<boolean>>;
   state?: {
     [key: string]: any;

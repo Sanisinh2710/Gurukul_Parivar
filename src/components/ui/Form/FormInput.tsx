@@ -20,11 +20,11 @@ import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
 export type FormInputProps = {
-  type: SupportedFormInputTypes;
-  name: string;
-  label: string;
+  type?: SupportedFormInputTypes;
+  name?: string;
+  label?: string;
   icon?: any;
-  placeholder: string;
+  placeholder?: string;
   value: any;
   onBlur: (...event: any[]) => void;
   onChange: (...event: any[]) => void;

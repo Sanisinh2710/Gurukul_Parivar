@@ -1,13 +1,13 @@
 import React from 'react';
-import * as Progress from 'react-native-progress';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
+import * as Progress from 'react-native-progress';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   AdressInfo,
   CompleteYourProfile,
-  GurukulInfo,
   EduBusinessInfo,
+  GurukulInfo,
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
@@ -38,7 +38,12 @@ export const ProfileSignup = ({
       dob: '',
       bloodGroup: '',
       mobilenumInfo: [
-        {mobilenum: '', secondary: false, whatsappNum: true, countryCode: ''},
+        {
+          mobilenum: '6355157390',
+          secondary: false,
+          whatsappNum: true,
+          countryCode: '',
+        },
       ],
       emailInfo: [{email: '', secondary: false}],
     },
@@ -85,16 +90,17 @@ export const ProfileSignup = ({
     typecase: 'next' | 'skip' | 'exit',
   ) => {
     if (formStep === 1) {
-      let newFormData = JSON.parse(JSON.stringify(formData));
+      let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
       newFormData.completeProfile = receivedData;
 
       setFormData(newFormData);
       setwidth(width + 20);
       setFormStep(formStep + 1);
-    } else if (formStep === 2) {
+    }
+    if (formStep === 2) {
       if (typecase === 'next') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         newFormData.personalInfo = receivedData;
         setFormData(newFormData);
@@ -102,24 +108,38 @@ export const ProfileSignup = ({
         setFormStep(formStep + 1);
       }
       if (typecase === 'exit') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         newFormData.personalInfo = receivedData;
         setFormData(newFormData);
         navigation.navigate('LoginSuccess', {type: 'Profile'});
       }
-    } else if (formStep === 3) {
-      let newFormData = JSON.parse(JSON.stringify(formData));
-
-      if (receivedData !== undefined) {
-        newFormData.addressInfo = receivedData;
-        setFormData(newFormData);
-      }
-      setwidth(width + 20);
-      setFormStep(formStep + 1);
-    } else if (formStep === 4) {
+    }
+    if (formStep === 3) {
       if (typecase === 'next') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.addressInfo = receivedData;
+          setFormData(newFormData);
+        }
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+      if (typecase === 'skip') {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.addressInfo = receivedData;
+          setFormData(newFormData);
+        }
+        setwidth(width + 20);
+        setFormStep(formStep + 1);
+      }
+    }
+    if (formStep === 4) {
+      if (typecase === 'next') {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
@@ -130,7 +150,7 @@ export const ProfileSignup = ({
       }
 
       if (typecase === 'skip') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
@@ -139,9 +159,11 @@ export const ProfileSignup = ({
         setwidth(width + 20);
         setFormStep(formStep + 1);
       }
-    } else {
+    }
+    if (formStep === 5) {
       if (typecase === 'next') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
 
@@ -149,12 +171,15 @@ export const ProfileSignup = ({
           navigation.navigate('LoginSuccess', {type: 'Profile'});
         }
       }
+      if (typecase === 'skip') {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
-      if (typecase === 'exit') {
-        let newFormData = JSON.parse(JSON.stringify(formData));
-        newFormData.personalInfo = receivedData;
-        setFormData(newFormData);
-        navigation.navigate('LoginSuccess', {type: 'Profile'});
+        if (receivedData !== undefined) {
+          newFormData.gurukulInfo = receivedData;
+
+          setFormData(newFormData);
+          navigation.navigate('LoginSuccess', {type: 'Profile'});
+        }
       }
     }
   };
