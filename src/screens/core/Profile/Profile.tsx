@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   DropDownModel,
@@ -49,24 +42,13 @@ export const ProfileScreen = ({
       case 'user':
         navigation.navigate('editProfile');
         break;
-      // case 'family':
-      //   navigation.navigate('dailyQuotes');
-      //   break;
       case 'translation':
         navigation.navigate('changeLanguage');
         break;
-      // case 'help':
-      //   navigation.navigate('calendar');
-      //   break;
-      // case 'feedback':
-      //   navigation.navigate('liveSatsang');
-      //   break;
       case 'logout':
         setModelType('logout');
         setModelVisible(!modelVisible);
-
         break;
-
       default:
         break;
     }
@@ -93,55 +75,17 @@ export const ProfileScreen = ({
           {paddingBottom: '25%'},
         ]}
         showsVerticalScrollIndicator={true}>
-        <View
-          style={{
-            flexDirection: 'row',
-            borderWidth: 0.25,
-            borderColor: 'rgba(172, 43, 49,0.3)',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            marginTop: 10,
-            padding: 20,
-            borderRadius: 8,
-          }}>
+        <View style={style.imageContainer}>
           <Image source={AllImages.Person} style={{height: 64, width: 64}} />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
-            <Text
-              style={{
-                ...CustomFonts.header.medium20,
-                fontSize: 16,
-                color: 'black',
-              }}>
-              {t('myProfile.Name')}
-            </Text>
+            <Text style={style.profileName}>{t('myProfile.Name')}</Text>
             <Text>+91-9873957274</Text>
-            <View
-              style={{
-                height: 28,
-                width: 116,
-                backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                marginTop: '5%',
-                justifyContent: 'center',
-                borderRadius: 4,
-              }}>
-              <Text
-                style={{
-                  color: COLORS.primaryColor,
-                  fontSize: 12,
-                  textAlign: 'center',
-                }}>
-                {t('myProfile.ID')}:148410
-              </Text>
+            <View style={style.familyIdView}>
+              <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
             </View>
           </View>
         </View>
-        <View
-          style={{
-            marginTop: 12,
-            borderWidth: 0.25,
-            borderColor: 'rgba(172, 43, 49,0.3)',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: 8,
-          }}>
+        <View style={style.mapContainer}>
           {EditProfile(t).map((item, index) => {
             return (
               <TouchableOpacity
@@ -150,51 +94,25 @@ export const ProfileScreen = ({
                   handlePress(item.id);
                 }}>
                 <View
-                  style={{
-                    borderBottomWidth: item.name === 'Logout' ? 0 : 1,
-                    borderColor: 'rgba(23, 23, 23,0.1)',
-                    flexDirection: 'row',
-                    marginHorizontal: '5%',
-                    marginVertical: '3.5%',
-                    paddingBottom: '2.5%',
-                  }}>
+                  style={[
+                    style.listView,
+                    {borderBottomWidth: item.name === 'Logout' ? 0 : 1},
+                  ]}>
                   <RoundedIcon
                     icon={item.image}
                     onPress={() => {}}
-                    imageStyle={{
-                      width: 20,
-                      height: 20,
-                    }}
+                    imageStyle={{width: 20, height: 20}}
                   />
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      marginLeft: '5%',
-                    }}>
-                    <Text
-                      style={{
-                        ...CustomFonts.body.medium12,
-                        fontSize: 16,
-                        color: 'black',
-                      }}>
-                      {item.name}{' '}
-                    </Text>
+                  <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+                    <Text style={style.listName}>{item.name} </Text>
                   </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'flex-end',
-                    }}>
+                  <View style={style.languageContainer}>
                     <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
                       {item.language}
                     </Text>
                   </View>
                   <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'flex-end',
-                    }}>
+                    style={{justifyContent: 'center', alignItems: 'flex-end'}}>
                     {item.rightIcon && (
                       <Image
                         source={item.rightIcon}
@@ -216,13 +134,7 @@ export const ProfileScreen = ({
             }}
             buttonColor={'rgba(172, 43, 49, 0.1)'}
             titleColor={COLORS.primaryColor}
-            buttonStyle={{
-              width: '100%',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginVertical: '5%',
-              borderRadius: 10,
-            }}
+            buttonStyle={style.btnStyle}
             textStyle={{fontSize: 16}}
           />
         </View>
@@ -237,97 +149,40 @@ export const ProfileScreen = ({
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
                   locations={[0, 1]}
-                  style={{
-                    flex: 1,
-                    borderRadius: 60,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                  style={style.linearGradient}>
                   {modalType === 'logout' ? (
-                    <View
-                      style={{
-                        height: '40%',
-                        width: '30%',
-                        backgroundColor: 'rgba(172, 43, 49, 0.4)',
-                        borderRadius: 7,
-                        justifyContent: 'center',
-                      }}>
-                      <View
-                        style={{
-                          position: 'absolute',
-                          right: -12,
-                          height: '50%',
-                          width: '90%',
-                          alignItems: 'center',
-                        }}>
+                    <View style={style.iconRectangleView}>
+                      <View style={style.iconContainer}>
                         <Image
                           source={AllIcons.LogoutArrow}
-                          style={{
-                            flex: 1,
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'contain',
-                          }}
+                          style={style.logoutIcon}
                         />
                       </View>
                     </View>
                   ) : (
-                    <Image
-                      source={AllIcons.Delete}
-                      style={{
-                        height: 40,
-                        width: 40,
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                      }}
-                    />
+                    <Image source={AllIcons.Delete} style={style.deleteIcon} />
                   )}
                 </LinearGradient>
               </View>
               <View>
-                <Text
-                  style={{
-                    ...CustomFonts.header.small18,
-                    marginTop: 24,
-                    color: 'black',
-                    fontSize: 20,
-                    textAlign: 'center',
-                  }}>
+                <Text style={style.modalHeader}>
                   {modalType === 'logout'
                     ? 'Come back soon!'
                     : ' Confirm Account Deletion'}
                 </Text>
-                <Text
-                  style={{
-                    color: 'rgba(23,23,23,0.5)',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    lineHeight: 20,
-                    marginTop: 8,
-                  }}>
+                <Text style={style.modalTextContent}>
                   {modalType === 'logout'
                     ? 'You will be signed out of your account \n and any unsaved changes will be lost.'
                     : 'Are you sure you want to delete your \n account? This action cannot be undone.'}
                 </Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  width: '100%',
-                  marginTop: '8%',
-                }}>
+              <View style={style.modalbtnView}>
                 <PrimaryButton
                   onPress={() => {
                     setModelVisible(!modelVisible);
                   }}
                   buttonColor="rgba(172, 43, 49, 0.05)"
-                  buttonStyle={{
-                    width: '42%',
-                    borderWidth: 0.25,
-                    borderColor: 'rgba(172,43,49,0.3)',
-                    borderRadius: 12,
-                  }}
+                  buttonStyle={style.modalbtn}
                   titleColor="black"
                   title="Cancel"
                 />

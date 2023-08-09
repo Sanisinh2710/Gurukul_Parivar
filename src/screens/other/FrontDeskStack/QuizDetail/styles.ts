@@ -14,8 +14,8 @@ export const styles = () => {
       color: 'black',
     },
     progressText: {
-      ...CustomFonts.body.medium12,
-      fontSize: 14,
+      ...CustomFonts.header.large36,
+      fontSize: 24,
       color: 'black',
     },
   });
