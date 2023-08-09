@@ -1,15 +1,19 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, View} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts, FrontDesk} from '../../../utils';
 import {styles} from './styles';
 import {AllIcons} from '../../../../assets/icons';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../types';
 
-export const FrontDeskScreen = () => {
+export const FrontDeskScreen = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList>) => {
   const theme = useAppSelector(state => state.theme.theme);
 
   const [currentPage, setCurrentPage] = React.useState<number>(1);
@@ -18,6 +22,28 @@ export const FrontDeskScreen = () => {
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
+  const handlePress = (val: string) => {
+    switch (val) {
+      // case 'goform':
+      //   navigation.navigate('dailyDarshan');
+      //   break;
+      // case 'speech':
+      //   navigation.navigate('dailyQuotes');
+      //   break;
+      // case 'event':
+      //   navigation.navigate('dailyUpdates');
+      //   break;
+      case 'quiz':
+        navigation.navigate('dailyQuiz');
+        break;
+      case 'donation':
+        navigation.navigate('liveSatsang');
+        break;
+
+      default:
+        break;
+    }
+  };
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -30,9 +56,7 @@ export const FrontDeskScreen = () => {
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {
-            console.log('Notification recieved');
-          },
+          onPress: () => {},
         }}
       />
       <View style={commonStyle.commonContentView}>
@@ -52,52 +76,62 @@ export const FrontDeskScreen = () => {
           }}>
           <PagerView currentPage={currentPage} />
         </View>
-        <View style={{marginTop: 24}}>
+
+        <View
+          style={{
+            marginTop: 24,
+            paddingBottom: 550,
+          }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={FrontDesk(t)}
             renderItem={({item, index}) => {
               return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginVertical: '2.5%',
-                    marginHorizontal: '2%',
-                    borderRadius: 12,
-                    height: 64,
-                    backgroundColor: '#ffffff',
+                <TouchableOpacity
+                  onPress={() => {
+                    handlePress(item.id);
                   }}>
                   <View
                     style={{
-                      height: 48,
-                      width: 48,
-                      justifyContent: 'center',
+                      flexDirection: 'row',
                       alignItems: 'center',
+                      marginVertical: '2.5%',
+                      marginHorizontal: '2%',
                       borderRadius: 12,
-                      backgroundColor: item.imageBG,
-                      marginHorizontal: 8,
+                      height: 64,
+                      backgroundColor: '#ffffff',
                     }}>
-                    <Image
-                      source={item.image}
-                      style={{height: 24, width: 24}}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      marginLeft: '2%',
-                    }}>
-                    <Text
+                    <View
                       style={{
-                        ...CustomFonts.header.medium20,
-                        fontSize: 16,
-                        color: 'black',
+                        height: 48,
+                        width: 48,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 12,
+                        backgroundColor: item.imageBG,
+                        marginHorizontal: 8,
                       }}>
-                      {item.title}{' '}
-                    </Text>
+                      <Image
+                        source={item.image}
+                        style={{height: 24, width: 24}}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        marginLeft: '2%',
+                      }}>
+                      <Text
+                        style={{
+                          ...CustomFonts.header.medium20,
+                          fontSize: 16,
+                          color: 'black',
+                        }}>
+                        {item.title}{' '}
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />

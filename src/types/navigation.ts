@@ -5,9 +5,17 @@ export type RootStackParamList = {
   Auth: undefined;
   BottomNavBar: undefined;
   dailyDarshan: undefined;
+  dailyDarshanDetail: {image: any; date: string};
   dailyQuotes: undefined;
   dailyUpdates: undefined;
+  dailyUpdateDetail: {title: string};
   calendar: undefined;
+  liveSatsang: undefined;
+  changeLanguage: undefined;
+  editProfile: undefined;
+  status: undefined;
+  dailyQuiz: undefined;
+  dailyQuizDetail: undefined;
 };
 
 export type RootBottomTabParamList = {
@@ -18,13 +26,13 @@ export type RootBottomTabParamList = {
 
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
-  MobileLoginOTP: undefined;
+  MobileLoginOTP: {mobileNum: string} | undefined;
   LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
   ProfileSignup: undefined;
 };
-export type LoginOtpScreenProps = NativeStackScreenProps<
-  RootAuthStackParamList,
-  'MobileLoginOTP'
+export type LoginOtpScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootAuthStackParamList, 'MobileLoginOTP'>,
+  NativeStackScreenProps<RootStackParamList>
 >;
 
 export type LoginSuccessStackScreenProps = CompositeScreenProps<

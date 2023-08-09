@@ -13,6 +13,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
+import {setProfileToken} from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
 
@@ -55,7 +56,7 @@ export const ProfileSignup = ({
         pincode: '',
         cityVillage: '',
         typeofAddress: '',
-        communicationAddr: false,
+        communicationAddr: true,
       },
     ],
     edu_businessInfo: {
@@ -113,7 +114,11 @@ export const ProfileSignup = ({
 
         newFormData.personalInfo = receivedData;
         setFormData(newFormData);
-        navigation.navigate('LoginSuccess', {type: 'Profile'});
+        const resType = setProfileToken(newFormData);
+
+        if (resType === 'SUCCESS') {
+          navigation.navigate('LoginSuccess', {type: 'Profile'});
+        }
       }
     }
     if (formStep === 3) {
@@ -169,7 +174,11 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          navigation.navigate('LoginSuccess', {type: 'Profile'});
+          const resType = setProfileToken(newFormData);
+
+          if (resType === 'SUCCESS') {
+            navigation.navigate('LoginSuccess', {type: 'Profile'});
+          }
         }
       }
       if (typecase === 'skip') {
@@ -178,7 +187,11 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          navigation.navigate('LoginSuccess', {type: 'Profile'});
+          const resType = setProfileToken(newFormData);
+
+          if (resType === 'SUCCESS') {
+            navigation.navigate('LoginSuccess', {type: 'Profile'});
+          }
         }
       }
     }

@@ -50,6 +50,8 @@ export const LoginScreen = ({
 
     const getLangCode = storage.getString('langCode');
 
+    const auth_token = storage.getString('auth_token');
+
     if (getLangCode) {
       const newLangcode = JSON.parse(getLangCode);
 
@@ -63,6 +65,9 @@ export const LoginScreen = ({
 
     const timer = setTimeout(() => {
       setIsloading(false);
+      if (auth_token) {
+        navigation.replace('ProfileSignup');
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -107,7 +112,7 @@ export const LoginScreen = ({
 
     // Do something with mobile number and than navigate to OTP Screen;
 
-    navigation.navigate('MobileLoginOTP');
+    navigation.navigate('MobileLoginOTP', {mobileNum: data.mobileNumber});
   };
 
   if (isLoading) {
@@ -178,7 +183,7 @@ export const LoginScreen = ({
               </Text>{' '}
               {t('loginScreen.FooterText2')
                 .split(' ')
-                .filter((val, index) => {
+                .filter((val: any, index: number) => {
                   return index !== 0 && val;
                 })
                 .join(' ')}

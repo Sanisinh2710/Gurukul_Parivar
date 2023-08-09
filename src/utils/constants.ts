@@ -2,6 +2,7 @@ import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
 import {Theme} from '../types';
 import {COLORS} from './colors';
+import {useTranslation} from 'react-i18next';
 
 export const LightTheme: Theme = {
   isDark: false,
@@ -332,12 +333,7 @@ export const FrontDesk = (t: any) => {
       id: 'speech',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
-    {
-      image: AllIcons.Video,
-      title: t('frontDesk.Darshan'),
-      id: 'darshan',
-      imageBG: 'rgba(0, 166, 88, 0.1)',
-    },
+
     {
       image: AllIcons.Ticket,
       title: t('frontDesk.Event'),
@@ -350,9 +346,14 @@ export const FrontDesk = (t: any) => {
       id: 'quiz',
       imageBG: 'rgba(60, 42, 152, 0.1)',
     },
+    {
+      image: AllIcons.Donation,
+      title: t('frontDesk.Donation'),
+      id: 'donation',
+      imageBG: 'rgba(0, 166, 88, 0.1)',
+    },
   ];
 };
-
 export const HomeGrid = (t: any) => {
   return [
     {
@@ -367,17 +368,27 @@ export const HomeGrid = (t: any) => {
     },
     {
       name: t('homeScreen.DailyUpdate'),
-      image: AllImages.CalendarImage,
+      image: AllImages.DailyUpdate,
       id: 'update',
     },
     {
       name: t('homeScreen.Calendar'),
-      image: AllImages.Darshan,
+      image: AllImages.CalendarImage,
       id: 'calendar',
+    },
+    {
+      name: t('homeScreen.DailyProgram'),
+      image: AllImages.DailyProgram,
+      id: 'program',
+    },
+    {
+      name: t('homeScreen.LiveSatsang'),
+      image: AllImages.LiveSatsang,
+      id: 'satsang',
     },
   ];
 };
-export const EditProfile = (t: any) => {
+export const EditProfile = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,
@@ -395,7 +406,7 @@ export const EditProfile = (t: any) => {
       image: AllIcons.Translation,
       name: t('myProfile.Language'),
       rightIcon: AllIcons.RightArrow,
-      language: 'EN',
+      language: i18n.language.toLocaleUpperCase(),
       id: 'translation',
     },
     {
@@ -432,4 +443,206 @@ export const months = [
   'October',
   'November',
   'December',
+];
+
+export const MyProfileData = () => [
+  {title: 'Personal Info', icon: AllIcons.RightArrow},
+  {title: 'Address Info', icon: AllIcons.RightArrow},
+  {title: 'Education/Business Info', icon: AllIcons.RightArrow},
+  {title: 'Gurukul Connect', icon: AllIcons.RightArrow},
+];
+export const DailyDarshanAllImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle28,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle29,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle31,
+      id: 4,
+    },
+  ];
+};
+export const DailyDarshanEveningImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle30,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle30,
+      id: 4,
+    },
+  ];
+};
+export const DailyDarshanMorningImages = () => {
+  return [
+    {
+      image: AllImages.Rectangle28,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle28,
+      id: 4,
+    },
+  ];
+};
+export const PhotoGallery = () => {
+  return [
+    {
+      image: AllImages.Rectangle75,
+      id: 1,
+    },
+    {
+      image: AllImages.Rectangle76,
+      id: 2,
+    },
+    {
+      image: AllImages.Rectangle77,
+      id: 3,
+    },
+    {
+      image: AllImages.Rectangle75,
+      id: 4,
+    },
+    {
+      image: AllImages.Rectangle76,
+      id: 5,
+    },
+    {
+      image: AllImages.Rectangle77,
+      id: 6,
+    },
+  ];
+};
+export const d = new Date();
+export const options: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+};
+export const options2: Intl.DateTimeFormatOptions = {
+  month: 'short',
+  year: 'numeric',
+};
+export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const DailyUpdate = [
+  {
+    image: AllImages.AppLogo,
+    title: 'Guru Purnima Celebration at Nikol Gurukul',
+    time: '9:29 AM',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Click This Image To Get Chaturmas Niyam Form',
+    time: '4:50 AM',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Praying Saints and students to Lord Shri Swaminarayan...',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'World Tobacco Day Celebration at Gurukul',
+    time: 'Yesterday',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Ravi Sabha was organized at Nikol Gurukul in the presence...',
+    time: '25,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: "200 Saint's Bhojan Pankti Darshan at Nikol Gurukul",
+    time: '25,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Guru Purnima Celebration at Nikol Gurukul',
+    time: '24,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Click This Image To Get Chaturmas Niyam Form',
+    time: '23,July',
+  },
+  {
+    image: AllImages.AppLogo,
+    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
+    time: '22,July',
+  },
+];
+export const QuizStatus = [
+  {date: '01,Jul 2023', percent: 75},
+  {date: '02,Jul 2023', percent: 30},
+  {date: '03,Jul 2023', percent: 55},
+  {date: '04,Jul 2023', percent: 45},
+  {date: '05,Jul 2023', percent: 95},
+  {date: '06,Jul 2023', percent: 75},
+  {date: '07,Jul 2023', percent: 60},
+  {date: '08,Jul 2023', percent: 75},
+  {date: '09,Jul 2023', percent: 51},
+  {date: '10,Jul 2023', percent: 60},
+];
+export const Quiz = [
+  {
+    questionText: '1. આજે સવારે ઠાકોર જગાડવાનો મારો સમય.',
+    answerOptions: [
+      '05:00 પહેલા',
+      '05:00 થી 05:15',
+      '05:15 થી 05:30',
+      '05:30 પછી',
+    ],
+    correctIndex: 2,
+  },
+  {
+    questionText: '2. આજે બપોરે ઠાકોર જગાડવાનો મારો સમય.',
+    answerOptions: [
+      'બપોરે સૂતા નથી',
+      '03:00 વાગ્યા પહેલા',
+      '03:00 થી 03:30',
+      '03:30 પછી',
+    ],
+    correctIndex: 2,
+  },
+  {
+    questionText: '3. ગઈ રાત્રે ઠાકોર પોંઢાડવાનો મારો સમય. ',
+    answerOptions: [
+      '11:00 પહેલા',
+      '1:00 થી 1:30',
+      '1:30 થી 12:00',
+      '12:00 પછી',
+    ],
+    correctIndex: 0,
+  },
 ];

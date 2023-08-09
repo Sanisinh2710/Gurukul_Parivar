@@ -10,10 +10,12 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {getOldUsers, getProfileToken, setAuthToken} from '../../../../services';
 import {LoginOtpScreenProps} from '../../../../types';
 import {styles} from './styles';
 
-export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
+export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
+  const mobileNum = route.params?.mobileNum;
   const style = styles();
   const CommonStyles = CommonStyle();
   const {t, i18n} = useTranslation();
@@ -36,7 +38,23 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
       return;
     } else {
       setOtp([num.join('')]);
-      navigation.replace('LoginSuccess', {type: 'Login'});
+      const resType = setAuthToken(mobileNum);
+      if (resType === 'SUCCESS') {
+        const allOldUsers = getOldUsers();
+
+        if (allOldUsers?.resType === 'SUCCESS') {
+          if (allOldUsers.data.includes(mobileNum)) {
+            const prof_token = getProfileToken();
+            if (prof_token === 'SUCCESS') {
+              navigation.replace('BottomNavBar');
+            } else {
+              navigation.replace('LoginSuccess', {type: 'Login'});
+            }
+          } else {
+            navigation.replace('LoginSuccess', {type: 'Login'});
+          }
+        }
+      }
     }
   };
   React.useEffect(() => {
@@ -90,7 +108,7 @@ export const LoginOTP = ({navigation}: LoginOtpScreenProps) => {
             {t('otpScreen.OtpContainerText')}
           </Text>
           <View style={style.phoneEditContainer}>
-            <Text style={style.phoneNumber}>+91-9876543210</Text>
+            <Text style={style.phoneNumber}>{mobileNum}</Text>
             <View style={style.editIconStyle}>
               <Icon name="edit-3" size={14} />
             </View>

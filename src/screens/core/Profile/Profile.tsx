@@ -1,29 +1,75 @@
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {
+  DropDownModel,
   PrimaryButton,
   RoundedIcon,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
+import {removeAuthToken} from '../../../services';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({
+  navigation,
+}: CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, 'Profile'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
   const theme = useAppSelector(state => state.theme.theme);
-  const {t} = useTranslation();
+  const [modelVisible, setModelVisible] = React.useState(false);
+  const [modalType, setModelType] = React.useState('');
+
+  const {t, i18n} = useTranslation();
 
   const ProfileList = React.useMemo(() => {
-    return EditProfile(t);
-  }, [t]);
+    return EditProfile(t, i18n);
+  }, [t, i18n]);
 
   const style = styles();
   const commonStyle = CommonStyle();
+
+  // React.useEffect(() => {
+  //   const language = i18n.language;
+  // }, []);
+  const handlePress = (val: string) => {
+    switch (val) {
+      case 'user':
+        navigation.navigate('editProfile');
+        break;
+      // case 'family':
+      //   navigation.navigate('dailyQuotes');
+      //   break;
+      case 'translation':
+        navigation.navigate('changeLanguage');
+        break;
+      // case 'help':
+      //   navigation.navigate('calendar');
+      //   break;
+      // case 'feedback':
+      //   navigation.navigate('liveSatsang');
+      //   break;
+      case 'logout':
+        setModelType('logout');
+        setModelVisible(!modelVisible);
+
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -37,9 +83,7 @@ export const ProfileScreen = () => {
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {
-            console.log('Notification recieved');
-          },
+          onPress: () => {},
         }}
       />
       <ScrollView
@@ -99,68 +143,76 @@ export const ProfileScreen = () => {
           }}>
           {ProfileList.map((item, index) => {
             return (
-              <View
+              <TouchableOpacity
                 key={index}
-                style={{
-                  borderBottomWidth: index === ProfileList.length - 1 ? 0 : 1,
-                  borderColor: 'rgba(23, 23, 23,0.1)',
-                  flexDirection: 'row',
-                  marginHorizontal: '5%',
-                  marginVertical: '3.5%',
-                  paddingBottom: '2.5%',
+                onPress={() => {
+                  handlePress(item.id);
                 }}>
-                <RoundedIcon
-                  icon={item.image}
-                  onPress={() => {}}
-                  imageStyle={{
-                    width: 20,
-                    height: 20,
-                  }}
-                />
                 <View
                   style={{
-                    justifyContent: 'center',
-                    marginLeft: '5%',
+                    borderBottomWidth: index === ProfileList.length - 1 ? 0 : 1,
+                    borderColor: 'rgba(23, 23, 23,0.1)',
+                    flexDirection: 'row',
+                    marginHorizontal: '5%',
+                    marginVertical: '3.5%',
+                    paddingBottom: '2.5%',
                   }}>
-                  <Text
+                  <RoundedIcon
+                    icon={item.image}
+                    onPress={() => {}}
+                    imageStyle={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                  <View
                     style={{
-                      ...CustomFonts.body.medium12,
-                      fontSize: 16,
-                      color: 'black',
+                      justifyContent: 'center',
+                      marginLeft: '5%',
                     }}>
-                    {item.name}{' '}
-                  </Text>
+                    <Text
+                      style={{
+                        ...CustomFonts.body.medium12,
+                        fontSize: 16,
+                        color: 'black',
+                      }}>
+                      {item.name}{' '}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'flex-end',
+                    }}>
+                    <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
+                      {item.language}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-end',
+                    }}>
+                    {item.rightIcon && (
+                      <Image
+                        source={item.rightIcon}
+                        style={{height: 24, width: 24}}
+                      />
+                    )}
+                  </View>
                 </View>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
-                    {item.language}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  {item.rightIcon && (
-                    <Image
-                      source={item.rightIcon}
-                      style={{height: 24, width: 24}}
-                    />
-                  )}
-                </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
         <View>
           <PrimaryButton
             title="Delete Account"
-            onPress={() => console.log('hi')}
+            onPress={() => {
+              setModelType('deleteAcc');
+              setModelVisible(!modelVisible);
+            }}
             buttonColor={'rgba(172, 43, 49, 0.1)'}
             titleColor={COLORS.primaryColor}
             buttonStyle={{
@@ -173,6 +225,133 @@ export const ProfileScreen = () => {
             textStyle={{fontSize: 16}}
           />
         </View>
+        <DropDownModel
+          modelVisible={modelVisible}
+          setModelVisible={setModelVisible}
+          type={'phone'}
+          modalHeight={'50%'}
+          customModelchild={
+            <View style={{alignItems: 'center', marginTop: '5%'}}>
+              <View style={{height: 80, width: 80}}>
+                <LinearGradient
+                  colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
+                  locations={[0, 1]}
+                  style={{
+                    flex: 1,
+                    borderRadius: 60,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  {modalType === 'logout' ? (
+                    <View
+                      style={{
+                        height: '40%',
+                        width: '30%',
+                        backgroundColor: 'rgba(172, 43, 49, 0.4)',
+                        borderRadius: 7,
+                        justifyContent: 'center',
+                      }}>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          right: -12,
+                          height: '50%',
+                          width: '90%',
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={AllIcons.LogoutArrow}
+                          style={{
+                            flex: 1,
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    <Image
+                      source={AllIcons.Delete}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}
+                    />
+                  )}
+                </LinearGradient>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    ...CustomFonts.header.small18,
+                    marginTop: 24,
+                    color: 'black',
+                    fontSize: 20,
+                    textAlign: 'center',
+                  }}>
+                  {modalType === 'logout'
+                    ? 'Come back soon!'
+                    : ' Confirm Account Deletion'}
+                </Text>
+                <Text
+                  style={{
+                    color: 'rgba(23,23,23,0.5)',
+                    fontSize: 14,
+                    textAlign: 'center',
+                    lineHeight: 20,
+                    marginTop: 8,
+                  }}>
+                  {modalType === 'logout'
+                    ? 'You will be signed out of your account \n and any unsaved changes will be lost.'
+                    : 'Are you sure you want to delete your \n account? This action cannot be undone.'}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '100%',
+                  marginTop: '8%',
+                }}>
+                <PrimaryButton
+                  onPress={() => {
+                    setModelVisible(!modelVisible);
+                  }}
+                  buttonColor="rgba(172, 43, 49, 0.05)"
+                  buttonStyle={{
+                    width: '42%',
+                    borderWidth: 0.25,
+                    borderColor: 'rgba(172,43,49,0.3)',
+                    borderRadius: 12,
+                  }}
+                  titleColor="black"
+                  title="Cancel"
+                />
+                <PrimaryButton
+                  onPress={
+                    modalType === 'logout'
+                      ? () => {
+                          const resRemoveAuthToken = removeAuthToken();
+                          // const resRemoveProfToken = removeProfToken();
+
+                          if (resRemoveAuthToken === 'SUCCESS') {
+                            navigation.replace('Auth');
+                          }
+                        }
+                      : () => {}
+                  }
+                  buttonStyle={{width: '42%'}}
+                  title={
+                    modalType === 'logout' ? 'Yes,log me out' : 'Delete Account'
+                  }
+                />
+              </View>
+            </View>
+          }
+        />
       </ScrollView>
     </ScreenWrapper>
   );

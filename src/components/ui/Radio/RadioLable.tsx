@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Dimensions,
   DimensionValue,
   Image,
   StyleProp,
@@ -18,6 +19,7 @@ interface Props {
   list: {name: string; icon?: any}[];
   wantFullSpace?: boolean;
   customStyle?: StyleProp<ViewStyle>;
+  dailyQuiz?: boolean;
 }
 
 export const RadioLable = ({
@@ -28,6 +30,7 @@ export const RadioLable = ({
   showHeading,
   value,
   onChange,
+  dailyQuiz,
 }: Props) => {
   const style = genstyle();
 
@@ -41,11 +44,17 @@ export const RadioLable = ({
       <View
         style={[
           [
-            style.innerView,
-            wantFullSpace
-              ? {justifyContent: 'space-between'}
-              : {gap: 10, flexWrap: 'wrap'},
+            [
+              style.innerView,
+              wantFullSpace
+                ? {justifyContent: 'space-between'}
+                : {gap: 10, flexWrap: 'wrap'},
+            ],
           ],
+          dailyQuiz && {
+            flexWrap: 'wrap',
+            width: Dimensions.get('window').width * 0.8,
+          },
         ]}>
         {list.map(item => (
           <View

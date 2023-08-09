@@ -66,7 +66,11 @@ export const CompleteYourProfile = React.memo(
 
     return (
       <View style={{height: '100%'}}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: '30%',
+          }}>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
               {t('uploadPhoto.FirstSubtitle')}
@@ -132,15 +136,14 @@ export const CompleteYourProfile = React.memo(
               }}
             />
           </View>
+          {/* Submit button.................................. */}
+          <View style={[style.NextBtn]}>
+            <PrimaryButton
+              title={t('uploadPhoto.NextBtn')}
+              onPress={handleSubmit(onSubmit)}
+            />
+          </View>
         </ScrollView>
-
-        {/* Submit button.................................. */}
-        <View style={[style.NextBtn, {position: 'absolute', bottom: 100}]}>
-          <PrimaryButton
-            title={t('uploadPhoto.NextBtn')}
-            onPress={handleSubmit(onSubmit)}
-          />
-        </View>
       </View>
     );
   },
