@@ -167,7 +167,7 @@ export const GurukulInfo = React.memo(
 
     const gurukulFormInputList2: {
       mainType?: any;
-      name?: keyof SingleGurukulRecType;
+      name: keyof SingleGurukulRecType;
       lable?: string;
       placeholder?: string;
       type?: SupportedFormInputTypes;
@@ -350,9 +350,13 @@ export const GurukulInfo = React.memo(
                                     onBlur={onBlur}
                                     onChange={onChange}
                                     customProps={item?.customProps}
-                                    error={errors?.gurukulData?.[mainindex]?.[
-                                      item?.name
-                                    ]?.message?.toString()}
+                                    error={
+                                      item.name
+                                        ? errors?.gurukulData?.[mainindex]?.[
+                                            item?.name
+                                          ]?.message?.toString()
+                                        : ''
+                                    }
                                   />
                                 </>
                               );
