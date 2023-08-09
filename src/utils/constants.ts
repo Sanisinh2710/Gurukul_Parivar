@@ -603,28 +603,31 @@ export const Quiz = [
   {
     questionText: '1. આજે સવારે ઠાકોર જગાડવાનો મારો સમય.',
     answerOptions: [
-      {answerText: '05:00 પહેલા', isCorrect: false},
-      {answerText: '05:00 થી 05:15', isCorrect: false},
-      {answerText: '05:15 થી 05:30', isCorrect: true},
-      {answerText: '05:30 પછી', isCorrect: false},
+      '05:00 પહેલા',
+      '05:00 થી 05:15',
+      '05:15 થી 05:30',
+      '05:30 પછી',
     ],
+    correctIndex: 2,
   },
   {
     questionText: '2. આજે બપોરે ઠાકોર જગાડવાનો મારો સમય.',
     answerOptions: [
-      {answerText: 'બપોરે સૂતા નથી', isCorrect: false},
-      {answerText: '03:00 વાગ્યા પહેલા', isCorrect: false},
-      {answerText: '03:00 થી 03:30', isCorrect: true},
-      {answerText: '03:30 પછી', isCorrect: false},
+      'બપોરે સૂતા નથી',
+      '03:00 વાગ્યા પહેલા',
+      '03:00 થી 03:30',
+      '03:30 પછી',
     ],
+    correctIndex: 2,
   },
   {
     questionText: '3. ગઈ રાત્રે ઠાકોર પોંઢાડવાનો મારો સમય. ',
     answerOptions: [
-      {answerText: '11:00 પહેલા', isCorrect: true},
-      {answerText: '1:00 થી 1:30', isCorrect: false},
-      {answerText: '1:30 થી 12:00', isCorrect: false},
-      {answerText: '12:00 પછી', isCorrect: false},
+      '11:00 પહેલા',
+      '1:00 થી 1:30',
+      '1:30 થી 12:00',
+      '12:00 પછી',
     ],
+    correctIndex: 0,
   },
 ];

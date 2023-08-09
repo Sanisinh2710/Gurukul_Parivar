@@ -1,36 +1,58 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Pressable, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   PrimaryButton,
-  RadioLable,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
 import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 
 export const DailyQuizDetail = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const {t, i18n} = useTranslation();
   const style = styles();
-  const [selectedItem, setselectedItem] = React.useState<string>('');
-  console.log(selectedItem);
+  const [answer, setAnswer] = React.useState<Array<Object>>([]);
+  const [selectedOptions, setSelectedOptions] = React.useState<Array<number>>(
+    [],
+  );
   const commonstyle = CommonStyle();
+
+  const handleAnswer = (options: string, index: number, opIndex: number) => {
+    const newSelectedOptions = [...selectedOptions];
+    newSelectedOptions[index] = opIndex;
+    setSelectedOptions(newSelectedOptions);
+
+    if (answer.length === 0) {
+      setAnswer([{questionNumber: index, optionIndex: opIndex}]);
+    } else {
+      const obj = [...answer];
+
+      let newData = [...obj];
+
+      if (
+        newData.some((data: any) => data.questionNumber === index) === false
+      ) {
+        newData.push({questionNumber: index, optionIndex: opIndex});
+      }
+
+      const newdata = newData.map((data: any) => {
+        if (data.questionNumber === index) {
+          data.optionIndex = opIndex;
+        }
+        return data;
+      });
+
+      setAnswer(newData);
+    }
+  };
+
+  console.log(answer, 'answer whole');
 
   return (
     <ScreenWrapper>
@@ -50,7 +72,7 @@ export const DailyQuizDetail = ({
         <FlatList
           data={Quiz}
           renderItem={({item, index}) => (
-            <>
+            <View>
               <LinearGradient
                 colors={['rgba(23, 23, 23, 0.05)', 'rgba(23, 23, 23, 0)']}
                 locations={[0, 1]}
@@ -84,27 +106,43 @@ export const DailyQuizDetail = ({
                   </View>
                 </View>
               </LinearGradient>
-              <View>
-                <RadioLable
-                  dailyQuiz={true}
-                  wantFullSpace={false}
-                  customStyle={{
-                    borderRadius: 60,
-                    height: 40,
-                    borderWidth: 0,
-                  }}
-                  selectedItem={selectedItem}
-                  setselectedItem={setselectedItem}
-                  heading={''}
-                  list={[
-                    {name: item.answerOptions[0].answerText},
-                    {name: item.answerOptions[1].answerText},
-                    {name: item.answerOptions[2].answerText},
-                    {name: item.answerOptions[3].answerText},
-                  ]}
-                />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                }}>
+                {item.answerOptions.map((options, opIndex) => {
+                  const isSelected = selectedOptions[index] === opIndex;
+                  return (
+                    <Pressable
+                      key={opIndex}
+                      onPress={() => {
+                        handleAnswer(options, index, opIndex);
+                      }}
+                      style={{
+                        width: '40%',
+                        marginRight: '5%',
+                        marginVertical: '3%',
+                        padding: 10,
+                        borderRadius: 20,
+                        backgroundColor: isSelected
+                          ? COLORS.primaryColor
+                          : 'rgba(172, 43, 49, 0.1)',
+                      }}>
+                      <View>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: isSelected ? 'white' : 'black',
+                          }}>
+                          {options}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  );
+                })}
               </View>
-            </>
+            </View>
           )}
         />
         <View style={{paddingBottom: '5%', marginTop: '5%'}}>
