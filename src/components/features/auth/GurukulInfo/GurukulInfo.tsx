@@ -220,8 +220,8 @@ export const GurukulInfo = React.memo(
       onSubmitEvent(newData, 'next');
     };
 
-    const onWithoutExstuSubmit = () => {
-      onSubmitEvent(initialValues, 'exit');
+    const onSubmitWithoutExstudent = () => {
+      onSubmitEvent(initialValues, 'skip');
     };
 
     return (
@@ -371,7 +371,6 @@ export const GurukulInfo = React.memo(
                     <FlatList
                       data={gurukulFormInputList2}
                       scrollEnabled={false}
-                      contentContainerStyle={{paddingBottom: '30%'}}
                       renderItem={arrayItem => {
                         return (
                           <Controller
@@ -411,7 +410,9 @@ export const GurukulInfo = React.memo(
         <PrimaryButton
           title={t('common.Complete')}
           onPress={
-            exstudent === 'Yes' ? handleSubmit(onSubmit) : onWithoutExstuSubmit
+            exstudent === 'Yes'
+              ? handleSubmit(onSubmit)
+              : onSubmitWithoutExstudent
           }
           buttonStyle={{marginTop: '5%'}}
         />

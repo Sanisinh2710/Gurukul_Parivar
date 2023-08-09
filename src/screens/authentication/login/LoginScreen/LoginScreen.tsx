@@ -149,8 +149,8 @@ export const LoginScreen = ({
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
-                    error={errors['mobileNumber']?.message?.toString()}
                     editable={true}
+                    error={errors['mobileNumber']?.message?.toString()}
                     state={{
                       countryCodeSelect,
                       setCountryCodeSelect,
