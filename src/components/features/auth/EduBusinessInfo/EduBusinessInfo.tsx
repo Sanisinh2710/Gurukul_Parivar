@@ -100,25 +100,14 @@ export const EduBusinessInfo = React.memo(
     });
 
     const onSubmit = (data: EduBusinessInfoValidationSchemaType) => {
-      let dataIsUndefined = false;
-
-      Object.keys(data).forEach((item, index) => {
-        if (
-          data[item] === '' ||
-          data[item] === undefined ||
-          data[item] === []
-        ) {
-          dataIsUndefined = true;
-        }
-      });
-
-      if (dataIsUndefined === false) {
+      if (data !== undefined) {
         onSubmitEvent(data, 'next');
-      } else {
-        onSubmitEvent(initialValues, 'skip');
       }
     };
 
+    const leftOnSubmit = () => {
+      onSubmitEvent(initialValues, 'skip');
+    };
     return (
       <>
         <FlatList
@@ -129,7 +118,7 @@ export const EduBusinessInfo = React.memo(
             gap: 15,
             paddingBottom: '40%',
           }}
-          renderItem={({item, index}) => {
+          renderItem={({item}) => {
             return (
               <Controller
                 control={control}
@@ -163,7 +152,7 @@ export const EduBusinessInfo = React.memo(
                 }}>
                 <SecondaryButton
                   title={t('common.SkipNow')}
-                  onPress={onSubmit}
+                  onPress={leftOnSubmit}
                   buttonStyle={{
                     width: '47%',
                   }}

@@ -142,13 +142,19 @@ export const ProfileSignup = ({
     } else {
       if (typecase === 'next') {
         let newFormData = JSON.parse(JSON.stringify(formData));
-
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
-          console.log(newFormData);
 
-          // setFormData(newFormData);
+          setFormData(newFormData);
+          navigation.navigate('LoginSuccess', {type: 'Profile'});
         }
+      }
+
+      if (typecase === 'exit') {
+        let newFormData = JSON.parse(JSON.stringify(formData));
+        newFormData.personalInfo = receivedData;
+        setFormData(newFormData);
+        navigation.navigate('LoginSuccess', {type: 'Profile'});
       }
     }
   };
@@ -165,7 +171,7 @@ export const ProfileSignup = ({
       : formStep === 5
       ? t('gurukulInfo.GurukulHeader')
       : '';
-  }, [formStep]);
+  }, [formStep, t]);
 
   return (
     <ScreenWrapper>

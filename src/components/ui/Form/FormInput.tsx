@@ -35,12 +35,14 @@ export type FormInputProps = {
   rightText?: string;
   rightTextOnPress?: (...event: any[]) => void;
   defaultPhoneCountryCode?: any;
+  editable?: boolean;
 };
 
 export const FormInput = React.memo(
   ({
     type,
     name,
+    editable,
     label,
     icon,
     placeholder,
@@ -75,6 +77,7 @@ export const FormInput = React.memo(
       case 'phone':
         fieldblock = (
           <PhoneDropdownInput
+            editable={editable}
             value={value}
             onChange={onChange}
             onBlur={onBlur}

@@ -110,9 +110,11 @@ export const AdressInfo = React.memo(
           return item;
         });
         onSubmitEvent([...newData], 'next');
-      } else {
-        onSubmitEvent(initialValues.addressInfo, 'skip');
       }
+    };
+
+    const leftOnSubmit = () => {
+      onSubmitEvent(initialValues.addressInfo, 'skip');
     };
 
     return (
@@ -261,7 +263,7 @@ export const AdressInfo = React.memo(
           }}>
           <SecondaryButton
             title={t('common.SkipNow')}
-            onPress={onSubmit}
+            onPress={leftOnSubmit}
             buttonStyle={{
               width: '47%',
             }}

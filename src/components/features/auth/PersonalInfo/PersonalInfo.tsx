@@ -204,7 +204,7 @@ export const PersonalInfo = React.memo(
         <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{gap: 15, paddingBottom: '15%'}}
+          contentContainerStyle={{gap: 15}}
           data={[...PerosnalInfoForm1InputList]}
           renderItem={({item}) => {
             return (
@@ -231,210 +231,203 @@ export const PersonalInfo = React.memo(
               />
             );
           }}
-          ListFooterComponent={() => {
+        />
+        <View style={{gap: 15, marginTop: '5%'}}>
+          {mobilefield.map((mainitem, mainindex) => {
             return (
-              <View style={{gap: 15, top: 10}}>
-                {mobilefield.map((mainitem, mainindex) => {
-                  return (
-                    <View key={mainindex}>
-                      {mainindex >= 1 && (
-                        <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                          onTouchEnd={() => mobileremove(mainindex)}>
-                          <Image
-                            source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        </View>
-                      )}
-                      <Controller
-                        control={control}
+              <View key={mainindex}>
+                {mainindex >= 1 && (
+                  <View
+                    style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                    onTouchEnd={() => mobileremove(mainindex)}>
+                    <Image
+                      source={AllIcons.Cancel}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  </View>
+                )}
+                <Controller
+                  control={control}
+                  name={`mobilenumInfo.${mainindex}.mobilenum`}
+                  render={({field: {onChange, onBlur, value}}) => {
+                    return (
+                      <FormInput
+                        type={'phone'}
                         name={`mobilenumInfo.${mainindex}.mobilenum`}
-                        render={({field: {onChange, onBlur, value}}) => {
-                          return (
-                            <FormInput
-                              type={'phone'}
-                              name={`mobilenumInfo.${mainindex}.mobilenum`}
-                              label={t('personalInfo.MobileNumber')}
-                              placeholder={t('common.EnterMobileNum')}
-                              value={value}
-                              onBlur={onBlur}
-                              onChange={onChange}
-                              error={errors?.mobilenumInfo?.[
-                                mainindex
-                              ]?.mobilenum?.message?.toString()}
-                              state={
-                                mainindex === 0
-                                  ? {
-                                      countryCodeSelect:
-                                        primarycountryCodeSelect,
-                                      setCountryCodeSelect:
-                                        setPrimaryCountryCodeSelect,
-                                    }
-                                  : {
-                                      countryCodeSelect:
-                                        secondarycountryCodeSelect,
-                                      setCountryCodeSelect:
-                                        setSecondaryCountryCodeSelect,
-                                    }
+                        label={t('personalInfo.MobileNumber')}
+                        placeholder={t('common.EnterMobileNum')}
+                        value={value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        error={errors?.mobilenumInfo?.[
+                          mainindex
+                        ]?.mobilenum?.message?.toString()}
+                        state={
+                          mainindex === 0
+                            ? {
+                                countryCodeSelect: primarycountryCodeSelect,
+                                setCountryCodeSelect:
+                                  setPrimaryCountryCodeSelect,
                               }
-                              defaultPhoneCountryCode={
-                                getValues()?.mobilenumInfo?.[mainindex]
-                                  .countryCode
+                            : {
+                                countryCodeSelect: secondarycountryCodeSelect,
+                                setCountryCodeSelect:
+                                  setSecondaryCountryCodeSelect,
                               }
-                              rightText={
-                                mainindex === 0
-                                  ? t('personalInfo.AddSecondaryNumber')
-                                  : ''
-                              }
-                              rightTextOnPress={
-                                mainindex === 0
-                                  ? () => {
-                                      if (mobilefield.length <= 1) {
-                                        mobileappend({
-                                          mobilenum: '',
-                                          secondary: true,
-                                          whatsappNum: false,
-                                          countryCode: '',
-                                        });
+                        }
+                        defaultPhoneCountryCode={
+                          getValues()?.mobilenumInfo?.[mainindex].countryCode
+                        }
+                        rightText={
+                          mainindex === 0
+                            ? t('personalInfo.AddSecondaryNumber')
+                            : ''
+                        }
+                        editable={mainindex === 0 ? false : true}
+                        rightTextOnPress={
+                          mainindex === 0
+                            ? () => {
+                                if (mobilefield.length <= 1) {
+                                  mobileappend({
+                                    mobilenum: '',
+                                    secondary: true,
+                                    whatsappNum: false,
+                                    countryCode: '',
+                                  });
 
-                                        let newArr = JSON.parse(
-                                          JSON.stringify(checkedArray),
-                                        );
-                                        newArr.push(false);
-                                        setCheckedArray(newArr);
-                                      }
-                                    }
-                                  : () => {}
+                                  let newArr = JSON.parse(
+                                    JSON.stringify(checkedArray),
+                                  );
+                                  newArr.push(false);
+                                  setCheckedArray(newArr);
+                                }
                               }
-                            />
-                          );
-                        }}
+                            : () => {}
+                        }
                       />
-                      <View
-                        style={{
-                          marginTop: '5%',
-                        }}>
-                        <View
+                    );
+                  }}
+                />
+                <View
+                  style={{
+                    marginTop: '5%',
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 10,
+                      marginBottom: '5%',
+                    }}>
+                    <View
+                      style={{
+                        height: 20,
+                        width: 20,
+                        alignItems: 'center',
+                        borderRadius: 5,
+                        borderColor: COLORS.primaryColor,
+                        borderWidth: checkedArray[mainindex] ? 0 : 1,
+                      }}
+                      onTouchEnd={() => {
+                        let newArr = JSON.parse(JSON.stringify(checkedArray));
+                        let returnArr = newArr.map(
+                          (item: any, index: number) => {
+                            return mainindex === index ? !item : false;
+                          },
+                        );
+                        setCheckedArray(returnArr);
+                      }}>
+                      {checkedArray[mainindex] ? (
+                        <Image
+                          source={AllIcons.Checkbox}
                           style={{
-                            flexDirection: 'row',
-                            gap: 10,
-                            marginBottom: '5%',
-                          }}>
-                          <View
-                            style={{
-                              height: 20,
-                              width: 20,
-                              alignItems: 'center',
-                              borderRadius: 5,
-                              borderColor: COLORS.primaryColor,
-                              borderWidth: checkedArray[mainindex] ? 0 : 1,
-                            }}
-                            onTouchEnd={() => {
-                              let newArr = JSON.parse(
-                                JSON.stringify(checkedArray),
-                              );
-                              let returnArr = newArr.map(
-                                (item: any, index: number) => {
-                                  return mainindex === index ? !item : false;
-                                },
-                              );
-                              setCheckedArray(returnArr);
-                            }}>
-                            {checkedArray[mainindex] ? (
-                              <Image
-                                source={AllIcons.Checkbox}
-                                style={{
-                                  height: '100%',
-                                  width: '100%',
-                                }}
-                              />
-                            ) : null}
-                          </View>
-                          <Text
-                            style={{
-                              ...CustomFonts.body.medium12,
-                              fontSize: 14,
-                              fontWeight: '400',
-                              lineHeight: 18.9,
-                              color: COLORS.lightModetextColor,
-                            }}>
-                            {t('personalInfo.MobileFieldCheckbox')}
-                          </Text>
-                        </View>
-                      </View>
+                            height: '100%',
+                            width: '100%',
+                          }}
+                        />
+                      ) : null}
                     </View>
-                  );
-                })}
-                {emailfield.map((mainitem, mainindex) => {
-                  return (
-                    <View key={mainindex}>
-                      {mainindex >= 1 && (
-                        <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                          onTouchEnd={() => emailremove(mainindex)}>
-                          <Image
-                            source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        </View>
-                      )}
-                      <Controller
-                        control={control}
-                        name={`emailInfo.${mainindex}.email`}
-                        render={({field: {onChange, onBlur, value}}) => {
-                          return (
-                            <FormInput
-                              type={'email'}
-                              name={`emailInfo.${mainindex}.email`}
-                              label={t('personalInfo.EmailAddress')}
-                              placeholder={t(
-                                'personalInfo.EnterYourEmailPlaceholder',
-                              )}
-                              value={value}
-                              onBlur={onBlur}
-                              onChange={onChange}
-                              error={errors?.emailInfo?.[
-                                mainindex
-                              ]?.email?.message?.toString()}
-                              rightText={
-                                mainindex === 0
-                                  ? t('personalInfo.AddSecondaryEmail')
-                                  : ''
-                              }
-                              rightTextOnPress={
-                                mainindex === 0
-                                  ? () => {
-                                      if (emailfield.length <= 1) {
-                                        emailappend({
-                                          email: '',
-                                          secondary: true,
-                                        });
-                                      }
-                                    }
-                                  : () => {}
-                              }
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  );
-                })}
+                    <Text
+                      style={{
+                        ...CustomFonts.body.medium12,
+                        fontSize: 14,
+                        fontWeight: '400',
+                        lineHeight: 18.9,
+                        color: COLORS.lightModetextColor,
+                      }}>
+                      {t('personalInfo.MobileFieldCheckbox')}
+                    </Text>
+                  </View>
+                </View>
               </View>
             );
-          }}
-        />
+          })}
+          {emailfield.map((mainitem, mainindex) => {
+            return (
+              <View key={mainindex}>
+                {mainindex >= 1 && (
+                  <View
+                    style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                    onTouchEnd={() => emailremove(mainindex)}>
+                    <Image
+                      source={AllIcons.Cancel}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  </View>
+                )}
+                <Controller
+                  control={control}
+                  name={`emailInfo.${mainindex}.email`}
+                  render={({field: {onChange, onBlur, value}}) => {
+                    return (
+                      <FormInput
+                        type={'email'}
+                        name={`emailInfo.${mainindex}.email`}
+                        label={t('personalInfo.EmailAddress')}
+                        placeholder={t(
+                          'personalInfo.EnterYourEmailPlaceholder',
+                        )}
+                        value={value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        error={errors?.emailInfo?.[
+                          mainindex
+                        ]?.email?.message?.toString()}
+                        rightText={
+                          mainindex === 0
+                            ? t('personalInfo.AddSecondaryEmail')
+                            : ''
+                        }
+                        rightTextOnPress={
+                          mainindex === 0
+                            ? () => {
+                                if (emailfield.length <= 1) {
+                                  emailappend({
+                                    email: '',
+                                    secondary: true,
+                                  });
+                                }
+                              }
+                            : () => {}
+                        }
+                      />
+                    );
+                  }}
+                />
+              </View>
+            );
+          })}
+        </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
+            marginTop: '5%',
           }}>
           <SecondaryButton
             title={t('common.Save&Exit')}

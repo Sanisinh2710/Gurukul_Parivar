@@ -19,6 +19,7 @@ type PhoneDropdownInputProps = {
     countryCodeSelect?: string;
     setCountryCodeSelect?: React.Dispatch<React.SetStateAction<string>>;
   };
+  editable?: boolean;
   defaultPhoneCountryCode?: any;
 };
 
@@ -31,6 +32,7 @@ export const PhoneDropdownInput = React.memo(
     setFocused,
     state,
     defaultPhoneCountryCode,
+    editable,
   }: PhoneDropdownInputProps) => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -76,9 +78,13 @@ export const PhoneDropdownInput = React.memo(
     return (
       <>
         <View
-          onTouchEnd={() => {
-            setModelVisible(!modelVisible);
-          }}
+          onTouchEnd={
+            editable
+              ? () => {
+                  setModelVisible(!modelVisible);
+                }
+              : () => {}
+          }
           style={style.phoneDropFirstView}>
           <Text style={style.phoneDropFirstViewText}>
             {state && state.countryCodeSelect
@@ -95,6 +101,7 @@ export const PhoneDropdownInput = React.memo(
         <View style={style.phoneTextView}>
           <TextInput
             value={value}
+            editable={editable}
             keyboardType="phone-pad"
             inputMode="tel"
             onFocus={() => setFocused(true)}
