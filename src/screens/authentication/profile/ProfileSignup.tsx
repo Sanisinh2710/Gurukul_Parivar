@@ -38,7 +38,12 @@ export const ProfileSignup = ({
       dob: '',
       bloodGroup: '',
       mobilenumInfo: [
-        {mobilenum: '', secondary: false, whatsappNum: true, countryCode: ''},
+        {
+          mobilenum: '7485968574',
+          secondary: false,
+          whatsappNum: true,
+          countryCode: '',
+        },
       ],
       emailInfo: [{email: '', secondary: false}],
     },
@@ -150,9 +155,9 @@ export const ProfileSignup = ({
         }
       }
 
-      if (typecase === 'exit') {
+      if (typecase === 'skip') {
         let newFormData = JSON.parse(JSON.stringify(formData));
-        newFormData.personalInfo = receivedData;
+        newFormData.gurukulInfo = receivedData;
         setFormData(newFormData);
         navigation.navigate('LoginSuccess', {type: 'Profile'});
       }

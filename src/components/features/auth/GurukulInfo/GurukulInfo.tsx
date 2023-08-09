@@ -228,8 +228,8 @@ export const GurukulInfo = React.memo(
       onSubmitEvent(newData, 'next');
     };
 
-    const onWithoutExstuSubmit = () => {
-      onSubmitEvent(initialValues, 'exit');
+    const onSubmitWithoutExstudent = () => {
+      onSubmitEvent(initialValues, 'skip');
     };
 
     return (
@@ -415,7 +415,9 @@ export const GurukulInfo = React.memo(
         <PrimaryButton
           title={t('common.Complete')}
           onPress={
-            exstudent === 'Yes' ? handleSubmit(onSubmit) : onWithoutExstuSubmit
+            exstudent === 'Yes'
+              ? handleSubmit(onSubmit)
+              : onSubmitWithoutExstudent
           }
           buttonStyle={{marginTop: '5%'}}
         />
