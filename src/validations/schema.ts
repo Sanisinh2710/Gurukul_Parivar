@@ -109,7 +109,7 @@ export const EduBusinessInfoFormValidationSchema =
         .array()
         .min(1, t('common.EmptyError'))
         .required(t('common.EmptyError')),
-      otherComment: yup.string().trim().required(t('common.EmptyError')),
+      otherComment: yup.string().trim(),
     });
   };
 

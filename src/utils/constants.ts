@@ -388,8 +388,7 @@ export const HomeGrid = (t: any) => {
     },
   ];
 };
-export const EditProfile = (t: any) => {
-  const {i18n} = useTranslation();
+export const EditProfile = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,

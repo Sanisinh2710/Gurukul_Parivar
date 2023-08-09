@@ -13,27 +13,35 @@ import {
   CalendarScreen,
   ChangeLanguage,
   DailyDarshan,
+  DailyDarshanDetail,
+  DailyQuiz,
+  DailyQuizDetail,
   DailyQuotes,
+  DailyUpdateDetail,
   DailyUpdates,
+  EditProfile,
   FrontDeskScreen,
   HomeScreen,
+  LiveSatsang,
   LoginOTP,
   LoginScreen,
   LoginSuccess,
   ProfileScreen,
   ProfileSignup,
+  Status,
 } from '../screens';
 import {
   RootAuthStackParamList,
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
-import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
-import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
-import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
-import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
-import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
-import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
+
+// import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
+// import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
+// import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
+// import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
+// import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
+// import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -87,7 +95,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
+            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}

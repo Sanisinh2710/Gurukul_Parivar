@@ -168,6 +168,25 @@
       "Help": "મદદ જોવે છે",
       "Feedback": "પ્રતિસાદ",
       "Logout": "લૉગઆઉટ"
+    },
+    "DailyDarshan": {
+      "Heading": "દૈનિક દર્શન",
+      "All": "બધા",
+      "Morning": "સવાર",
+      "Evening": "સાંજ"
+    },
+    "DailyDarshanDetail": {
+      "Ghanshyam Maharaj": "ઘનશ્યામ મહારાજ",
+      "Subtext": "આજના દર્શન યાદ રાખવાનો અભ્યાસ કરવો"
+    },
+    "DailyQuote": {
+      "Heading": "દૈનિક સુવિચાર"
+    },
+    "DailyUpdate": {
+      "Heading": "દૈનિક અપડેટ"
+    },
+    "ChangeLanguage": {
+      "Heading": "ભાષા બદલો"
     }
   }
 }

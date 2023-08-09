@@ -40,15 +40,15 @@ export const ProfileScreen = ({
   const {t, i18n} = useTranslation();
 
   const ProfileList = React.useMemo(() => {
-    return EditProfile(t);
-  }, [t]);
+    return EditProfile(t, i18n);
+  }, [t, i18n]);
 
   const style = styles();
   const commonStyle = CommonStyle();
 
-  React.useEffect(() => {
-    const language = i18n.language;
-  }, []);
+  // React.useEffect(() => {
+  //   const language = i18n.language;
+  // }, []);
   const handlePress = (val: string) => {
     switch (val) {
       case 'user':

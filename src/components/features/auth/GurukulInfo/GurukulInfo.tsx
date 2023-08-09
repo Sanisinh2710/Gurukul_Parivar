@@ -367,7 +367,6 @@ export const GurukulInfo = React.memo(
                     <FlatList
                       data={gurukulFormInputList2}
                       scrollEnabled={false}
-                      contentContainerStyle={{paddingBottom: '30%'}}
                       renderItem={arrayItem => {
                         return (
                           <Controller
