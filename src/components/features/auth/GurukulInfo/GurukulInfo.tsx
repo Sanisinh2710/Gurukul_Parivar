@@ -1,16 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {Dimensions, ScrollView, View, Image} from 'react-native';
-import {FormInput, PrimaryButton, RadioLable} from '../../../ui';
+
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {GurukulFormValidationSchemaType} from '../../../../types';
-import {GurukulFormValidationSchema} from '../../../../validations';
-import {GuruKulList} from '../../../../utils';
-import {FlatList} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {
+  GurukulFormValidationSchemaType,
+  SingleGurukulRecType,
+  SupportedFormInputTypes,
+} from '../../../../types';
+import {GuruKulList} from '../../../../utils';
+import {GurukulFormValidationSchema} from '../../../../validations';
+import {FormInput, PrimaryButton, RadioLable} from '../../../ui';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
@@ -18,6 +20,17 @@ type GurukulInfoProps = {
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
   ) => void;
+};
+
+type GurukulInfoListType = {
+  name: keyof SingleGurukulRecType;
+  lable: string;
+  placeholder: string;
+  type: SupportedFormInputTypes;
+  menuList?: any;
+  customProps?: object;
+  rightText?: string;
+  rightTextOnPress?: (...event: any[]) => void;
 };
 
 export const GurukulInfo = React.memo(
@@ -32,7 +45,6 @@ export const GurukulInfo = React.memo(
       control,
       handleSubmit,
       watch,
-      getValues,
       formState: {errors},
     } = useForm<GurukulFormValidationSchemaType>({
       defaultValues: initialValues,
@@ -46,21 +58,11 @@ export const GurukulInfo = React.memo(
     });
 
     const gurukulFormInputList1: {
-      mainType?: any;
-      name?: string;
+      name?: keyof SingleGurukulRecType;
       lable?: string;
       placeholder?: string;
-      type?:
-        | 'number'
-        | 'select'
-        | 'text'
-        | 'phone'
-        | 'photo'
-        | 'radio'
-        | 'textarea'
-        | 'date'
-        | 'dob';
-
+      type?: SupportedFormInputTypes;
+      mainType?: GurukulInfoListType[];
       menuList?: any;
       customProps?: object;
       rightText?: string;
@@ -165,20 +167,10 @@ export const GurukulInfo = React.memo(
 
     const gurukulFormInputList2: {
       mainType?: any;
-      name?: string;
+      name?: keyof SingleGurukulRecType;
       lable?: string;
       placeholder?: string;
-      type?:
-        | 'number'
-        | 'select'
-        | 'text'
-        | 'phone'
-        | 'photo'
-        | 'radio'
-        | 'textarea'
-        | 'date'
-        | 'dob';
-
+      type?: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
       rightText?: string;
@@ -213,7 +205,7 @@ export const GurukulInfo = React.memo(
       const newData = data;
 
       newData.exGurukulStudent = exstudent;
-      newData.gurukulData = newData?.gurukulData?.map((item, index) => {
+      newData.gurukulData = newData?.gurukulData?.map(item => {
         if (item.RelativeOfSaint === 'No') {
           item.FromFamily = '';
           item.SaintName = '';
@@ -280,7 +272,7 @@ export const GurukulInfo = React.memo(
                     }}
                     showsVerticalScrollIndicator={false}
                     data={gurukulFormInputList1}
-                    renderItem={({item, index}) => (
+                    renderItem={({item}) => (
                       <View>
                         {Array.isArray(item.mainType) ? (
                           <>

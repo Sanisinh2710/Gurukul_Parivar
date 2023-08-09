@@ -34,25 +34,24 @@ export type AddressFormValidationSchemaType = {
   addressInfo: UserAddress[];
 };
 
+export type SingleGurukulRecType = {
+  gurukulBranch: string;
+  attendGurukul: string;
+  stdFrom: string;
+  stdTo: string;
+  sscYear: string;
+  hscYear: string;
+  knowSaintPersonally: string;
+  knowHaribhakt: string;
+  RelativeOfSaint: string;
+  FromFamily?: string | undefined;
+  SaintName?: string | undefined;
+  YourRelation?: string | undefined;
+};
+
 export type GurukulFormValidationSchemaType = {
   [key: string]: any;
-  gurukulData:
-    | {
-        [key: string]: any;
-        gurukulBranch: string;
-        attendGurukul: string;
-        stdFrom: string;
-        stdTo: string;
-        sscYear: string;
-        hscYear: string;
-        knowSaintPersonally: string;
-        knowHaribhakt: string;
-        RelativeOfSaint: string;
-        FromFamily?: string | undefined;
-        SaintName?: string | undefined;
-        YourRelation?: string | undefined;
-      }[]
-    | undefined;
+  gurukulData: SingleGurukulRecType[] | undefined;
 };
 
 export type InitialThemeType = {theme: Theme; themeMode: string};

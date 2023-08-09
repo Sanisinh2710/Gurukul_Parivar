@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
-import {COLORS, CustomFonts} from '../../../../utils';
+import { StyleSheet } from 'react-native';
+import { useAppSelector } from '../../../../redux/hooks';
+import { COLORS, CustomFonts } from '../../../../utils';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -80,7 +80,7 @@ export const styles = () => {
       marginTop: 24,
     },
     NextBtn: {
-      width: 335,
+      width: '100%',
       marginTop: 50,
       alignSelf: 'center',
     },
