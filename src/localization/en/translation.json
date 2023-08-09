@@ -145,7 +145,9 @@
       "DailyDarshan": "Daily Darshan",
       "DailyQuotes": "Daily Quotes",
       "DailyUpdate": "Daily Update",
-      "Calendar": "Calendar"
+      "DailyProgram": "Daily Program",
+      "Calendar": "Calendar",
+      "LiveSatsang": "Live Satsang"
     },
     "frontDesk": {
       "Heading": "Front Desk",
@@ -153,7 +155,8 @@
       "Speech": "Special Speech",
       "Darshan": "Gurukul Darshan",
       "Event": "Gurukul Events",
-      "Quiz": "Daily Quiz"
+      "Quiz": "Daily Quiz",
+      "Donation": "Donation"
     },
     "myProfile": {
       "Heading": "My Profile",
@@ -165,6 +168,25 @@
       "Help": "Need Help",
       "Feedback": "Feedback",
       "Logout": "Logout"
+    },
+    "DailyDarshan": {
+      "Heading": "Daily Darshan",
+      "All": "All",
+      "Morning": "Morning",
+      "Evening": "Evening"
+    },
+    "DailyDarshanDetail": {
+      "Ghanshyam Maharaj": "Ghanshyam Maharaj",
+      "Subtext": "Practice remembering today's darshan"
+    },
+    "DailyQuote": {
+      "Heading": "Daily Quotes"
+    },
+    "DailyUpdate": {
+      "Heading": "Daily Updates"
+    },
+    "ChangeLanguage": {
+      "Heading": "Change Language"
     }
   }
 }

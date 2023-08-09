@@ -25,8 +25,8 @@ export const styles = () => {
     images: {
       justifyContent: 'flex-end',
       borderRadius: 12,
-      height: '33%',
-      width: '45%',
+      height: 169,
+      width: '47%',
       marginTop: 24,
     },
     textOverImage: {
@@ -41,9 +41,11 @@ export const styles = () => {
       textAlign: 'center',
     },
     gridContainer: {
-      flexDirection: 'row',
+      paddingHorizontal: 10,
+      height: '100%',
       flexWrap: 'wrap',
-      justifyContent: 'space-around',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       marginTop: 14,
     },
 

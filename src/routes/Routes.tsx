@@ -11,6 +11,7 @@ import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {
   CalendarScreen,
+  ChangeLanguage,
   DailyDarshan,
   DailyQuotes,
   DailyUpdates,
@@ -27,6 +28,12 @@ import {
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
+import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
+import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
+import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
+import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
+import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
+import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -80,15 +87,35 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
+            {/* <NativeStack.Screen name="Auth" component={AuthStackNavigator} /> */}
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}
             />
             <NativeStack.Screen name="dailyDarshan" component={DailyDarshan} />
+            <NativeStack.Screen
+              name="dailyDarshanDetail"
+              component={DailyDarshanDetail}
+            />
             <NativeStack.Screen name="dailyUpdates" component={DailyUpdates} />
+            <NativeStack.Screen
+              name="dailyUpdateDetail"
+              component={DailyUpdateDetail}
+            />
             <NativeStack.Screen name="dailyQuotes" component={DailyQuotes} />
             <NativeStack.Screen name="calendar" component={CalendarScreen} />
+            <NativeStack.Screen name="liveSatsang" component={LiveSatsang} />
+            <NativeStack.Screen
+              name="changeLanguage"
+              component={ChangeLanguage}
+            />
+            <NativeStack.Screen name="editProfile" component={EditProfile} />
+            <NativeStack.Screen name="status" component={Status} />
+            <NativeStack.Screen name="dailyQuiz" component={DailyQuiz} />
+            <NativeStack.Screen
+              name="dailyQuizDetail"
+              component={DailyQuizDetail}
+            />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

@@ -5,9 +5,17 @@ export type RootStackParamList = {
   Auth: undefined;
   BottomNavBar: undefined;
   dailyDarshan: undefined;
+  dailyDarshanDetail: {image: any; date: string};
   dailyQuotes: undefined;
   dailyUpdates: undefined;
+  dailyUpdateDetail: {title: string};
   calendar: undefined;
+  liveSatsang: undefined;
+  changeLanguage: undefined;
+  editProfile: undefined;
+  status: undefined;
+  dailyQuiz: undefined;
+  dailyQuizDetail: undefined;
 };
 
 export type RootBottomTabParamList = {

@@ -35,6 +35,7 @@ export const Calendar = ({
   const [currentMonth, setCurrentMonth] = React.useState(
     selectedParentDate.getMonth() || new Date().getMonth(),
   );
+
   const [currentYear, setCurrentYear] = React.useState(
     selectedParentDate.getFullYear() || new Date().getFullYear(),
   );
@@ -260,13 +261,14 @@ export const Calendar = ({
               color: COLORS.primaryRippleColor,
             }}
             style={{
-              position: 'absolute',
+              // position: 'absolute',
               right: 10,
-              bottom: 5,
+              bottom: 0,
               width: '23%',
               height: '10%',
               backgroundColor: COLORS.primaryColor,
               alignItems: 'center',
+              alignSelf: 'flex-end',
               justifyContent: 'center',
               borderRadius: 10,
             }}>
@@ -332,7 +334,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: COLORS.lightModeBackgroundColor,
     borderRadius: 13,
-    height: '55%',
   },
   header: {
     flexDirection: 'row',
