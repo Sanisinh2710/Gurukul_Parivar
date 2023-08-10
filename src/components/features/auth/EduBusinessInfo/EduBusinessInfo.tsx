@@ -2,13 +2,14 @@ import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {FlatList, View} from 'react-native';
+import {FlatList, ScrollView, View} from 'react-native';
 import {
   EduBusinessInfoValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {styles} from './style';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
@@ -21,6 +22,8 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+
+    const style = styles();
 
     const EduBusinessInfoFormInputList: {
       name: keyof EduBusinessInfoValidationSchemaType;
@@ -109,15 +112,15 @@ export const EduBusinessInfo = React.memo(
       onSubmitEvent(initialValues, 'skip');
     };
     return (
-      <>
+      <ScrollView
+        contentContainerStyle={style.scrollViewContainer}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <FlatList
           data={[...EduBusinessInfoFormInputList]}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            marginTop: 19,
-            gap: 15,
-            paddingBottom: '40%',
-          }}
+          contentContainerStyle={style.flatListContainer}
+          scrollEnabled={false}
           renderItem={({item}) => {
             return (
               <Controller
@@ -143,30 +146,20 @@ export const EduBusinessInfo = React.memo(
               />
             );
           }}
-          ListFooterComponent={() => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <SecondaryButton
-                  title={t('common.SkipNow')}
-                  onPress={leftOnSubmit}
-                  buttonStyle={{
-                    width: '47%',
-                  }}
-                />
-                <PrimaryButton
-                  title={t('common.Save&Next')}
-                  onPress={handleSubmit(onSubmit)}
-                  buttonStyle={{width: '47%'}}
-                />
-              </View>
-            );
-          }}
         />
-      </>
+        <View style={style.submitButtonView}>
+          <SecondaryButton
+            title={t('common.SkipNow')}
+            onPress={leftOnSubmit}
+            buttonStyle={style.submitButtonStyle}
+          />
+          <PrimaryButton
+            title={t('common.Save&Next')}
+            onPress={handleSubmit(onSubmit)}
+            buttonStyle={style.submitButtonStyle}
+          />
+        </View>
+      </ScrollView>
     );
   },
 );

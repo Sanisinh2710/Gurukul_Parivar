@@ -80,7 +80,7 @@ export type EduBusinessInfoValidationSchemaType = {
   occupation: string;
   occupationType: string;
   skills: string[];
-  otherComment: string;
+  otherComment: string | undefined;
 };
 
 export type SupportedFormInputTypes =

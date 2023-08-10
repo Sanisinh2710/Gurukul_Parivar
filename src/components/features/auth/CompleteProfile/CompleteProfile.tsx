@@ -65,7 +65,7 @@ export const CompleteYourProfile = React.memo(
     };
 
     return (
-      <View style={{height: '100%'}}>
+      <View style={style.mainView}>
         <ScrollView>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
@@ -111,7 +111,7 @@ export const CompleteYourProfile = React.memo(
               name={completeProfileInputList.gurukulName.name}
               render={({field: {onBlur, onChange, value}}) => {
                 return (
-                  <View style={{marginTop: 24}}>
+                  <View style={style.formInputView}>
                     <FormInput
                       menuList={[...GuruKulList]}
                       type={completeProfileInputList.gurukulName.type}
@@ -135,7 +135,7 @@ export const CompleteYourProfile = React.memo(
         </ScrollView>
 
         {/* Submit button.................................. */}
-        <View style={[style.NextBtn, {position: 'absolute', bottom: 100}]}>
+        <View style={[style.NextBtn]}>
           <PrimaryButton
             title={t('uploadPhoto.NextBtn')}
             onPress={handleSubmit(onSubmit)}

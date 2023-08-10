@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -11,6 +10,7 @@ import {GurukulFormValidationSchema} from '../../../../validations';
 import {GuruKulList} from '../../../../utils';
 import {FlatList} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {styles} from './style';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
@@ -23,6 +23,7 @@ type GurukulInfoProps = {
 export const GurukulInfo = React.memo(
   ({initialValues, onSubmitEvent}: GurukulInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+    const style = styles();
 
     const [exstudent, setExstudent] = React.useState(
       initialValues.exGurukulStudent || '',
@@ -234,7 +235,7 @@ export const GurukulInfo = React.memo(
 
     return (
       <ScrollView
-        contentContainerStyle={{paddingTop: '3%', paddingBottom: '30%'}}
+        contentContainerStyle={style.scrollViewContainer}
         showsVerticalScrollIndicator={false}>
         <RadioLable
           heading={t('gurukulInfo.ExGurukulLbl')}
@@ -249,35 +250,21 @@ export const GurukulInfo = React.memo(
             {fields.map((mainItem, mainindex) => {
               return (
                 <View key={mainindex}>
+                  {mainindex >= 1 && (
+                    <View
+                      style={[
+                        style.removeBtnView,
+                        watch().gurukulData?.at(mainindex)?.RelativeOfSaint !==
+                          'Yes' && {marginTop: '10%'},
+                      ]}
+                      onTouchEnd={() => remove(mainindex)}>
+                      <Image source={AllIcons.Cancel} style={style.removeImg} />
+                    </View>
+                  )}
                   <FlatList
                     scrollEnabled={false}
                     key={mainItem.id}
-                    contentContainerStyle={{
-                      gap: 16,
-                      paddingTop: '4%',
-                      paddingBottom: '2%',
-                    }}
-                    ListHeaderComponent={() => {
-                      return (
-                        mainindex >= 1 && (
-                          <View
-                            style={{
-                              height: 30,
-                              width: 30,
-                              alignSelf: 'flex-end',
-                            }}
-                            onTouchEnd={() => remove(mainindex)}>
-                            <Image
-                              source={AllIcons.Cancel}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          </View>
-                        )
-                      );
-                    }}
+                    contentContainerStyle={style.flatListContainer}
                     showsVerticalScrollIndicator={false}
                     data={gurukulFormInputList1}
                     renderItem={({item, index}) => (
@@ -287,15 +274,10 @@ export const GurukulInfo = React.memo(
                             <FlatList
                               data={item.mainType}
                               numColumns={2}
-                              columnWrapperStyle={{
-                                justifyContent: 'space-between',
-                              }}
+                              columnWrapperStyle={style.flatListColumnWrap}
                               renderItem={arrayItem => {
                                 return (
-                                  <View
-                                    style={{
-                                      width: '48%',
-                                    }}>
+                                  <View style={style.arrayTypeFlatListView}>
                                     <Controller
                                       control={control}
                                       name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
@@ -375,7 +357,7 @@ export const GurukulInfo = React.memo(
                     <FlatList
                       data={gurukulFormInputList2}
                       scrollEnabled={false}
-                      contentContainerStyle={{paddingBottom: '30%'}}
+                      contentContainerStyle={style.relativeFlatListContainer}
                       renderItem={arrayItem => {
                         return (
                           <Controller
@@ -419,7 +401,7 @@ export const GurukulInfo = React.memo(
               ? handleSubmit(onSubmit)
               : onSubmitWithoutExstudent
           }
-          buttonStyle={{marginTop: '5%'}}
+          buttonStyle={style.submitBtn}
         />
       </ScrollView>
     );
