@@ -1,6 +1,13 @@
 import React from 'react';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  Dimensions,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {useAppSelector} from '../../../redux/hooks';
 import {Theme} from '../../../types';
 import {COLORS, CustomFonts} from '../../../utils';
@@ -65,11 +72,23 @@ export const ScreenHeader = React.memo(
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <MaterialCommunityIcon
-                  name="arrow-left"
-                  size={25}
-                  color={COLORS.black}
-                />
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={AllIcons.ArrowSimpleLeft}
+                    style={{
+                      flex: 1,
+                      width: '100%',
+                      height: '100%',
+                      resizeMode: 'contain',
+                    }}
+                  />
+                </View>
               </View>
             )}
             {showLeft && headerLeft && <View>{headerLeft}</View>}

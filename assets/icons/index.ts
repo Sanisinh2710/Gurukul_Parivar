@@ -36,4 +36,8 @@ export const AllIcons = {
   SetWallPaper: require('../icons/SetWallpaper.png'),
   Filter: require('../icons/Filter.png'),
   Donation: require('../icons/Donation.png'),
+  ChevronArrowDown: require('../icons/ChevronArrowDown.png'),
+  RoundCheckedCircle: require('../icons/RoundCheckedCircle.png'),
+  ArrowSimpleLeft: require('../icons/ArrowSimpleLeft.png'),
+  OTPEdit: require('../icons/OTPEdit.png'),
 };

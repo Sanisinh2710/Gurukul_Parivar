@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {Text, TextInput, View} from 'react-native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image, Text, TextInput, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {useAppSelector} from '../../../redux/hooks';
 import {AllCountryCodes, countries} from '../../../utils';
 import {DropDownModel} from '../Modal';
@@ -91,11 +91,22 @@ export const PhoneDropdownInput = React.memo(
               ? state?.countryCodeSelect
               : localval}
           </Text>
-          <MaterialCommunityIcon
-            name={modelVisible ? 'chevron-up' : 'chevron-down'}
-            size={20}
-            color={theme.textColor}
-          />
+          <View style={style.chevronArrowView}>
+            <Image
+              source={AllIcons.ChevronArrowDown}
+              style={[
+                style.chevronArrow,
+                modelVisible && {
+                  transform: [
+                    {
+                      rotate: '180deg',
+                    },
+                  ],
+                },
+              ]}
+            />
+          </View>
+
           <View style={style.phoneDropFirstViewRightBorder} />
         </View>
         <View style={style.phoneTextView}>

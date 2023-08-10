@@ -3,7 +3,8 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Modal, Text, TextInput, View} from 'react-native';
 
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {COLORS, CustomFonts} from '../../../utils';
 import {ModalStyle} from './style';
 
@@ -141,11 +142,12 @@ export const DropDownModel = React.memo(
                   )}
                   {wantSearchBar && (
                     <View style={style.modelSearchView}>
-                      <MaterialCommunityIcon
-                        name="magnify"
-                        size={25}
-                        color={COLORS.lightModetextColor}
-                      />
+                      <View style={style.iconView}>
+                        <Image
+                          source={AllIcons.Search}
+                          style={style.iconStyle}
+                        />
+                      </View>
                       <TextInput
                         value={searchvalue}
                         placeholder={t('common.Search')}
@@ -218,11 +220,12 @@ export const DropDownModel = React.memo(
                             (type === 'phone' &&
                               item.includes(selectedItem))) &&
                           type !== 'radio' ? (
-                            <MaterialCommunityIcon
-                              name="check-circle-outline"
-                              size={25}
-                              color={'red'}
-                            />
+                            <View style={style.iconView}>
+                              <Image
+                                source={AllIcons.RoundCheckedCircle}
+                                style={style.iconStyle}
+                              />
+                            </View>
                           ) : (
                             type === 'radio' &&
                             (selectedItem?.includes(item) ||

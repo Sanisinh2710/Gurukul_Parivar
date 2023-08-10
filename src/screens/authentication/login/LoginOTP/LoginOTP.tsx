@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {Pressable, Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import {Image, Pressable, Text, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   OtpComponent,
@@ -109,7 +109,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
               </Text>
             )}
             <View style={style.editIconStyle}>
-              <Icon name="edit-3" size={14} />
+              <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
             </View>
           </View>
 
