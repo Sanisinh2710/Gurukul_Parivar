@@ -78,10 +78,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           downloadImage();
           setModalVisible(!modalVisible);
-          Toast.show('Storage Permission Required', 2);
         } else {
-          // downloadImage();
-          // setModalVisible(!modalVisible);
           Toast.show('Storage Permission Required', 2);
         }
       } catch (err) {}
