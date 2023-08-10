@@ -10,12 +10,13 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {getOldUsers, getProfileToken, setAuthToken} from '../../../../services';
+import {isProfilingDone, setAuthToken} from '../../../../services';
 import {LoginOtpScreenProps} from '../../../../types';
 import {styles} from './styles';
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const mobileNum = route.params?.mobileNum;
+  const countryCode = route.params?.countryCode;
   const style = styles();
   const CommonStyles = CommonStyle();
   const {t, i18n} = useTranslation();
@@ -38,25 +39,19 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       return;
     } else {
       setOtp([num.join('')]);
-      const resType = setAuthToken(mobileNum);
+      const resType = setAuthToken({mobileNum, countryCode});
       if (resType === 'SUCCESS') {
-        const allOldUsers = getOldUsers();
+        const isProfileSignupDone = isProfilingDone(mobileNum);
 
-        if (allOldUsers?.resType === 'SUCCESS') {
-          if (allOldUsers.data.includes(mobileNum)) {
-            const prof_token = getProfileToken();
-            if (prof_token === 'SUCCESS') {
-              navigation.replace('BottomNavBar');
-            } else {
-              navigation.replace('LoginSuccess', {type: 'Login'});
-            }
-          } else {
-            navigation.replace('LoginSuccess', {type: 'Login'});
-          }
+        if (isProfileSignupDone === 'SUCCESS') {
+          navigation.replace('BottomNavBar');
+        } else {
+          navigation.replace('LoginSuccess', {type: 'Login'});
         }
       }
     }
   };
+
   React.useEffect(() => {
     for (let i = 0; i < num.length; i++) {
       if (num[i] !== '' || num[i] === undefined) {
@@ -108,7 +103,11 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             {t('otpScreen.OtpContainerText')}
           </Text>
           <View style={style.phoneEditContainer}>
-            <Text style={style.phoneNumber}>{mobileNum}</Text>
+            {countryCode && mobileNum && (
+              <Text style={style.phoneNumber}>
+                {countryCode.split('(')[0].toString() + mobileNum}
+              </Text>
+            )}
             <View style={style.editIconStyle}>
               <Icon name="edit-3" size={14} />
             </View>

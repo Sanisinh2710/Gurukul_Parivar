@@ -2,7 +2,6 @@ import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
 import {Theme} from '../types';
 import {COLORS} from './colors';
-import {useTranslation} from 'react-i18next';
 
 export const LightTheme: Theme = {
   isDark: false,

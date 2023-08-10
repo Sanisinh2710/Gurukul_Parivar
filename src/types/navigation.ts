@@ -26,7 +26,7 @@ export type RootBottomTabParamList = {
 
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
-  MobileLoginOTP: {mobileNum: string} | undefined;
+  MobileLoginOTP: {mobileNum: string; countryCode: string} | undefined;
   LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
   ProfileSignup: undefined;
 };

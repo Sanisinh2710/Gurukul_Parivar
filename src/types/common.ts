@@ -11,6 +11,7 @@ export type Theme = {
 };
 
 export type LoginFormValidationSchemaType = {
+  [key: string]: string;
   mobileNumber: string;
 };
 

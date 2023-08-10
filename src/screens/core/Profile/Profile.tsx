@@ -16,7 +16,7 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
-import {removeAuthToken} from '../../../services';
+import {removeAuthToken, removeProfToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
@@ -335,9 +335,12 @@ export const ProfileScreen = ({
                     modalType === 'logout'
                       ? () => {
                           const resRemoveAuthToken = removeAuthToken();
-                          // const resRemoveProfToken = removeProfToken();
+                          const resRemoveProfToken = removeProfToken();
 
-                          if (resRemoveAuthToken === 'SUCCESS') {
+                          if (
+                            resRemoveAuthToken === 'SUCCESS' &&
+                            resRemoveProfToken === 'SUCCESS'
+                          ) {
                             navigation.replace('Auth');
                           }
                         }

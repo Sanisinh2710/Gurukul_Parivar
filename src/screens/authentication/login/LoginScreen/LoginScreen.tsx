@@ -105,14 +105,18 @@ export const LoginScreen = ({
   }, [watch()]);
 
   const onSubmit = (data: LoginFormValidationSchemaType) => {
-    data.mobileNumber =
-      countryCodeSelect.split('(')[0].toString() + data.mobileNumber.toString();
+    // data.countryCode = countryCodeSelect.split('(')[0].toString();
+    data.countryCode = countryCodeSelect;
+    data.mobileNumber = data.mobileNumber.toString();
 
     console.log(data);
 
     // Do something with mobile number and than navigate to OTP Screen;
 
-    navigation.navigate('MobileLoginOTP', {mobileNum: data.mobileNumber});
+    navigation.navigate('MobileLoginOTP', {
+      mobileNum: data.mobileNumber,
+      countryCode: data.countryCode,
+    });
   };
 
   if (isLoading) {

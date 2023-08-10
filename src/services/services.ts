@@ -19,19 +19,20 @@ export const isSignedIn = () => {
   return isAuthenticated;
 };
 
-export const setOldUsers = (mobileNum: any) => {
+export const setUserActivity = (mobileNum: any) => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {
-    const allUsers = storage.getString('old_users');
+    const allUsers = storage.getString('userActivity');
 
     if (allUsers) {
       const newAllUsers = JSON.parse(allUsers);
-      newAllUsers.push(mobileNum);
-      storage.set('old_users', JSON.stringify(newAllUsers));
+      newAllUsers.push({mobileNum: mobileNum, profileDone: false});
+
+      storage.set('userActivity', JSON.stringify(newAllUsers));
     } else {
-      const newAllUsers = [mobileNum];
-      storage.set('old_users', JSON.stringify(newAllUsers));
+      const newAllUsers = [{mobileNum: mobileNum, profileDone: false}];
+      storage.set('userActivity', JSON.stringify(newAllUsers));
     }
     resType = 'SUCCESS';
   } catch (error) {
@@ -41,30 +42,12 @@ export const setOldUsers = (mobileNum: any) => {
   return resType;
 };
 
-export const getOldUsers = () => {
-  let resType: 'SUCCESS' | 'ERROR';
-
-  let returnData;
-
-  try {
-    const allUsers = storage.getString('old_users');
-    if (allUsers) {
-      returnData = JSON.parse(allUsers);
-      resType = 'SUCCESS';
-      return {resType, data: returnData};
-    }
-  } catch (error) {
-    resType = 'ERROR';
-    return {resType, data: returnData};
-  }
-};
-
-export const setAuthToken = (mobileNum: any) => {
+export const setAuthToken = (loginData: any) => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {
-    storage.set('auth_token', JSON.stringify(mobileNum));
-    const resSetUserType = setOldUsers(mobileNum);
+    storage.set('auth_token', JSON.stringify(loginData));
+    const resSetUserType = setUserActivity(loginData.mobileNum);
     if (resSetUserType === 'SUCCESS') {
       resType = 'SUCCESS';
     } else {
@@ -77,11 +60,105 @@ export const setAuthToken = (mobileNum: any) => {
   return resType;
 };
 
-export const setProfileToken = (newFormData: any) => {
+export const getAuthToken = () => {
+  let resType: 'SUCCESS' | 'ERROR';
+  let loginData: {mobileNum: string; countryCode: string} = {
+    mobileNum: '',
+    countryCode: '',
+  };
+  try {
+    const auth_token = storage.getString('auth_token');
+    if (auth_token) {
+      const newAuthToken = JSON.parse(auth_token);
+      loginData.mobileNum = newAuthToken.mobileNum;
+      loginData.countryCode = newAuthToken.countryCode;
+      resType = 'SUCCESS';
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return {resType, loginData};
+};
+
+export const removeAuthToken = () => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {
-    storage.set('profile_token', JSON.stringify(newFormData));
+    storage.delete('auth_token');
+    resType = 'SUCCESS';
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return resType;
+};
+
+export const isProfilingDone = (mobileNum: any) => {
+  let resType: 'SUCCESS' | 'ERROR';
+
+  try {
+    const allUsers = storage.getString('userActivity');
+    if (allUsers) {
+      const newAllUsers = JSON.parse(allUsers);
+
+      const isprofiledone = newAllUsers.find(
+        (item: any, index: any) => item.mobileNum === mobileNum,
+      ).profileDone;
+
+      if (isprofiledone) {
+        resType = 'SUCCESS';
+      } else {
+        resType = 'ERROR';
+      }
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return resType;
+};
+
+export const setUserProfilingDone = (mobileNum: any) => {
+  let resType: 'SUCCESS' | 'ERROR';
+
+  try {
+    const allUsers = storage.getString('userActivity');
+    if (allUsers) {
+      const newAllUsers = JSON.parse(allUsers);
+
+      const allNewUsersWithUpdatedstatus = newAllUsers.map(
+        (item: any, index: any) => {
+          if (item.mobileNum === mobileNum) {
+            item.profileDone = true;
+          }
+          return item;
+        },
+      );
+
+      storage.set('userActivity', JSON.stringify(allNewUsersWithUpdatedstatus));
+      const isSetProfToken = setProfileToken();
+      if (isSetProfToken === 'SUCCESS') {
+        resType = 'SUCCESS';
+      } else {
+        resType = 'ERROR';
+      }
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+
+  return resType;
+};
+
+export const setProfileToken = () => {
+  let resType: 'SUCCESS' | 'ERROR';
+
+  try {
+    storage.set('profile_token', JSON.stringify(true));
     resType = 'SUCCESS';
   } catch (error) {
     resType = 'ERROR';
@@ -104,18 +181,6 @@ export const getProfileToken = () => {
     resType = 'ERROR';
   }
 
-  return resType;
-};
-
-export const removeAuthToken = () => {
-  let resType: 'SUCCESS' | 'ERROR';
-
-  try {
-    storage.delete('auth_token');
-    resType = 'SUCCESS';
-  } catch (error) {
-    resType = 'ERROR';
-  }
   return resType;
 };
 

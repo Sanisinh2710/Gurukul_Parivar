@@ -13,7 +13,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {setProfileToken} from '../../../services';
+import {getAuthToken, setUserProfilingDone} from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
 
@@ -41,10 +41,10 @@ export const ProfileSignup = ({
       bloodGroup: '',
       mobilenumInfo: [
         {
-          mobilenum: '6355157390',
+          mobilenum: getAuthToken().loginData.mobileNum,
           secondary: false,
           whatsappNum: true,
-          countryCode: '',
+          countryCode: getAuthToken().loginData.countryCode,
         },
       ],
       emailInfo: [{email: '', secondary: false}],
@@ -114,7 +114,9 @@ export const ProfileSignup = ({
 
         newFormData.personalInfo = receivedData;
         setFormData(newFormData);
-        const resType = setProfileToken(newFormData);
+        const resType = setUserProfilingDone(
+          newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+        );
 
         if (resType === 'SUCCESS') {
           navigation.navigate('LoginSuccess', {type: 'Profile'});
@@ -174,7 +176,9 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          const resType = setProfileToken(newFormData);
+          const resType = setUserProfilingDone(
+            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+          );
 
           if (resType === 'SUCCESS') {
             navigation.navigate('LoginSuccess', {type: 'Profile'});
@@ -187,7 +191,9 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          const resType = setProfileToken(newFormData);
+          const resType = setUserProfilingDone(
+            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+          );
 
           if (resType === 'SUCCESS') {
             navigation.navigate('LoginSuccess', {type: 'Profile'});
