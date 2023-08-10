@@ -15,6 +15,7 @@ export type RootStackParamList = {
   status: undefined;
   dailyQuiz: undefined;
   dailyQuizDetail: undefined;
+  donation: undefined;
 };
 
 export type RootBottomTabParamList = {

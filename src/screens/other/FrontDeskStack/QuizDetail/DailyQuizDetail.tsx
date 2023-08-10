@@ -14,6 +14,7 @@ import {AllIcons} from '../../../../../assets/icons';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Progress from 'react-native-progress';
+import {useTranslation} from 'react-i18next';
 
 export const DailyQuizDetail = ({
   navigation,
@@ -21,14 +22,12 @@ export const DailyQuizDetail = ({
   const style = styles();
   const [answer, setAnswer] = React.useState<Array<Object>>([]);
   const [modelVisible, setModelVisible] = React.useState(false);
-
-  const [selectedOptions, setSelectedOptions] = React.useState<Array<number>>(
-    [],
-  );
+  const [selectedOptions, setSelectedOptions] = React.useState<number[]>([]);
   const [correctAnswer, setCorrectAnswer] = React.useState<Array<number>>([]);
   const commonstyle = CommonStyle();
+  const {t} = useTranslation();
+
   const Marks = Math.floor((correctAnswer.length / Quiz.length) * 100);
-  console.log(Marks / 100);
   const handleAnswer = (
     options: string,
     Questionnumber: number,
@@ -46,7 +45,6 @@ export const DailyQuizDetail = ({
     } else {
       const correct = [...correctAnswer];
       correct.splice(Questionnumber, 1);
-      console.log(correct, '::::');
       setCorrectAnswer(correct);
     }
 
@@ -74,8 +72,6 @@ export const DailyQuizDetail = ({
       setAnswer(newData);
     }
   };
-
-  console.log(correctAnswer, 'correct Answer');
 
   return (
     <ScreenWrapper>
@@ -176,7 +172,7 @@ export const DailyQuizDetail = ({
         />
         <View style={{paddingBottom: '5%', marginTop: '5%'}}>
           <PrimaryButton
-            title="Submit"
+            title={t('DailyQuiz.SubmitBtn')}
             onPress={() => {
               setModelVisible(!modelVisible);
             }}
@@ -213,7 +209,7 @@ export const DailyQuizDetail = ({
                     color: 'black',
                     textAlign: 'center',
                   }}>
-                  Congratulations
+                  {t('ResultModel.Title')}
                 </Text>
                 <Text
                   style={{
@@ -223,8 +219,7 @@ export const DailyQuizDetail = ({
                     color: 'rgba(23,23,23,0.5)',
                     textAlign: 'center',
                   }}>
-                  You've completed the quiz with flying colors.{'\n'} "Great
-                  Job! Keep it Up!"
+                  {t('ResultModel.Content')}
                 </Text>
               </View>
             </View>

@@ -71,14 +71,7 @@ export const DailyQuotes = ({
             height: Dimensions.get('window').height * 0.7,
             justifyContent: 'center',
           }}>
-          <Image
-            source={AllImages.DailyQuote}
-            style={{
-              height: Dimensions.get('window').height * 0.58,
-              width: '100%',
-              borderRadius: 10,
-            }}
-          />
+          <Image source={AllImages.DailyQuote} style={style.image} />
         </View>
 
         <ShareDownload wallpaper={false} />

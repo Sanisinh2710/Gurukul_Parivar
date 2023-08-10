@@ -431,10 +431,10 @@ export const EditProfile = (t: any) => {
 };
 
 export const MyProfileData = (t: any) => [
-  {title: 'Personal Info', icon: AllIcons.RightArrow},
-  {title: 'Address Info', icon: AllIcons.RightArrow},
-  {title: 'Education/Business Info', icon: AllIcons.RightArrow},
-  {title: 'Gurukul Connect', icon: AllIcons.RightArrow},
+  {title: t('EditProfile.PersonalInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.AddressInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.EduBussInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.GurukulConnect'), icon: AllIcons.RightArrow},
 ];
 export const DailyDarshanAllImages = () => {
   return [

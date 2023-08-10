@@ -142,12 +142,52 @@
       "Subtext":"Practice remembering today's darshan"
     },
     "DailyQuote":{
-      "Heading":"Daily Quotes"
+      "Heading":"Daily Quote"
   },
   "DailyUpdate":{
-    "Heading":"Daily Updates"
+    "Heading":"Daily Update"
 },
 "ChangeLanguage":{
   "Heading":"Change Language"
+},
+"EditProfile":{
+  "Heading":"Edit Profile",
+  "PersonalInfo":"Personal Info",
+  "AddressInfo":"Address Info",
+  "EduBussInfo":"Education/Business Info",
+  "GurukulConnect":"GurukulConnect"
+},
+"LogoutModel":{
+  "Title":"Come back soon!",
+  "Content":"You will be signed out of your account \n and any unsaved changes will be lost.",
+  "CancelBtn":"Cancel",
+  "LogoutBtn":"Yes,log me out"
+},
+"DeleteModel":{
+  "Title":"Confirm Account Deletion",
+  "Content":"Are you sure you want to delete your \n account? This action cannot be undone.",
+  "DltBtn":"Delete Account"
+},
+"DailyQuiz":{
+  "Heading":"Daily Quiz",
+  "NxtBtn":"Next",
+  "SubmitBtn":"Submit"
+},
+"ResultModel":{
+  "Title":"Congratulations",
+  "Content":"You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
+},
+"DailyCalendar":{
+  "Heading":"Daily Calendar"
+},
+ "Donation":{
+  "Heading": "Donation",
+  "Quote":"In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",
+  "Branch" :"Donate to Gurukul Branch",
+  "Amount":"Amount",
+  "OtherNote":"Other Note by Donar"
+},
+"Payment":{
+  "Heading":"Select Payment Method"
 }
 }}

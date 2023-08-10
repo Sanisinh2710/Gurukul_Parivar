@@ -119,12 +119,12 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
 
   useEffect(() => {
     Animated.timing(animationProgress.current, {
-      toValue: 1,
-      duration: 5000,
+      toValue: modalVisible ? 1 : 0,
+      duration: 3000,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
-  }, []);
+  }, [modalVisible]);
 
   return (
     <>

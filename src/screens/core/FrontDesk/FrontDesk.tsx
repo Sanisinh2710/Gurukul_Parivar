@@ -30,14 +30,12 @@ export const FrontDeskScreen = ({
       // case 'speech':
       //   navigation.navigate('dailyQuotes');
       //   break;
-      // case 'event':
-      //   navigation.navigate('dailyUpdates');
-      //   break;
+
       case 'quiz':
         navigation.navigate('dailyQuiz');
         break;
       case 'donation':
-        navigation.navigate('liveSatsang');
+        navigation.navigate('donation');
         break;
 
       default:

@@ -70,11 +70,7 @@ export const DailyDarshan = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <RadioLable
           wantFullSpace={false}
-          customStyle={{
-            borderRadius: 60,
-            height: 40,
-            borderWidth: 0,
-          }}
+          customStyle={{borderRadius: 60, height: 40, borderWidth: 0}}
           selectedItem={selectedItem}
           setselectedItem={setselectedItem}
           heading={''}

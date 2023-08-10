@@ -10,7 +10,7 @@ interface Props {
   setselectedItem: React.Dispatch<React.SetStateAction<string>>;
   heading: string;
   list: {name: string; icon?: any}[];
-  dailyQuiz: boolean;
+  dailyQuiz?: boolean;
 }
 
 export const RadioLable = ({

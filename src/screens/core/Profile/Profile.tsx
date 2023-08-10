@@ -127,7 +127,7 @@ export const ProfileScreen = ({
         </View>
         <View>
           <PrimaryButton
-            title="Delete Account"
+            title={t('DeleteModel.DltBtn')}
             onPress={() => {
               setModelType('deleteAcc');
               setModelVisible(!modelVisible);
@@ -167,13 +167,13 @@ export const ProfileScreen = ({
               <View>
                 <Text style={style.modalHeader}>
                   {modalType === 'logout'
-                    ? 'Come back soon!'
-                    : ' Confirm Account Deletion'}
+                    ? t('LogoutModel.Title')
+                    : t('DeleteModel.Title')}
                 </Text>
                 <Text style={style.modalTextContent}>
                   {modalType === 'logout'
-                    ? 'You will be signed out of your account \n and any unsaved changes will be lost.'
-                    : 'Are you sure you want to delete your \n account? This action cannot be undone.'}
+                    ? t('LogoutModel.Content')
+                    : t('DeleteModel.Content')}
                 </Text>
               </View>
               <View style={style.modalbtnView}>
@@ -184,13 +184,15 @@ export const ProfileScreen = ({
                   buttonColor="rgba(172, 43, 49, 0.05)"
                   buttonStyle={style.modalbtn}
                   titleColor="black"
-                  title="Cancel"
+                  title={t('LogoutModel.CancelBtn')}
                 />
                 <PrimaryButton
                   onPress={() => {}}
                   buttonStyle={{width: '42%'}}
                   title={
-                    modalType === 'logout' ? 'Yes,log me out' : 'Delete Account'
+                    modalType === 'logout'
+                      ? t('LogoutModel.LogoutBtn')
+                      : t('DeleteModel.DltBtn')
                   }
                 />
               </View>

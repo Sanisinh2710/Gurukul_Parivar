@@ -29,7 +29,7 @@ export const DailyQuiz = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Daily Quiz'}
+        headerTitle={t('DailyQuiz.Heading')}
         headerRight={{
           icon: AllIcons.ChartQuiz,
           onPress: () => {},
@@ -51,7 +51,7 @@ export const DailyQuiz = ({
               onPress={() => {
                 navigation.navigate('dailyQuizDetail');
               }}
-              title={'Next'}
+              title={t('DailyQuiz.NxtBtn')}
             />
           </View>
         </ScrollView>
