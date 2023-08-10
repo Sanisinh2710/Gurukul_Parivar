@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -65,12 +64,8 @@ export const CompleteYourProfile = React.memo(
     };
 
     return (
-      <View style={{height: '100%'}}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: '30%',
-          }}>
+      <View style={style.mainView}>
+        <ScrollView>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
               {t('uploadPhoto.FirstSubtitle')}
@@ -115,7 +110,7 @@ export const CompleteYourProfile = React.memo(
               name={completeProfileInputList.gurukulName.name}
               render={({field: {onBlur, onChange, value}}) => {
                 return (
-                  <View style={{marginTop: 24}}>
+                  <View style={style.formInputView}>
                     <FormInput
                       menuList={[...GuruKulList]}
                       type={completeProfileInputList.gurukulName.type}
@@ -136,14 +131,15 @@ export const CompleteYourProfile = React.memo(
               }}
             />
           </View>
-          {/* Submit button.................................. */}
-          <View style={[style.NextBtn]}>
-            <PrimaryButton
-              title={t('uploadPhoto.NextBtn')}
-              onPress={handleSubmit(onSubmit)}
-            />
-          </View>
         </ScrollView>
+
+        {/* Submit button.................................. */}
+        <View style={[style.NextBtn]}>
+          <PrimaryButton
+            title={t('uploadPhoto.NextBtn')}
+            onPress={handleSubmit(onSubmit)}
+          />
+        </View>
       </View>
     );
   },

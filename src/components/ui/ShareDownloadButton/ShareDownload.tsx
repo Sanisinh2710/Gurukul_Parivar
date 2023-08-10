@@ -40,9 +40,10 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
       });
 
       if ((await response.promise).statusCode === 200) {
-        const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
+        const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
+        console.log(imagePath, ' ', fileContent, '   ', base64Image);
 
         const options = {
           title: 'Share via',

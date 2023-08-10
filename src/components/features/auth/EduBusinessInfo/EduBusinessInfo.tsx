@@ -10,6 +10,7 @@ import {
 } from '../../../../types';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {styles} from './style';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
@@ -22,6 +23,8 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+
+    const style = styles();
 
     const EduBusinessInfoFormInputList: {
       name: keyof EduBusinessInfoValidationSchemaType;
@@ -111,17 +114,14 @@ export const EduBusinessInfo = React.memo(
     };
     return (
       <ScrollView
-        contentContainerStyle={{paddingBottom: '30%'}}
-        showsVerticalScrollIndicator={false}>
+        contentContainerStyle={style.scrollViewContainer}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <FlatList
           data={[...EduBusinessInfoFormInputList]}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={style.flatListContainer}
           scrollEnabled={false}
-          contentContainerStyle={{
-            marginTop: 19,
-            gap: 15,
-            paddingBottom: '20%',
-          }}
           renderItem={({item}) => {
             return (
               <Controller
@@ -148,22 +148,16 @@ export const EduBusinessInfo = React.memo(
             );
           }}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
+        <View style={style.submitButtonView}>
           <SecondaryButton
             title={t('common.SkipNow')}
             onPress={leftOnSubmit}
-            buttonStyle={{
-              width: '47%',
-            }}
+            buttonStyle={style.submitButtonStyle}
           />
           <PrimaryButton
             title={t('common.Save&Next')}
             onPress={handleSubmit(onSubmit)}
-            buttonStyle={{width: '47%'}}
+            buttonStyle={style.submitButtonStyle}
           />
         </View>
       </ScrollView>
