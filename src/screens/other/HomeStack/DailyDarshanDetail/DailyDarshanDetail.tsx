@@ -1,12 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Image, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
+import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 
 export const DailyDarshanDetail = ({
   route,

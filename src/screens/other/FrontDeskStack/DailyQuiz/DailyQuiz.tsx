@@ -1,6 +1,10 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {Dimensions, Image, ScrollView, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
+import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   PrimaryButton,
@@ -9,9 +13,6 @@ import {
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
 
 export const DailyQuiz = ({
   navigation,

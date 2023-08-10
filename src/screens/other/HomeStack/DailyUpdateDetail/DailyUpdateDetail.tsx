@@ -1,5 +1,6 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   FlatList,
   Image,
@@ -13,7 +14,7 @@ import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {d, options, PhotoGallery} from '../../../../utils';
+import {PhotoGallery, d, options} from '../../../../utils';
 import {styles} from './styles';
 export const DailyUpdateDetail = ({
   route,

@@ -1,15 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, TextInput, View} from 'react-native';
+import {Image, ScrollView, TextInput, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, CustomFonts, d, daysArray, options2} from '../../../../utils';
+import {COLORS, CustomFonts} from '../../../../utils';
 import {styles} from './styles';
 
 export const LiveSatsang = ({
