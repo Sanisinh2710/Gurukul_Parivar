@@ -1,13 +1,10 @@
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
@@ -19,13 +16,10 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
+import {removeAuthToken, removeProfToken} from '../../../services';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, CustomFonts, EditProfile} from '../../../utils';
 import {styles} from './styles';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import LinearGradient from 'react-native-linear-gradient';
 
 export const ProfileScreen = ({
   navigation,
@@ -337,7 +331,21 @@ export const ProfileScreen = ({
                   title="Cancel"
                 />
                 <PrimaryButton
-                  onPress={() => {}}
+                  onPress={
+                    modalType === 'logout'
+                      ? () => {
+                          const resRemoveAuthToken = removeAuthToken();
+                          const resRemoveProfToken = removeProfToken();
+
+                          if (
+                            resRemoveAuthToken === 'SUCCESS' &&
+                            resRemoveProfToken === 'SUCCESS'
+                          ) {
+                            navigation.replace('Auth');
+                          }
+                        }
+                      : () => {}
+                  }
                   buttonStyle={{width: '42%'}}
                   title={
                     modalType === 'logout' ? 'Yes,log me out' : 'Delete Account'

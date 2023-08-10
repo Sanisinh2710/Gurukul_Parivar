@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -170,7 +169,7 @@ export const GurukulInfo = React.memo(
 
     const gurukulFormInputList2: {
       mainType?: any;
-      name?: keyof SingleGurukulRecType;
+      name: keyof SingleGurukulRecType;
       lable?: string;
       placeholder?: string;
       type?: SupportedFormInputTypes;
@@ -246,11 +245,7 @@ export const GurukulInfo = React.memo(
                 <View key={mainindex}>
                   {mainindex >= 1 && (
                     <View
-                      style={[
-                        style.removeBtnView,
-                        watch().gurukulData?.at(mainindex)?.RelativeOfSaint !==
-                          'Yes' && {marginTop: '10%'},
-                      ]}
+                      style={[style.removeBtnView]}
                       onTouchEnd={() => remove(mainindex)}>
                       <Image source={AllIcons.Cancel} style={style.removeImg} />
                     </View>
@@ -334,9 +329,13 @@ export const GurukulInfo = React.memo(
                                     onBlur={onBlur}
                                     onChange={onChange}
                                     customProps={item?.customProps}
-                                    error={errors?.gurukulData?.[mainindex]?.[
-                                      item?.name
-                                    ]?.message?.toString()}
+                                    error={
+                                      item.name
+                                        ? errors?.gurukulData?.[mainindex]?.[
+                                            item?.name
+                                          ]?.message?.toString()
+                                        : ''
+                                    }
                                   />
                                 </>
                               );

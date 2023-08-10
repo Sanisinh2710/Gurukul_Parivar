@@ -50,6 +50,8 @@ export const LoginScreen = ({
 
     const getLangCode = storage.getString('langCode');
 
+    const auth_token = storage.getString('auth_token');
+
     if (getLangCode) {
       const newLangcode = JSON.parse(getLangCode);
 
@@ -63,6 +65,9 @@ export const LoginScreen = ({
 
     const timer = setTimeout(() => {
       setIsloading(false);
+      if (auth_token) {
+        navigation.replace('ProfileSignup');
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -100,14 +105,18 @@ export const LoginScreen = ({
   }, [watch()]);
 
   const onSubmit = (data: LoginFormValidationSchemaType) => {
-    data.mobileNumber =
-      countryCodeSelect.split('(')[0].toString() + data.mobileNumber.toString();
+    // data.countryCode = countryCodeSelect.split('(')[0].toString();
+    data.countryCode = countryCodeSelect;
+    data.mobileNumber = data.mobileNumber.toString();
 
     console.log(data);
 
     // Do something with mobile number and than navigate to OTP Screen;
 
-    navigation.navigate('MobileLoginOTP');
+    navigation.navigate('MobileLoginOTP', {
+      mobileNum: data.mobileNumber,
+      countryCode: data.countryCode,
+    });
   };
 
   if (isLoading) {
@@ -151,7 +160,6 @@ export const LoginScreen = ({
                     onChange={onChange}
                     editable={true}
                     error={errors['mobileNumber']?.message?.toString()}
-                    editable={true}
                     state={{
                       countryCodeSelect,
                       setCountryCodeSelect,

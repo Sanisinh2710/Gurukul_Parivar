@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import * as Progress from 'react-native-progress';
@@ -12,6 +13,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
+import {getAuthToken, setUserProfilingDone} from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
 
@@ -39,10 +41,10 @@ export const ProfileSignup = ({
       bloodGroup: '',
       mobilenumInfo: [
         {
-          mobilenum: '6355157390',
+          mobilenum: getAuthToken().loginData.mobileNum,
           secondary: false,
           whatsappNum: true,
-          countryCode: '',
+          countryCode: getAuthToken().loginData.countryCode,
         },
       ],
       emailInfo: [{email: '', secondary: false}],
@@ -112,7 +114,13 @@ export const ProfileSignup = ({
 
         newFormData.personalInfo = receivedData;
         setFormData(newFormData);
-        navigation.navigate('LoginSuccess', {type: 'Profile'});
+        const resType = setUserProfilingDone(
+          newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+        );
+
+        if (resType === 'SUCCESS') {
+          navigation.navigate('LoginSuccess', {type: 'Profile'});
+        }
       }
     }
     if (formStep === 3) {
@@ -168,22 +176,32 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          navigation.navigate('LoginSuccess', {type: 'Profile'});
+          const resType = setUserProfilingDone(
+            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+          );
+
+          if (resType === 'SUCCESS') {
+            navigation.navigate('LoginSuccess', {type: 'Profile'});
+          }
         }
       }
       if (typecase === 'skip') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          navigation.navigate('LoginSuccess', {type: 'Profile'});
+          const resType = setUserProfilingDone(
+            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+          );
+
+          if (resType === 'SUCCESS') {
+            navigation.navigate('LoginSuccess', {type: 'Profile'});
+          }
         }
       }
     }
   };
-
   const headerTitle = React.useMemo(() => {
     return formStep === 1
       ? t('uploadPhoto.HederText')

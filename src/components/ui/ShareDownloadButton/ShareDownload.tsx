@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {
   Animated,
   Easing,
@@ -9,36 +9,41 @@ import {
   View,
 } from 'react-native';
 
-import Share from 'react-native-share';
-import RNFS from 'react-native-fs';
-import RNFetchBlob from 'rn-fetch-blob';
-import Toast from 'react-native-simple-toast';
 import LottieView from 'lottie-react-native';
-import {CommonStyle} from '../../../../assets/styles';
-import {styles} from './style';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import Toast from 'react-native-simple-toast';
+import RNFetchBlob from 'rn-fetch-blob';
 import {AllIcons} from '../../../../assets/icons';
-import {DropDownModel} from '../Modal';
+import {CommonStyle} from '../../../../assets/styles';
 import {CustomFonts} from '../../../utils';
+import {DropDownModel} from '../Modal';
+import {styles} from './style';
+
 type ShareDownloadProps = {
   wallpaper: boolean;
 };
+
 export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+
+  const animationProgress = React.useRef(new Animated.Value(0));
 
   const onShare = async () => {
     try {
       const response = await RNFS.downloadFile({
         fromUrl:
           'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png',
-        toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
+        toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
 
       if ((await response.promise).statusCode === 200) {
-        const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
+        const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
+        console.log(imagePath, ' ', fileContent, '   ', base64Image);
 
         const options = {
           title: 'Share via',
@@ -115,16 +120,15 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     // To get the file extension
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
-  const animationProgress = useRef(new Animated.Value(0));
 
-  useEffect(() => {
+  React.useEffect(() => {
     Animated.timing(animationProgress.current, {
-      toValue: 1,
-      duration: 5000,
+      toValue: modalVisible ? 1 : 0,
+      duration: 2000,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
-  }, []);
+  }, [modalVisible]);
 
   return (
     <>

@@ -3,8 +3,8 @@ import * as yup from 'yup';
 import {
   AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
-  GurukulFormValidationSchemaType,
   EduBusinessInfoValidationSchemaType,
+  GurukulFormValidationSchemaType,
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
 } from '../types';

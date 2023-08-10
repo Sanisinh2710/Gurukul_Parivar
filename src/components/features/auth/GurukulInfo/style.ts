@@ -6,6 +6,7 @@ export const styles = () => {
     removeBtnView: {
       height: 30,
       width: 30,
+      marginTop: '5%',
       alignSelf: 'flex-end',
     },
     removeImg: {
@@ -23,7 +24,7 @@ export const styles = () => {
     arrayTypeFlatListView: {
       width: '48%',
     },
-    relativeFlatListContainer: {paddingBottom: '20%', gap: 16},
+    relativeFlatListContainer: {paddingBottom: '8%', gap: 16},
     submitBtn: {marginTop: '5%'},
   });
 };

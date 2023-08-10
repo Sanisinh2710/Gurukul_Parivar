@@ -1,12 +1,14 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import {useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {CustomBottomTabBar, CustomStatusBar} from '../components';
+import {CustomBottomTabBar, CustomStatusBar, Loader} from '../components';
 import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {
@@ -30,6 +32,7 @@ import {
   ProfileSignup,
   Status,
 } from '../screens';
+import {isSignedIn} from '../services';
 import {
   RootAuthStackParamList,
   RootBottomTabParamList,
@@ -38,21 +41,39 @@ import {
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
-export const AuthStackNavigator = (): React.JSX.Element => {
-  return (
-    <AuthStack.Navigator
-      initialRouteName="MobileLogin"
-      screenOptions={{
-        orientation: 'portrait',
-        animation: 'none',
-        headerShown: false,
-      }}>
-      <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
-      <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
-      <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
-      <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
-    </AuthStack.Navigator>
-  );
+export const AuthStackNavigator = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, 'Auth'>): React.JSX.Element => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  React.useEffect(() => {
+    setIsLoading(true);
+    const isCurrentlySignedIn = isSignedIn();
+
+    if (isCurrentlySignedIn) {
+      navigation.replace('BottomNavBar');
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  } else {
+    return (
+      <AuthStack.Navigator
+        initialRouteName="MobileLogin"
+        screenOptions={{
+          orientation: 'portrait',
+          animation: 'none',
+          headerShown: false,
+        }}>
+        <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
+        <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
+        <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
+        <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
+      </AuthStack.Navigator>
+    );
+  }
 };
 
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
