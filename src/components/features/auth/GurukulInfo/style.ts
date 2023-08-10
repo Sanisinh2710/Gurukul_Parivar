@@ -1,19 +1,29 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
-import {CustomFonts} from '../../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
-    checkboxFonts: {
-      ...CustomFonts.body.medium12,
-      fontSize: 14,
-      fontWeight: '400',
-      color: theme.textColor,
-      lineHeight: 18.9,
+    scrollViewContainer: {paddingTop: '3%', paddingBottom: '30%'},
+    removeBtnView: {
+      height: 30,
+      width: 30,
+      alignSelf: 'flex-end',
     },
+    removeImg: {
+      width: '100%',
+      height: '100%',
+    },
+    flatListContainer: {
+      gap: 16,
+      paddingTop: '4%',
+      paddingBottom: '2%',
+    },
+    flatListColumnWrap: {
+      justifyContent: 'space-between',
+    },
+    arrayTypeFlatListView: {
+      width: '48%',
+    },
+    relativeFlatListContainer: {paddingBottom: '20%', gap: 16},
+    submitBtn: {marginTop: '5%'},
   });
 };

@@ -10,9 +10,10 @@ import {
   SupportedFormInputTypes,
   UserAddress,
 } from '../../../../types';
-import {COLORS, CustomFonts, countries} from '../../../../utils';
+import {COLORS, countries} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {styles} from './style';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;
@@ -25,6 +26,7 @@ type AddressInfoProps = {
 export const AdressInfo = React.memo(
   ({initialValues, onSubmitEvent}: AddressInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+    const style = styles();
 
     const addressFormInputList: {
       name: keyof UserAddress;
@@ -119,81 +121,59 @@ export const AdressInfo = React.memo(
 
     return (
       <ScrollView
-        contentContainerStyle={{paddingBottom: '30%'}}
+        contentContainerStyle={style.scrollViewContainer}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         {fields.map((mainItem, mainindex) => {
           return (
-            <FlatList
-              scrollEnabled={false}
-              key={mainItem.id}
-              contentContainerStyle={{
-                gap: 16,
-                marginTop: '5%',
-              }}
-              ListHeaderComponent={() => {
-                return (
-                  mainindex >= 1 && (
-                    <View
-                      style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                      onTouchEnd={() => remove(mainindex)}>
-                      <Image
-                        source={AllIcons.Cancel}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    </View>
-                  )
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              data={addressFormInputList}
-              renderItem={({item, index}) => (
-                <View>
-                  <Controller
-                    control={control}
-                    name={`addressInfo.${mainindex}.${item.name}`}
-                    render={({field: {onBlur, onChange, value}}) => {
-                      return (
-                        <FormInput
-                          menuList={item.menuList}
-                          type={item.type}
-                          name={`addressInfo.${mainindex}.${item.name}`}
-                          label={item.lable}
-                          placeholder={item.placeholder}
-                          value={value}
-                          onBlur={onBlur}
-                          onChange={onChange}
-                          customProps={item.customProps}
-                          error={errors?.addressInfo?.[mainindex]?.[
-                            item.name
-                          ]?.message?.toString()}
-                        />
-                      );
-                    }}
-                  />
-                  {(index + 1) % 5 === 0 ? (
-                    <View
-                      style={{
-                        marginTop: '5%',
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          gap: 10,
-                          marginBottom: '5%',
-                        }}>
+            <View key={mainindex}>
+              {mainindex >= 1 && (
+                <View
+                  style={style.cancelImgView}
+                  onTouchEnd={() => remove(mainindex)}>
+                  <Image source={AllIcons.Cancel} style={style.cancelImg} />
+                </View>
+              )}
+              <FlatList
+                scrollEnabled={false}
+                key={mainItem.id}
+                contentContainerStyle={[
+                  style.flatListContainer,
+                  mainindex >= 1 && style._flatListContainer,
+                ]}
+                showsVerticalScrollIndicator={false}
+                data={addressFormInputList}
+                renderItem={({item, index}) => (
+                  <View>
+                    <Controller
+                      control={control}
+                      name={`addressInfo.${mainindex}.${item.name}`}
+                      render={({field: {onBlur, onChange, value}}) => {
+                        return (
+                          <FormInput
+                            menuList={item.menuList}
+                            type={item.type}
+                            name={`addressInfo.${mainindex}.${item.name}`}
+                            label={item.lable}
+                            placeholder={item.placeholder}
+                            value={value}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            customProps={item.customProps}
+                            error={errors?.addressInfo?.[mainindex]?.[
+                              item.name
+                            ]?.message?.toString()}
+                          />
+                        );
+                      }}
+                    />
+                    {(index + 1) % 5 === 0 ? (
+                      <View key={mainItem.id} style={style.checkboxView}>
                         <View
-                          style={{
-                            height: 20,
-                            width: 20,
-                            alignItems: 'center',
-                            borderRadius: 5,
-                            borderColor: COLORS.primaryColor,
-                            borderWidth: checkedArray[mainindex] ? 0 : 1,
-                          }}
+                          style={[
+                            style.checkboxInnerView,
+                            {borderWidth: checkedArray[mainindex] ? 0 : 1},
+                          ]}
                           onTouchEnd={() => {
                             let newArr = JSON.parse(
                               JSON.stringify(checkedArray),
@@ -210,29 +190,19 @@ export const AdressInfo = React.memo(
                           {checkedArray[mainindex] ? (
                             <Image
                               source={AllIcons.Checkbox}
-                              style={{
-                                height: '100%',
-                                width: '100%',
-                              }}
+                              style={style.checkboxImg}
                             />
                           ) : null}
                         </View>
-                        <Text
-                          style={{
-                            ...CustomFonts.body.medium12,
-                            fontSize: 14,
-                            fontWeight: '400',
-                            lineHeight: 18.9,
-                            color: COLORS.lightModetextColor,
-                          }}>
+                        <Text style={style.checkboxText}>
                           {t('addressInfo.AddressCheckbox')}
                         </Text>
                       </View>
-                    </View>
-                  ) : null}
-                </View>
-              )}
-            />
+                    ) : null}
+                  </View>
+                )}
+              />
+            </View>
           );
         })}
         <SecondaryButton
@@ -254,24 +224,18 @@ export const AdressInfo = React.memo(
           buttonColor={'transparent'}
           titleColor={COLORS.primaryColor}
           borderColor={COLORS.primaryColor}
-          buttonStyle={{marginBottom: '5%'}}
+          buttonStyle={style.secondaryButton}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
+        <View style={style.submitButtonView}>
           <SecondaryButton
             title={t('common.SkipNow')}
             onPress={leftOnSubmit}
-            buttonStyle={{
-              width: '47%',
-            }}
+            buttonStyle={style.submitButtonStyle}
           />
           <PrimaryButton
             title={t('common.Save&Next')}
             onPress={handleSubmit(onSubmit)}
-            buttonStyle={{width: '47%'}}
+            buttonStyle={style.submitButtonStyle}
           />
         </View>
       </ScrollView>

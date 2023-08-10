@@ -36,13 +36,6 @@ import {
   RootStackParamList,
 } from '../types';
 
-// import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail';
-// import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
-// import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
-// import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
-// import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
-// import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
-
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
 export const AuthStackNavigator = (): React.JSX.Element => {
