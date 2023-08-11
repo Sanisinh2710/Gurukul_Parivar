@@ -45,9 +45,9 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getReactApplicationContext());
             wallpaperManager.setBitmap(bitmap);
 
-            promise.resolve("Wallpaper set successfully");
+            promise.resolve("SUCCESS");
         } catch (IOException e) {
-            promise.reject("ERROR_SET_WALLPAPER", "Error setting wallpaper", e);
+            promise.reject("ERROR", "Error setting wallpaper", e);
         }
     }
 

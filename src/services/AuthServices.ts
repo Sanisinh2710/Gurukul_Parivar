@@ -62,9 +62,10 @@ export const setAuthToken = (loginData: any) => {
 
 export const getAuthToken = () => {
   let resType: 'SUCCESS' | 'ERROR';
-  let loginData: {mobileNum: string; countryCode: string} = {
+  let loginData: {mobileNum: string; countryCode: string; token: string} = {
     mobileNum: '',
     countryCode: '',
+    token: '',
   };
   try {
     const auth_token = storage.getString('auth_token');
@@ -72,6 +73,7 @@ export const getAuthToken = () => {
       const newAuthToken = JSON.parse(auth_token);
       loginData.mobileNum = newAuthToken.mobileNum;
       loginData.countryCode = newAuthToken.countryCode;
+      loginData.token = newAuthToken.token;
       resType = 'SUCCESS';
     } else {
       resType = 'ERROR';
@@ -194,4 +196,22 @@ export const removeProfToken = () => {
     resType = 'ERROR';
   }
   return resType;
+};
+
+export const getBearerToken = () => {
+  let resType: 'SUCCESS' | 'ERROR';
+  let token: string = '';
+
+  try {
+    const auth_token = getAuthToken();
+    if (auth_token.resType === 'SUCCESS') {
+      token = auth_token.loginData.token;
+      resType = 'SUCCESS';
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return {resType, token};
 };

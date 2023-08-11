@@ -73,7 +73,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     } else {
       try {
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          'android.permission.WRITE_EXTERNAL_STORAGE',
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           downloadImage();

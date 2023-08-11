@@ -251,151 +251,147 @@ export const FormInput = React.memo(
     }
 
     return (
-      <View>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-            setFocused(false);
-          }}>
-          <>
-            {type !== 'photo' && type !== 'radio' ? (
-              <>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={style.labelText}>{label}</Text>
-                  {(type === 'phone' ||
-                    type === 'email' ||
-                    type === 'select') &&
-                    rightText && (
-                      <Text
-                        onPress={rightTextOnPress ? rightTextOnPress : () => {}}
-                        style={[style.labelText, {color: COLORS.primaryColor}]}>
-                        {rightText}
-                      </Text>
-                    )}
-                </View>
-                <View
-                  style={[
-                    style.fieldBlockView,
-                    {
-                      borderColor: focused
-                        ? theme.primary
-                        : COLORS.primaryInputBorderColor,
-                      justifyContent: 'space-between',
-                    },
-                    type === 'textarea' && {
-                      height: 80,
-                      alignItems: 'flex-start',
-                    },
-                    icon &&
-                      type !== 'select' &&
-                      type !== 'date' &&
-                      type !== 'dob' && {
-                        gap: 3,
-                      },
-                  ]}>
-                  {icon &&
-                  type !== 'select' &&
-                  type !== 'date' &&
-                  type !== 'dob' ? (
-                    <View style={{width: '90%'}}>{fieldblock}</View>
-                  ) : (
-                    fieldblock
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+          setFocused(false);
+        }}>
+        <>
+          {type !== 'photo' && type !== 'radio' ? (
+            <>
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={style.labelText}>{label}</Text>
+                {(type === 'phone' || type === 'email' || type === 'select') &&
+                  rightText && (
+                    <Text
+                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
+                      style={[style.labelText, {color: COLORS.primaryColor}]}>
+                      {rightText}
+                    </Text>
                   )}
-                  {icon &&
+              </View>
+              <View
+                style={[
+                  style.fieldBlockView,
+                  {
+                    borderColor: focused
+                      ? theme.primary
+                      : COLORS.primaryInputBorderColor,
+                    justifyContent: 'space-between',
+                  },
+                  type === 'textarea' && {
+                    height: 80,
+                    alignItems: 'flex-start',
+                  },
+                  icon &&
                     type !== 'select' &&
                     type !== 'date' &&
-                    type !== 'dob' && (
-                      <View
+                    type !== 'dob' && {
+                      gap: 3,
+                    },
+                ]}>
+                {icon &&
+                type !== 'select' &&
+                type !== 'date' &&
+                type !== 'dob' ? (
+                  <View style={{width: '90%'}}>{fieldblock}</View>
+                ) : (
+                  fieldblock
+                )}
+                {icon &&
+                  type !== 'select' &&
+                  type !== 'date' &&
+                  type !== 'dob' && (
+                    <View
+                      style={{
+                        height: '50%',
+                        width: '10%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={icon}
                         style={{
-                          height: '50%',
-                          width: '10%',
+                          width: '100%',
+                          height: '100%',
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  )}
+              </View>
+              {Array.isArray(value) && type === 'multi-select' && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    top: 10,
+                    gap: 8,
+                    flexWrap: 'wrap',
+                    marginBottom: '3%',
+                  }}>
+                  {value.map((item, index) => {
+                    return (
+                      <View
+                        key={index}
+                        style={{
+                          flexDirection: 'row',
+                          backgroundColor: COLORS.primaryColor,
+                          paddingLeft: 16,
+                          paddingRight: 10,
+                          height: 35,
                           justifyContent: 'center',
                           alignItems: 'center',
+                          borderRadius: 60,
+                          gap: 10,
                         }}>
-                        <Image
-                          source={icon}
+                        <Text
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'contain',
-                          }}
-                        />
-                      </View>
-                    )}
-                </View>
-                {Array.isArray(value) && type === 'multi-select' && (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      top: 10,
-                      gap: 8,
-                      flexWrap: 'wrap',
-                      marginBottom: '3%',
-                    }}>
-                    {value.map((item, index) => {
-                      return (
-                        <View
-                          key={index}
-                          style={{
-                            flexDirection: 'row',
-                            backgroundColor: COLORS.primaryColor,
-                            paddingLeft: 16,
-                            paddingRight: 10,
-                            height: 35,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 60,
-                            gap: 10,
+                            ...CustomFonts.body.large14,
+                            lineHeight: 18.9,
+                            color: COLORS.darkModetextColor,
                           }}>
-                          <Text
+                          {item}
+                        </Text>
+                        <View
+                          onTouchEnd={() => {
+                            let newValues: string[] = JSON.parse(
+                              JSON.stringify(value),
+                            );
+                            newValues.splice(index, 1);
+                            onChange(newValues);
+                          }}
+                          style={{
+                            width: 14,
+                            height: 14,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}>
+                          <Image
+                            source={AllIcons.RoundCross}
                             style={{
-                              ...CustomFonts.body.large14,
-                              lineHeight: 18.9,
-                              color: COLORS.darkModetextColor,
-                            }}>
-                            {item}
-                          </Text>
-                          <View
-                            onTouchEnd={() => {
-                              let newValues: string[] = JSON.parse(
-                                JSON.stringify(value),
-                              );
-                              newValues.splice(index, 1);
-                              onChange(newValues);
+                              flex: 1,
+                              tintColor: COLORS.darkModeIconColor,
+                              resizeMode: 'contain',
                             }}
-                            style={{
-                              width: 14,
-                              height: 14,
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}>
-                            <Image
-                              source={AllIcons.RoundCross}
-                              style={{
-                                flex: 1,
-                                tintColor: COLORS.darkModeIconColor,
-                                resizeMode: 'contain',
-                              }}
-                            />
-                          </View>
+                          />
                         </View>
-                      );
-                    })}
-                  </View>
-                )}
-              </>
-            ) : (
-              fieldblock
-            )}
-          </>
-        </TouchableWithoutFeedback>
-        {error && <Text style={style.errorText}>{error}</Text>}
-      </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+            </>
+          ) : (
+            fieldblock
+          )}
+          {error && <Text style={style.errorText}>{error}</Text>}
+        </>
+      </TouchableWithoutFeedback>
     );
   },
 );
