@@ -30,9 +30,7 @@ export const LiveSatsang = ({
         headerTitle={'Live Satsang'}
         headerRight={{
           icon: AllIcons.Filter,
-          onPress: () => {
-            console.log('Hi');
-          },
+          onPress: () => {},
         }}
       />
 

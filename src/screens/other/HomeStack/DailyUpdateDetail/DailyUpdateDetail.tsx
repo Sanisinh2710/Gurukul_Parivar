@@ -33,9 +33,7 @@ export const DailyUpdateDetail = ({
         headerTitle={'Daily Updates'}
         headerRight={{
           icon: AllIcons.Filter,
-          onPress: () => {
-            console.log('Hi');
-          },
+          onPress: () => {},
         }}
       />
       <View style={commonstyle.commonContentView}>

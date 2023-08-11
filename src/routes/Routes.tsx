@@ -30,7 +30,7 @@ import {DailyDarshanDetail} from '../screens/other/HomeStack/DailyDarshanDetail'
 import {DailyUpdateDetail} from '../screens/other/HomeStack/DailyUpdateDetail';
 import {LiveSatsang} from '../screens/other/HomeStack/LiveSatsang';
 import {EditProfile} from '../screens/other/ProfileStack/EditProfile';
-import {DailyQuiz, Status} from '../screens/other/FrontDeskStack';
+import {DailyQuiz, QuizResult, Status} from '../screens/other/FrontDeskStack';
 import {DailyQuizDetail} from '../screens/other/FrontDeskStack/QuizDetail/DailyQuizDetail';
 import {DonationScreen} from '../screens/other/FrontDeskStack/Donation';
 
@@ -118,6 +118,7 @@ export const Routes = (): React.JSX.Element => {
               name="dailyQuizDetail"
               component={DailyQuizDetail}
             />
+            <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
           </NativeStack.Navigator>
         </NavigationContainer>

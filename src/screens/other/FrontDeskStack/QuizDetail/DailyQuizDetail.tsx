@@ -178,7 +178,7 @@ export const DailyQuizDetail = ({
             }}
           />
         </View>
-        <DropDownModel
+        {/* <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
           type={'phone'}
@@ -224,7 +224,7 @@ export const DailyQuizDetail = ({
               </View>
             </View>
           }
-        />
+        /> */}
       </View>
     </ScreenWrapper>
   );

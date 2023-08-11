@@ -15,6 +15,7 @@ export const DailyDarshanDetail = ({
   const style = styles();
   const commonStyle = CommonStyle();
   const [pagination, setPagination] = React.useState<number>(1);
+  const TotalImages = route.params.totalImages;
 
   return (
     <ScreenWrapper>
@@ -28,14 +29,17 @@ export const DailyDarshanDetail = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '80%', marginTop: '5%'}}>
-          <Image source={route.params.image} style={style.images} />
+          <Image
+            source={{uri: `https://gurukul.taskgrids.com${route.params.image}`}}
+            style={style.images}
+          />
         </View>
         <ShareDownload wallpaper={true} />
       </View>
       <CustomNavigate
-        text={`${pagination}/4`}
+        text={`${pagination}/${TotalImages}`}
         handleNextPress={() => {
-          if (pagination < 4) {
+          if (pagination < TotalImages) {
             setPagination(pagination + 1);
           }
         }}
