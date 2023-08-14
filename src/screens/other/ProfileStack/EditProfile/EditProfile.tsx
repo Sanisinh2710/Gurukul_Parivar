@@ -25,7 +25,7 @@ export const EditProfile = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Edit Profile'}
+        headerTitle={t('EditProfile.Heading')}
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList

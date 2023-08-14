@@ -48,7 +48,6 @@ export const LoginScreen = ({
   const [language, setLanguage] = React.useState(Languages.gu);
 
   const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
-
   React.useMemo(() => {
     setIsloading(true);
 
