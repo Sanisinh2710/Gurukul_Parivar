@@ -99,8 +99,6 @@ export const LoginScreen = ({
   }, [watch()]);
 
   const onSubmit = (data: LoginFormValidationSchemaType) => {
-    console.log(data, 'data');
-
     data.mobileNumber =
       countryCodeSelect.toString() + data.mobileNumber.toString();
 

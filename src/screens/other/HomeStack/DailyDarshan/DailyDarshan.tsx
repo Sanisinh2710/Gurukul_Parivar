@@ -3,6 +3,7 @@ import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  NoData,
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
@@ -16,6 +17,7 @@ import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNav
 import {useTranslation} from 'react-i18next';
 import {DailyDarshanApi} from '../../../../services/ApiServices';
 import {Loader} from '../../../../components';
+import {AllImages} from '../../../../../assets/images';
 
 export const DailyDarshan = ({
   navigation,
@@ -24,7 +26,7 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const [selectedItem, setselectedItem] = React.useState('');
+  const [selectedItem, setselectedItem] = React.useState('both');
   const [Data, setData] = React.useState<Array<String>>([]);
   const {t} = useTranslation();
 
@@ -40,11 +42,8 @@ export const DailyDarshan = ({
           setLoader(false);
         }, 200);
       }
-    } catch (error) {
-      console.log('Error');
-    }
+    } catch (error) {}
   }, [selectedItem, selectedDate]);
-  console.log(Data);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -111,9 +110,10 @@ export const DailyDarshan = ({
           // />
           <Loader />
         ) : (
-          <View style={{height: '80%'}}>
+          <View style={{height: '85%'}}>
             {Data.length > 0 ? (
               <FlatList
+                showsVerticalScrollIndicator={false}
                 data={Data}
                 numColumns={2}
                 columnWrapperStyle={{justifyContent: 'space-between'}}
@@ -121,7 +121,7 @@ export const DailyDarshan = ({
                   gap: 15,
                   marginTop: '3%',
                 }}
-                renderItem={item => {
+                renderItem={({item, index}) => {
                   return (
                     <TouchableOpacity
                       activeOpacity={0.8}
@@ -129,7 +129,9 @@ export const DailyDarshan = ({
                       onPress={() => {
                         navigation.navigate('dailyDarshanDetail', {
                           totalImages: Data.length,
-                          image: item.item,
+                          data: Data,
+                          image: item,
+                          currentImageIndex: index,
                           date: selectedDate.toLocaleDateString(
                             'en-in',
                             options,
@@ -138,7 +140,7 @@ export const DailyDarshan = ({
                       }}>
                       <Image
                         source={{
-                          uri: `https://gurukul.taskgrids.com${item.item}`,
+                          uri: `https://gurukul.taskgrids.com${item}`,
                         }}
                         style={style.images}
                       />
@@ -147,11 +149,7 @@ export const DailyDarshan = ({
                 }}
               />
             ) : (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <Text style={{textAlign: 'center', fontSize: 20}}>
-                  No Data Found
-                </Text>
-              </View>
+              <NoData />
             )}
           </View>
         )}

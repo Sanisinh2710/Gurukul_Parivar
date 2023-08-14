@@ -3,7 +3,6 @@ import {ApiDateFormat, options} from '../utils';
 
 export const DailyDarshanApi = async (date: Date, time: string) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  console.log(newDate);
 
   const res = await axios.get(
     `https://gurukul.taskgrids.com/api/v1/daily-darshan?date=${newDate}&time=${time}`,

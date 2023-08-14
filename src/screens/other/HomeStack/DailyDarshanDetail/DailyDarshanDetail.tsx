@@ -14,8 +14,14 @@ export const DailyDarshanDetail = ({
 }: NativeStackScreenProps<RootStackParamList, 'dailyDarshanDetail'>) => {
   const style = styles();
   const commonStyle = CommonStyle();
-  const [pagination, setPagination] = React.useState<number>(1);
+  const currentImageIndex = route.params.currentImageIndex;
+  const [pagination, setPagination] = React.useState<number>(
+    currentImageIndex + 1,
+  );
   const TotalImages = route.params.totalImages;
+  const AllData = route.params.data;
+  const [Data, setData] = React.useState<Array<String>>(AllData);
+  const currentImageUri = Data[pagination - 1];
 
   return (
     <ScreenWrapper>
@@ -28,13 +34,18 @@ export const DailyDarshanDetail = ({
         headerTitle={route.params.date}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View style={{height: '80%', marginTop: '5%'}}>
-          <Image
-            source={{uri: `https://gurukul.taskgrids.com${route.params.image}`}}
-            style={style.images}
-          />
-        </View>
-        <ShareDownload wallpaper={true} />
+        <>
+          <View style={{height: '80%', marginTop: '5%'}}>
+            <Image
+              source={{
+                uri: `https://gurukul.taskgrids.com${currentImageUri}`,
+              }}
+              style={style.images}
+            />
+          </View>
+
+          <ShareDownload wallpaper={true} />
+        </>
       </View>
       <CustomNavigate
         text={`${pagination}/${TotalImages}`}
