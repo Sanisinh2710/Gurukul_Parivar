@@ -17,8 +17,8 @@ export type LoginFormValidationSchemaType = {
 
 export type CompleteProfileFormValidationSchemaType = {
   [key: string]: any;
-  profilePic: string | undefined;
-  gurukulName: string;
+  profile: any;
+  branch_id: number;
 };
 
 export type UserAddress = {
@@ -59,10 +59,10 @@ export type InitialThemeType = {theme: Theme; themeMode: string};
 
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
-  fullname: string;
-  fatherFullName: string;
+  full_name: string;
+  father_name: string;
   dob: string;
-  bloodGroup: string;
+  blood_group: string;
   mobilenumInfo: {
     mobilenum: string | undefined;
     whatsappNum?: boolean | undefined;

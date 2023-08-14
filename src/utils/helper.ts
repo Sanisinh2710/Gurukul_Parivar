@@ -84,7 +84,65 @@ export const chooseFile = async (type: MediaType) => {
     }
   });
 
-  let finaluri: {uri: string | undefined} = {uri: mainuri.assets?.[0].uri};
+  let finaluri: any = mainuri.assets;
 
   return finaluri;
+};
+
+export const isStringArray = (object: any): object is Array<string> => {
+  if (object.some((item: any) => typeof item === 'string') === true) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const isObjectArray = (object: any): object is Array<object> => {
+  if (object.some((item: any) => typeof item === 'object') === true) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const isObject = (object: any): object is object => {
+  if (typeof object === 'object') {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const isString = (object: any): object is string => {
+  if (typeof object === 'string') {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const CustomDateSplitAndFormat = (
+  date: string,
+  fromSplitParameter: string,
+  toSplitParameter: string,
+  format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
+) => {
+  if (format === 'mm/dd/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[0]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+    return newDate;
+  }
+  if (format === 'dd/mm/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[0]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+    return newDate;
+  }
 };

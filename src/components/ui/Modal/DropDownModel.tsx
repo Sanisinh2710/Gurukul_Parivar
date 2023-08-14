@@ -5,13 +5,20 @@ import {FlatList, Modal, Text, TextInput, View} from 'react-native';
 
 import {Image} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
-import {COLORS, CustomFonts} from '../../../utils';
+import {
+  COLORS,
+  CustomFonts,
+  isObject,
+  isObjectArray,
+  isString,
+  isStringArray,
+} from '../../../utils';
 import {ModalStyle} from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
   setModelVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  inputList?: string[];
+  inputList?: Array<string> | Array<object>;
   wantSearchBar?: boolean;
   wantResetButton?: boolean;
   type: 'phone' | 'radio' | 'multi-select' | 'simple' | 'none';
@@ -48,10 +55,12 @@ export const DropDownModel = React.memo(
 
     const [searchvalue, setSearch] = React.useState('');
 
-    const [searchedData, setSearchedData] = React.useState<string[]>([]);
+    const [searchedData, setSearchedData] = React.useState<
+      Array<string> | Array<object>
+    >([]);
 
     React.useEffect(() => {
-      if (inputList) {
+      if (isStringArray(inputList)) {
         let temp = [...inputList];
 
         if (
@@ -59,7 +68,7 @@ export const DropDownModel = React.memo(
           searchvalue !== undefined &&
           searchvalue !== ''
         ) {
-          let abc = temp.filter((mainitem: any) => {
+          let abc = temp.filter((mainitem: string) => {
             if (
               mainitem
                 .toString()
@@ -69,6 +78,32 @@ export const DropDownModel = React.memo(
               return mainitem;
             }
           });
+          setSearchedData(abc);
+        } else {
+          setSearchedData([...inputList]);
+        }
+      }
+      if (isObjectArray(inputList)) {
+        let temp = [...inputList];
+
+        if (
+          searchvalue !== null &&
+          searchvalue !== undefined &&
+          searchvalue !== ''
+        ) {
+          let abc = temp.filter((mainitem: any) =>
+            Object.keys(mainitem).some((column: any) => {
+              if (
+                mainitem[column]
+                  .toString()
+                  .toLowerCase()
+                  .includes(searchvalue.trim().toLowerCase())
+              ) {
+                return mainitem;
+              }
+            }),
+          );
+
           setSearchedData(abc);
         } else {
           setSearchedData([...inputList]);
@@ -164,23 +199,46 @@ export const DropDownModel = React.memo(
                     contentContainerStyle={style.modelFlatListContainerStyle}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
-                    data={wantSearchBar ? searchedData : inputList}
-                    renderItem={({item, index}) => {
+                    data={
+                      wantSearchBar ? searchedData : inputList ? inputList : []
+                    }
+                    renderItem={({item, index}: any) => {
                       return (
                         <View
                           onTouchEnd={() => {
-                            if (setSelectedItem) {
-                              if (type === 'multi-select') {
-                                const newArr = [...selectedItem];
-                                if (newArr.includes(item) === false) {
-                                  newArr.push(item);
-                                  setSelectedItem(newArr);
+                            if (isObject(item)) {
+                              if (setSelectedItem) {
+                                if (type === 'multi-select') {
+                                  const newArr = [...selectedItem];
+                                  if (
+                                    newArr.find(
+                                      newitem => newitem.name === item,
+                                    ) === undefined
+                                  ) {
+                                    newArr.push(item);
+                                    setSelectedItem(newArr);
+                                  }
+                                } else {
+                                  setSelectedItem(item?.id);
                                 }
-                              } else {
-                                setSelectedItem(item);
+                                if (setModelValueChoosed) {
+                                  setModelValueChoosed(true);
+                                }
                               }
-                              if (setModelValueChoosed) {
-                                setModelValueChoosed(true);
+                            } else {
+                              if (setSelectedItem) {
+                                if (type === 'multi-select') {
+                                  const newArr = [...selectedItem];
+                                  if (newArr.includes(item) === false) {
+                                    newArr.push(item);
+                                    setSelectedItem(newArr);
+                                  }
+                                } else {
+                                  setSelectedItem(item);
+                                }
+                                if (setModelValueChoosed) {
+                                  setModelValueChoosed(true);
+                                }
                               }
                             }
                           }}
@@ -209,50 +267,96 @@ export const DropDownModel = React.memo(
                                 fontSize: 16,
                                 color: COLORS.lightModetextColor,
                               },
-                              (selectedItem?.includes(item) ||
+                              ((isString(item) &&
+                                selectedItem?.includes(item)) ||
                                 (type === 'phone' &&
                                   item.includes(selectedItem))) &&
                                 type !== 'radio' && {color: 'red'},
+
+                              ((isObject(item) && selectedItem === item?.id) ||
+                                (type === 'phone' &&
+                                  item?.name.includes(selectedItem))) &&
+                                type !== 'radio' && {color: 'red'},
                             ]}>
-                            {item}
+                            {isObject(item) ? item?.name : item}
                           </Text>
-                          {(selectedItem?.includes(item) ||
-                            (type === 'phone' &&
-                              item.includes(selectedItem))) &&
-                          type !== 'radio' ? (
-                            <View style={style.iconView}>
-                              <Image
-                                source={AllIcons.RoundCheckedCircle}
-                                style={style.iconStyle}
-                              />
-                            </View>
-                          ) : (
-                            type === 'radio' &&
-                            (selectedItem?.includes(item) ||
-                              item.includes(selectedItem)) && (
-                              <View
-                                style={{
-                                  width: 20,
-                                  height: 20,
-                                  borderColor: COLORS.primaryColor,
-                                  borderWidth: 1,
-                                  borderRadius: 60,
-                                  padding: 1,
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  right: 16,
-                                }}>
-                                <View
-                                  style={{
-                                    backgroundColor: COLORS.primaryColor,
-                                    borderRadius: 60,
-                                    width: 12,
-                                    height: 12,
-                                  }}
+                          <>
+                            {isString(item) ? (
+                              (selectedItem?.includes(item) ||
+                                (type === 'phone' &&
+                                  item.includes(selectedItem))) &&
+                              type !== 'radio' ? (
+                                <View style={style.iconView}>
+                                  <Image
+                                    source={AllIcons.RoundCheckedCircle}
+                                    style={style.iconStyle}
+                                  />
+                                </View>
+                              ) : (
+                                type === 'radio' &&
+                                (selectedItem?.includes(item) ||
+                                  item.includes(selectedItem)) && (
+                                  <View
+                                    style={{
+                                      width: 20,
+                                      height: 20,
+                                      borderColor: COLORS.primaryColor,
+                                      borderWidth: 1,
+                                      borderRadius: 60,
+                                      padding: 1,
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      right: 16,
+                                    }}>
+                                    <View
+                                      style={{
+                                        backgroundColor: COLORS.primaryColor,
+                                        borderRadius: 60,
+                                        width: 12,
+                                        height: 12,
+                                      }}
+                                    />
+                                  </View>
+                                )
+                              )
+                            ) : (selectedItem === item?.id ||
+                                (type === 'phone' &&
+                                  item?.name.includes(selectedItem))) &&
+                              type !== 'radio' ? (
+                              <View style={style.iconView}>
+                                <Image
+                                  source={AllIcons.RoundCheckedCircle}
+                                  style={style.iconStyle}
                                 />
                               </View>
-                            )
-                          )}
+                            ) : (
+                              type === 'radio' &&
+                              (selectedItem === item?.id ||
+                                item?.name.includes(selectedItem)) && (
+                                <View
+                                  style={{
+                                    width: 20,
+                                    height: 20,
+                                    borderColor: COLORS.primaryColor,
+                                    borderWidth: 1,
+                                    borderRadius: 60,
+                                    padding: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    right: 16,
+                                  }}>
+                                  <View
+                                    style={{
+                                      backgroundColor: COLORS.primaryColor,
+                                      borderRadius: 60,
+                                      width: 12,
+                                      height: 12,
+                                    }}
+                                  />
+                                </View>
+                              )
+                            )}
+                          </>
                         </View>
                       );
                     }}

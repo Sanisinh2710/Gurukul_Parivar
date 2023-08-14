@@ -297,20 +297,20 @@ export const Languages: {[key: string]: string} = {
   hn: 'Hindi',
 };
 
-export const GuruKulList = [
-  'Ahmedabad Gurukul: Memnagar',
-  'Ahmedabad Gurukul: Nikol',
-  'Ahmedabad Gurukul: Santigram',
-  'America Gurukul',
-  'Atlanta Gurukul',
-  'Austin',
-  'Bangalore Gurukul',
-  'Bhavnagar Gurukul',
-  'Bhayavadar Gurukul',
-  'Bidar Gurukul',
-  'Boise',
-  'Boston',
-];
+// export const GuruKulList = [
+//   'Ahmedabad Gurukul: Memnagar',
+//   'Ahmedabad Gurukul: Nikol',
+//   'Ahmedabad Gurukul: Santigram',
+//   'America Gurukul',
+//   'Atlanta Gurukul',
+//   'Austin',
+//   'Bangalore Gurukul',
+//   'Bhavnagar Gurukul',
+//   'Bhayavadar Gurukul',
+//   'Bidar Gurukul',
+//   'Boise',
+//   'Boston',
+// ];
 
 export const AllCountryCodes = [
   ...countries.map(item => {
@@ -450,6 +450,7 @@ export const MyProfileData = () => [
   {title: 'Education/Business Info', icon: AllIcons.RightArrow},
   {title: 'Gurukul Connect', icon: AllIcons.RightArrow},
 ];
+
 export const DailyDarshanAllImages = () => {
   return [
     {
@@ -470,6 +471,7 @@ export const DailyDarshanAllImages = () => {
     },
   ];
 };
+
 export const DailyDarshanEveningImages = () => {
   return [
     {
@@ -490,6 +492,7 @@ export const DailyDarshanEveningImages = () => {
     },
   ];
 };
+
 export const DailyDarshanMorningImages = () => {
   return [
     {
@@ -510,6 +513,7 @@ export const DailyDarshanMorningImages = () => {
     },
   ];
 };
+
 export const PhotoGallery = () => {
   return [
     {
@@ -538,17 +542,22 @@ export const PhotoGallery = () => {
     },
   ];
 };
+
 export const d = new Date();
+
 export const options: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
 };
+
 export const options2: Intl.DateTimeFormatOptions = {
   month: 'short',
   year: 'numeric',
 };
+
 export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 export const DailyUpdate = [
   {
     image: AllImages.AppLogo,
