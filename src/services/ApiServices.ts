@@ -1,24 +1,17 @@
 import axios from 'axios';
+
+import {
+  ADDRESS_INFO_GET_ENDPOINT,
+  ADDRESS_INFO_POST_ENDPOINT,
+  BASE_URL,
+  DAILY_DARSHAN_GET_ENDPOINT,
+  GET_COUNTRIES_ENDPOINT,
+  GURUKUL_BRANCH_GET_ENDPOINT,
+  LOGIN_POST_ENDPOINT,
+  VERIFY_POST_ENDPONT,
+} from '@env';
+import {getBearerToken} from './AuthServices';
 import {ApiDateFormat} from '../utils';
-
-export const DailyDarshanApi = async (date: Date, time: string) => {
-  const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  console.log(newDate);
-
-  const res = await axios.get(
-    `https://gurukul.taskgrids.com/api/v1/daily-darshan?date=${newDate}&time=${time}`,
-    {
-      headers: {
-        Authorization:
-          'Bearer ' +
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiY2ZkNDhiZDI1YWYyNGFhYjJkYjFlMTk1N2UxMmNlOWJhMGIyYjQ3MjQzOTJkMTQ3YTYwNTIwYmI5YzIzOTM4NWM3OTAwOGQ4N2IxMjk1ZDkiLCJpYXQiOjE2OTE3NTE1NDIuNzY2NzYyLCJuYmYiOjE2OTE3NTE1NDIuNzY2NzY0LCJleHAiOjE3MjMzNzM5NDIuNzYxMDQ5LCJzdWIiOiIxMCIsInNjb3BlcyI6W119.fcLZoV6U67N0wIshBgniwQahGURfwrERkodLhkVbuDQzXl5KIYWL_LFc5vIyckKNLuMD0aiYnpbo0LDjcapKqE7ZiZLxtSyuy5HJP28I-lQaxCKDu0ujhxuv32QvobOUUGvBrfUQ4h7sInaNwibzcIWpHqVPyDIGgzZmZQ-0FLUttttHpBnXXjMZdkDWOiZL5QmUE5ymbSkEstLy-QWlG05DMkwaOnC6pKmWav3iRrWtAnQLL9Ndnll1ekBEuhxLUYHcwANO0C5X9KrV_Pg7zTkipuzIZCywVDNbYdK2o4sawpk7LTJD5bNk5AvvgL0JB5HbgoGByq-L16Yna6zcrFSy3dF3kFvCHHJ9Vt4YTYYIJztinGZNVwRqKlO62dlqL7ey5fa_q35M6WQazUA1mENHWbN0YZvsw0nmFzJfMZnRB7GZCYloWu9hbSR0kW-FNJjGQh5cPcqO0DRLr5Y8BsZaoxH4y7Zlpd4tUim8khknVI9Si2p71vlRh0UZlpRFs515gHGgze80El8JAMKHVYuPest1Y4EukzgzrVYqB3uV4JbX-K9uVL0m1jqNoEgGApNONpv_RR4BOZEv-7Sa3KRviTCOZzgbstkMMqJGflio4A2Qz_GX0G2andK5j9bpNj465yUXuBBQFbb72XJRswD2V7eu0tFXcXncZePonHA',
-      },
-    },
-  );
-  return res;
-};
-
-import {BASE_URL, LOGIN_POST_ENDPOINT, VERIFY_POST_ENDPONT} from '@env';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -32,18 +25,24 @@ export const LoginByMobileNumApi = async (mobileNum: string) => {
     message: '',
   };
 
-  const response = await axiosInstance.post(`${LOGIN_POST_ENDPOINT}`, {
-    contact: mobileNum,
-  });
+  try {
+    const response = await axiosInstance.post(`${LOGIN_POST_ENDPOINT}`, {
+      contact: mobileNum,
+    });
 
-  if (response.data.status === 'success') {
-    data.resType = 'SUCCESS';
-    data.data = response.data.data;
-    data.message = response.data.message;
-  } else {
+    if (response.data.status === 'success') {
+      data.resType = 'SUCCESS';
+      data.data = response.data.data;
+      data.message = response.data.message;
+    } else {
+      data.resType = 'ERROR';
+      data.data = response.data.data;
+      data.message = response.data.message;
+    }
+  } catch (error: any) {
     data.resType = 'ERROR';
-    data.data = response.data.data;
-    data.message = response.data.message;
+    data.data = [];
+    data.message = error.toString();
   }
 
   return data;
@@ -56,10 +55,214 @@ export const VerifyOTPApi = async (mobileNum: string, otp: string) => {
     message: '',
   };
 
-  const response = await axiosInstance.post(`${VERIFY_POST_ENDPONT}`, {
-    contact: mobileNum,
-    otp: otp,
-  });
+  try {
+    const response = await axiosInstance.post(`${VERIFY_POST_ENDPONT}`, {
+      contact: mobileNum,
+      otp: otp,
+    });
+
+    if (response.data.status === 'success') {
+      data.resType = 'SUCCESS';
+      data.data = response.data.data;
+      data.message = response.data.message;
+    } else {
+      data.resType = 'ERROR';
+      data.data = response.data.data;
+      data.message = response.data.message;
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const GurukulBranchGetApi = async () => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.get(
+        `${GURUKUL_BRANCH_GET_ENDPOINT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const GetCountriesApi = async () => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.get(`${GET_COUNTRIES_ENDPOINT}`, {
+        headers: {
+          Authorization: `Bearer ${bearer_token.token}`,
+        },
+      });
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const AddressInfoGetApi = async () => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.get(`${ADDRESS_INFO_GET_ENDPOINT}`, {
+        headers: {
+          Authorization: `Bearer ${bearer_token.token}`,
+        },
+      });
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+export const AddressInfoPostApi = async (address_details: any) => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.post(
+        `${ADDRESS_INFO_POST_ENDPOINT}`,
+        {
+          address_details: address_details,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const DailyDarshanApi = async (date: Date, time: string) => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+  const newDate = date.toLocaleString('en-US', ApiDateFormat);
+
+  const response = await axiosInstance.get(
+    `${DAILY_DARSHAN_GET_ENDPOINT}?date=${newDate}&time=${time}`,
+    {
+      headers: {
+        Authorization: 'Bearer ' + getBearerToken().token,
+      },
+    },
+  );
 
   if (response.data.status === 'success') {
     data.resType = 'SUCCESS';

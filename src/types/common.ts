@@ -22,17 +22,17 @@ export type CompleteProfileFormValidationSchemaType = {
 };
 
 export type UserAddress = {
-  id?: string | undefined;
-  country: string;
+  id?: number | undefined;
+  country_id: number;
   address: string;
-  pincode: string;
-  cityVillage: string;
-  typeofAddress: string;
+  pincode: number;
+  city: string;
+  address_type: string;
   communicationAddr?: boolean;
 };
 
 export type AddressFormValidationSchemaType = {
-  addressInfo: UserAddress[];
+  address_details: UserAddress[];
 };
 
 export type SingleGurukulRecType = {

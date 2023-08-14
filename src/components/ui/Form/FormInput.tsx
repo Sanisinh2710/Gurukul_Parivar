@@ -186,7 +186,7 @@ export const FormInput = React.memo(
             keyboardType="numeric"
             inputMode="numeric"
             onFocus={() => setFocused(true)}
-            value={value}
+            value={typeof value === 'number' ? value.toString() : value}
             placeholder={placeholder}
             placeholderTextColor={theme.textColor}
             style={style.formTextInput}
