@@ -81,16 +81,16 @@ export const AddressFormValidationSchema =
   (): yup.ObjectSchema<AddressFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      addressInfo: yup
+      address_details: yup
         .array()
         .of(
           yup.object().shape({
-            id: yup.string(),
-            country: yup.string().trim().required(t('common.EmptyError')),
+            id: yup.number(),
+            country_id: yup.number().required(t('common.EmptyError')),
             address: yup.string().trim().required(t('common.EmptyError')),
-            pincode: yup.string().trim().required(t('common.EmptyError')),
-            cityVillage: yup.string().trim().required(t('common.EmptyError')),
-            typeofAddress: yup.string().trim().required(t('common.EmptyError')),
+            pincode: yup.number().required(t('common.EmptyError')),
+            city: yup.string().trim().required(t('common.EmptyError')),
+            address_type: yup.string().trim().required(t('common.EmptyError')),
             communicationAddr: yup.boolean(),
           }),
         )

@@ -13,7 +13,12 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {getAuthToken, setUserProfilingDone} from '../../../services';
+import {
+  AddressInfoGetApi,
+  AddressInfoPostApi,
+  getAuthToken,
+  setUserProfilingDone,
+} from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
 
@@ -49,13 +54,13 @@ export const ProfileSignup = ({
       ],
       emailInfo: [{email: '', secondary: false}],
     },
-    addressInfo: [
+    address_details: [
       {
-        country: '',
+        country_id: 0,
         address: '',
-        pincode: '',
-        cityVillage: '',
-        typeofAddress: '',
+        pincode: 0,
+        city: '',
+        address_type: '',
         communicationAddr: true,
       },
     ],
@@ -87,7 +92,41 @@ export const ProfileSignup = ({
     },
   });
 
-  const submitButton = (
+  React.useMemo(async () => {
+    const CallBackButtonAxiosGet = async () => {
+      if (formStep === 3) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const fetchData = await AddressInfoGetApi();
+        if (fetchData.resType === 'SUCCESS') {
+          // console.log(fetchData.data.address_details, 'of address');
+          newFormData.address_details =
+            fetchData.data.address_details.length >= 1
+              ? fetchData.data.address_details
+              : newFormData.address_details;
+          setFormData(newFormData);
+        }
+      }
+
+      if (formStep === 4) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        // const fetchData = await AddressInfoGetApi();
+        // if (fetchData.resType === 'SUCCESS') {
+        //   // console.log(fetchData.data.address_details, 'of address');
+        //   newFormData.address_details =
+        //     fetchData.data.address_details.length >= 1
+        //       ? fetchData.data.address_details
+        //       : newFormData.address_details;
+        //   setFormData(newFormData);
+        // }
+      }
+    };
+
+    await CallBackButtonAxiosGet();
+  }, [formStep]);
+
+  const submitButton = async (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
   ) => {
@@ -128,8 +167,9 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          newFormData.addressInfo = receivedData;
+          newFormData.address_details = receivedData;
           setFormData(newFormData);
+          await AddressInfoPostApi(newFormData.address_details);
         }
         setwidth(width + 20);
         setFormStep(formStep + 1);
@@ -138,7 +178,7 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          newFormData.addressInfo = receivedData;
+          newFormData.address_details = receivedData;
           setFormData(newFormData);
         }
         setwidth(width + 20);
@@ -202,6 +242,7 @@ export const ProfileSignup = ({
       }
     }
   };
+
   const headerTitle = React.useMemo(() => {
     return formStep === 1
       ? t('uploadPhoto.HederText')
@@ -271,7 +312,7 @@ export const ProfileSignup = ({
           />
         ) : formStep === 3 ? (
           <AdressInfo
-            initialValues={{addressInfo: [...formData.addressInfo]}}
+            initialValues={{address_details: [...formData.address_details]}}
             onSubmitEvent={submitButton}
           />
         ) : formStep === 4 ? (

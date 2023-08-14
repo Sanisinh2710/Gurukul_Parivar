@@ -33,9 +33,11 @@ export const DailyDarshan = ({
   const style = styles();
 
   React.useMemo(async () => {
-    setLoader(true);
+    // setLoader(true);
     try {
       const res = await DailyDarshanApi(selectedDate, selectedItem);
+      console.log(res);
+
       if (res.data.code === 200) {
         setTimeout(() => {
           setData(res.data.data.image_paths);
