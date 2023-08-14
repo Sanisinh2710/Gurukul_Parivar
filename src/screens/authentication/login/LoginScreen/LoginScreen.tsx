@@ -22,6 +22,7 @@ import {
 import {Languages} from '../../../../utils';
 import {LoginFormValidationSchema} from '../../../../validations';
 import {LoginScreenstyle} from './style';
+import {MobileLogin} from '../../../../services/ApiServices';
 
 export const LoginScreen = ({
   navigation,
@@ -108,8 +109,6 @@ export const LoginScreen = ({
     // data.countryCode = countryCodeSelect.split('(')[0].toString();
     data.countryCode = countryCodeSelect;
     data.mobileNumber = data.mobileNumber.toString();
-
-    console.log(data);
 
     // Do something with mobile number and than navigate to OTP Screen;
 

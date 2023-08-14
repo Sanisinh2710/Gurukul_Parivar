@@ -23,7 +23,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
-  const [resendEnabled, setResendEnabled] = React.useState(true);
   const [disabled, setDisabled] = React.useState(true);
 
   const handleLogin = () => {
@@ -46,6 +45,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
         if (isProfileSignupDone === 'SUCCESS') {
           navigation.replace('BottomNavBar');
         } else {
+          OtpLogin(mobileNum, Otp);
           navigation.replace('LoginSuccess', {type: 'Login'});
         }
       }
