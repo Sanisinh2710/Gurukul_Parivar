@@ -47,13 +47,5 @@ onPress={() => changeYourTheme('default')}
 
 
 
------------------------------------------------Vishwa Task :- -----------------------------------------------------
-1) To create exporter file for icons and images from assets,
-2) Do not wrap your screens with memo, wrap only components with the memo.
-3) tsx file  name should be in capital
-4) style files or any other files can't be tsx.
-5) Update frontDesk menu cards with proper coloring
-
-
 //Always use this
  new Date(`${currentYear}-${currentMonth + 1}-${day}`),

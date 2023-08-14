@@ -2,21 +2,12 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  Alert,
-  Dimensions,
-  Image,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
+import {COLORS} from '../../../../utils';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import {Button} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 
 export const LiveSatsang = ({
@@ -33,10 +24,6 @@ export const LiveSatsang = ({
       setPlaying(false);
       Alert.alert('video has finished playing!');
     }
-  }, []);
-
-  const togglePlaying = React.useCallback(() => {
-    setPlaying(prev => !prev);
   }, []);
 
   return (

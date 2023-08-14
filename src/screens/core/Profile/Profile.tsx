@@ -1,7 +1,8 @@
+import React from 'react';
+
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -40,9 +41,6 @@ export const ProfileScreen = ({
   const style = styles();
   const commonStyle = CommonStyle();
 
-  // React.useEffect(() => {
-  //   const language = i18n.language;
-  // }, []);
   const handlePress = (val: string) => {
     switch (val) {
       case 'user':

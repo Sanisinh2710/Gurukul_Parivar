@@ -13,6 +13,7 @@ type Props = {
   titleColor?: string;
   buttonStyle?: {[key: string]: any};
   textStyle?: {[key: string]: any};
+  customWidget?: React.JSX.Element;
 };
 export const PrimaryButton = React.memo(
   ({
@@ -23,6 +24,7 @@ export const PrimaryButton = React.memo(
     buttonStyle,
     textStyle,
     disabled,
+    customWidget,
   }: Props) => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -44,14 +46,18 @@ export const PrimaryButton = React.memo(
                 backgroundColor: '#D28F90',
               },
             ]}>
-            <Text
-              style={{
-                ...styles.titleText,
-                ...textStyle,
-                color: titleColor || COLORS.darkModetextColor,
-              }}>
-              {title}
-            </Text>
+            {customWidget ? (
+              customWidget
+            ) : (
+              <Text
+                style={{
+                  ...styles.titleText,
+                  ...textStyle,
+                  color: titleColor || COLORS.darkModetextColor,
+                }}>
+                {title}
+              </Text>
+            )}
           </TouchableOpacity>
         ) : (
           <Pressable
@@ -64,16 +70,20 @@ export const PrimaryButton = React.memo(
                 backgroundColor: buttonColor || theme.primary,
               },
             ]}>
-            <Text
-              style={{
-                ...styles.titleText,
-                ...textStyle,
-                marginTop: 'auto',
-                marginBottom: 'auto',
-                color: titleColor || COLORS.darkModetextColor,
-              }}>
-              {title}
-            </Text>
+            {customWidget ? (
+              customWidget
+            ) : (
+              <Text
+                style={{
+                  ...styles.titleText,
+                  ...textStyle,
+                  marginTop: 'auto',
+                  marginBottom: 'auto',
+                  color: titleColor || COLORS.darkModetextColor,
+                }}>
+                {title}
+              </Text>
+            )}
           </Pressable>
         )}
       </View>

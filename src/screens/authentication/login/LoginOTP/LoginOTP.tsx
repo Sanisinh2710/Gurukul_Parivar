@@ -1,8 +1,9 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {Pressable, Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import {ActivityIndicator, Image, Pressable, Text, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   OtpComponent,
@@ -10,8 +11,13 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {isProfilingDone, setAuthToken} from '../../../../services';
+import {
+  VerifyOTPApi,
+  isProfilingDone,
+  setAuthToken,
+} from '../../../../services';
 import {LoginOtpScreenProps} from '../../../../types';
+import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
@@ -19,13 +25,15 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const countryCode = route.params?.countryCode;
   const style = styles();
   const CommonStyles = CommonStyle();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [disabled, setDisabled] = React.useState(true);
 
-  const handleLogin = () => {
+  const [isApiLoading, setIsApiloading] = React.useState(false);
+
+  const handleLogin = async () => {
     let flag = 0;
 
     for (let i = 0; i < num.length; i++) {
@@ -38,15 +46,32 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       return;
     } else {
       setOtp([num.join('')]);
-      const resType = setAuthToken({mobileNum, countryCode});
-      if (resType === 'SUCCESS') {
-        const isProfileSignupDone = isProfilingDone(mobileNum);
+      if (mobileNum && num.join('')) {
+        setIsApiloading(true);
+        const response = await VerifyOTPApi(mobileNum, num.join(''));
 
-        if (isProfileSignupDone === 'SUCCESS') {
-          navigation.replace('BottomNavBar');
+        if (response.resType === 'SUCCESS') {
+          const resType = setAuthToken({
+            mobileNum: mobileNum,
+            countryCode: countryCode,
+            token: response.data.token,
+          });
+          if (resType === 'SUCCESS') {
+            const isProfileSignupDone = isProfilingDone(mobileNum);
+            setIsApiloading(false);
+
+            if (isProfileSignupDone === 'SUCCESS') {
+              navigation.replace('BottomNavBar');
+            } else {
+              navigation.replace('LoginSuccess', {type: 'Login'});
+            }
+          } else {
+            setIsApiloading(false);
+            Toast.show(resType, 2);
+          }
         } else {
-          OtpLogin(mobileNum, Otp);
-          navigation.replace('LoginSuccess', {type: 'Login'});
+          setIsApiloading(false);
+          Toast.show(response.message, 2);
         }
       }
     }
@@ -109,7 +134,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
               </Text>
             )}
             <View style={style.editIconStyle}>
-              <Icon name="edit-3" size={14} />
+              <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
             </View>
           </View>
 
@@ -129,6 +154,16 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
           <PrimaryButton
             onPress={handleLogin}
             title={t('otpScreen.Verify&Login')}
+            customWidget={
+              isApiLoading ? (
+                <>
+                  <ActivityIndicator
+                    size={25}
+                    color={COLORS.darkModetextColor}
+                  />
+                </>
+              ) : undefined
+            }
             disabled={disabled}
           />
         </View>

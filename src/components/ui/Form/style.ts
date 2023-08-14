@@ -107,6 +107,18 @@ export const FormInputStyle = (value?: any) => {
       marginTop: 50,
       alignSelf: 'center',
     },
+    chevronArrowView: {
+      width: '15%',
+      height: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    chevronArrow: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+    },
     contentView: {
       // marginTop: 10,
       // height: 50,

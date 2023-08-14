@@ -1,5 +1,8 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {FlatList, Image, TouchableOpacity, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
@@ -7,19 +10,16 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
+import {RootStackParamList} from '../../../../types';
 import {
-  d,
   DailyDarshanAllImages,
   DailyDarshanEveningImages,
   DailyDarshanMorningImages,
+  d,
   options,
 } from '../../../../utils';
-import {AllIcons} from '../../../../../assets/icons';
 import {styles} from './styles';
-import {RootStackParamList} from '../../../../types';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {useTranslation} from 'react-i18next';
 
 export const DailyDarshan = ({
   navigation,
@@ -75,14 +75,15 @@ export const DailyDarshan = ({
             height: 40,
             borderWidth: 0,
           }}
-          selectedItem={selectedItem}
-          setselectedItem={setselectedItem}
+          value={selectedItem}
+          onChange={setselectedItem}
           heading={''}
           list={[
             {name: t('DailyDarshan.All')},
             {name: t('DailyDarshan.Morning')},
             {name: t('DailyDarshan.Evening')},
           ]}
+          showHeading={false}
         />
 
         <View>

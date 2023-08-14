@@ -3,6 +3,7 @@ import {
   Animated,
   Easing,
   Image,
+  NativeModules,
   PermissionsAndroid,
   Platform,
   Text,
@@ -25,6 +26,8 @@ type ShareDownloadProps = {
 };
 
 export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
+  const {WallpaperModule} = NativeModules;
+
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
@@ -70,12 +73,12 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     } else {
       try {
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          'android.permission.WRITE_EXTERNAL_STORAGE',
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        } else {
           downloadImage();
           setModalVisible(!modalVisible);
+        } else {
           Toast.show('Storage Permission Required', 2);
         }
       } catch (err) {}
@@ -130,6 +133,17 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
 
+  const imgURL = `https://img.freepik.com/premium-photo/ready-serve-shot-tennis-ball-lying-court-outlined-by-shadow-racket_590464-5276.jpg?t=st=1691665426~exp=1691666026~hmac=341c3bea3f1ebe4b4692743aec138eb64cf2773345d6c34d2305cad8a471c81e`;
+
+  const setWallPaper = async (imgUrl: string) => {
+    try {
+      const result = await WallpaperModule.setAsWallpaper(imgUrl);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
@@ -142,6 +156,9 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
+              onTouchEnd={async () => {
+                await setWallPaper(imgURL);
+              }}
               style={[
                 style.iconContainer,
                 {backgroundColor: 'rgba(98, 177, 158, 1)'},

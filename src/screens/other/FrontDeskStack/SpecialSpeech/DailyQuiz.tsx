@@ -1,12 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import {AllIcons} from '../../../../../assets/icons';
 
 export const DailyQuiz = ({
   navigation,

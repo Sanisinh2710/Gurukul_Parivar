@@ -1,6 +1,9 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FlatList, Pressable, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   PrimaryButton,
@@ -8,10 +11,8 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
-import {AllIcons} from '../../../../../assets/icons';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
-import LinearGradient from 'react-native-linear-gradient';
+import {styles} from './styles';
 
 export const DailyQuizDetail = ({
   navigation,

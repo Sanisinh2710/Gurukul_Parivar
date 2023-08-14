@@ -238,7 +238,8 @@ export const ProfileSignup = ({
           }
         }}
       />
-      <View style={commonStyle.commonContentView}>
+
+      <View style={[commonStyle.commonContentView]}>
         {formStep === 1 ? (
           <CompleteYourProfile
             initialValues={formData.completeProfile}
