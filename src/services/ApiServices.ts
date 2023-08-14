@@ -5,6 +5,7 @@ import {
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_QUOTES_GET_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   LOGIN_POST_ENDPOINT,
@@ -246,7 +247,33 @@ export const AddressInfoPostApi = async (address_details: any) => {
 
   return data;
 };
+export const DailyQuotesApi = async (date: Date) => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+  const newDate = date.toLocaleString('en-US', ApiDateFormat);
+  const response = await axiosInstance.get(
+    `${DAILY_QUOTES_GET_ENDPOINT}?date=${newDate}`,
+    {
+      headers: {
+        Authorization: 'Bearer ' + getBearerToken().token,
+      },
+    },
+  );
+  if (response.data.status === 'success') {
+    data.resType = 'SUCCESS';
+    data.data = response.data.data;
+    data.message = response.data.message;
+  } else {
+    data.resType = 'ERROR';
+    data.data = response.data.data;
+    data.message = response.data.message;
+  }
 
+  return data;
+};
 export const DailyDarshanApi = async (date: Date, time: string) => {
   let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
     resType: 'ERROR',

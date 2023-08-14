@@ -16,6 +16,7 @@ export const DailyDarshanDetail = ({
   const style = styles();
   const commonStyle = CommonStyle();
   const currentImageIndex = route.params.currentImageIndex;
+  const [wallpaper, setWallpaper] = React.useState('');
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
   );
@@ -23,6 +24,10 @@ export const DailyDarshanDetail = ({
   const AllData = route.params.data;
   const [Data, setData] = React.useState<Array<String>>(AllData);
   const currentImageUri = Data[pagination - 1];
+
+  React.useEffect(() => {
+    setWallpaper(`https://gurukul.taskgrids.com${currentImageUri}`);
+  }, [currentImageUri]);
 
   return (
     <ScreenWrapper>
@@ -45,7 +50,7 @@ export const DailyDarshanDetail = ({
             />
           </View>
 
-          <ShareDownload wallpaper={true} />
+          <ShareDownload wallpaper={true} imgURL={wallpaper && wallpaper} />
         </>
       </View>
       <CustomNavigate

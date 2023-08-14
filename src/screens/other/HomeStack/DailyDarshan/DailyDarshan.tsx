@@ -36,15 +36,16 @@ export const DailyDarshan = ({
     // setLoader(true);
     try {
       const res = await DailyDarshanApi(selectedDate, selectedItem);
-      console.log(res);
 
-      if (res.data.code === 200) {
+      if (res.resType === 'SUCCESS') {
         setTimeout(() => {
-          setData(res.data.data.image_paths);
+          setData(res.data.image_paths);
           setLoader(false);
         }, 200);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, [selectedItem, selectedDate]);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
@@ -117,7 +118,7 @@ export const DailyDarshan = ({
           // />
           <Loader />
         ) : (
-          <View style={{height: '85%'}}>
+          <View style={{height: '90%'}}>
             {Data.length > 0 ? (
               <FlatList
                 showsVerticalScrollIndicator={false}

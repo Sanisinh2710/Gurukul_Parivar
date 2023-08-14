@@ -56,7 +56,7 @@ export const ProfileSignup = ({
     },
     address_details: [
       {
-        country_id: 0,
+        country_id: 101,
         address: '',
         pincode: 0,
         city: '',
@@ -99,12 +99,14 @@ export const ProfileSignup = ({
 
         const fetchData = await AddressInfoGetApi();
         if (fetchData.resType === 'SUCCESS') {
-          // console.log(fetchData.data.address_details, 'of address');
-          newFormData.address_details =
-            fetchData.data.address_details.length >= 1
-              ? fetchData.data.address_details
-              : newFormData.address_details;
-          setFormData(newFormData);
+          console.log(fetchData, 'of address');
+          if (fetchData.data.address_details !== null) {
+            newFormData.address_details =
+              fetchData.data.address_details.length >= 1
+                ? fetchData.data.address_details
+                : newFormData.address_details;
+            setFormData(newFormData);
+          }
         }
       }
 

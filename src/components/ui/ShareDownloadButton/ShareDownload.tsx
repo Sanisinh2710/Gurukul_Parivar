@@ -22,13 +22,14 @@ import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
 type ShareDownloadProps = {
+  imgURL?: string;
   wallpaper: boolean;
 };
 
-export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
+export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const {WallpaperModule} = NativeModules;
-
   const style = styles();
+  console.log(imgURL);
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
@@ -46,7 +47,6 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
-        console.log(imagePath, ' ', fileContent, '   ', base64Image);
 
         const options = {
           title: 'Share via',
@@ -65,8 +65,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     }
   };
 
-  const REMOTE_IMAGE_PATH =
-    'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png';
+  const REMOTE_IMAGE_PATH = imgURL;
   const checkPermission = async () => {
     if (Platform.OS === 'ios') {
       downloadImage();
@@ -93,7 +92,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     // Image URL which we want to download
     let image_URL = REMOTE_IMAGE_PATH;
     // Getting the extention of the file
-    let ext: any = getExtention(image_URL);
+    let ext: any = image_URL && getExtention(image_URL);
     ext = '.' + ext[0];
     // Get config and fs from RNFetchBlob
     // config: To pass the downloading related options
@@ -114,9 +113,10 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         description: 'Image',
       },
     };
-    config(options)
-      .fetch('GET', image_URL)
-      .then(res => {});
+    image_URL &&
+      config(options)
+        .fetch('GET', image_URL)
+        .then(res => {});
   };
 
   const getExtention = (filename: string) => {
@@ -133,9 +133,8 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
 
-  const imgURL = `https://img.freepik.com/premium-photo/ready-serve-shot-tennis-ball-lying-court-outlined-by-shadow-racket_590464-5276.jpg?t=st=1691665426~exp=1691666026~hmac=341c3bea3f1ebe4b4692743aec138eb64cf2773345d6c34d2305cad8a471c81e`;
-
   const setWallPaper = async (imgUrl: string) => {
+    console.log(imgUrl, 'wallpaper');
     try {
       const result = await WallpaperModule.setAsWallpaper(imgUrl);
       console.log(result);
@@ -157,7 +156,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
           {wallpaper === true && (
             <View
               onTouchEnd={async () => {
-                await setWallPaper(imgURL);
+                await setWallPaper(imgURL ? imgURL : 'wallpaperImage');
               }}
               style={[
                 style.iconContainer,

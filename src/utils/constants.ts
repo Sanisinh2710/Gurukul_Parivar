@@ -388,6 +388,7 @@ export const HomeGrid = (t: any) => {
   ];
 };
 export const EditProfile = (t: any, i18n: any) => {
+  console.log(i18n.language.toLocaleUpperCase());
   return [
     {
       image: AllIcons.ProfileUser,
@@ -444,7 +445,7 @@ export const months = [
   'December',
 ];
 
-export const MyProfileData = () => [
+export const MyProfileData = (t: any) => [
   {title: t('EditProfile.PersonalInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.AddressInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.EduBussInfo'), icon: AllIcons.RightArrow},

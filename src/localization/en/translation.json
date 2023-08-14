@@ -228,6 +228,9 @@
     },
     "Payment": {
       "Heading": "Select Payment Method"
-    }
-  }
+    },
+    "NoData":{
+      "Title":"Oops, We're Blanking Out!",
+      "Content":"Looks like our data elves are on a break.\n We'll conjure up some information soon."
+  }}
 }

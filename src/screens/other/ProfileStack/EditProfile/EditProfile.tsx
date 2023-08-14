@@ -29,7 +29,7 @@ export const EditProfile = ({
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
-          data={MyProfileData()}
+          data={MyProfileData(t)}
           renderItem={item => {
             return (
               <>

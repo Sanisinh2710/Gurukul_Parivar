@@ -12,14 +12,32 @@ import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/Share
 import {RootStackParamList} from '../../../../types';
 import {d, options} from '../../../../utils';
 import {styles} from './styles';
+import {DailyQuotesApi} from '../../../../services';
 
 export const DailyQuotes = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
   const {t} = useTranslation();
+  const [Data, setData] = React.useState<Array<String>>([]);
+  const [loader, setLoader] = React.useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
+  React.useMemo(async () => {
+    // setLoader(true);
+    try {
+      const res = await DailyQuotesApi(selectedDate);
+
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.quotes);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedDate]);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -71,7 +89,12 @@ export const DailyQuotes = ({
             height: Dimensions.get('window').height * 0.7,
             justifyContent: 'center',
           }}>
-          <Image source={AllImages.DailyQuote} style={style.image} />
+          <Image
+            source={{
+              uri: `https://gurukul.taskgrids.com${Data[0]}`,
+            }}
+            style={style.image}
+          />
         </View>
 
         <ShareDownload wallpaper={false} />
