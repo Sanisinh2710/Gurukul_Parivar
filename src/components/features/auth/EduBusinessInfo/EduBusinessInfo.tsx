@@ -11,6 +11,7 @@ import {
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
+import {EducationInfoGetApi} from '../../../../services';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
@@ -23,8 +24,10 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+    console.log(initialValues);
 
     const style = styles();
+    const [loader, setLoader] = React.useState<boolean>(false);
 
     const EduBusinessInfoFormInputList: {
       name: keyof EduBusinessInfoValidationSchemaType;
@@ -36,7 +39,7 @@ export const EduBusinessInfo = React.memo(
       customProps?: object;
     }[] = [
       {
-        name: 'maxEduLevel',
+        name: 'education',
         lable: t('education/BusinessInfo.HighesteduLbl'),
         placeholder: t('education/BusinessInfo.HighesteduPlaceHolder'),
         type: 'select',
@@ -49,6 +52,7 @@ export const EduBusinessInfo = React.memo(
           'U.G.',
           'P.G.',
           'Ph.d.',
+          'BE',
         ],
       },
       {
@@ -66,7 +70,7 @@ export const EduBusinessInfo = React.memo(
         },
       },
       {
-        name: 'occupationType',
+        name: 'occupation_type',
         lable: t('education/BusinessInfo.OccupationType'),
         placeholder: t('education/BusinessInfo.OccuTypePlaceHolder'),
         type: 'select',
@@ -76,6 +80,7 @@ export const EduBusinessInfo = React.memo(
           'H.R. Executive',
           'C.E.O.',
           'C.T.O.',
+          'Employee',
         ],
       },
       {
@@ -86,7 +91,7 @@ export const EduBusinessInfo = React.memo(
         menuList: ['Music', 'Dancing', 'Games', 'Cricket', 'gtdrdrghfdghr'],
       },
       {
-        name: 'otherComment',
+        name: 'other',
         lable: t('education/BusinessInfo.Other'),
         placeholder: t('education/BusinessInfo.OtherPlaceHolder'),
         type: 'textarea',
@@ -96,6 +101,7 @@ export const EduBusinessInfo = React.memo(
     const {
       control,
       handleSubmit,
+      setValue,
       formState: {errors},
     } = useForm<EduBusinessInfoValidationSchemaType>({
       defaultValues: initialValues,
@@ -112,6 +118,19 @@ export const EduBusinessInfo = React.memo(
     const leftOnSubmit = () => {
       onSubmitEvent(initialValues, 'skip');
     };
+
+    React.useEffect(() => {
+      setLoader(true);
+
+      const timer = setTimeout(() => {
+        if (initialValues) {
+          // setValue()
+          setLoader(false);
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }, [initialValues]);
     return (
       <ScrollView
         contentContainerStyle={style.scrollViewContainer}

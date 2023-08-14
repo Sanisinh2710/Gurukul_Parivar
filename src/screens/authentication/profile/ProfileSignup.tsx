@@ -16,6 +16,8 @@ import {
 import {
   AddressInfoGetApi,
   AddressInfoPostApi,
+  EducationInfoGetApi,
+  EducationInfoPostApi,
   getAuthToken,
   setUserProfilingDone,
 } from '../../../services';
@@ -65,11 +67,11 @@ export const ProfileSignup = ({
       },
     ],
     edu_businessInfo: {
-      maxEduLevel: '',
+      education: '',
       occupation: '',
-      occupationType: '',
+      occupation_type: '',
       skills: [],
-      otherComment: '',
+      other: '',
     },
     gurukulInfo: {
       exGurukulStudent: 'No',
@@ -99,27 +101,29 @@ export const ProfileSignup = ({
 
         const fetchData = await AddressInfoGetApi();
         if (fetchData.resType === 'SUCCESS') {
-          // console.log(fetchData.data.address_details, 'of address');
-          newFormData.address_details =
-            fetchData.data.address_details.length >= 1
-              ? fetchData.data.address_details
-              : newFormData.address_details;
-          setFormData(newFormData);
+          if (fetchData.data.address_details !== null) {
+            newFormData.address_details =
+              fetchData.data.address_details.length >= 1
+                ? fetchData.data.address_details
+                : newFormData.address_details;
+            setFormData(newFormData);
+          }
         }
       }
 
       if (formStep === 4) {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
-        // const fetchData = await AddressInfoGetApi();
-        // if (fetchData.resType === 'SUCCESS') {
-        //   // console.log(fetchData.data.address_details, 'of address');
-        //   newFormData.address_details =
-        //     fetchData.data.address_details.length >= 1
-        //       ? fetchData.data.address_details
-        //       : newFormData.address_details;
-        //   setFormData(newFormData);
-        // }
+        const fetchData = await EducationInfoGetApi();
+        console.log(fetchData);
+
+        if (fetchData.resType === 'SUCCESS') {
+          if (fetchData.data.education_details !== undefined) {
+            newFormData.edu_businessInfo =
+              fetchData.data.data.education_details;
+            setFormData(newFormData);
+          }
+        }
       }
     };
 
@@ -192,6 +196,7 @@ export const ProfileSignup = ({
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
           setFormData(newFormData);
+          await EducationInfoPostApi(newFormData.edu_businessInfo);
         }
         setwidth(width + 20);
         setFormStep(formStep + 1);

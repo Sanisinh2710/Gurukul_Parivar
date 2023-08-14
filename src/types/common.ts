@@ -76,11 +76,11 @@ export type PersonalInfoFormValidationSchemaType = {
 };
 
 export type EduBusinessInfoValidationSchemaType = {
-  maxEduLevel: string;
+  education: string;
   occupation: string;
-  occupationType: string;
+  occupation_type: string;
   skills: string[];
-  otherComment?: string | undefined;
+  other?: string | undefined;
 };
 
 export type SupportedFormInputTypes =

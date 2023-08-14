@@ -5,6 +5,8 @@ import {
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
   DAILY_DARSHAN_GET_ENDPOINT,
+  EDUCATION_INFO_GET_ENDPOINT,
+  EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   LOGIN_POST_ENDPOINT,
@@ -217,6 +219,96 @@ export const AddressInfoPostApi = async (address_details: any) => {
         {
           address_details: address_details,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const EducationInfoGetApi = async () => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.get(
+        `${EDUCATION_INFO_GET_ENDPOINT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+export const EducationInfoPostApi = async (education_details: any) => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+  console.log(education_details);
+
+  try {
+    const bearer_token = getBearerToken();
+    console.log(bearer_token.token, education_details);
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.post(
+        `${EDUCATION_INFO_POST_ENDPOINT}`,
+        education_details,
         {
           headers: {
             Authorization: `Bearer ${bearer_token.token}`,

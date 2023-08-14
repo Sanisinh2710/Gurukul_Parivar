@@ -102,14 +102,14 @@ export const EduBusinessInfoFormValidationSchema =
   (): yup.ObjectSchema<EduBusinessInfoValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      maxEduLevel: yup.string().trim().required(t('common.EmptyError')),
+      education: yup.string().trim().required(t('common.EmptyError')),
       occupation: yup.string().trim().required(t('common.EmptyError')),
-      occupationType: yup.string().trim().required(t('common.EmptyError')),
+      occupation_type: yup.string().trim().required(t('common.EmptyError')),
       skills: yup
         .array()
         .min(1, t('common.EmptyError'))
         .required(t('common.EmptyError')),
-      otherComment: yup.string().trim(),
+      other: yup.string().trim(),
     });
   };
 
