@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, CustomFonts} from '../../../../utils';
 import {useAppSelector} from '../../../../redux/hooks';
+import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -37,11 +37,16 @@ export const styles = () => {
     editIconStyle: {
       height: 24,
       width: 24,
-      // borderWidth: 1,
       backgroundColor: COLORS.sunray,
       borderRadius: 60,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    editImageStyle: {
+      flex: 1,
+      width: '70%',
+      height: '70%',
+      resizeMode: 'contain',
     },
     buttonStyle: {
       borderRadius: 12,

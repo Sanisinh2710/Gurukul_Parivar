@@ -1,12 +1,19 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../../utils';
+import {useAppSelector} from '../../../../redux/hooks';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
+    mainView: {
+      height: '100%',
+    },
     FirstSubtitleView: {
+      marginTop: 24,
+    },
+    formInputView: {
       marginTop: 24,
     },
     FirstSubtitle: {
@@ -80,9 +87,11 @@ export const styles = () => {
       marginTop: 24,
     },
     NextBtn: {
-      width: 335,
+      width: '100%',
       marginTop: 50,
       alignSelf: 'center',
+      position: 'absolute',
+      bottom: 100,
     },
     contentView: {
       marginTop: 10,

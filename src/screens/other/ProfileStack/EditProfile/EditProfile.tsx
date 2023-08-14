@@ -1,14 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootAuthStackParamList} from '../../../../types';
-import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import {Text, View} from 'react-native';
-import {FlatList} from 'react-native';
 import {MyProfileData} from '../../../../utils';
-import {Image} from 'react-native';
+import {styles} from './styles';
 
 export const EditProfile = ({
   navigation,
@@ -30,7 +29,7 @@ export const EditProfile = ({
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
-          data={MyProfileData(t)}
+          data={MyProfileData()}
           renderItem={item => {
             return (
               <>

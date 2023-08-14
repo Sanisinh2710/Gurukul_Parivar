@@ -8,6 +8,7 @@ import {ButtonStyles} from './style';
 type Props = {
   title: string;
   onPress: any;
+  borderColor?: string;
   disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
@@ -17,6 +18,7 @@ type Props = {
 export const SecondaryButton = React.memo(
   ({
     title,
+    borderColor,
     onPress,
     buttonColor,
     titleColor,
@@ -31,17 +33,25 @@ export const SecondaryButton = React.memo(
     return (
       <View
         onTouchEnd={disabled ? () => {} : onPress}
-        style={{
-          ...styles.container,
-          ...buttonStyle,
-        }}>
+        style={[
+          {
+            ...styles.container,
+            ...buttonStyle,
+          },
+          {
+            backgroundColor: buttonColor || COLORS.lightsunray,
+            borderColor: borderColor || COLORS.sunray,
+          },
+        ]}>
         {disabled ? (
           <TouchableOpacity
             activeOpacity={1}
             style={[
               styles.pressableButtonstyle,
               {
-                backgroundColor: COLORS.sunray,
+                backgroundColor: buttonColor || COLORS.lightsunray,
+                borderColor: borderColor || COLORS.sunray,
+                // ...buttonStyle,
               },
             ]}>
             <Text
@@ -63,7 +73,7 @@ export const SecondaryButton = React.memo(
               {
                 backgroundColor: buttonColor || COLORS.lightsunray,
                 borderWidth: 1,
-                borderColor: COLORS.sunray,
+                borderColor: borderColor || COLORS.sunray,
               },
             ]}>
             <Text

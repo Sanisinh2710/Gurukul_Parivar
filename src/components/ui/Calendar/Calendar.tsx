@@ -8,39 +8,25 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS} from '../../../utils';
+import {COLORS, months, weekDays} from '../../../utils';
 
-const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+const minAllowedDOBDate = new Date();
+minAllowedDOBDate.setFullYear(minAllowedDOBDate.getFullYear() - 18);
 
 type CalendarProps = {
   calendarVisible: boolean;
   setCalendarVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  // saveParentDate: (...event: any[]) => void;
-  selectedParentDate: Date;
-  setSelectedParentDate: React.Dispatch<React.SetStateAction<Date>>;
+  selectedParentDate: any;
+  setSelectedParentDate: React.Dispatch<React.SetStateAction<any>>;
+  type?: string;
 };
 
 export const Calendar = ({
   calendarVisible,
   setCalendarVisible,
-  // saveParentDate,
   selectedParentDate,
   setSelectedParentDate,
+  type,
 }: CalendarProps) => {
   const [selectedDate, setSelectedDate] = React.useState(
     selectedParentDate || new Date(),
@@ -49,6 +35,7 @@ export const Calendar = ({
   const [currentMonth, setCurrentMonth] = React.useState(
     selectedParentDate.getMonth() || new Date().getMonth(),
   );
+
   const [currentYear, setCurrentYear] = React.useState(
     selectedParentDate.getFullYear() || new Date().getFullYear(),
   );
@@ -61,10 +48,20 @@ export const Calendar = ({
     }
   }, [selectedParentDate]);
 
+  React.useEffect(() => {
+    if (currentMonth && currentYear) {
+      setSelectedDate(
+        new Date(
+          `${currentYear}-${currentMonth + 1}-${selectedDate.getDate()}`,
+        ),
+      );
+    }
+  }, [currentMonth, currentYear]);
+
   const [isModalVisible, setModalVisible] = React.useState(false);
 
   const handlePreviousMonth = () => {
-    setCurrentMonth(prevMonth => {
+    setCurrentMonth((prevMonth: number) => {
       const prevMonthDate = new Date(currentYear, prevMonth - 1, 1);
       setCurrentYear(prevMonthDate.getFullYear());
       return prevMonthDate.getMonth();
@@ -72,7 +69,7 @@ export const Calendar = ({
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(prevMonth => {
+    setCurrentMonth((prevMonth: number) => {
       const nextMonthDate = new Date(currentYear, prevMonth + 1, 1);
       setCurrentYear(nextMonthDate.getFullYear());
       return nextMonthDate.getMonth();
@@ -97,8 +94,14 @@ export const Calendar = ({
   };
 
   const saveDate = () => {
+    setSelectedParentDate(
+      new Date(
+        `${selectedDate.getFullYear()}-${
+          selectedDate.getMonth() + 1
+        }-${selectedDate.getDate()}`,
+      ),
+    );
     setCalendarVisible(false);
-    setSelectedParentDate(selectedDate);
   };
 
   const renderCalendarDays = () => {
@@ -120,29 +123,58 @@ export const Calendar = ({
 
       daysRow.push(
         <TouchableOpacity
+          activeOpacity={
+            type === 'dob'
+              ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
+                minAllowedDOBDate
+                ? 1
+                : 0
+              : 0
+          }
           key={i}
           onPress={
             day
-              ? () => {
-                  handleDateSelect(
-                    new Date(`${currentYear}-${currentMonth + 1}-${day}`),
-                  );
-                }
+              ? type === 'dob'
+                ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
+                  minAllowedDOBDate
+                  ? () => {}
+                  : () => {
+                      handleDateSelect(
+                        new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                      );
+                    }
+                : () => {
+                    handleDateSelect(
+                      new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                    );
+                  }
               : () => {}
           }
           style={[
             styles.dayContainer,
-            selectedDate.getDate() === day && styles.selectedDateItem,
+            new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
+              minAllowedDOBDate && type === 'dob'
+              ? {
+                  backgroundColor: 'rgba(202, 204, 203,0.2)',
+                }
+              : selectedDate.getDate() === day && styles.selectedDateItem,
           ]}>
-          <Text
-            style={[
-              styles.dayText,
-              selectedDate.getDate() === day && {
-                color: COLORS.darkModetextColor,
-              },
-            ]}>
-            {day ? day : ''}
-          </Text>
+          <>
+            <Text
+              style={[
+                styles.dayText,
+                new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
+                  minAllowedDOBDate && type === 'dob'
+                  ? {
+                      color: 'rgba(202, 204, 203,1)',
+                    }
+                  : selectedDate.getDate() === day && {
+                      color: COLORS.darkModetextColor,
+                    },
+              ]}>
+              {day ? day : ''}
+            </Text>
+          </>
         </TouchableOpacity>,
       );
 
@@ -169,8 +201,8 @@ export const Calendar = ({
   };
 
   const renderYearRange = () => {
-    const startYear = currentYear - 70;
-    const endYear = currentYear + 20;
+    const startYear = new Date().getFullYear() - 70;
+    const endYear = new Date().getFullYear();
 
     const years = [];
     for (let year = startYear; year <= endYear; year++) {
@@ -254,11 +286,13 @@ export const Calendar = ({
               <View style={styles.modal}>
                 <View
                   style={{
-                    width: '100%',
-                    height: '50%',
+                    width: '50%',
+                    height: '40%',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    borderRadius: 20,
                     backgroundColor: COLORS.lightModeBackgroundColor,
+                    padding: '5%',
                   }}>
                   <Text style={styles.modalTitle}>Select Year</Text>
                   <ScrollView
@@ -266,7 +300,18 @@ export const Calendar = ({
                     contentContainerStyle={styles.yearRange}>
                     {renderYearRange()}
                   </ScrollView>
-                  <TouchableOpacity onPress={handleCloseYearModal}>
+                  <TouchableOpacity
+                    onPress={handleCloseYearModal}
+                    style={{
+                      width: '50%',
+                      height: '14%',
+                      backgroundColor: COLORS.primaryColor,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                      top: 10,
+                      alignSelf: 'center',
+                    }}>
                     <Text style={styles.modalCancel}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
@@ -346,7 +391,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: COLORS.lightModetextColor,
+    color: COLORS.primaryColor,
   },
   modalYear: {
     fontSize: 16,
@@ -355,8 +400,7 @@ const styles = StyleSheet.create({
   },
   modalCancel: {
     fontSize: 16,
-    color: 'red',
-    marginTop: 10,
+    color: COLORS.darkModetextColor,
   },
   weekdayContainer: {
     flexDirection: 'row',

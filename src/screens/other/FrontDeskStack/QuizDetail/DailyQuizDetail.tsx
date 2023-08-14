@@ -1,6 +1,9 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FlatList, Pressable, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   DropDownModel,
@@ -9,13 +12,10 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
-import {AllIcons} from '../../../../../assets/icons';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
-import LinearGradient from 'react-native-linear-gradient';
-import * as Progress from 'react-native-progress';
+import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
-
+import * as Progress from 'react-native-progress';
 export const DailyQuizDetail = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -178,7 +178,7 @@ export const DailyQuizDetail = ({
             }}
           />
         </View>
-        {/* <DropDownModel
+        <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
           type={'phone'}
@@ -224,7 +224,7 @@ export const DailyQuizDetail = ({
               </View>
             </View>
           }
-        /> */}
+        />
       </View>
     </ScreenWrapper>
   );

@@ -1,10 +1,9 @@
 import React from 'react';
+
 import {useTranslation} from 'react-i18next';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import LinearGradient from 'react-native-linear-gradient';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {styles} from './styles';
-import LinearGradient from 'react-native-linear-gradient';
 import {HomeGrid} from '../../../utils';
 import {
   ImageBackground,
@@ -15,12 +14,14 @@ import {
   View,
 } from 'react-native';
 
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {useAppSelector} from '../../../redux/hooks';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AllIcons} from '../../../../assets/icons';
+import {useAppSelector} from '../../../redux/hooks';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {styles} from './styles';
+
 export const HomeScreen = ({
   navigation,
 }: CompositeScreenProps<

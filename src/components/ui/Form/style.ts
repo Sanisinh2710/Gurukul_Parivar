@@ -3,7 +3,6 @@ import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
 export const FormInputStyle = (value?: any) => {
-  // const {theme} = useCustomTheme();
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
@@ -14,6 +13,7 @@ export const FormInputStyle = (value?: any) => {
       width: '100%',
       color: theme.textColor,
       opacity: value ? 1 : 0.5,
+      left: -4,
     },
     labelText: {
       ...CustomFonts.body.medium12,
@@ -25,12 +25,12 @@ export const FormInputStyle = (value?: any) => {
       marginTop: 8,
       width: '100%',
       height: 60,
-      paddingHorizontal: '3%',
+      paddingHorizontal: 10,
       borderRadius: 12,
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: COLORS.primaryInputBackgroundColor,
-      borderWidth: 2,
+      borderWidth: 1,
     },
     errorText: {
       ...CustomFonts.body.large14,
@@ -63,6 +63,7 @@ export const FormInputStyle = (value?: any) => {
     photoMainView: {
       alignItems: 'center',
       marginTop: 40,
+      justifyContent: 'center',
     },
     photOutSideView: {
       height: 110,
@@ -71,7 +72,8 @@ export const FormInputStyle = (value?: any) => {
       borderStyle: 'dashed',
       borderColor: COLORS.primaryColor,
       borderRadius: 60,
-      padding: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     photoView: {
       backgroundColor: 'rgba(172, 43, 49, 0.1)',
@@ -104,6 +106,18 @@ export const FormInputStyle = (value?: any) => {
       width: 335,
       marginTop: 50,
       alignSelf: 'center',
+    },
+    chevronArrowView: {
+      width: '15%',
+      height: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    chevronArrow: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
     },
     contentView: {
       // marginTop: 10,

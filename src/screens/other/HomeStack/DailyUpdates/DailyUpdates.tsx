@@ -1,31 +1,23 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 
-import {
-  FlatList,
-  Image,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {useTranslation} from 'react-i18next';
-import {COLORS, DailyUpdate} from '../../../../utils';
+import {CommonStyle} from '../../../../../assets/styles';
+import {ScreenHeader, ScreenWrapper} from '../../../../components';
+import {RootStackParamList} from '../../../../types';
+import {DailyUpdate} from '../../../../utils';
+import {styles} from './styles';
 
 export const DailyUpdates = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
   const commonStyle = CommonStyle();
-  const {t} = useTranslation();
 
   return (
-    <SafeAreaView style={commonStyle.commonContainer}>
+    <ScreenWrapper>
       <ScreenHeader
         showLeft={true}
         headerTitleAlign={'left'}
@@ -77,6 +69,6 @@ export const DailyUpdates = ({
           }}
         />
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };

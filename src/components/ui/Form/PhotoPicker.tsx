@@ -8,7 +8,7 @@ type PhotoPickerProps = {
   value: any;
   onChange: (...event: any[]) => void;
   onBlur: (...event: any[]) => void;
-  placeholder: string;
+  placeholder?: string;
   setFocused: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -25,7 +25,7 @@ export const PhotoPicker = React.memo(
       <View
         style={style.photoMainView}
         onTouchEnd={() => {
-          Alert.alert('Select profile picture', 'From', [
+          Alert.alert('Select profile picture', '', [
             {
               text: 'Cancel',
               onPress: () => {},

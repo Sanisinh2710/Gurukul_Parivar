@@ -56,20 +56,16 @@ export const CompleteYourProfile = React.memo(
 
     const onSubmit = (data: CompleteProfileFormValidationSchemaType) => {
       const formSubmitData = {
-        profilePic: data.profilePic,
-        gurukulName: data.gurukulName,
+        profilePic: data.profilePic || '',
+        gurukulName: data.gurukulName || '',
       };
 
       onSubmitEvent(formSubmitData);
     };
 
     return (
-      <View style={{height: '100%'}}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: '30%',
-          }}>
+      <View style={style.mainView}>
+        <ScrollView>
           <View style={style.FirstSubtitleView}>
             <Text style={style.FirstSubtitle}>
               {t('uploadPhoto.FirstSubtitle')}
@@ -114,9 +110,9 @@ export const CompleteYourProfile = React.memo(
               name={completeProfileInputList.gurukulName.name}
               render={({field: {onBlur, onChange, value}}) => {
                 return (
-                  <View style={{marginTop: 24}}>
+                  <View style={style.formInputView}>
                     <FormInput
-                      dropDownList={[...GuruKulList]}
+                      menuList={[...GuruKulList]}
                       type={completeProfileInputList.gurukulName.type}
                       name={completeProfileInputList.gurukulName.name}
                       label={completeProfileInputList.gurukulName.label}
@@ -135,15 +131,15 @@ export const CompleteYourProfile = React.memo(
               }}
             />
           </View>
-          <View style={[style.NextBtn]}>
-            <PrimaryButton
-              title={t('uploadPhoto.NextBtn')}
-              onPress={handleSubmit(onSubmit)}
-            />
-          </View>
         </ScrollView>
 
         {/* Submit button.................................. */}
+        <View style={[style.NextBtn]}>
+          <PrimaryButton
+            title={t('uploadPhoto.NextBtn')}
+            onPress={handleSubmit(onSubmit)}
+          />
+        </View>
       </View>
     );
   },

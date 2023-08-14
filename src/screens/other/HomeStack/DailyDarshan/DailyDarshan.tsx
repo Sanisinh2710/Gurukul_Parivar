@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
@@ -8,10 +9,9 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {d, options} from '../../../../utils';
-import {AllIcons} from '../../../../../assets/icons';
-import {styles} from './styles';
 import {RootStackParamList} from '../../../../types';
+import {d, options} from '../../../../utils';
+import {styles} from './styles';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
 import {useTranslation} from 'react-i18next';
@@ -82,15 +82,20 @@ export const DailyDarshan = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <RadioLable
           wantFullSpace={false}
-          customStyle={{borderRadius: 60, height: 40, borderWidth: 0}}
-          selectedItem={selectedItem}
-          setselectedItem={setselectedItem}
+          customStyle={{
+            borderRadius: 60,
+            height: 40,
+            borderWidth: 0,
+          }}
+          value={selectedItem}
+          onChange={setselectedItem}
           heading={''}
           list={[
             {name: 'both'},
             {name: t('DailyDarshan.Morning')},
             {name: t('DailyDarshan.Evening')},
           ]}
+          showHeading={false}
         />
 
         <View>

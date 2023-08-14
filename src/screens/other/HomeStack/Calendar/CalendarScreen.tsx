@@ -1,5 +1,6 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, View} from 'react-native';
 import {AllImages} from '../../../../../assets/images';
@@ -8,7 +9,7 @@ import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
 import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, d, daysArray, options2} from '../../../../utils';
+import {d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({

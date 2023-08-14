@@ -10,6 +10,7 @@ export const ModalStyle = (modalHeight: any) => {
       width: '100%',
       color: COLORS.lightModetextColor,
       opacity: 1,
+      marginLeft: 8,
     },
     modelWholeView: {
       flex: 1,
@@ -78,6 +79,18 @@ export const ModalStyle = (modalHeight: any) => {
       fontSize: 16,
       color: COLORS.lightModetextColor,
       paddingBottom: 10,
+    },
+    iconView: {
+      width: 23,
+      height: 25,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    iconStyle: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
     },
   });
 };

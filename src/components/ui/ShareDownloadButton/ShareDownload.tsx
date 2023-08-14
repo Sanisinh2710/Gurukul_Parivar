@@ -1,44 +1,52 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {
   Animated,
   Easing,
   Image,
+  NativeModules,
   PermissionsAndroid,
   Platform,
   Text,
   View,
 } from 'react-native';
 
-import Share from 'react-native-share';
-import RNFS from 'react-native-fs';
-import RNFetchBlob from 'rn-fetch-blob';
-import Toast from 'react-native-simple-toast';
 import LottieView from 'lottie-react-native';
-import {CommonStyle} from '../../../../assets/styles';
-import {styles} from './style';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import Toast from 'react-native-simple-toast';
+import RNFetchBlob from 'rn-fetch-blob';
 import {AllIcons} from '../../../../assets/icons';
-import {DropDownModel} from '../Modal';
+import {CommonStyle} from '../../../../assets/styles';
 import {CustomFonts} from '../../../utils';
+import {DropDownModel} from '../Modal';
+import {styles} from './style';
+
 type ShareDownloadProps = {
   wallpaper: boolean;
 };
+
 export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
+  const {WallpaperModule} = NativeModules;
+
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+
+  const animationProgress = React.useRef(new Animated.Value(0));
 
   const onShare = async () => {
     try {
       const response = await RNFS.downloadFile({
         fromUrl:
           'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png',
-        toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
+        toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
 
       if ((await response.promise).statusCode === 200) {
-        const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
+        const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
+        console.log(imagePath, ' ', fileContent, '   ', base64Image);
 
         const options = {
           title: 'Share via',
@@ -65,12 +73,12 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     } else {
       try {
         const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          'android.permission.WRITE_EXTERNAL_STORAGE',
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        } else {
           downloadImage();
           setModalVisible(!modalVisible);
+        } else {
           Toast.show('Storage Permission Required', 2);
         }
       } catch (err) {}
@@ -115,16 +123,26 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     // To get the file extension
     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
-  const animationProgress = useRef(new Animated.Value(0));
 
-  useEffect(() => {
+  React.useEffect(() => {
     Animated.timing(animationProgress.current, {
       toValue: modalVisible ? 1 : 0,
-      duration: 3000,
+      duration: 2000,
       easing: Easing.linear,
       useNativeDriver: false,
     }).start();
   }, [modalVisible]);
+
+  const imgURL = `https://img.freepik.com/premium-photo/ready-serve-shot-tennis-ball-lying-court-outlined-by-shadow-racket_590464-5276.jpg?t=st=1691665426~exp=1691666026~hmac=341c3bea3f1ebe4b4692743aec138eb64cf2773345d6c34d2305cad8a471c81e`;
+
+  const setWallPaper = async (imgUrl: string) => {
+    try {
+      const result = await WallpaperModule.setAsWallpaper(imgUrl);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -138,6 +156,9 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
+              onTouchEnd={async () => {
+                await setWallPaper(imgURL);
+              }}
               style={[
                 style.iconContainer,
                 {backgroundColor: 'rgba(98, 177, 158, 1)'},

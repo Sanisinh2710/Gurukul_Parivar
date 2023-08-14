@@ -4,7 +4,8 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {Image, Text, View} from 'react-native';
+import {ActivityIndicator, Image, Text, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -14,12 +15,13 @@ import {
   PrimaryButton,
   ScreenWrapper,
 } from '../../../../components';
+import {LoginByMobileNumApi} from '../../../../services';
 import {storage} from '../../../../storage';
 import {
   LoginFormValidationSchemaType,
   RootAuthStackParamList,
 } from '../../../../types';
-import {Languages} from '../../../../utils';
+import {COLORS, Languages} from '../../../../utils';
 import {LoginFormValidationSchema} from '../../../../validations';
 import {LoginScreenstyle} from './style';
 
@@ -37,6 +39,8 @@ export const LoginScreen = ({
 
   const [isLoading, setIsloading] = React.useState(false);
 
+  const [isApiLoading, setIsApiloading] = React.useState(false);
+
   const [disabled, setDisabled] = React.useState(true);
 
   const [modelVisible, setModelVisible] = React.useState<boolean>(false);
@@ -48,6 +52,8 @@ export const LoginScreen = ({
     setIsloading(true);
 
     const getLangCode = storage.getString('langCode');
+
+    const auth_token = storage.getString('auth_token');
 
     if (getLangCode) {
       const newLangcode = JSON.parse(getLangCode);
@@ -62,6 +68,9 @@ export const LoginScreen = ({
 
     const timer = setTimeout(() => {
       setIsloading(false);
+      if (auth_token) {
+        navigation.replace('ProfileSignup');
+      }
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -71,7 +80,6 @@ export const LoginScreen = ({
     control,
     watch,
     handleSubmit,
-    getValues,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(LoginFormValidationSchema()),
@@ -91,21 +99,37 @@ export const LoginScreen = ({
   }, [language]);
 
   React.useEffect(() => {
-    if (Object.keys(errors).length === 0 && getValues('mobileNumber')) {
+    if (Object.keys(errors).length === 0 && watch().mobileNumber) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
   }, [watch()]);
 
-  const onSubmit = (data: LoginFormValidationSchemaType) => {
-    data.mobileNumber =
-      countryCodeSelect.toString() + data.mobileNumber.toString();
+  const onSubmit = React.useCallback(
+    async (data: LoginFormValidationSchemaType) => {
+      // data.countryCode = countryCodeSelect.split('(')[0].toString();
 
-    // Do something with mobile number and than navigate to OTP Screen;
+      setIsApiloading(true);
+      data.countryCode = countryCodeSelect;
+      data.mobileNumber = data.mobileNumber.toString();
 
-    navigation.navigate('MobileLoginOTP');
-  };
+      // Do something with mobile number and than navigate to OTP Screen;
+      const response = await LoginByMobileNumApi(data.mobileNumber);
+
+      setIsApiloading(false);
+
+      if (response.resType === 'SUCCESS') {
+        navigation.navigate('MobileLoginOTP', {
+          mobileNum: data.mobileNumber,
+          countryCode: data.countryCode,
+        });
+      } else {
+        Toast.show(response.message, 2);
+      }
+    },
+    [],
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -146,8 +170,12 @@ export const LoginScreen = ({
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
+                    editable={true}
                     error={errors['mobileNumber']?.message?.toString()}
-                    state={{countryCodeSelect, setCountryCodeSelect}}
+                    state={{
+                      countryCodeSelect,
+                      setCountryCodeSelect,
+                    }}
                   />
                 );
               }}
@@ -158,6 +186,16 @@ export const LoginScreen = ({
           <View key={'LoginFormFooter'} style={style.footerView}>
             <PrimaryButton
               title={t('common.Signin')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
               onPress={handleSubmit(onSubmit)}
               disabled={disabled}
             />

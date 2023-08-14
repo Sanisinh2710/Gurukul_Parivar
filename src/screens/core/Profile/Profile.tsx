@@ -1,5 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {AllIcons} from '../../../../assets/icons';
+import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   DropDownModel,
@@ -9,16 +18,10 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
-import {COLORS, CustomFonts, EditProfile} from '../../../utils';
-import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {removeAuthToken, removeProfToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import LinearGradient from 'react-native-linear-gradient';
+import {COLORS, EditProfile} from '../../../utils';
+import {styles} from './styles';
 
 export const ProfileScreen = ({
   navigation,
@@ -26,17 +29,18 @@ export const ProfileScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Profile'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const theme = useAppSelector(state => state.theme.theme);
   const [modelVisible, setModelVisible] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
 
   const {t, i18n} = useTranslation();
+
+  const ProfileList = React.useMemo(() => {
+    return EditProfile(t, i18n);
+  }, [t, i18n]);
+
   const style = styles();
   const commonStyle = CommonStyle();
 
-  React.useEffect(() => {
-    const language = i18n.language;
-  }, []);
   const handlePress = (val: string) => {
     switch (val) {
       case 'user':
@@ -187,7 +191,21 @@ export const ProfileScreen = ({
                   title={t('LogoutModel.CancelBtn')}
                 />
                 <PrimaryButton
-                  onPress={() => {}}
+                  onPress={
+                    modalType === 'logout'
+                      ? () => {
+                          const resRemoveAuthToken = removeAuthToken();
+                          const resRemoveProfToken = removeProfToken();
+
+                          if (
+                            resRemoveAuthToken === 'SUCCESS' &&
+                            resRemoveProfToken === 'SUCCESS'
+                          ) {
+                            navigation.replace('Auth');
+                          }
+                        }
+                      : () => {}
+                  }
                   buttonStyle={{width: '42%'}}
                   title={
                     modalType === 'logout'

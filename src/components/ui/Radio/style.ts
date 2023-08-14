@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../utils';
@@ -15,19 +16,16 @@ export const genstyle = () => {
     },
     innerView: {
       flexDirection: 'row',
-      gap: 10,
-      // justifyContent: 'space-between',
     },
     itemView: {
       borderWidth: 1,
-      borderColor: COLORS.primaryColor,
-      flexDirection: 'row',
+      borderColor: COLORS.primaryLightBorderColor,
       borderRadius: 12,
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       height: 60,
       paddingHorizontal: 16,
-      gap: 2,
     },
     icon: {
       height: 20,

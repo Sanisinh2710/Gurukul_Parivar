@@ -1,4 +1,3 @@
-import {useTranslation} from 'react-i18next';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
 import {Theme} from '../types';
@@ -44,7 +43,7 @@ export const GurukulTheme: {[key: string]: Theme} = {
   dark: DarkTheme,
 };
 
-export const nameRegex = /^[a-zA-Z]{2,3}[a-zA-Z\s]*$/;
+export const nameRegex = /^[a-zA-Z\s]*$/;
 export const phoneRegex = /^[6-9]\d{9}$/;
 export const mailRegex = /^\w+[@]{1}\w+(\.[a-zA-Z]{2,3})+$/;
 export const passwordRegex = /^[A-Z]{1}[a-zA-Z]+[@$.]{1}[a-zA-Z\d]+$/;
@@ -387,10 +386,8 @@ export const HomeGrid = (t: any) => {
       id: 'satsang',
     },
   ];
-  [];
 };
-export const EditProfile = (t: any) => {
-  const {i18n} = useTranslation();
+export const EditProfile = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,
@@ -430,7 +427,24 @@ export const EditProfile = (t: any) => {
   ];
 };
 
-export const MyProfileData = (t: any) => [
+export const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export const MyProfileData = () => [
   {title: t('EditProfile.PersonalInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.AddressInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.EduBussInfo'), icon: AllIcons.RightArrow},
@@ -573,7 +587,7 @@ export const DailyUpdate = [
   },
   {
     image: AllImages.AppLogo,
-    title: `200 Saint's Bhojan Pankti Darshan at Nikol Gurukul`,
+    title: "200 Saint's Bhojan Pankti Darshan at Nikol Gurukul",
     time: '25,July',
   },
   {

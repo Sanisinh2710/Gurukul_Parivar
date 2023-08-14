@@ -1,7 +1,8 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, View} from 'react-native';
+import {Dimensions, Image, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -61,7 +62,6 @@ export const DailyQuotes = ({
           <Calendar
             setCalendarVisible={setCalendarVisible}
             calendarVisible={calendarVisible}
-            // saveParentDate={saveDate}
             selectedParentDate={selectedDate}
             setSelectedParentDate={setSelectedDate}
           />

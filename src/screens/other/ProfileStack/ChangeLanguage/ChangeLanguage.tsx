@@ -1,13 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
+import {storage} from '../../../../storage';
 import {RootAuthStackParamList} from '../../../../types';
 import {COLORS, Languages} from '../../../../utils';
-import {storage} from '../../../../storage';
-import {styles} from './styles';
 import {useTranslation} from 'react-i18next';
+import {styles} from './styles';
 
 export const ChangeLanguage = ({
   navigation,
