@@ -22,6 +22,8 @@ export const DailyUpdateDetail = ({
 }: NativeStackScreenProps<RootStackParamList, 'dailyUpdateDetail'>) => {
   const style = styles();
   const commonstyle = CommonStyle();
+  const Data = route.params.data;
+  console.log(Data, 'Data');
 
   return (
     <ScreenWrapper>
@@ -40,7 +42,9 @@ export const DailyUpdateDetail = ({
       <View style={commonstyle.commonContentView}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: '30%'}}>
+          contentContainerStyle={{
+            paddingBottom: '90%',
+          }}>
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
             <Text style={style.date}>
@@ -48,16 +52,13 @@ export const DailyUpdateDetail = ({
             </Text>
           </View>
           <View style={style.imageContainer}>
-            <Image source={AllImages.Rectangle74} style={style.image} />
+            <Image
+              source={{uri: `https://gurukul.taskgrids.com/${Data.images}`}}
+              style={style.image}
+            />
           </View>
           <View style={style.titleContainer}>
-            <Text style={style.content}>
-              ભારતીય સંસ્કૃતિ ઉપર અષાઢી વરસાદની જેમ ભગવાન વેદવ્યાસે અધ્યાત્મ
-              જ્ઞાનની વૃષ્ટિ કરીને જીવોના મોક્ષમાર્ગનું બીજ રોપ્યું છે. આ
-              જ્ઞાનવૃષ્ટિને સ્વજીવનમાં ઝીલીને ચરિતાર્થ કરનાર ગુરુજનોના પૂજનનો
-              દિવસ એટલે અષાઢ સુદ ૧૫ - ગુરુપૂર્ણિમા. આ પૂનમે ભરતીની જેમ શિષ્ય
-              અનેરા આનંદની અનુભુતિ કરે છે.
-            </Text>
+            <Text style={style.content}>{Data.description}</Text>
           </View>
           <View style={{marginTop: 24}}>
             <Text style={style.title}>Photo Gallery</Text>

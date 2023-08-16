@@ -31,5 +31,13 @@ export const styles = () => {
       width: '100%',
       justifyContent: 'space-between',
     },
+    wallpaperText: {
+      fontSize: 20,
+      color: 'black',
+      marginHorizontal: 20,
+      borderBottomWidth: 0.25,
+      borderBottomColor: 'rgba(23,23,23,0.3)',
+      paddingBottom: 20,
+    },
   });
 };

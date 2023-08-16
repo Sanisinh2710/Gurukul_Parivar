@@ -371,24 +371,25 @@ export const HomeGrid = (t: any) => {
       id: 'update',
     },
     {
-      name: t('homeScreen.Calendar'),
-      image: AllImages.CalendarImage,
-      id: 'calendar',
+      name: t('homeScreen.DailySatsang'),
+      image: AllImages.LiveSatsang,
+      id: 'satsang',
     },
+
     {
       name: t('homeScreen.DailyProgram'),
       image: AllImages.DailyProgram,
       id: 'program',
     },
+
     {
-      name: t('homeScreen.LiveSatsang'),
-      image: AllImages.LiveSatsang,
-      id: 'satsang',
+      name: t('homeScreen.Calendar'),
+      image: AllImages.CalendarImage,
+      id: 'calendar',
     },
   ];
 };
 export const EditProfile = (t: any, i18n: any) => {
-  console.log(i18n.language.toLocaleUpperCase());
   return [
     {
       image: AllIcons.ProfileUser,

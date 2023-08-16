@@ -1,11 +1,11 @@
-import axios from 'axios';
-
+import axios, {AxiosResponse} from 'axios';
 import {
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
   DAILY_DARSHAN_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
+  DAILY_UPDATES_GET_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   LOGIN_POST_ENDPOINT,
@@ -19,287 +19,102 @@ const axiosInstance = axios.create({
   timeout: 5000,
 });
 
-export const LoginByMobileNumApi = async (mobileNum: string) => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
+const handleApiResponse = (response: AxiosResponse<any, any>) => {
+  const data = {
+    resType: response.data.status === 'success' ? 'SUCCESS' : 'ERROR',
+    data: response.data.data,
+    message: response.data.message,
   };
+  return data;
+};
 
+const apiRequest = async (
+  endpoint: string,
+  method: string,
+  requestData = {},
+  requireBearerToken = true,
+) => {
   try {
-    const response = await axiosInstance.post(`${LOGIN_POST_ENDPOINT}`, {
-      contact: mobileNum,
+    if (requireBearerToken) {
+      const bearerToken = getBearerToken();
+      if (bearerToken.resType !== 'SUCCESS') {
+        throw new Error('Bearer token not available');
+      }
+    }
+
+    const response = await axiosInstance({
+      method,
+      url: endpoint,
+      headers: {
+        ...(requireBearerToken && {
+          Authorization: `Bearer ${getBearerToken().token}`,
+        }),
+      },
+      ...(method === 'get' ? {params: requestData} : {data: requestData}),
     });
 
-    if (response.data.status === 'success') {
-      data.resType = 'SUCCESS';
-      data.data = response.data.data;
-      data.message = response.data.message;
-    } else {
-      data.resType = 'ERROR';
-      data.data = response.data.data;
-      data.message = response.data.message;
-    }
+    return handleApiResponse(response);
   } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
+    return {
+      resType: 'ERROR',
+      data: [],
+      message: error.toString(),
+    };
   }
+};
 
-  return data;
+export const LoginByMobileNumApi = async (mobileNum: string) => {
+  return await apiRequest(
+    LOGIN_POST_ENDPOINT,
+    'post',
+    {contact: mobileNum},
+    false,
+  );
 };
 
 export const VerifyOTPApi = async (mobileNum: string, otp: string) => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
-
-  try {
-    const response = await axiosInstance.post(`${VERIFY_POST_ENDPONT}`, {
+  return await apiRequest(
+    VERIFY_POST_ENDPONT,
+    'post',
+    {
       contact: mobileNum,
-      otp: otp,
-    });
-
-    if (response.data.status === 'success') {
-      data.resType = 'SUCCESS';
-      data.data = response.data.data;
-      data.message = response.data.message;
-    } else {
-      data.resType = 'ERROR';
-      data.data = response.data.data;
-      data.message = response.data.message;
-    }
-  } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
-  }
-
-  return data;
+      otp,
+    },
+    false,
+  );
 };
 
 export const GurukulBranchGetApi = async () => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
-
-  try {
-    const bearer_token = getBearerToken();
-
-    if (bearer_token.resType === 'SUCCESS') {
-      const response = await axiosInstance.get(
-        `${GURUKUL_BRANCH_GET_ENDPOINT}`,
-        {
-          headers: {
-            Authorization: `Bearer ${bearer_token.token}`,
-          },
-        },
-      );
-
-      if (response.data.status === 'success') {
-        data.resType = 'SUCCESS';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      } else {
-        data.resType = 'ERROR';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      }
-    } else {
-      data.resType = 'ERROR';
-      data.data = [];
-      data.message = 'An error occurred..!';
-    }
-  } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
-  }
-
-  return data;
+  return await apiRequest(GURUKUL_BRANCH_GET_ENDPOINT, 'get');
 };
 
 export const GetCountriesApi = async () => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
-
-  try {
-    const bearer_token = getBearerToken();
-
-    if (bearer_token.resType === 'SUCCESS') {
-      const response = await axiosInstance.get(`${GET_COUNTRIES_ENDPOINT}`, {
-        headers: {
-          Authorization: `Bearer ${bearer_token.token}`,
-        },
-      });
-
-      if (response.data.status === 'success') {
-        data.resType = 'SUCCESS';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      } else {
-        data.resType = 'ERROR';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      }
-    } else {
-      data.resType = 'ERROR';
-      data.data = [];
-      data.message = 'An error occurred..!';
-    }
-  } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
-  }
-
-  return data;
+  return await apiRequest(GET_COUNTRIES_ENDPOINT, 'get');
 };
 
 export const AddressInfoGetApi = async () => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
-
-  try {
-    const bearer_token = getBearerToken();
-
-    if (bearer_token.resType === 'SUCCESS') {
-      const response = await axiosInstance.get(`${ADDRESS_INFO_GET_ENDPOINT}`, {
-        headers: {
-          Authorization: `Bearer ${bearer_token.token}`,
-        },
-      });
-
-      if (response.data.status === 'success') {
-        data.resType = 'SUCCESS';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      } else {
-        data.resType = 'ERROR';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      }
-    } else {
-      data.resType = 'ERROR';
-      data.data = [];
-      data.message = 'An error occurred..!';
-    }
-  } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
-  }
-
-  return data;
+  return await apiRequest(ADDRESS_INFO_GET_ENDPOINT, 'get');
 };
-export const AddressInfoPostApi = async (address_details: any) => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
 
-  try {
-    const bearer_token = getBearerToken();
-
-    if (bearer_token.resType === 'SUCCESS') {
-      const response = await axiosInstance.post(
-        `${ADDRESS_INFO_POST_ENDPOINT}`,
-        {
-          address_details: address_details,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${bearer_token.token}`,
-          },
-        },
-      );
-
-      if (response.data.status === 'success') {
-        data.resType = 'SUCCESS';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      } else {
-        data.resType = 'ERROR';
-        data.data = response.data.data;
-        data.message = response.data.message;
-      }
-    } else {
-      data.resType = 'ERROR';
-      data.data = [];
-      data.message = 'An error occurred..!';
-    }
-  } catch (error: any) {
-    data.resType = 'ERROR';
-    data.data = [];
-    data.message = error.toString();
-  }
-
-  return data;
+export const AddressInfoPostApi = async (addressDetails: any) => {
+  return await apiRequest(ADDRESS_INFO_POST_ENDPOINT, 'post', {
+    address_details: addressDetails,
+  });
 };
+
 export const DailyQuotesApi = async (date: Date) => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  const response = await axiosInstance.get(
-    `${DAILY_QUOTES_GET_ENDPOINT}?date=${newDate}`,
-    {
-      headers: {
-        Authorization: 'Bearer ' + getBearerToken().token,
-      },
-    },
-  );
-  if (response.data.status === 'success') {
-    data.resType = 'SUCCESS';
-    data.data = response.data.data;
-    data.message = response.data.message;
-  } else {
-    data.resType = 'ERROR';
-    data.data = response.data.data;
-    data.message = response.data.message;
-  }
-
-  return data;
+  return await apiRequest(DAILY_QUOTES_GET_ENDPOINT, 'get', {date: newDate});
 };
+
 export const DailyDarshanApi = async (date: Date, time: string) => {
-  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
-    resType: 'ERROR',
-    data: '',
-    message: '',
-  };
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
+  return await apiRequest(DAILY_DARSHAN_GET_ENDPOINT, 'get', {
+    date: newDate,
+    time,
+  });
+};
 
-  const response = await axiosInstance.get(
-    `${DAILY_DARSHAN_GET_ENDPOINT}?date=${newDate}&time=${time}`,
-    {
-      headers: {
-        Authorization: 'Bearer ' + getBearerToken().token,
-      },
-    },
-  );
-
-  if (response.data.status === 'success') {
-    data.resType = 'SUCCESS';
-    data.data = response.data.data;
-    data.message = response.data.message;
-  } else {
-    data.resType = 'ERROR';
-    data.data = response.data.data;
-    data.message = response.data.message;
-  }
-
-  return data;
+export const DailyUpdatesApi = async () => {
+  return await apiRequest(DAILY_UPDATES_GET_ENDPOINT, 'get');
 };

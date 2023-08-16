@@ -9,4 +9,5 @@ declare module '@env' {
   export const ADDRESS_INFO_GET_ENDPOINT: string;
   export const ADDRESS_INFO_POST_ENDPOINT: string;
   export const DAILY_QUOTES_GET_ENDPOINT: string;
+  export const DAILY_UPDATES_GET_ENDPOINT: string;
 }

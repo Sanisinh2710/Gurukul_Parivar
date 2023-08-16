@@ -140,15 +140,15 @@
     },
 
     "homeScreen": {
-      "WelcomeText1": "नमस्ते",
+      "WelcomeText1": "नमस्ते,",
       "Name": "महेशभाई",
-      "WelcomeText2": "आपका दिन शुभ हो",
+      "WelcomeText2": "जय स्वामिनारायण",
       "DailyDarshan": "रोज़ाना दर्शन",
       "DailyQuotes": "रोज़ाना उद्धरण",
       "DailyUpdate": "रोज़ाना अपडेट",
       "Calendar": "कैलेंडर",
       "DailyProgram": "दैनिक कार्यक्रम",
-      "LiveSatsang": "लाइव सत्संग"
+      "DailySatsang": "रोज़ाना सत्संग"
     },
     "frontDesk": {
       "Heading": "फ्रंट डेस्क",

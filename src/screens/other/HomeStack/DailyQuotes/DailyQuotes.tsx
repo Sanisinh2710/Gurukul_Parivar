@@ -6,7 +6,13 @@ import {Dimensions, Image, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {Calendar, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {
+  Calendar,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
 import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {RootStackParamList} from '../../../../types';
@@ -24,7 +30,7 @@ export const DailyQuotes = ({
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   React.useMemo(async () => {
-    // setLoader(true);
+    setLoader(true);
     try {
       const res = await DailyQuotesApi(selectedDate);
 
@@ -75,39 +81,51 @@ export const DailyQuotes = ({
           },
         }}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View>
-          <Calendar
-            setCalendarVisible={setCalendarVisible}
-            calendarVisible={calendarVisible}
-            selectedParentDate={selectedDate}
-            setSelectedParentDate={setSelectedDate}
-          />
-        </View>
-        <View
-          style={{
-            height: Dimensions.get('window').height * 0.7,
-            justifyContent: 'center',
-          }}>
-          <Image
-            source={{
-              uri: `https://gurukul.taskgrids.com${Data[0]}`,
-            }}
-            style={style.image}
-          />
-        </View>
+      {loader ? (
+        <Loader />
+      ) : (
+        <>
+          {Data.length > 0 ? (
+            <>
+              <View style={[commonStyle.commonContentView, {flex: 1}]}>
+                <View>
+                  <Calendar
+                    setCalendarVisible={setCalendarVisible}
+                    calendarVisible={calendarVisible}
+                    selectedParentDate={selectedDate}
+                    setSelectedParentDate={setSelectedDate}
+                  />
+                </View>
+                <View
+                  style={{
+                    height: Dimensions.get('window').height * 0.7,
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={{
+                      uri: `https://gurukul.taskgrids.com${Data[0]}`,
+                    }}
+                    style={style.image}
+                  />
+                </View>
 
-        <ShareDownload wallpaper={false} />
-      </View>
-      <CustomNavigate
-        text={
-          selectedDate !== undefined
-            ? selectedDate.toLocaleDateString('en-in', options)
-            : d.toLocaleDateString('en-in', options)
-        }
-        handlePrevPress={handlePrev}
-        handleNextPress={handleNext}
-      />
+                <ShareDownload wallpaper={false} />
+              </View>
+            </>
+          ) : (
+            <NoData />
+          )}
+          <CustomNavigate
+            text={
+              selectedDate !== undefined
+                ? selectedDate.toLocaleDateString('en-in', options)
+                : d.toLocaleDateString('en-in', options)
+            }
+            handlePrevPress={handlePrev}
+            handleNextPress={handleNext}
+          />
+        </>
+      )}
     </ScreenWrapper>
   );
 };

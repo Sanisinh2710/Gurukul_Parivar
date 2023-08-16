@@ -99,7 +99,6 @@ export const ProfileSignup = ({
 
         const fetchData = await AddressInfoGetApi();
         if (fetchData.resType === 'SUCCESS') {
-          console.log(fetchData, 'of address');
           if (fetchData.data.address_details !== null) {
             newFormData.address_details =
               fetchData.data.address_details.length >= 1
@@ -115,7 +114,6 @@ export const ProfileSignup = ({
 
         // const fetchData = await AddressInfoGetApi();
         // if (fetchData.resType === 'SUCCESS') {
-        //   // console.log(fetchData.data.address_details, 'of address');
         //   newFormData.address_details =
         //     fetchData.data.address_details.length >= 1
         //       ? fetchData.data.address_details

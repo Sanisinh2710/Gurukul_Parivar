@@ -2,7 +2,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Alert, Text, View} from 'react-native';
+import {Alert, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootAuthStackParamList} from '../../../../types';
@@ -41,18 +41,47 @@ export const LiveSatsang = ({
         }}
       />
       <View style={commonstyle.commonContentView}>
-        <View style={{marginTop: '3%', gap: 10}}>
-          <Text style={{color: COLORS.black}}>YouTube Live Katha</Text>
-          <YoutubePlayer
-            height={210}
-            play={playing}
-            videoId={'TtS2tLDauBI'}
-            onChangeState={onStateChange}
-            webViewProps={{
-              containerStyle: {borderRadius: 15},
-            }}
-          />
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{marginTop: '3%', gap: 10, paddingBottom: '30%'}}>
+            <Text style={{color: COLORS.black}}>YouTube Live Katha</Text>
+            <YoutubePlayer
+              height={200}
+              play={playing}
+              videoId={'TtS2tLDauBI'}
+              onChangeState={onStateChange}
+              webViewProps={{
+                containerStyle: {borderRadius: 15},
+              }}
+            />
+            <YoutubePlayer
+              height={200}
+              play={playing}
+              videoId={'TtS2tLDauBI'}
+              onChangeState={onStateChange}
+              webViewProps={{
+                containerStyle: {borderRadius: 15},
+              }}
+            />
+            <YoutubePlayer
+              height={200}
+              play={playing}
+              videoId={'TtS2tLDauBI'}
+              onChangeState={onStateChange}
+              webViewProps={{
+                containerStyle: {borderRadius: 15},
+              }}
+            />
+            <YoutubePlayer
+              height={200}
+              play={playing}
+              videoId={'TtS2tLDauBI'}
+              onChangeState={onStateChange}
+              webViewProps={{
+                containerStyle: {borderRadius: 15},
+              }}
+            />
+          </View>
+        </ScrollView>
       </View>
     </ScreenWrapper>
   );

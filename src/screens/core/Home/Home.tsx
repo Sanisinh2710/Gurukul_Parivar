@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import LinearGradient from 'react-native-linear-gradient';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {HomeGrid} from '../../../utils';
+import {COLORS, HomeGrid} from '../../../utils';
 import {
   ImageBackground,
   Pressable,
@@ -67,9 +67,15 @@ export const HomeScreen = ({
           <View>
             <View style={{flexDirection: 'row'}}>
               <Text style={style.WelcomeText1}>
-                {t('homeScreen.WelcomeText1')}{' '}
+                {t('homeScreen.WelcomeText1')}
               </Text>
-              <Text style={style.name}>{t('homeScreen.Name')}</Text>
+              <Text style={style.name}>
+                {t('homeScreen.Name')}
+                <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
+                  {' '}
+                  (AB0011)
+                </Text>
+              </Text>
             </View>
             <View>
               <Text style={style.WelcomeText2}>

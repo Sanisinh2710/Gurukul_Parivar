@@ -33,7 +33,7 @@ export const DailyDarshan = ({
   const style = styles();
 
   React.useMemo(async () => {
-    // setLoader(true);
+    setLoader(true);
     try {
       const res = await DailyDarshanApi(selectedDate, selectedItem);
 
@@ -111,11 +111,6 @@ export const DailyDarshan = ({
           />
         </View>
         {loader ? (
-          // <ActivityIndicator
-          //   size={50}
-          //   style={{flex: 1}}
-          //   color={COLORS.primaryColor}
-          // />
           <Loader />
         ) : (
           <View style={{height: '90%'}}>

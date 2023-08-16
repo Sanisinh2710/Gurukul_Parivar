@@ -27,11 +27,17 @@ export const styles = () => {
       lineHeight: 18.9,
     },
     image: {
-      height: 250,
-      width: 355,
+      flex: 1,
+      height: '100%',
+      width: '100%',
       borderRadius: 12,
+      resizeMode: 'cover',
     },
     imageContainer: {
+      height: '60%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
       marginTop: '3%',
     },
   });

@@ -7,14 +7,34 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {DailyUpdate} from '../../../../utils';
+import {d} from '../../../../utils';
 import {styles} from './styles';
+import {DailyUpdatesApi} from '../../../../services';
 
 export const DailyUpdates = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
+  const [Data, setData] = React.useState<Array<String>>([]);
+  const [loader, setLoader] = React.useState<boolean>(false);
+  const NewDate = d.toISOString().split('T')[0];
+
   const commonStyle = CommonStyle();
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await DailyUpdatesApi();
+
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.daily_updates);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -36,14 +56,16 @@ export const DailyUpdates = ({
           contentContainerStyle={{
             paddingBottom: '35%',
           }}
-          data={DailyUpdate}
-          renderItem={item => {
+          data={Data}
+          renderItem={({item, index}) => {
+            console.log(index);
             return (
               <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={() => {
                   navigation.navigate('dailyUpdateDetail', {
-                    title: item.item.title,
+                    title: item.title,
+                    data: Data[index],
                   });
                 }}>
                 <View style={style.updateContainer}>
@@ -54,13 +76,18 @@ export const DailyUpdates = ({
                       width: '20%',
                     }}>
                     <View style={style.imageContainer}>
-                      <Image source={item.item.image} style={style.image} />
+                      <Image
+                        source={{
+                          uri: `https://gurukul.taskgrids.com/${item.images}`,
+                        }}
+                        style={style.image}
+                      />
                     </View>
                   </View>
                   <View style={{width: '80%'}}>
                     <View style={style.textContainer}>
-                      <Text style={style.title}>{item.item.title}</Text>
-                      <Text style={style.time}>{item.item.time}</Text>
+                      <Text style={style.title}>{item.title}</Text>
+                      <Text style={style.time}>{item.created_at}</Text>
                     </View>
                   </View>
                 </View>

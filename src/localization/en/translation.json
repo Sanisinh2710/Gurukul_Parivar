@@ -139,15 +139,15 @@
       "YourRelation": "Select relation"
     },
     "homeScreen": {
-      "WelcomeText1": "Hello",
+      "WelcomeText1": "Hello,",
       "Name": "Maheshbhai",
-      "WelcomeText2": "Have a Great Day",
+      "WelcomeText2": "Jay Swaminarayan",
       "DailyDarshan": "Daily Darshan",
       "DailyQuotes": "Daily Quotes",
       "DailyUpdate": "Daily Update",
       "DailyProgram": "Daily Program",
       "Calendar": "Calendar",
-      "LiveSatsang": "Live Satsang"
+      "DailySatsang": "Daily Satsang"
     },
     "frontDesk": {
       "Heading": "Front Desk",
