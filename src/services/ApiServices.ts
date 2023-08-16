@@ -130,49 +130,32 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
     const bearer_token = getBearerToken();
 
     if (bearer_token.resType === 'SUCCESS') {
-      try {
-        const paylodaData = new FormData();
+      const payloadData = new FormData();
 
-        Object.keys(userPersonalInfo).map((key, index) => {
-          paylodaData.append(
-            `${key}`,
-            key === 'profile'
-              ? JSON.stringify(userPersonalInfo[key])
-              : userPersonalInfo[key],
-          );
-        });
+      Object.keys(userPersonalInfo).map((key, index) => {
+        payloadData.append(`${key}`, userPersonalInfo[key]);
+      });
 
-        console.log(paylodaData);
-
-        const response = await axiosInstance.post(
-          `${PERSONAL_INFO_POST_ENDPOINT}`,
-          paylodaData,
-          {
-            headers: {
-              Authorization: `Bearer ${bearer_token.token}`,
-              'Content-Type': `multipart/form-data`,
-              Accept: 'application/json',
-            },
+      const response = await axiosInstance.post(
+        `${PERSONAL_INFO_POST_ENDPOINT}`,
+        payloadData,
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+            'Content-Type': `multipart/form-data`,
+            Accept: 'application/json',
           },
-        );
+        },
+      );
 
-        console.log(response, 'in api');
-
-        if (response.data.status === 'success') {
-          data.resType = 'SUCCESS';
-          data.data = response.data.data;
-          data.message = response.data.message;
-        } else {
-          data.resType = 'ERROR';
-          data.data = response.data.data;
-          data.message = response.data.message;
-        }
-      } catch (error: any) {
-        console.log('aama aavyu', error);
-
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
         data.resType = 'ERROR';
-        data.data = [];
-        data.message = error.toString();
+        data.data = response.data.data;
+        data.message = response.data.message;
       }
     } else {
       data.resType = 'ERROR';

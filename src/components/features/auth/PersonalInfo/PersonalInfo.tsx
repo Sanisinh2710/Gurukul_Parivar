@@ -35,6 +35,8 @@ export const PersonalInfo = React.memo(
     const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =
       React.useState('');
 
+    const [localLoading, setIsLocalLoading] = React.useState(false);
+
     const [checkedArray, setCheckedArray] = React.useState(
       [
         ...initialValues?.mobilenumInfo?.map(item => {
@@ -42,6 +44,8 @@ export const PersonalInfo = React.memo(
         }),
       ] || [true],
     );
+
+    const [isArraySet, setIsArrayset] = React.useState(false);
 
     const PerosnalInfoForm1InputList: {
       name: keyof PersonalInfoFormValidationSchemaType;
@@ -101,6 +105,7 @@ export const PersonalInfo = React.memo(
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: {errors},
     } = useForm<PersonalInfoFormValidationSchemaType>({
       defaultValues: initialValues,
@@ -113,6 +118,7 @@ export const PersonalInfo = React.memo(
       append: mobileappend,
       remove: mobileremove,
       update: mobileupdate,
+      replace: mobilereplace,
     } = useFieldArray({
       control,
       name: 'mobilenumInfo',
@@ -122,10 +128,78 @@ export const PersonalInfo = React.memo(
       fields: emailfield,
       append: emailappend,
       remove: emailremove,
+      update: emailupdate,
+      replace: emailreplace,
     } = useFieldArray({
       control,
       name: 'emailInfo',
     });
+
+    React.useEffect(() => {
+      if (primarycountryCodeSelect) {
+        mobileupdate(0, {
+          mobilenum: getValues()?.mobilenumInfo?.[0].mobilenum,
+          whatsappNum: getValues()?.mobilenumInfo?.[0].whatsappNum,
+          countryCode: primarycountryCodeSelect,
+          secondary: false,
+        });
+      }
+    }, [mobileupdate, primarycountryCodeSelect, getValues]);
+
+    React.useEffect(() => {
+      if (secondarycountryCodeSelect) {
+        mobileupdate(1, {
+          mobilenum: getValues()?.mobilenumInfo?.[1].mobilenum,
+          whatsappNum: getValues()?.mobilenumInfo?.[1].whatsappNum,
+          countryCode: secondarycountryCodeSelect,
+          secondary: true,
+        });
+      }
+    }, [getValues, mobileupdate, secondarycountryCodeSelect]);
+
+    React.useMemo(() => {
+      if (initialValues) {
+        if (initialValues.mobilenumInfo.length > 1) {
+          if (mobilefield.length <= 1) {
+            mobileappend(initialValues.mobilenumInfo[1]);
+          }
+        }
+        if (initialValues.emailInfo.length > 1) {
+          if (emailfield.length <= 1) {
+            emailappend(initialValues.emailInfo[1]);
+          }
+        }
+        setIsArrayset(true);
+      }
+    }, [initialValues]);
+
+    React.useEffect(() => {
+      if (isArraySet) {
+        setIsLocalLoading(true);
+        Object.keys(initialValues).map((key, index) => {
+          if (key === 'mobilenumInfo') {
+            const mobileArr = initialValues.mobilenumInfo;
+            mobileArr.map((item, index) => {
+              mobileupdate(index, item);
+            });
+          } else if (key === 'emailInfo') {
+            const emailArr = initialValues.emailInfo;
+            emailArr.map((item, index) => {
+              emailupdate(index, item);
+            });
+          } else {
+            setValue(key, initialValues[key]);
+          }
+        });
+
+        setCheckedArray([
+          ...initialValues?.mobilenumInfo?.map(item => {
+            return item.whatsappNum;
+          }),
+        ]);
+        setIsLocalLoading(false);
+      }
+    }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
       if (data && data.mobilenumInfo && data.emailInfo) {
@@ -177,31 +251,9 @@ export const PersonalInfo = React.memo(
       }
     };
 
-    React.useEffect(() => {
-      if (primarycountryCodeSelect) {
-        mobileupdate(0, {
-          mobilenum: getValues()?.mobilenumInfo?.[0].mobilenum,
-          whatsappNum: getValues()?.mobilenumInfo?.[0].whatsappNum,
-          countryCode: primarycountryCodeSelect,
-          secondary: false,
-        });
-      }
-    }, [mobileupdate, primarycountryCodeSelect, getValues]);
-
-    React.useEffect(() => {
-      if (secondarycountryCodeSelect) {
-        mobileupdate(1, {
-          mobilenum: getValues()?.mobilenumInfo?.[1].mobilenum,
-          whatsappNum: getValues()?.mobilenumInfo?.[1].whatsappNum,
-          countryCode: secondarycountryCodeSelect,
-          secondary: true,
-        });
-      }
-    }, [getValues, mobileupdate, secondarycountryCodeSelect]);
-
     return (
       <>
-        {isParentLoading ? (
+        {isParentLoading || localLoading ? (
           <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
@@ -247,7 +299,7 @@ export const PersonalInfo = React.memo(
               <View style={{gap: 15, marginTop: '5%'}}>
                 {mobilefield.map((mainitem, mainindex) => {
                   return (
-                    <View key={mainindex}>
+                    <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
                           style={{height: 30, width: 30, alignSelf: 'flex-end'}}
@@ -294,7 +346,7 @@ export const PersonalInfo = React.memo(
                               }
                               defaultPhoneCountryCode={
                                 getValues()?.mobilenumInfo?.[mainindex]
-                                  .countryCode
+                                  ?.countryCode
                               }
                               rightText={
                                 mainindex === 0
@@ -383,7 +435,7 @@ export const PersonalInfo = React.memo(
                 })}
                 {emailfield.map((mainitem, mainindex) => {
                   return (
-                    <View key={mainindex}>
+                    <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
                           style={{height: 30, width: 30, alignSelf: 'flex-end'}}

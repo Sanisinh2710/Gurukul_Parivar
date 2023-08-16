@@ -121,7 +121,7 @@ export const isString = (object: any): object is string => {
   }
 };
 
-export const CustomDateSplitAndFormat = (
+export const CustomLocalDateSplitAndFormat = (
   date: string,
   fromSplitParameter: string,
   toSplitParameter: string,
@@ -142,6 +142,32 @@ export const CustomDateSplitAndFormat = (
     }${toSplitParameter}${
       date.split(`${fromSplitParameter}`)[1]
     }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+    return newDate;
+  }
+};
+
+export const CustomBackendDateSplitAndFormat = (
+  date: string,
+  fromSplitParameter: string,
+  toSplitParameter: string,
+  format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
+) => {
+  if (format === 'mm/dd/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[2]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
+
+    return newDate;
+  }
+  if (format === 'dd/mm/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[2]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
 
     return newDate;
   }

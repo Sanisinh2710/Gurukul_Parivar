@@ -53,8 +53,6 @@ export const DailyQuizDetail = ({
     }
   };
 
-  console.log(answer, 'answer whole');
-
   return (
     <ScreenWrapper>
       <ScreenHeader

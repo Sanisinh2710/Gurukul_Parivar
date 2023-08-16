@@ -56,6 +56,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             mobileNum: mobileNum,
             countryCode: countryCode,
             token: response.data.token,
+            is_profile_updated: response.data.is_profile_updated,
           });
           if (resType === 'SUCCESS') {
             const isProfileSignupDone = isProfilingDone(mobileNum);
@@ -111,6 +112,9 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .toString()
       .padStart(2, '0')}`;
   };
+
+  console.log(route.params, 'route params');
+
   return (
     <ScreenWrapper>
       <ScreenHeader

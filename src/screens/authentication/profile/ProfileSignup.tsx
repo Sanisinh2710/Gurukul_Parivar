@@ -15,12 +15,17 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {
+  PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
   getAuthToken,
   setUserProfilingDone,
 } from '../../../services';
 import {ProfileSignupProps} from '../../../types';
-import {COLORS, CustomDateSplitAndFormat} from '../../../utils';
+import {
+  COLORS,
+  CustomBackendDateSplitAndFormat,
+  CustomLocalDateSplitAndFormat,
+} from '../../../utils';
 
 export const ProfileSignup = ({
   navigation,
@@ -35,7 +40,7 @@ export const ProfileSignup = ({
 
   const [isParentLoading, setIsParentLoading] = React.useState(false);
 
-  const [formData, setFormData] = React.useState<any>({
+  const [formData, setFormData] = React.useState<{[key: string]: any}>({
     completeProfile: {
       profile: '',
       branch_id: null,
@@ -50,7 +55,7 @@ export const ProfileSignup = ({
         {
           mobilenum: getAuthToken().loginData.mobileNum,
           secondary: false,
-          whatsappNum: true,
+          whatsappNum: false,
           countryCode: getAuthToken().loginData.countryCode,
         },
       ],
@@ -94,6 +99,117 @@ export const ProfileSignup = ({
     },
   });
 
+  React.useMemo(async () => {
+    const CallBackButtonAxiosGet = async () => {
+      if (formStep === 1) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const response = await PersonalInfoGetDetailsApi();
+        if (response.resType === 'SUCCESS') {
+          if (
+            response.data !== null &&
+            response.data !== undefined &&
+            response.data !== ''
+          ) {
+            newFormData.completeProfile =
+              response.data.completeProfile ?? newFormData.completeProfile;
+            setFormData(newFormData);
+          }
+        }
+      }
+      if (formStep === 2) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const response = await PersonalInfoGetDetailsApi();
+        if (response.resType === 'SUCCESS') {
+          if (
+            response.data.personal_details !== null &&
+            response.data.personal_details !== undefined &&
+            response.data.personal_details !== ''
+          ) {
+            const backendData: any = response.data.personal_details;
+
+            Object.keys(backendData).map((key, index) => {
+              if (key === 'dob') {
+                const newDob = CustomBackendDateSplitAndFormat(
+                  backendData[key],
+                  '-',
+                  '/',
+                  'dd/mm/yyyy',
+                );
+
+                newFormData.personalInfo.dob = newDob;
+              } else if (key === 'gender') {
+                const newgender =
+                  backendData[key][0] +
+                  backendData[key].slice(1).toLocaleLowerCase();
+                newFormData.personalInfo.gender =
+                  newgender ?? newFormData.personalInfo.gender;
+              } else if (key === 'primary_contact') {
+                newFormData.personalInfo.mobilenumInfo[0].mobilenum =
+                  backendData[key].toString() ??
+                  newFormData.personalInfo.mobilenumInfo[0].mobilenum;
+              } else if (key === 'primary_contact_cc') {
+                newFormData.personalInfo.mobilenumInfo[0].countryCode =
+                  backendData[key] ??
+                  newFormData.personalInfo.mobilenumInfo[0].countryCode;
+              } else if (key === 'is_primary_contact_wp') {
+                newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
+                  backendData[key] ??
+                  newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
+              } else if (key === 'secondary_contact') {
+                return;
+              } else if (key === 'secondary_contact_cc') {
+                return;
+              } else if (key === 'is_secondary_contact_wp') {
+                return;
+              } else if (key === 'primary_email') {
+                newFormData.personalInfo.emailInfo[0].email =
+                  backendData[key] ??
+                  newFormData.personalInfo.emailInfo[0].email;
+              } else if (key === 'secondary_email') {
+                return;
+              } else {
+                newFormData.personalInfo[key] =
+                  backendData[key] ?? newFormData.personalInfo[key];
+              }
+            });
+
+            if (newFormData.personalInfo.mobilenumInfo.length <= 1) {
+              const newJSON = {};
+              newJSON.mobilenum = backendData['secondary_contact'];
+              newJSON.countryCode = backendData['secondary_contact_cc'];
+              newJSON.whatsappNum = backendData['is_secondary_contact_wp'];
+              newJSON.secondary = true;
+
+              newFormData.personalInfo.mobilenumInfo.push(newJSON);
+            } else {
+              if (newFormData.personalInfo.mobilenumInfo[1].mobilenum) {
+                newFormData.personalInfo.mobilenumInfo[1].secondary = true;
+              }
+            }
+
+            if (newFormData.personalInfo.emailInfo.length <= 1) {
+              const newJSON = {};
+              newJSON.email = backendData['secondary_email'];
+              newJSON.secondary = true;
+
+              newFormData.personalInfo.emailInfo.push(newJSON);
+            } else {
+              if (newFormData.personalInfo.emailInfo[1].email) {
+                newFormData.personalInfo.emailInfo[1].secondary = true;
+              }
+            }
+
+            setFormData(newFormData);
+          }
+        }
+      }
+    };
+
+    await CallBackButtonAxiosGet();
+  }, [formStep]);
+
   const submitButton = async (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -128,7 +244,7 @@ export const ProfileSignup = ({
           full_name: newFormData.personalInfo.full_name,
           father_name: newFormData.personalInfo.father_name,
           dob:
-            CustomDateSplitAndFormat(
+            CustomLocalDateSplitAndFormat(
               newFormData.personalInfo.dob,
               '/',
               '/',
@@ -139,42 +255,97 @@ export const ProfileSignup = ({
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
             )?.mobilenum ?? null,
-          secondary_contact:
-            newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.mobilenum ?? null,
+          // secondary_contact:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.mobilenum ?? null,
 
           is_primary_contact_wp:
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
             )?.whatsappNum ?? null,
-          is_secondary_contact_wp:
-            newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.whatsappNum ?? null,
+          // is_secondary_contact_wp:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.whatsappNum ?? null,
 
           primary_contact_cc:
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
-            )?.countryCode ?? null,
-          secondary_contact_cc:
+            )?.countryCode === '' ||
             newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.countryCode ?? null,
+              (item: any) => item.secondary === false,
+            )?.countryCode === null ||
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === false,
+            )?.countryCode === undefined
+              ? '+91(IN)'
+              : newFormData.personalInfo.mobilenumInfo.find(
+                  (item: any) => item.secondary === false,
+                )?.countryCode,
+          // secondary_contact_cc:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.countryCode ?? null,
 
           primary_email:
             newFormData.personalInfo.emailInfo.find(
               (item: any) => item.secondary === false,
             )?.email ?? null,
-          secondary_email:
+          // secondary_email:
+          //   newFormData.personalInfo.emailInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.email ?? null,
+        };
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.mobilenum
+        ) {
+          toSubmitPersonalInfoData.secondary_contact =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.mobilenum;
+        }
+
+        if (
+          newFormData.personalInfo.emailInfo.find(
+            (item: any) => item.secondary === true,
+          )?.email
+        ) {
+          toSubmitPersonalInfoData.secondary_email =
             newFormData.personalInfo.emailInfo.find(
               (item: any) => item.secondary === true,
-            )?.email ?? null,
-        };
+            )?.email;
+        }
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.countryCode
+        ) {
+          toSubmitPersonalInfoData.secondary_contact_cc =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.countryCode;
+        }
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.whatsappNum
+        ) {
+          toSubmitPersonalInfoData.is_secondary_contact_wp =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.whatsappNum;
+        }
 
         const response = await PersonalInfoSaveDetailsApi(
           toSubmitPersonalInfoData,
         );
+
         setIsParentLoading(false);
 
         if (response.resType === 'SUCCESS') {
@@ -203,7 +374,7 @@ export const ProfileSignup = ({
           full_name: newFormData.personalInfo.full_name,
           father_name: newFormData.personalInfo.father_name,
           dob:
-            CustomDateSplitAndFormat(
+            CustomLocalDateSplitAndFormat(
               newFormData.personalInfo.dob,
               '/',
               '/',
@@ -214,38 +385,92 @@ export const ProfileSignup = ({
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
             )?.mobilenum ?? null,
-          secondary_contact:
-            newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.mobilenum ?? null,
+          // secondary_contact:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.mobilenum ?? null,
 
           is_primary_contact_wp:
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
             )?.whatsappNum ?? null,
-          is_secondary_contact_wp:
-            newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.whatsappNum ?? null,
+          // is_secondary_contact_wp:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.whatsappNum ?? null,
 
           primary_contact_cc:
             newFormData.personalInfo.mobilenumInfo.find(
               (item: any) => item.secondary === false,
-            )?.countryCode ?? null,
-          secondary_contact_cc:
+            )?.countryCode === '' ||
             newFormData.personalInfo.mobilenumInfo.find(
-              (item: any) => item.secondary === true,
-            )?.countryCode ?? null,
+              (item: any) => item.secondary === false,
+            )?.countryCode === null ||
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === false,
+            )?.countryCode === undefined
+              ? '+91(IN)'
+              : newFormData.personalInfo.mobilenumInfo.find(
+                  (item: any) => item.secondary === false,
+                )?.countryCode,
+          // secondary_contact_cc:
+          //   newFormData.personalInfo.mobilenumInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.countryCode ?? null,
 
           primary_email:
             newFormData.personalInfo.emailInfo.find(
               (item: any) => item.secondary === false,
             )?.email ?? null,
-          secondary_email:
+          // secondary_email:
+          //   newFormData.personalInfo.emailInfo.find(
+          //     (item: any) => item.secondary === true,
+          //   )?.email ?? null,
+        };
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.mobilenum
+        ) {
+          toSubmitPersonalInfoData.secondary_contact =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.mobilenum;
+        }
+
+        if (
+          newFormData.personalInfo.emailInfo.find(
+            (item: any) => item.secondary === true,
+          )?.email
+        ) {
+          toSubmitPersonalInfoData.secondary_email =
             newFormData.personalInfo.emailInfo.find(
               (item: any) => item.secondary === true,
-            )?.email ?? null,
-        };
+            )?.email;
+        }
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.countryCode
+        ) {
+          toSubmitPersonalInfoData.secondary_contact_cc =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.countryCode;
+        }
+
+        if (
+          newFormData.personalInfo.mobilenumInfo.find(
+            (item: any) => item.secondary === true,
+          )?.whatsappNum
+        ) {
+          toSubmitPersonalInfoData.is_secondary_contact_wp =
+            newFormData.personalInfo.mobilenumInfo.find(
+              (item: any) => item.secondary === true,
+            )?.whatsappNum;
+        }
 
         const response = await PersonalInfoSaveDetailsApi(
           toSubmitPersonalInfoData,
@@ -253,12 +478,7 @@ export const ProfileSignup = ({
         setIsParentLoading(false);
 
         if (response.resType === 'SUCCESS') {
-          // const resType = setUserProfilingDone(
-          //   newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
-          // );
-          // if (resType === 'SUCCESS') {
-          //   navigation.navigate('LoginSuccess', {type: 'Profile'});
-          // }
+          navigation.navigate('LoginSuccess', {type: 'Profile'});
         } else {
           Toast.show(response.message, 2);
         }
@@ -343,6 +563,7 @@ export const ProfileSignup = ({
       }
     }
   };
+
   const headerTitle = React.useMemo(() => {
     return formStep === 1
       ? t('uploadPhoto.HederText')
@@ -356,6 +577,8 @@ export const ProfileSignup = ({
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep, t]);
+
+  console.log(getAuthToken());
 
   return (
     <ScreenWrapper>

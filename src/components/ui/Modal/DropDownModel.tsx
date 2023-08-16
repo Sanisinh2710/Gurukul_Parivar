@@ -60,53 +60,55 @@ export const DropDownModel = React.memo(
     >([]);
 
     React.useEffect(() => {
-      if (isStringArray(inputList)) {
-        let temp = [...inputList];
+      if (inputList) {
+        if (isStringArray(inputList)) {
+          let temp = [...inputList];
 
-        if (
-          searchvalue !== null &&
-          searchvalue !== undefined &&
-          searchvalue !== ''
-        ) {
-          let abc = temp.filter((mainitem: string) => {
-            if (
-              mainitem
-                .toString()
-                .toLowerCase()
-                .includes(searchvalue.trim().toLowerCase())
-            ) {
-              return mainitem;
-            }
-          });
-          setSearchedData(abc);
-        } else {
-          setSearchedData([...inputList]);
-        }
-      }
-      if (isObjectArray(inputList)) {
-        let temp = [...inputList];
-
-        if (
-          searchvalue !== null &&
-          searchvalue !== undefined &&
-          searchvalue !== ''
-        ) {
-          let abc = temp.filter((mainitem: any) =>
-            Object.keys(mainitem).some((column: any) => {
+          if (
+            searchvalue !== null &&
+            searchvalue !== undefined &&
+            searchvalue !== ''
+          ) {
+            let abc = temp.filter((mainitem: string) => {
               if (
-                mainitem[column]
+                mainitem
                   .toString()
                   .toLowerCase()
                   .includes(searchvalue.trim().toLowerCase())
               ) {
                 return mainitem;
               }
-            }),
-          );
+            });
+            setSearchedData(abc);
+          } else {
+            setSearchedData([...inputList]);
+          }
+        }
+        if (isObjectArray(inputList)) {
+          let temp = [...inputList];
 
-          setSearchedData(abc);
-        } else {
-          setSearchedData([...inputList]);
+          if (
+            searchvalue !== null &&
+            searchvalue !== undefined &&
+            searchvalue !== ''
+          ) {
+            let abc = temp.filter((mainitem: any) =>
+              Object.keys(mainitem).some((column: any) => {
+                if (
+                  mainitem[column]
+                    .toString()
+                    .toLowerCase()
+                    .includes(searchvalue.trim().toLowerCase())
+                ) {
+                  return mainitem;
+                }
+              }),
+            );
+
+            setSearchedData(abc);
+          } else {
+            setSearchedData([...inputList]);
+          }
         }
       }
     }, [searchvalue]);
@@ -241,6 +243,10 @@ export const DropDownModel = React.memo(
                                 }
                               }
                             }
+                            const timer = setTimeout(() => {
+                              setModelVisible(false);
+                            }, 200);
+                            return () => clearTimeout(timer);
                           }}
                           style={[
                             style.modelMenuView,
@@ -251,11 +257,17 @@ export const DropDownModel = React.memo(
                               paddingLeft: 16,
                               paddingVertical: 17,
                             },
-                            type === 'radio' &&
-                              selectedItem?.includes(item) &&
-                              item.includes(selectedItem) && {
-                                backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                              },
+                            isString(item)
+                              ? type === 'radio' &&
+                                selectedItem?.includes(item) &&
+                                item.includes(selectedItem) && {
+                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                }
+                              : type === 'radio' &&
+                                selectedItem === item?.id &&
+                                item?.name.includes(selectedItem) && {
+                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                },
                           ]}>
                           <Text
                             style={[
@@ -269,12 +281,14 @@ export const DropDownModel = React.memo(
                               },
                               ((isString(item) &&
                                 selectedItem?.includes(item)) ||
-                                (type === 'phone' &&
+                                (isString(item) &&
+                                  type === 'phone' &&
                                   item.includes(selectedItem))) &&
                                 type !== 'radio' && {color: 'red'},
 
                               ((isObject(item) && selectedItem === item?.id) ||
-                                (type === 'phone' &&
+                                (isObject(item) &&
+                                  type === 'phone' &&
                                   item?.name.includes(selectedItem))) &&
                                 type !== 'radio' && {color: 'red'},
                             ]}>
