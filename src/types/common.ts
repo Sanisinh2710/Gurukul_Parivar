@@ -36,18 +36,19 @@ export type AddressFormValidationSchemaType = {
 };
 
 export type SingleGurukulRecType = {
-  gurukulBranch: string;
-  attendGurukul: string;
-  stdFrom: string;
-  stdTo: string;
-  sscYear: string;
-  hscYear: string;
-  knowSaintPersonally: string;
-  knowHaribhakt: string;
+  branch_id: string;
+  attend: string;
+  standard_from: string;
+  standard_to: string;
+  ssc_year: string;
+  hsc_year: string;
+  known_saint: string;
+  known_haribhakta: string;
   RelativeOfSaint: string;
   FromFamily?: string | undefined;
+  saint_from_family?: string | undefined;
   SaintName?: string | undefined;
-  YourRelation?: string | undefined;
+  relation?: string | undefined;
 };
 
 export type GurukulFormValidationSchemaType = {

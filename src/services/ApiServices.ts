@@ -9,6 +9,8 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
+  GURUKUL_CONNECT_GET_ENDPOINT,
+  GURUKUL_CONNECT_POST_ENDPOINT,
   LOGIN_POST_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
@@ -309,6 +311,97 @@ export const EducationInfoPostApi = async (education_details: any) => {
       const response = await axiosInstance.post(
         `${EDUCATION_INFO_POST_ENDPOINT}`,
         education_details,
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const GurukulConnectGetApi = async () => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.get(
+        `${GURUKUL_CONNECT_GET_ENDPOINT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${bearer_token.token}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        data.resType = 'SUCCESS';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      } else {
+        data.resType = 'ERROR';
+        data.data = response.data.data;
+        data.message = response.data.message;
+      }
+    } else {
+      data.resType = 'ERROR';
+      data.data = [];
+      data.message = 'An error occurred..!';
+    }
+  } catch (error: any) {
+    data.resType = 'ERROR';
+    data.data = [];
+    data.message = error.toString();
+  }
+
+  return data;
+};
+
+export const GurukulConnectPostApi = async (gurukulInfo: any) => {
+  let data: {resType: 'SUCCESS' | 'ERROR'; data: any; message: string} = {
+    resType: 'ERROR',
+    data: '',
+    message: '',
+  };
+
+  console.log(gurukulInfo, 'guru');
+
+  try {
+    const bearer_token = getBearerToken();
+
+    if (bearer_token.resType === 'SUCCESS') {
+      const response = await axiosInstance.post(
+        `${GURUKUL_CONNECT_POST_ENDPOINT}`,
+        gurukulInfo,
         {
           headers: {
             Authorization: `Bearer ${bearer_token.token}`,

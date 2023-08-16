@@ -3,24 +3,18 @@ import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
   UserAddress,
 } from '../../../../types';
-import {COLORS, countries} from '../../../../utils';
+import {COLORS} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
+import {GetCountriesApi} from '../../../../services';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;
@@ -37,6 +31,15 @@ export const AdressInfo = React.memo(
 
     const [loader, setLoader] = React.useState<boolean>(false);
 
+    const [countries, setCountries] = React.useState([]);
+
+    React.useMemo(async () => {
+      const res = await GetCountriesApi();
+      if (res.resType === 'SUCCESS') {
+        setCountries(res.data.countries);
+      }
+    }, []);
+
     const addressFormInputList: {
       name: keyof UserAddress;
       lable: string;
@@ -50,11 +53,7 @@ export const AdressInfo = React.memo(
         lable: t('addressInfo.CountryLbl'),
         placeholder: t('addressInfo.CountryPlaceHolder'),
         type: 'select',
-        menuList: [
-          ...countries.map(item => {
-            return item.country;
-          }),
-        ],
+        menuList: countries,
       },
       {
         name: 'address',
@@ -130,7 +129,6 @@ export const AdressInfo = React.memo(
     const onSubmit = (data: AddressFormValidationSchemaType) => {
       if (data.address_details !== undefined) {
         let newData = [...data.address_details].map((item, index) => {
-          item.country_id = 101;
           item.communicationAddr = checkedArray[index];
           return item;
         });

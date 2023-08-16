@@ -10,4 +10,6 @@ declare module '@env' {
   export const ADDRESS_INFO_POST_ENDPOINT: string;
   export const EDUCATION_INFO_GET_ENDPOINT: string;
   export const EDUCATION_INFO_POST_ENDPOINT: string;
+  export const GURUKUL_CONNECT_GET_ENDPOINT: string;
+  export const GURUKUL_CONNECT_POST_ENDPOINT: string;
 }

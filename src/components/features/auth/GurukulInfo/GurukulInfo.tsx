@@ -10,10 +10,11 @@ import {
   SingleGurukulRecType,
   SupportedFormInputTypes,
 } from '../../../../types';
-import {GuruKulList} from '../../../../utils';
+import {getYearsArray} from '../../../../utils';
 import {GurukulFormValidationSchema} from '../../../../validations';
-import {FormInput, PrimaryButton, RadioLable} from '../../../ui';
+import {FormInput, Loader, PrimaryButton, RadioLable} from '../../../ui';
 import {styles} from './style';
+import {GurukulBranchGetApi} from '../../../../services';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
@@ -39,6 +40,10 @@ export const GurukulInfo = React.memo(
     const {t} = useTranslation();
     const style = styles();
 
+    const [loader, setLoader] = React.useState<boolean>(false);
+
+    const [branches, setbranches] = React.useState([]);
+
     const [exstudent, setExstudent] = React.useState(
       initialValues.exGurukulStudent || '',
     );
@@ -54,10 +59,29 @@ export const GurukulInfo = React.memo(
       mode: 'onBlur',
     });
 
-    const {fields, append, remove} = useFieldArray({
+    const {fields, append, remove, replace} = useFieldArray({
       control,
       name: 'gurukulData',
     });
+
+    React.useMemo(async () => {
+      setLoader(true);
+      if (branches.length === 0) {
+        const res = await GurukulBranchGetApi();
+        if (res.resType === 'SUCCESS') {
+          setbranches(res.data.branches);
+        }
+      }
+
+      const timer = setTimeout(() => {
+        if (initialValues) {
+          replace(initialValues.gurukulData[0]);
+          setLoader(false);
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }, [initialValues]);
 
     const gurukulFormInputList1: {
       name?: keyof SingleGurukulRecType;
@@ -71,31 +95,31 @@ export const GurukulInfo = React.memo(
       rightTextOnPress?: (...event: any[]) => void;
     }[] = [
       {
-        name: 'gurukulBranch',
+        name: 'branch_id',
         lable: t('uploadPhoto.DropdownTitle'),
         placeholder: t('uploadPhoto.DropdownLable'),
         type: 'select',
-        menuList: [...GuruKulList],
-        rightText: t('gurukulInfo.AddGurukul'),
+        menuList: branches,
+        // rightText: t('gurukulInfo.AddGurukul'),
         rightTextOnPress: () => {
           append({
-            gurukulBranch: '',
-            attendGurukul: '',
-            stdFrom: '',
-            stdTo: '',
-            sscYear: '',
-            hscYear: '',
-            knowSaintPersonally: '',
-            knowHaribhakt: '',
+            branch_id: '',
+            attend: '',
+            standard_from: '',
+            standard_to: '',
+            ssc_year: '',
+            hsc_year: '',
+            known_saint: '',
+            known_haribhakta: '',
             RelativeOfSaint: 'No',
             FromFamily: '',
-            SaintName: '',
-            YourRelation: '',
+            saint_from_family: '',
+            relation: '',
           });
         },
       },
       {
-        name: 'attendGurukul',
+        name: 'attend',
         lable: t('gurukulInfo.StayGurukul'),
         placeholder: '',
         type: 'radio',
@@ -112,48 +136,74 @@ export const GurukulInfo = React.memo(
       {
         mainType: [
           {
-            name: 'stdFrom',
+            name: 'standard_from',
             lable: t('gurukulInfo.StdFrom'),
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
-            menuList: ['1', '2', '3'],
+            menuList: [
+              '1',
+              '2',
+              '3',
+              '4',
+              '5',
+              '6',
+              '7',
+              '8',
+              '9',
+              '10',
+              '11',
+              '12',
+            ],
           },
           {
-            name: 'stdTo',
+            name: 'standard_to',
             lable: t('gurukulInfo.StdTo'),
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
-            menuList: ['1', '2', '3'],
+            menuList: [
+              '1',
+              '2',
+              '3',
+              '4',
+              '5',
+              '6',
+              '7',
+              '8',
+              '9',
+              '10',
+              '11',
+              '12',
+            ],
           },
         ],
       },
       {
         mainType: [
           {
-            name: 'sscYear',
+            name: 'ssc_year',
             lable: t('gurukulInfo.SSCYear'),
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
-            menuList: ['1', '2', '3'],
+            menuList: getYearsArray(),
           },
           {
-            name: 'hscYear',
+            name: 'hsc_year',
             lable: t('gurukulInfo.HSCYear'),
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
-            menuList: ['1', '2', '3'],
+            menuList: getYearsArray(),
           },
         ],
       },
       {
-        name: 'knowSaintPersonally',
+        name: 'known_saint',
         lable: t('gurukulInfo.KnowSaint'),
         placeholder: t('gurukulInfo.Select'),
         type: 'select',
         menuList: ['1', '2', '3'],
       },
       {
-        name: 'knowHaribhakt',
+        name: 'known_haribhakta',
         lable: t('gurukulInfo.KnowHaribhakta'),
         placeholder: t('gurukulInfo.KnowHaribhaktaPlaceholder'),
         type: 'text',
@@ -188,18 +238,18 @@ export const GurukulInfo = React.memo(
         ],
       },
       {
-        name: 'SaintName',
+        name: 'saint_from_family',
         lable: t('gurukulInfo.NameSaintlbl'),
         placeholder: t('gurukulInfo.NameSaint'),
         type: 'select',
         menuList: ['1', '2', '3'],
       },
       {
-        name: 'YourRelation',
+        name: 'relation',
         lable: t('gurukulInfo.YourRelationLbl'),
         placeholder: t('gurukulInfo.YourRelation'),
         type: 'select',
-        menuList: ['1', '2', '3'],
+        menuList: ['Father', 'Mother', 'Brother'],
       },
     ];
 
@@ -210,9 +260,8 @@ export const GurukulInfo = React.memo(
       newData.gurukulData = newData?.gurukulData?.map(item => {
         if (item.RelativeOfSaint === 'No') {
           item.FromFamily = '';
-          item.SaintName = '';
-          item.YourRelation = '';
-
+          item.saint_from_family = '';
+          item.relation = '';
           return item;
         } else {
           return item;
@@ -227,176 +276,200 @@ export const GurukulInfo = React.memo(
     };
 
     return (
-      <ScrollView
-        contentContainerStyle={style.scrollViewContainer}
-        showsVerticalScrollIndicator={false}>
-        <RadioLable
-          heading={t('gurukulInfo.ExGurukulLbl')}
-          wantFullSpace={true}
-          showHeading={true}
-          value={exstudent}
-          onChange={setExstudent}
-          list={[{name: 'Yes'}, {name: 'No'}]}
-        />
-        {exstudent === 'Yes' ? (
-          <View>
-            {fields.map((mainItem, mainindex) => {
-              return (
-                <View key={mainindex}>
-                  {mainindex >= 1 && (
-                    <View
-                      style={[style.removeBtnView]}
-                      onTouchEnd={() => remove(mainindex)}>
-                      <Image source={AllIcons.Cancel} style={style.removeImg} />
-                    </View>
-                  )}
-                  <FlatList
-                    scrollEnabled={false}
-                    key={mainItem.id}
-                    contentContainerStyle={style.flatListContainer}
-                    showsVerticalScrollIndicator={false}
-                    data={gurukulFormInputList1}
-                    renderItem={({item}) => (
-                      <View>
-                        {Array.isArray(item.mainType) ? (
-                          <>
-                            <FlatList
-                              data={item.mainType}
-                              numColumns={2}
-                              columnWrapperStyle={style.flatListColumnWrap}
-                              renderItem={arrayItem => {
-                                return (
-                                  <View style={style.arrayTypeFlatListView}>
-                                    <Controller
-                                      control={control}
-                                      name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
-                                      render={({
-                                        field: {onBlur, onChange, value},
-                                      }) => {
-                                        return (
-                                          <>
-                                            <FormInput
-                                              menuList={arrayItem.item.menuList}
-                                              type={arrayItem.item.type}
-                                              name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
-                                              rightText={
-                                                arrayItem.item.rightText
-                                              }
-                                              rightTextOnPress={
-                                                arrayItem.item.rightTextOnPress
-                                              }
-                                              label={arrayItem.item.lable}
-                                              placeholder={
-                                                arrayItem.item.placeholder
-                                              }
-                                              value={value}
-                                              onBlur={onBlur}
-                                              onChange={onChange}
-                                              customProps={
-                                                arrayItem.item.customProps
-                                              }
-                                              error={errors?.gurukulData?.[
+      <>
+        {loader ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            contentContainerStyle={style.scrollViewContainer}
+            showsVerticalScrollIndicator={false}>
+            <RadioLable
+              heading={t('gurukulInfo.ExGurukulLbl')}
+              wantFullSpace={true}
+              showHeading={true}
+              value={exstudent}
+              onChange={setExstudent}
+              list={[{name: 'Yes'}, {name: 'No'}]}
+            />
+            {exstudent === 'Yes' ? (
+              <View>
+                {fields.map((mainItem, mainindex) => {
+                  return (
+                    <View key={mainindex}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={[style.removeBtnView]}
+                          onTouchEnd={() => remove(mainindex)}>
+                          <Image
+                            source={AllIcons.Cancel}
+                            style={style.removeImg}
+                          />
+                        </View>
+                      )}
+                      <FlatList
+                        scrollEnabled={false}
+                        key={mainItem.id}
+                        contentContainerStyle={style.flatListContainer}
+                        showsVerticalScrollIndicator={false}
+                        data={gurukulFormInputList1}
+                        renderItem={({item}) => (
+                          <View>
+                            {Array.isArray(item.mainType) ? (
+                              <>
+                                <FlatList
+                                  data={item.mainType}
+                                  numColumns={2}
+                                  columnWrapperStyle={style.flatListColumnWrap}
+                                  renderItem={arrayItem => {
+                                    return (
+                                      <View style={style.arrayTypeFlatListView}>
+                                        <Controller
+                                          control={control}
+                                          name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
+                                          render={({
+                                            field: {onBlur, onChange, value},
+                                          }) => {
+                                            return (
+                                              <>
+                                                <FormInput
+                                                  menuList={
+                                                    arrayItem.item.menuList
+                                                  }
+                                                  type={arrayItem.item.type}
+                                                  name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
+                                                  rightText={
+                                                    arrayItem.item.rightText
+                                                  }
+                                                  rightTextOnPress={
+                                                    arrayItem.item
+                                                      .rightTextOnPress
+                                                  }
+                                                  label={arrayItem.item.lable}
+                                                  placeholder={
+                                                    arrayItem.item.placeholder
+                                                  }
+                                                  value={value}
+                                                  onBlur={onBlur}
+                                                  onChange={onChange}
+                                                  customProps={
+                                                    arrayItem.item.customProps
+                                                  }
+                                                  error={errors?.gurukulData?.[
+                                                    mainindex
+                                                  ]?.[
+                                                    arrayItem.item.name
+                                                  ]?.message?.toString()}
+                                                />
+                                              </>
+                                            );
+                                          }}
+                                        />
+                                      </View>
+                                    );
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              <Controller
+                                control={control}
+                                name={`gurukulData.${mainindex}.${item?.name}`}
+                                render={({
+                                  field: {onBlur, onChange, value},
+                                }) => {
+                                  return (
+                                    <>
+                                      <FormInput
+                                        menuList={item?.menuList}
+                                        type={item?.type}
+                                        name={`gurukulData.${mainindex}.${item?.name}`}
+                                        rightText={item?.rightText}
+                                        rightTextOnPress={
+                                          item?.rightTextOnPress
+                                        }
+                                        label={item?.lable}
+                                        placeholder={item?.placeholder}
+                                        value={value}
+                                        onBlur={onBlur}
+                                        onChange={onChange}
+                                        customProps={item?.customProps}
+                                        error={
+                                          item.name
+                                            ? errors?.gurukulData?.[
                                                 mainindex
                                               ]?.[
-                                                arrayItem.item.name
-                                              ]?.message?.toString()}
-                                            />
-                                          </>
-                                        );
-                                      }}
-                                    />
-                                  </View>
-                                );
-                              }}
-                            />
-                          </>
-                        ) : (
-                          <Controller
-                            control={control}
-                            name={`gurukulData.${mainindex}.${item?.name}`}
-                            render={({field: {onBlur, onChange, value}}) => {
-                              return (
-                                <>
-                                  <FormInput
-                                    menuList={item?.menuList}
-                                    type={item?.type}
-                                    name={`gurukulData.${mainindex}.${item?.name}`}
-                                    rightText={item?.rightText}
-                                    rightTextOnPress={item?.rightTextOnPress}
-                                    label={item?.lable}
-                                    placeholder={item?.placeholder}
-                                    value={value}
-                                    onBlur={onBlur}
-                                    onChange={onChange}
-                                    customProps={item?.customProps}
-                                    error={
-                                      item.name
-                                        ? errors?.gurukulData?.[mainindex]?.[
-                                            item?.name
-                                          ]?.message?.toString()
-                                        : ''
-                                    }
-                                  />
-                                </>
-                              );
-                            }}
-                          />
+                                                item?.name
+                                              ]?.message?.toString()
+                                            : ''
+                                        }
+                                      />
+                                    </>
+                                  );
+                                }}
+                              />
+                            )}
+                          </View>
                         )}
-                      </View>
-                    )}
-                  />
-                  {watch().gurukulData?.at(mainindex)?.RelativeOfSaint ===
-                    'Yes' && (
-                    <FlatList
-                      data={gurukulFormInputList2}
-                      scrollEnabled={false}
-                      contentContainerStyle={style.relativeFlatListContainer}
-                      renderItem={arrayItem => {
-                        return (
-                          <Controller
-                            control={control}
-                            name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
-                            render={({field: {onBlur, onChange, value}}) => {
-                              return (
-                                <>
-                                  <FormInput
-                                    menuList={arrayItem.item.menuList}
-                                    type={arrayItem.item.type}
-                                    name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
-                                    rightText={arrayItem.item.rightText}
-                                    label={arrayItem.item.lable}
-                                    placeholder={arrayItem.item.placeholder}
-                                    value={value}
-                                    onBlur={onBlur}
-                                    onChange={onChange}
-                                    customProps={arrayItem.item.customProps}
-                                    error={errors?.gurukulData?.[mainindex]?.[
-                                      arrayItem.item.name
-                                    ]?.message?.toString()}
-                                  />
-                                </>
-                              );
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                  )}
-                </View>
-              );
-            })}
-          </View>
-        ) : null}
-        <PrimaryButton
-          title={t('common.Complete')}
-          onPress={
-            exstudent === 'Yes'
-              ? handleSubmit(onSubmit)
-              : onSubmitWithoutExstudent
-          }
-          buttonStyle={style.submitBtn}
-        />
-      </ScrollView>
+                      />
+                      {watch().gurukulData?.at(mainindex)?.RelativeOfSaint ===
+                        'Yes' && (
+                        <FlatList
+                          data={gurukulFormInputList2}
+                          scrollEnabled={false}
+                          contentContainerStyle={
+                            style.relativeFlatListContainer
+                          }
+                          renderItem={arrayItem => {
+                            return (
+                              <Controller
+                                control={control}
+                                name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
+                                render={({
+                                  field: {onBlur, onChange, value},
+                                }) => {
+                                  return (
+                                    <>
+                                      <FormInput
+                                        menuList={arrayItem.item.menuList}
+                                        type={arrayItem.item.type}
+                                        name={`gurukulData.${mainindex}.${arrayItem.item.name}`}
+                                        rightText={arrayItem.item.rightText}
+                                        label={arrayItem.item.lable}
+                                        placeholder={arrayItem.item.placeholder}
+                                        value={value}
+                                        onBlur={onBlur}
+                                        onChange={onChange}
+                                        customProps={arrayItem.item.customProps}
+                                        error={errors?.gurukulData?.[
+                                          mainindex
+                                        ]?.[
+                                          arrayItem.item.name
+                                        ]?.message?.toString()}
+                                      />
+                                    </>
+                                  );
+                                }}
+                              />
+                            );
+                          }}
+                        />
+                      )}
+                    </View>
+                  );
+                })}
+              </View>
+            ) : null}
+            <PrimaryButton
+              title={t('common.Complete')}
+              onPress={
+                exstudent === 'Yes'
+                  ? handleSubmit(onSubmit)
+                  : onSubmitWithoutExstudent
+              }
+              buttonStyle={style.submitBtn}
+            />
+          </ScrollView>
+        )}
+      </>
     );
   },
 );

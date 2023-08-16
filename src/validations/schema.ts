@@ -109,7 +109,7 @@ export const EduBusinessInfoFormValidationSchema =
         .array()
         .min(1, t('common.EmptyError'))
         .required(t('common.EmptyError')),
-      other: yup.string().trim(),
+      other: yup.string(),
     });
   };
 
@@ -119,17 +119,64 @@ export const GurukulFormValidationSchema =
     return yup.object().shape({
       gurukulData: yup.array().of(
         yup.object().shape({
-          gurukulBranch: yup.string().trim().required(t('common.EmptyError')),
-          attendGurukul: yup.string().trim().required(t('common.EmptyError')),
-          stdFrom: yup.string().trim().required(t('common.EmptyError')),
-          stdTo: yup.string().trim().required(t('common.EmptyError')),
-          sscYear: yup.string().trim().required(t('common.EmptyError')),
-          hscYear: yup.string().trim().required(t('common.EmptyError')),
-          knowSaintPersonally: yup
+          branch_id: yup.string().trim().required(t('common.EmptyError')),
+          attend: yup.string().trim().required(t('common.EmptyError')),
+          standard_from: yup.string().trim().required(t('common.EmptyError')),
+          standard_to: yup
+            .string()
+            .trim()
+            .required(t('common.EmptyError'))
+            .test({
+              name: 'invalid year',
+              skipAbsent: true,
+              test(value, err) {
+                let flag: boolean = false;
+                if (value <= this.parent.standard_from) {
+                  flag = true;
+                }
+
+                if (!flag) {
+                  return true;
+                } else {
+                  return err.createError({
+                    message: 'Select Valid Standard',
+                  });
+                }
+              },
+            }),
+          ssc_year: yup
+            .string()
+            .trim()
+            .notOneOf([yup.ref('hsc_year')], 'Select Valid Year')
+            .required(t('common.EmptyError')),
+          hsc_year: yup
+            .string()
+            .trim()
+            .notOneOf([yup.ref('ssc_year')], 'Select Valid Year')
+            .required(t('common.EmptyError'))
+            .test({
+              name: 'invalid year',
+              skipAbsent: true,
+              test(value, err) {
+                let flag: boolean = false;
+                if (value > this.parent.ssc_year) {
+                  flag = true;
+                }
+
+                if (flag) {
+                  return true;
+                } else {
+                  return err.createError({
+                    message: 'Select Valid Year',
+                  });
+                }
+              },
+            }),
+          known_saint: yup.string().trim().required(t('common.EmptyError')),
+          known_haribhakta: yup
             .string()
             .trim()
             .required(t('common.EmptyError')),
-          knowHaribhakt: yup.string().trim().required(t('common.EmptyError')),
           RelativeOfSaint: yup.string().trim().required(t('common.EmptyError')),
           FromFamily: yup.string().test({
             name: 'FromFamily',
@@ -148,8 +195,8 @@ export const GurukulFormValidationSchema =
               return true;
             },
           }),
-          SaintName: yup.string().test({
-            name: 'SaintName',
+          saint_from_family: yup.string().test({
+            name: 'saint_from_family',
             skipAbsent: true,
             test(value, ctx) {
               if (
@@ -165,8 +212,8 @@ export const GurukulFormValidationSchema =
               return true;
             },
           }),
-          YourRelation: yup.string().test({
-            name: 'YourRelation',
+          relation: yup.string().test({
+            name: 'relation',
             skipAbsent: true,
             test(value, ctx) {
               if (

@@ -18,6 +18,8 @@ import {
   AddressInfoPostApi,
   EducationInfoGetApi,
   EducationInfoPostApi,
+  GurukulConnectGetApi,
+  GurukulConnectPostApi,
   getAuthToken,
   setUserProfilingDone,
 } from '../../../services';
@@ -77,18 +79,18 @@ export const ProfileSignup = ({
       exGurukulStudent: 'No',
       gurukulData: [
         {
-          gurukulBranch: '',
-          attendGurukul: '',
-          stdFrom: '',
-          stdTo: '',
-          sscYear: '',
-          hscYear: '',
-          knowSaintPersonally: '',
-          knowHaribhakt: '',
+          branch_id: '',
+          attend: '',
+          standard_from: '',
+          standard_to: '',
+          ssc_year: '',
+          hsc_year: '',
+          known_saint: '',
+          known_haribhakta: '',
           RelativeOfSaint: 'No',
           FromFamily: '',
-          SaintName: '',
-          YourRelation: '',
+          saint_from_family: '',
+          relation: '',
         },
       ],
     },
@@ -115,12 +117,31 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         const fetchData = await EducationInfoGetApi();
-        console.log(fetchData);
 
         if (fetchData.resType === 'SUCCESS') {
           if (fetchData.data.education_details !== undefined) {
-            newFormData.edu_businessInfo =
-              fetchData.data.data.education_details;
+            newFormData.edu_businessInfo = fetchData.data.education_details;
+            setFormData(newFormData);
+          }
+        }
+      }
+
+      if (formStep === 5) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const fetchData = await GurukulConnectGetApi();
+
+        if (fetchData.resType === 'SUCCESS') {
+          if (fetchData.data.gurukul_connect_details !== undefined) {
+            newFormData.gurukulInfo.exGurukulStudent = 'Yes';
+
+            newFormData.gurukulInfo.gurukulData[0] =
+              fetchData.data.gurukul_connect_details;
+
+            if (fetchData.data.gurukul_connect_details.saint_from_family) {
+              newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'Yes';
+            }
+
             setFormData(newFormData);
           }
         }
@@ -219,6 +240,8 @@ export const ProfileSignup = ({
 
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
+
+          await GurukulConnectPostApi(newFormData.gurukulInfo.gurukulData[0]);
 
           setFormData(newFormData);
           const resType = setUserProfilingDone(

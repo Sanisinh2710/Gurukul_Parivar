@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -9,9 +10,8 @@ import {
   SupportedFormInputTypes,
 } from '../../../../types';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
-import {EducationInfoGetApi} from '../../../../services';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
@@ -24,7 +24,6 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-    console.log(initialValues);
 
     const style = styles();
     const [loader, setLoader] = React.useState<boolean>(false);
@@ -80,7 +79,6 @@ export const EduBusinessInfo = React.memo(
           'H.R. Executive',
           'C.E.O.',
           'C.T.O.',
-          'Employee',
         ],
       },
       {
@@ -88,7 +86,7 @@ export const EduBusinessInfo = React.memo(
         lable: t('education/BusinessInfo.SKills'),
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
-        menuList: ['Music', 'Dancing', 'Games', 'Cricket', 'gtdrdrghfdghr'],
+        menuList: ['Music', 'Dancing', 'Games', 'Cricket'],
       },
       {
         name: 'other',
@@ -124,62 +122,73 @@ export const EduBusinessInfo = React.memo(
 
       const timer = setTimeout(() => {
         if (initialValues) {
-          // setValue()
+          setValue('education', initialValues.education ?? '');
+          setValue('occupation', initialValues.occupation ?? '');
+          setValue('occupation_type', initialValues.occupation_type ?? '');
+          setValue('skills', initialValues.skills ?? []);
+          setValue('other', initialValues.other ?? '');
           setLoader(false);
         }
       }, 1000);
 
       return () => clearTimeout(timer);
     }, [initialValues]);
+
     return (
-      <ScrollView
-        contentContainerStyle={style.scrollViewContainer}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={true}>
-        <FlatList
-          data={[...EduBusinessInfoFormInputList]}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={style.flatListContainer}
-          scrollEnabled={false}
-          renderItem={({item}) => {
-            return (
-              <Controller
-                control={control}
-                name={item.name}
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      icon={item.icon}
-                      type={item.type}
-                      name={item.name}
-                      label={item.lable}
-                      placeholder={item.placeholder}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      menuList={item.menuList}
-                      customProps={item.customProps}
-                      error={errors[item.name]?.message?.toString()}
-                    />
-                  );
-                }}
+      <>
+        {loader ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            contentContainerStyle={style.scrollViewContainer}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}>
+            <FlatList
+              data={[...EduBusinessInfoFormInputList]}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={style.flatListContainer}
+              scrollEnabled={false}
+              renderItem={({item}) => {
+                return (
+                  <Controller
+                    control={control}
+                    name={item.name}
+                    render={({field: {onBlur, onChange, value}}) => {
+                      return (
+                        <FormInput
+                          icon={item.icon}
+                          type={item.type}
+                          name={item.name}
+                          label={item.lable}
+                          placeholder={item.placeholder}
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={onChange}
+                          menuList={item.menuList}
+                          customProps={item.customProps}
+                          error={errors[item.name]?.message?.toString()}
+                        />
+                      );
+                    }}
+                  />
+                );
+              }}
+            />
+            <View style={style.submitButtonView}>
+              <SecondaryButton
+                title={t('common.SkipNow')}
+                onPress={leftOnSubmit}
+                buttonStyle={style.submitButtonStyle}
               />
-            );
-          }}
-        />
-        <View style={style.submitButtonView}>
-          <SecondaryButton
-            title={t('common.SkipNow')}
-            onPress={leftOnSubmit}
-            buttonStyle={style.submitButtonStyle}
-          />
-          <PrimaryButton
-            title={t('common.Save&Next')}
-            onPress={handleSubmit(onSubmit)}
-            buttonStyle={style.submitButtonStyle}
-          />
-        </View>
-      </ScrollView>
+              <PrimaryButton
+                title={t('common.Save&Next')}
+                onPress={handleSubmit(onSubmit)}
+                buttonStyle={style.submitButtonStyle}
+              />
+            </View>
+          </ScrollView>
+        )}
+      </>
     );
   },
 );
