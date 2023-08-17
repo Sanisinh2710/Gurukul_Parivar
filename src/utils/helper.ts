@@ -172,3 +172,45 @@ export const CustomBackendDateSplitAndFormat = (
     return newDate;
   }
 };
+
+export function getYearsArray() {
+  const years = [];
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 1948;
+  for (let year = startYear; year <= currentYear; year++) {
+    years.push(year.toString());
+  }
+
+  let sort = years.sort((a, b) => {
+    return parseInt(b) - parseInt(a);
+  });
+
+  return sort;
+}
+
+export const CustomDateSplitAndFormat = (
+  date: string,
+  fromSplitParameter: string,
+  toSplitParameter: string,
+  format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
+) => {
+  if (format === 'mm/dd/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[0]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+    return newDate;
+  }
+  if (format === 'dd/mm/yyyy') {
+    const newDate = `${
+      date.split(`${fromSplitParameter}`)[0]
+    }${toSplitParameter}${
+      date.split(`${fromSplitParameter}`)[1]
+    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+    return newDate;
+  }
+};

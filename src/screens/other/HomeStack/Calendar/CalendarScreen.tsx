@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, View} from 'react-native';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -8,13 +9,14 @@ import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
 import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, d, daysArray, options2} from '../../../../utils';
+import {d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
   navigation,
 }: NativeStackScreenProps<RootAuthStackParamList>) => {
   const style = styles();
+  const {t} = useTranslation();
   const commonstyle = CommonStyle();
   const date = d.getDate().toString().padStart(2, '0');
   const day = daysArray[d.getDay()];
@@ -46,84 +48,29 @@ export const CalendarScreen = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Calendar'}
+        headerTitle={t('DailyCalendar.Heading')}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         <ScrollView>
           <View>
             <Text style={style.title}>આજનો દિવસ રળીયામણો</Text>
           </View>
-          <View
-            style={{
-              width: '100%',
-              height: 64,
-              flexDirection: 'row',
-              marginVertical: '5%',
-            }}>
-            <View
-              style={{
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 10,
-                width: '20%',
-                borderWidth: 1,
-                borderColor: COLORS.primaryColor,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 64,
-                backgroundColor: COLORS.primaryColor,
-              }}>
+          <View style={style.textBoxContainer}>
+            <View style={style.dateContainer}>
               <Text style={style.date}>{date}</Text>
               <Text style={style.day}>{day}</Text>
             </View>
-            <View
-              style={{
-                width: '80%',
-                borderWidth: 0.25,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                backgroundColor: 'white',
-                paddingLeft: '5%',
-                borderColor: 'rgba(172, 43, 49, 0.3)',
-                justifyContent: 'center',
-                height: 64,
-              }}>
+            <View style={style.contentContainer}>
               <Text style={style.content1}>મુક્તાનંદ સ્વામીનો જન્મ દિવસ</Text>
               <Text style={style.content2}>૧૫,પૂર્ણિમા - શુક્લ પક્ષ </Text>
             </View>
           </View>
-          <View
-            style={{
-              width: '100%',
-              height: 64,
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                borderTopLeftRadius: 10,
-                borderBottomLeftRadius: 10,
-                width: '20%',
-                borderWidth: 1,
-                borderColor: COLORS.primaryColor,
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 64,
-                backgroundColor: COLORS.primaryColor,
-              }}>
+          <View style={{width: '100%', height: 64, flexDirection: 'row'}}>
+            <View style={style.dateContainer}>
               <Text style={style.date}>{date}</Text>
               <Text style={style.day}>{day}</Text>
             </View>
-            <View
-              style={{
-                width: '80%',
-                borderWidth: 0.25,
-                borderTopRightRadius: 10,
-                backgroundColor: 'white',
-                borderBottomRightRadius: 10,
-                borderColor: 'rgba(172, 43, 49, 0.3)',
-                justifyContent: 'center',
-                height: 64,
-                paddingLeft: '5%',
-              }}>
+            <View style={style.contentContainer}>
               <Text style={style.content1}>મુક્તાનંદ સ્વામીનો જન્મ દિવસ</Text>
               <Text style={style.content2}>૧૫,પૂર્ણિમા - શુક્લ પક્ષ </Text>
             </View>

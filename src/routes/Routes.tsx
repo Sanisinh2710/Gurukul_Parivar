@@ -21,6 +21,7 @@ import {
   DailyQuotes,
   DailyUpdateDetail,
   DailyUpdates,
+  DonationScreen,
   EditProfile,
   FrontDeskScreen,
   HomeScreen,
@@ -30,6 +31,7 @@ import {
   LoginSuccess,
   ProfileScreen,
   ProfileSignup,
+  QuizResult,
   Status,
 } from '../screens';
 import {isSignedIn} from '../services';
@@ -138,6 +140,8 @@ export const Routes = (): React.JSX.Element => {
               name="dailyQuizDetail"
               component={DailyQuizDetail}
             />
+            <NativeStack.Screen name="QuizResult" component={QuizResult} />
+            <NativeStack.Screen name="donation" component={DonationScreen} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

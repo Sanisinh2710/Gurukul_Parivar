@@ -16,7 +16,7 @@ interface Props {
   showHeading: boolean;
   value: string;
   onChange: (...event: any[]) => void;
-  list: {name: string; icon?: any}[];
+  list: {name: string; icon?: any; id?: any}[];
   wantFullSpace?: boolean;
   customStyle?: StyleProp<ViewStyle>;
   dailyQuiz?: boolean;

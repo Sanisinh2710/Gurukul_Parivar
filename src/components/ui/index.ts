@@ -2,6 +2,7 @@ export * from './BottomBar';
 export * from './Buttons';
 export * from './Calendar';
 export * from './Carousel';
+export * from './CustomNavigate';
 export * from './Form';
 export * from './Header';
 export * from './Loader';

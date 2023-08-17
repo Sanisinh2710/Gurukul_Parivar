@@ -15,6 +15,12 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {
+  AddressInfoGetApi,
+  AddressInfoPostApi,
+  EducationInfoGetApi,
+  EducationInfoPostApi,
+  GurukulConnectGetApi,
+  GurukulConnectPostApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
   getAuthToken,
@@ -61,39 +67,39 @@ export const ProfileSignup = ({
       ],
       emailInfo: [{email: '', secondary: false}],
     },
-    addressInfo: [
+    address_details: [
       {
-        country: '',
+        country_id: '',
         address: '',
         pincode: '',
-        cityVillage: '',
-        typeofAddress: '',
-        communicationAddr: true,
+        city: '',
+        address_type: '',
+        is_preferred_communication: true,
       },
     ],
     edu_businessInfo: {
-      maxEduLevel: '',
+      education: '',
       occupation: '',
-      occupationType: '',
+      occupation_type: '',
       skills: [],
-      otherComment: '',
+      other: '',
     },
     gurukulInfo: {
       exGurukulStudent: 'No',
       gurukulData: [
         {
-          gurukulBranch: '',
-          attendGurukul: '',
-          stdFrom: '',
-          stdTo: '',
-          sscYear: '',
-          hscYear: '',
-          knowSaintPersonally: '',
-          knowHaribhakt: '',
+          branch_id: '',
+          attend: '',
+          standard_from: '',
+          standard_to: '',
+          ssc_year: '',
+          hsc_year: '',
+          known_saint: '',
+          known_haribhakta: '',
           RelativeOfSaint: 'No',
           FromFamily: '',
-          SaintName: '',
-          YourRelation: '',
+          saint_from_family: '',
+          relation: '',
         },
       ],
     },
@@ -181,7 +187,7 @@ export const ProfileSignup = ({
                 backendData['secondary_contact_cc'] &&
                 backendData['is_secondary_contact_wp']
               ) {
-                const newJSON = {};
+                const newJSON: any = {};
                 newJSON.mobilenum = backendData['secondary_contact'];
                 newJSON.countryCode = backendData['secondary_contact_cc'];
                 newJSON.whatsappNum = backendData['is_secondary_contact_wp'];
@@ -197,7 +203,7 @@ export const ProfileSignup = ({
 
             if (newFormData.personalInfo.emailInfo.length <= 1) {
               if (backendData['secondary_email']) {
-                const newJSON = {};
+                const newJSON: any = {};
                 newJSON.email = backendData['secondary_email'];
                 newJSON.secondary = true;
 
@@ -207,6 +213,66 @@ export const ProfileSignup = ({
               if (newFormData.personalInfo.emailInfo[1].email) {
                 newFormData.personalInfo.emailInfo[1].secondary = true;
               }
+            }
+
+            setFormData(newFormData);
+          }
+        }
+      }
+      if (formStep === 3) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const fetchData = await AddressInfoGetApi();
+        if (fetchData.resType === 'SUCCESS') {
+          if (
+            fetchData.data.address_details !== null &&
+            fetchData.data.address_details !== undefined &&
+            fetchData.data.address_details !== ''
+          ) {
+            newFormData.address_details =
+              fetchData.data.address_details.length >= 1
+                ? fetchData.data.address_details
+                : newFormData.address_details;
+            setFormData(newFormData);
+          }
+        } else {
+          Toast.show(fetchData.message, Toast.SHORT);
+        }
+      }
+      if (formStep === 4) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const fetchData = await EducationInfoGetApi();
+
+        if (fetchData.resType === 'SUCCESS') {
+          if (
+            fetchData.data.education_details !== undefined &&
+            fetchData.data.education_details !== null &&
+            fetchData.data.education_details !== ''
+          ) {
+            newFormData.edu_businessInfo = fetchData.data.education_details;
+            setFormData(newFormData);
+          }
+        }
+      }
+      if (formStep === 5) {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        const fetchData = await GurukulConnectGetApi();
+
+        if (fetchData.resType === 'SUCCESS') {
+          if (
+            fetchData.data.gurukul_connect_details !== undefined &&
+            fetchData.data.gurukul_connect_details !== null &&
+            fetchData.data.gurukul_connect_details !== ''
+          ) {
+            newFormData.gurukulInfo.exGurukulStudent = 'Yes';
+
+            newFormData.gurukulInfo.gurukulData[0] =
+              fetchData.data.gurukul_connect_details;
+
+            if (fetchData.data.gurukul_connect_details.saint_from_family) {
+              newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'Yes';
             }
 
             setFormData(newFormData);
@@ -245,7 +311,7 @@ export const ProfileSignup = ({
           type: newFormData.completeProfile.profile?.at(0)?.type,
         };
 
-        const toSubmitPersonalInfoData = {
+        const toSubmitPersonalInfoData: any = {
           profile: image,
           branch_id: newFormData.completeProfile.branch_id,
           gender: newFormData.personalInfo.gender.toLocaleUpperCase(),
@@ -375,7 +441,7 @@ export const ProfileSignup = ({
           type: newFormData.completeProfile.profile?.at(0)?.type,
         };
 
-        const toSubmitPersonalInfoData = {
+        const toSubmitPersonalInfoData: any = {
           profile: image,
           branch_id: newFormData.completeProfile.branch_id,
           gender: newFormData.personalInfo.gender.toLocaleUpperCase(),
@@ -500,17 +566,28 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          newFormData.addressInfo = receivedData;
+          console.log(receivedData, 'resdaata');
+
+          newFormData.address_details = receivedData;
           setFormData(newFormData);
+          const response = await AddressInfoPostApi(
+            newFormData.address_details,
+          );
+          console.log(response, 'resdaata');
+
+          if (response.resType === 'SUCCESS') {
+            setwidth(width + 20);
+            setFormStep(formStep + 1);
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
         }
-        setwidth(width + 20);
-        setFormStep(formStep + 1);
       }
       if (typecase === 'skip') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          newFormData.addressInfo = receivedData;
+          newFormData.address_details = receivedData;
           setFormData(newFormData);
         }
         setwidth(width + 20);
@@ -524,6 +601,15 @@ export const ProfileSignup = ({
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
           setFormData(newFormData);
+          const response = await EducationInfoPostApi(
+            newFormData.edu_businessInfo,
+          );
+          if (response.resType === 'SUCCESS') {
+            setwidth(width + 20);
+            setFormStep(formStep + 1);
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
         }
         setwidth(width + 20);
         setFormStep(formStep + 1);
@@ -546,14 +632,20 @@ export const ProfileSignup = ({
 
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
-
           setFormData(newFormData);
-          const resType = setUserProfilingDone(
-            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
+
+          const response = await GurukulConnectPostApi(
+            newFormData.gurukulInfo.gurukulData[0],
           );
 
-          if (resType === 'SUCCESS') {
+          const setuserprofileDone = setUserProfilingDone(true);
+          if (
+            setuserprofileDone === 'SUCCESS' &&
+            response.resType === 'SUCCESS'
+          ) {
             navigation.navigate('LoginSuccess', {type: 'Profile'});
+          } else {
+            Toast.show(response.message, Toast.SHORT);
           }
         }
       }
@@ -563,11 +655,8 @@ export const ProfileSignup = ({
           newFormData.gurukulInfo = receivedData;
 
           setFormData(newFormData);
-          const resType = setUserProfilingDone(
-            newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
-          );
-
-          if (resType === 'SUCCESS') {
+          const setuserprofileDone = setUserProfilingDone(true);
+          if (setuserprofileDone === 'SUCCESS') {
             navigation.navigate('LoginSuccess', {type: 'Profile'});
           }
         }
@@ -648,7 +737,7 @@ export const ProfileSignup = ({
           />
         ) : formStep === 3 ? (
           <AdressInfo
-            initialValues={{addressInfo: [...formData.addressInfo]}}
+            initialValues={{address_details: [...formData.address_details]}}
             onSubmitEvent={submitButton}
           />
         ) : formStep === 4 ? (

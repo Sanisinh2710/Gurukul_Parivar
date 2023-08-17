@@ -16,6 +16,7 @@ import {storage} from '../storage';
 
 export const App = () => {
   const {i18n} = useTranslation();
+
   React.useMemo(async () => {
     const timer = setTimeout(() => {
       SplashScreen.hide();
@@ -50,6 +51,7 @@ export const App = () => {
       clearTimeout(timer);
     };
   }, []);
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Loader />}>

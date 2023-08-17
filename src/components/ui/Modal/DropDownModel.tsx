@@ -201,9 +201,7 @@ export const DropDownModel = React.memo(
                     contentContainerStyle={style.modelFlatListContainerStyle}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
-                    data={
-                      wantSearchBar ? searchedData : inputList ? inputList : []
-                    }
+                    data={wantSearchBar ? searchedData : inputList}
                     renderItem={({item, index}: any) => {
                       return (
                         <View
@@ -279,26 +277,33 @@ export const DropDownModel = React.memo(
                                 fontSize: 16,
                                 color: COLORS.lightModetextColor,
                               },
-                              ((isString(item) &&
-                                selectedItem?.includes(item)) ||
+                              ((isString(item) && selectedItem === item) ||
                                 (isString(item) &&
                                   type === 'phone' &&
-                                  item.includes(selectedItem))) &&
+                                  item.includes(selectedItem)) ||
+                                (isString(item) &&
+                                  type === 'multi-select' &&
+                                  selectedItem.includes(item))) &&
                                 type !== 'radio' && {color: 'red'},
 
                               ((isObject(item) && selectedItem === item?.id) ||
                                 (isObject(item) &&
                                   type === 'phone' &&
-                                  item?.name.includes(selectedItem))) &&
+                                  item?.name.includes(selectedItem)) ||
+                                (isObject(item) &&
+                                  type === 'multi-select' &&
+                                  selectedItem.includes(item?.id))) &&
                                 type !== 'radio' && {color: 'red'},
                             ]}>
-                            {isObject(item) ? item?.name : item}
+                            {isString(item) ? item : item?.name}
                           </Text>
                           <>
                             {isString(item) ? (
-                              (selectedItem?.includes(item) ||
+                              (selectedItem === item ||
                                 (type === 'phone' &&
-                                  item.includes(selectedItem))) &&
+                                  item.includes(selectedItem)) ||
+                                (type === 'multi-select' &&
+                                  selectedItem.includes(item))) &&
                               type !== 'radio' ? (
                                 <View style={style.iconView}>
                                   <Image
@@ -308,8 +313,8 @@ export const DropDownModel = React.memo(
                                 </View>
                               ) : (
                                 type === 'radio' &&
-                                (selectedItem?.includes(item) ||
-                                  item.includes(selectedItem)) && (
+                                (selectedItem === item ||
+                                  item === selectedItem) && (
                                   <View
                                     style={{
                                       width: 20,
@@ -335,7 +340,9 @@ export const DropDownModel = React.memo(
                               )
                             ) : (selectedItem === item?.id ||
                                 (type === 'phone' &&
-                                  item?.name.includes(selectedItem))) &&
+                                  item?.name.includes(selectedItem)) ||
+                                (type === 'multi-select' &&
+                                  selectedItem.includes(item?.id))) &&
                               type !== 'radio' ? (
                               <View style={style.iconView}>
                                 <Image

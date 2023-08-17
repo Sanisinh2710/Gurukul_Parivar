@@ -1,6 +1,5 @@
 import React from 'react';
-import {Pressable} from 'react-native';
-import {Image, Text, View} from 'react-native';
+import {Image, Pressable, Text, View} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {CustomFonts} from '../../../utils';
@@ -13,6 +12,7 @@ type CustomNavigateProps = {
   selectedDate?: Date;
   setSelectedDate?: React.Dispatch<React.SetStateAction<Date>>;
 };
+
 export const CustomNavigate = ({
   text,
   handlePrevPress,

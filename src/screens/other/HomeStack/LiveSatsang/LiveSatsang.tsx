@@ -2,20 +2,29 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, TextInput, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
-import {styles} from './styles';
+import {COLORS} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,
 }: NativeStackScreenProps<RootAuthStackParamList>) => {
-  const style = styles();
+  // const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
+
+  const [playing, setPlaying] = React.useState(false);
+
+  const onStateChange = React.useCallback((state: string) => {
+    if (state === 'ended') {
+      setPlaying(false);
+      Alert.alert('video has finished playing!');
+    }
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -28,45 +37,22 @@ export const LiveSatsang = ({
         headerTitle={'Live Satsang'}
         headerRight={{
           icon: AllIcons.Filter,
-          onPress: () => {
-            console.log('Hi');
-          },
+          onPress: () => {},
         }}
       />
-
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <ScrollView>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: '#E6E6E6',
-              borderRadius: 10,
-              height: 50,
-              marginTop: 12,
-              paddingHorizontal: 15,
-            }}>
-            <Image source={AllIcons.Search} style={{height: 22, width: 22}} />
-            <TextInput
-              //   value={searchvalue}
-              placeholder={t('common.Search')}
-              placeholderTextColor={'rgba(23,23,23,0.3)'}
-              style={{
-                ...CustomFonts.body.large14,
-                fontSize: 16,
-                fontWeight: '400',
-                width: '100%',
-                color: COLORS.lightModetextColor,
-                opacity: 1,
-              }}
-              onChangeText={val => {
-                // setSearch(val);
-              }}
-            />
-          </View>
-        </ScrollView>
+      <View style={commonstyle.commonContentView}>
+        <View style={{marginTop: '3%', gap: 10}}>
+          <Text style={{color: COLORS.black}}>YouTube Live Katha</Text>
+          <YoutubePlayer
+            height={210}
+            play={playing}
+            videoId={'TtS2tLDauBI'}
+            onChangeState={onStateChange}
+            webViewProps={{
+              containerStyle: {borderRadius: 15},
+            }}
+          />
+        </View>
       </View>
     </ScreenWrapper>
   );

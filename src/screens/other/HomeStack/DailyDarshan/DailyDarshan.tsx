@@ -1,25 +1,29 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {BASE_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  CustomNavigate,
+  Loader,
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
+import {DailyDarshanApi} from '../../../../services/ApiServices';
 import {RootStackParamList} from '../../../../types';
-import {
-  DailyDarshanAllImages,
-  DailyDarshanEveningImages,
-  DailyDarshanMorningImages,
-  d,
-  options,
-} from '../../../../utils';
+import {d, options} from '../../../../utils';
 import {styles} from './styles';
+
+const TimeArray = (t: any) => [
+  {name: t('DailyDarshan.All'), id: 'both'},
+  {name: t('DailyDarshan.Morning'), id: 'Morning'},
+  {name: t('DailyDarshan.Evening'), id: 'Evening'},
+];
 
 export const DailyDarshan = ({
   navigation,
@@ -27,10 +31,32 @@ export const DailyDarshan = ({
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
-  const [selectedItem, setselectedItem] = React.useState('');
+  const [loader, setLoader] = React.useState<boolean>(false);
+  const [Data, setData] = React.useState<Array<String>>([]);
+
   const {t} = useTranslation();
 
+  const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
+
   const style = styles();
+
+  React.useMemo(async () => {
+    try {
+      const res = await DailyDarshanApi(
+        selectedDate,
+        TimeArray(t).find(item => item.name === selectedItem)?.id ?? 'both',
+      );
+
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.image_paths);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {
+      console.log('Error');
+    }
+  }, [selectedItem, selectedDate]);
 
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
@@ -77,12 +103,7 @@ export const DailyDarshan = ({
           }}
           value={selectedItem}
           onChange={setselectedItem}
-          heading={''}
-          list={[
-            {name: t('DailyDarshan.All')},
-            {name: t('DailyDarshan.Morning')},
-            {name: t('DailyDarshan.Evening')},
-          ]}
+          list={TimeArray(t)}
           showHeading={false}
         />
 
@@ -95,41 +116,58 @@ export const DailyDarshan = ({
             setSelectedParentDate={setSelectedDate}
           />
         </View>
-
-        <View style={{height: '80%'}}>
-          <FlatList
-            data={
-              selectedItem === t('DailyDarshan.All')
-                ? DailyDarshanAllImages()
-                : selectedItem === t('DailyDarshan.Morning')
-                ? DailyDarshanMorningImages()
-                : selectedItem === t('DailyDarshan.Evening')
-                ? DailyDarshanEveningImages()
-                : DailyDarshanAllImages()
-            }
-            numColumns={2}
-            columnWrapperStyle={{justifyContent: 'space-between'}}
-            contentContainerStyle={{
-              gap: 15,
-              marginTop: '3%',
-            }}
-            renderItem={item => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={style.imageContainer}
-                  onPress={() => {
-                    navigation.navigate('dailyDarshanDetail', {
-                      image: item.item.image,
-                      date: selectedDate.toLocaleDateString('en-in', options),
-                    });
-                  }}>
-                  <Image source={item.item.image} style={style.images} />
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
+        {loader ? (
+          // <ActivityIndicator
+          //   size={50}
+          //   style={{flex: 1}}
+          //   color={COLORS.primaryColor}
+          // />
+          <Loader />
+        ) : (
+          <View style={{height: '80%'}}>
+            {Data.length > 0 ? (
+              <FlatList
+                data={Data}
+                numColumns={2}
+                columnWrapperStyle={{justifyContent: 'space-between'}}
+                contentContainerStyle={{
+                  gap: 15,
+                  marginTop: '3%',
+                }}
+                renderItem={item => {
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={style.imageContainer}
+                      onPress={() => {
+                        navigation.navigate('dailyDarshanDetail', {
+                          totalImages: Data.length,
+                          image: item.item,
+                          date: selectedDate.toLocaleDateString(
+                            'en-in',
+                            options,
+                          ),
+                        });
+                      }}>
+                      <Image
+                        source={{
+                          uri: `${BASE_URL}${item.item}`,
+                        }}
+                        style={style.images}
+                      />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            ) : (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <Text style={{textAlign: 'center', fontSize: 20}}>
+                  No Data Found
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
       </View>
       <CustomNavigate
         text={

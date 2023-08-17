@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 
@@ -9,6 +9,11 @@ export const styles = () => {
     title: {
       ...CustomFonts.header.large36,
       color: 'black',
+    },
+    image: {
+      height: Dimensions.get('window').height * 0.58,
+      width: '100%',
+      borderRadius: 10,
     },
   });
 };
