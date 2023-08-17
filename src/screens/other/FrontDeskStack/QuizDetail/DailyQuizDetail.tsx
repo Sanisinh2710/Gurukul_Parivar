@@ -1,8 +1,10 @@
 import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {FlatList, Pressable, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import * as Progress from 'react-native-progress';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -14,8 +16,6 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import * as Progress from 'react-native-progress';
 export const DailyQuizDetail = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {

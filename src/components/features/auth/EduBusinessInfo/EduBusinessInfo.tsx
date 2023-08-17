@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -9,10 +8,10 @@ import {
   EduBusinessInfoValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
+import {OccupationList, skillsList} from '../../../../utils';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
-import {OccupationList, skillsList} from '../../../../utils';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;

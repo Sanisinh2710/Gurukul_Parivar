@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
@@ -17,7 +16,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {removeAuthToken, removeProfToken} from '../../../services';
+import {removeAuthToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, EditProfile} from '../../../utils';
 import {styles} from './styles';
@@ -194,12 +193,8 @@ export const ProfileScreen = ({
                     modalType === 'logout'
                       ? () => {
                           const resRemoveAuthToken = removeAuthToken();
-                          const resRemoveProfToken = removeProfToken();
 
-                          if (
-                            resRemoveAuthToken === 'SUCCESS' &&
-                            resRemoveProfToken === 'SUCCESS'
-                          ) {
+                          if (resRemoveAuthToken === 'SUCCESS') {
                             navigation.replace('Auth');
                           }
                         }

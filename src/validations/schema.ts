@@ -26,8 +26,8 @@ export const CompleteProfileFormValidationSchema =
   (): yup.ObjectSchema<CompleteProfileFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      profilePic: yup.string(),
-      gurukulName: yup.string().trim().required(t('common.EmptyError')),
+      profile: yup.mixed(),
+      branch_id: yup.number().required(t('common.EmptyError')),
     });
   };
 
@@ -36,18 +36,18 @@ export const PersonalInfoFormValidationSchema =
     const {t} = useTranslation();
     return yup.object().shape({
       gender: yup.string().trim().required(t('common.EmptyError')),
-      fullname: yup
+      full_name: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      fatherFullName: yup
+      father_name: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
-      bloodGroup: yup.string().required(t('common.EmptyError')),
+      blood_group: yup.string().required(t('common.EmptyError')),
       mobilenumInfo: yup
         .array()
         .of(
@@ -127,11 +127,11 @@ export const GurukulFormValidationSchema =
             .trim()
             .required(t('common.EmptyError'))
             .test({
-              name: 'invalid year',
+              name: 'standard_to',
               skipAbsent: true,
               test(value, err) {
                 let flag: boolean = false;
-                if (value <= this.parent.standard_from) {
+                if (parseInt(value) <= parseInt(this.parent.standard_from)) {
                   flag = true;
                 }
 
@@ -155,11 +155,11 @@ export const GurukulFormValidationSchema =
             .notOneOf([yup.ref('ssc_year')], 'Select Valid Year')
             .required(t('common.EmptyError'))
             .test({
-              name: 'invalid year',
+              name: 'hsc_year',
               skipAbsent: true,
               test(value, err) {
                 let flag: boolean = false;
-                if (value > this.parent.ssc_year) {
+                if (parseInt(value) >= parseInt(this.parent.ssc_year) + 2) {
                   flag = true;
                 }
 

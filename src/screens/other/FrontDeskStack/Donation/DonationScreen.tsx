@@ -1,13 +1,12 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
-import {AllIcons} from '../../../../../assets/icons';
-import {useTranslation} from 'react-i18next';
 import {COLORS} from '../../../../utils';
+import {styles} from './styles';
 
 export const DonationScreen = ({
   navigation,

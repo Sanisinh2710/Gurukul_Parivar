@@ -5,6 +5,7 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {GetCountriesApi} from '../../../../services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
@@ -14,7 +15,6 @@ import {COLORS} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
-import {GetCountriesApi} from '../../../../services';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;

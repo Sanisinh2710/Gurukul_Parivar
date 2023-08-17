@@ -30,7 +30,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(true);
-
   const [disabled, setDisabled] = React.useState(true);
 
   const [isApiLoading, setIsApiloading] = React.useState(false);
@@ -57,6 +56,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             mobileNum: mobileNum,
             countryCode: countryCode,
             token: response.data.token,
+            is_profile_updated: response.data.is_profile_updated,
           });
           if (resType === 'SUCCESS') {
             const isProfileSignupDone = isProfilingDone(mobileNum);
@@ -112,6 +112,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .toString()
       .padStart(2, '0')}`;
   };
+
   return (
     <ScreenWrapper>
       <ScreenHeader

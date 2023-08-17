@@ -5,6 +5,7 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {GurukulBranchGetApi} from '../../../../services';
 import {
   GurukulFormValidationSchemaType,
   SingleGurukulRecType,
@@ -14,7 +15,6 @@ import {getYearsArray} from '../../../../utils';
 import {GurukulFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, RadioLable} from '../../../ui';
 import {styles} from './style';
-import {GurukulBranchGetApi} from '../../../../services';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
@@ -76,7 +76,7 @@ export const GurukulInfo = React.memo(
       const timer = setTimeout(() => {
         if (initialValues) {
           setExstudent(initialValues.exGurukulStudent);
-          replace(initialValues.gurukulData[0]);
+          replace(initialValues?.gurukulData?.[0]);
           setLoader(false);
         }
       }, 1000);

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Image, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -31,7 +32,7 @@ export const DailyDarshanDetail = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '80%', marginTop: '5%'}}>
           <Image
-            source={{uri: `https://gurukul.taskgrids.com${route.params.image}`}}
+            source={{uri: `${BASE_URL}${route.params.image}`}}
             style={style.images}
           />
         </View>

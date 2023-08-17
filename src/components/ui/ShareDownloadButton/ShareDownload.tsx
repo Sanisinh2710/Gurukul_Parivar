@@ -46,7 +46,6 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
-        console.log(imagePath, ' ', fileContent, '   ', base64Image);
 
         const options = {
           title: 'Share via',
@@ -138,7 +137,6 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
   const setWallPaper = async (imgUrl: string) => {
     try {
       const result = await WallpaperModule.setAsWallpaper(imgUrl);
-      console.log(result);
     } catch (error) {
       console.log(error);
     }
