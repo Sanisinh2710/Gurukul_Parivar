@@ -86,12 +86,12 @@ export const AddressFormValidationSchema =
         .of(
           yup.object().shape({
             id: yup.number(),
-            country_id: yup.number().required(t('common.EmptyError')),
+            country_id: yup.string().required(t('common.EmptyError')),
             address: yup.string().trim().required(t('common.EmptyError')),
-            pincode: yup.number().required(t('common.EmptyError')),
+            pincode: yup.string().required(t('common.EmptyError')),
             city: yup.string().trim().required(t('common.EmptyError')),
             address_type: yup.string().trim().required(t('common.EmptyError')),
-            communicationAddr: yup.boolean(),
+            is_preferred_communication: yup.boolean(),
           }),
         )
         .required(),

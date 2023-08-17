@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
@@ -61,12 +62,12 @@ export const ProfileSignup = ({
     },
     address_details: [
       {
-        country_id: 0,
+        country_id: '',
         address: '',
-        pincode: 0,
+        pincode: '',
         city: '',
         address_type: '',
-        communicationAddr: true,
+        is_preferred_communication: true,
       },
     ],
     edu_businessInfo: {
@@ -104,13 +105,19 @@ export const ProfileSignup = ({
 
         const fetchData = await AddressInfoGetApi();
         if (fetchData.resType === 'SUCCESS') {
-          if (fetchData.data.address_details !== null) {
+          if (
+            fetchData.data.address_details !== null &&
+            fetchData.data.address_details !== undefined &&
+            fetchData.data.address_details !== ''
+          ) {
             newFormData.address_details =
               fetchData.data.address_details.length >= 1
                 ? fetchData.data.address_details
                 : newFormData.address_details;
             setFormData(newFormData);
           }
+        } else {
+          Toast.show(fetchData.message, Toast.SHORT);
         }
       }
 
@@ -120,7 +127,11 @@ export const ProfileSignup = ({
         const fetchData = await EducationInfoGetApi();
 
         if (fetchData.resType === 'SUCCESS') {
-          if (fetchData.data.education_details !== undefined) {
+          if (
+            fetchData.data.education_details !== undefined &&
+            fetchData.data.education_details !== null &&
+            fetchData.data.education_details !== ''
+          ) {
             newFormData.edu_businessInfo = fetchData.data.education_details;
             setFormData(newFormData);
           }
@@ -133,7 +144,11 @@ export const ProfileSignup = ({
         const fetchData = await GurukulConnectGetApi();
 
         if (fetchData.resType === 'SUCCESS') {
-          if (fetchData.data.gurukul_connect_details !== undefined) {
+          if (
+            fetchData.data.gurukul_connect_details !== undefined &&
+            fetchData.data.gurukul_connect_details !== null &&
+            fetchData.data.gurukul_connect_details !== ''
+          ) {
             newFormData.gurukulInfo.exGurukulStudent = 'Yes';
 
             newFormData.gurukulInfo.gurukulData[0] =
@@ -151,7 +166,6 @@ export const ProfileSignup = ({
 
     await CallBackButtonAxiosGet();
   }, [formStep]);
-  console.log(formData.gurukulInfo.exGurukulStudent);
 
   const submitButton = async (
     receivedData: any,
@@ -194,11 +208,14 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
+          console.log(receivedData, 'resdaata');
+
           newFormData.address_details = receivedData;
           setFormData(newFormData);
           const response = await AddressInfoPostApi(
             newFormData.address_details,
           );
+          console.log(response, 'resdaata');
 
           if (response.resType === 'SUCCESS') {
             setwidth(width + 20);

@@ -23,12 +23,12 @@ export type CompleteProfileFormValidationSchemaType = {
 
 export type UserAddress = {
   id?: number | undefined;
-  country_id: number;
+  country_id: string;
   address: string;
-  pincode: number;
+  pincode: string;
   city: string;
   address_type: string;
-  communicationAddr?: boolean;
+  is_preferred_communication?: boolean;
 };
 
 export type AddressFormValidationSchemaType = {
