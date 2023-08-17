@@ -139,15 +139,15 @@
       "YourRelation": "સંબંધ પસંદ કરો"
     },
     "homeScreen": {
-      "WelcomeText1": "નમસ્તે",
+      "WelcomeText1": "નમસ્તે,",
       "Name": "મહેશભાઈ",
-      "WelcomeText2": "તમારો દિવસ શુભ રહે",
+      "WelcomeText2": "જય સ્વામિનારાયણ",
       "DailyDarshan": "દૈનિક દર્શન",
       "DailyQuotes": "દૈનિક સુવાર્તાઓ",
       "DailyUpdate": "દૈનિક અપડેટ",
       "Calendar": "કેલેન્ડર",
       "DailyProgram": "દૈનિક કાર્યક્રમ",
-      "LiveSatsang": "લાઇવ સત્સંગ"
+      "DailySatsang": "દૈનિક સત્સંગ"
     },
     "frontDesk": {
       "Heading": "ફ્રંટ ડેસ્ક",
@@ -227,6 +227,10 @@
     },
     "Payment": {
       "Heading": "ચુકવણી પદ્ધતિ પસંદ કરો"
+    },
+    "NoData":{
+      "Title":"ઓહ! કોઈ ડેટા મળ્યો નથી.",
+      "Content":"લાગે છે કે અમારા ડેટા એલ્વ્સ વિરામ લેવું ચાલુ છે.\n અમે શીઘ્રજી કેટલીક માહિતી બનાવીશું."
     }
   }
 }

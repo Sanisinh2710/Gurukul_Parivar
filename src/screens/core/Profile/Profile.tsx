@@ -81,7 +81,7 @@ export const ProfileScreen = ({
           <Image source={AllImages.Person} style={{height: 64, width: 64}} />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>{t('myProfile.Name')}</Text>
-            <Text>+91-9873957274</Text>
+            <Text style={{color: 'rgba(23,23,23,0.5)'}}>+91-9873957274</Text>
             <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
             </View>

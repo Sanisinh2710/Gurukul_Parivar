@@ -1,6 +1,10 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
+import LinearGradient from 'react-native-linear-gradient';
+import {CommonStyle} from '../../../../assets/styles';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {COLORS, HomeGrid} from '../../../utils';
 import {
   ImageBackground,
   ScrollView,
@@ -8,11 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {HomeGrid} from '../../../utils';
-
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -20,6 +19,7 @@ import {AllIcons} from '../../../../assets/icons';
 import {useAppSelector} from '../../../redux/hooks';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {styles} from './styles';
+import {AllImages} from '../../../../assets/images';
 
 export const HomeScreen = ({
   navigation,
@@ -27,10 +27,15 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [currentPage, setCurrentPage] = React.useState<number>(0);
+  const [dashboardImages, setDashboardImages] = React.useState([
+    AllImages.Rectangle,
+    AllImages.Rectangle3,
+    AllImages.Rectangle2,
+  ]);
+
   const style = styles();
   const TouchX = React.useRef<any>();
-  const theme = useAppSelector(state => state.theme.theme);
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
@@ -66,9 +71,15 @@ export const HomeScreen = ({
           <View>
             <View style={{flexDirection: 'row'}}>
               <Text style={style.WelcomeText1}>
-                {t('homeScreen.WelcomeText1')}{' '}
+                {t('homeScreen.WelcomeText1')}
               </Text>
-              <Text style={style.name}>{t('homeScreen.Name')}</Text>
+              <Text style={style.name}>
+                {t('homeScreen.Name')}
+                <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
+                  {' '}
+                  (AB0011)
+                </Text>
+              </Text>
             </View>
             <View>
               <Text style={style.WelcomeText2}>
@@ -82,33 +93,33 @@ export const HomeScreen = ({
           onPress: () => {},
         }}
       />
+
       <View style={[commonStyle.commonContentView, {height: '100%'}]}>
         <View
-          style={{}}
           onTouchStart={e => {
-            e.stopPropagation();
-
             TouchX.current = e.nativeEvent.pageX;
           }}
           onTouchEnd={e => {
-            e.stopPropagation();
             if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < 3) {
+              if (currentPage < dashboardImages.length - 1) {
                 setCurrentPage(currentPage + 1);
               }
             }
             if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (currentPage > 1 && currentPage <= 3) {
+              if (
+                currentPage > 0 &&
+                currentPage <= dashboardImages.length - 1
+              ) {
                 setCurrentPage(currentPage - 1);
               }
             }
           }}>
-          <PagerView currentPage={currentPage} />
+          <PagerView currentPage={currentPage} images={dashboardImages} />
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: '52%',
+            paddingBottom: '50%',
           }}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (

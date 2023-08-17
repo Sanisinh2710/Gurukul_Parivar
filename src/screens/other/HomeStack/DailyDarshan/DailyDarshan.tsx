@@ -3,13 +3,14 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
   Loader,
+  NoData,
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
@@ -41,6 +42,7 @@ export const DailyDarshan = ({
   const style = styles();
 
   React.useMemo(async () => {
+    setLoader(true);
     try {
       const res = await DailyDarshanApi(
         selectedDate,
@@ -48,13 +50,16 @@ export const DailyDarshan = ({
       );
 
       if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setData(res.data.image_paths);
-          setLoader(false);
-        }, 200);
+        if (res.resType === 'SUCCESS') {
+          setTimeout(() => {
+            setData(res.data.image_paths);
+            setData(res.data.image_paths);
+            setLoader(false);
+          }, 200);
+        }
       }
     } catch (error) {
-      console.log('Error');
+      console.log(error);
     }
   }, [selectedItem, selectedDate]);
 
@@ -117,16 +122,12 @@ export const DailyDarshan = ({
           />
         </View>
         {loader ? (
-          // <ActivityIndicator
-          //   size={50}
-          //   style={{flex: 1}}
-          //   color={COLORS.primaryColor}
-          // />
           <Loader />
         ) : (
-          <View style={{height: '80%'}}>
+          <View style={{height: '90%'}}>
             {Data.length > 0 ? (
               <FlatList
+                showsVerticalScrollIndicator={false}
                 data={Data}
                 numColumns={2}
                 columnWrapperStyle={{justifyContent: 'space-between'}}
@@ -134,7 +135,7 @@ export const DailyDarshan = ({
                   gap: 15,
                   marginTop: '3%',
                 }}
-                renderItem={item => {
+                renderItem={({item, index}) => {
                   return (
                     <TouchableOpacity
                       activeOpacity={0.8}
@@ -142,7 +143,9 @@ export const DailyDarshan = ({
                       onPress={() => {
                         navigation.navigate('dailyDarshanDetail', {
                           totalImages: Data.length,
-                          image: item.item,
+                          data: Data,
+                          image: item,
+                          currentImageIndex: index,
                           date: selectedDate.toLocaleDateString(
                             'en-in',
                             options,
@@ -151,7 +154,7 @@ export const DailyDarshan = ({
                       }}>
                       <Image
                         source={{
-                          uri: `${BASE_URL}${item.item}`,
+                          uri: `${BASE_URL}${item}`,
                         }}
                         style={style.images}
                       />
@@ -160,11 +163,7 @@ export const DailyDarshan = ({
                 }}
               />
             ) : (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <Text style={{textAlign: 'center', fontSize: 20}}>
-                  No Data Found
-                </Text>
-              </View>
+              <NoData />
             )}
           </View>
         )}

@@ -9,18 +9,21 @@ export const styles = () => {
   return StyleSheet.create({
     WelcomeText1: {
       ...CustomFonts.body.large14,
-      fontSize: 24,
+      fontSize: 20,
       color: 'black',
+      lineHeight: 30,
     },
     name: {
-      ...CustomFonts.header.large36,
-      fontSize: 24,
+      ...CustomFonts.header.medium20,
+      fontSize: 20,
       color: 'black',
+      lineHeight: 30,
     },
     WelcomeText2: {
       ...CustomFonts.body.large14,
-      fontSize: 24,
+      fontSize: 20,
       color: 'black',
+      lineHeight: 30,
     },
     images: {
       justifyContent: 'flex-end',

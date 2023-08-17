@@ -8,6 +8,7 @@ import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
 import {RootStackParamList} from '../../../types';
+import {AllImages} from '../../../../assets/images';
 import {FrontDesk} from '../../../utils';
 import {styles} from './styles';
 
@@ -17,6 +18,11 @@ export const FrontDeskScreen = ({
   const theme = useAppSelector(state => state.theme.theme);
 
   const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [dashboardImages, setDashboardImages] = React.useState([
+    AllImages.Rectangle,
+    AllImages.Rectangle3,
+    AllImages.Rectangle2,
+  ]);
   const style = styles();
   const TouchX = React.useRef<any>();
 
@@ -59,20 +65,25 @@ export const FrontDeskScreen = ({
       />
       <View style={commonStyle.commonContentView}>
         <View
-          onTouchStart={e => (TouchX.current = e.nativeEvent.pageX)}
+          onTouchStart={e => {
+            TouchX.current = e.nativeEvent.pageX;
+          }}
           onTouchEnd={e => {
             if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < 3) {
+              if (currentPage < dashboardImages.length - 1) {
                 setCurrentPage(currentPage + 1);
               }
             }
             if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (currentPage > 1 && currentPage <= 3) {
+              if (
+                currentPage > 0 &&
+                currentPage <= dashboardImages.length - 1
+              ) {
                 setCurrentPage(currentPage - 1);
               }
             }
           }}>
-          <PagerView currentPage={currentPage} />
+          <PagerView currentPage={currentPage} images={dashboardImages} />
         </View>
 
         <View style={{marginTop: 24, paddingBottom: 550}}>

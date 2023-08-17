@@ -24,4 +24,5 @@ export const AllImages = {
   DailyProgram: require('../images/DailyProgram.png'),
   DailyUpdate: require('../images/DailyUpdate.png'),
   LiveSatsang: require('../images/LiveSatsang.png'),
+  NoData: require('../images/NoData.png'),
 };

@@ -55,7 +55,7 @@ export const captureImage = async (type: MediaType) => {
         }
       },
     );
-    let finaluri: {uri: string | undefined} = {uri: mainuri.assets?.[0].uri};
+    let finaluri: any = mainuri.assets;
 
     return finaluri;
   }
