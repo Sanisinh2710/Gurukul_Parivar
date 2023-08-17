@@ -188,6 +188,13 @@
     },
     "ChangeLanguage": {
       "Heading": "भाषा बदलें"
+    },
+    "EditProfile": {
+      "Heading": "प्रोफ़ाइल संपादित करें",
+      "PersonalInfo": "व्यक्तिगत जानकारी",
+      "AddressInfo": "पता जानकारी",
+      "EduBussInfo": "शिक्षा / व्यवसाय जानकारी",
+      "GurukulConnect": "गुरुकुल कनेक्ट"
     }
   }
 }

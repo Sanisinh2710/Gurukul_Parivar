@@ -176,13 +176,19 @@ export const ProfileSignup = ({
             });
 
             if (newFormData.personalInfo.mobilenumInfo.length <= 1) {
-              const newJSON = {};
-              newJSON.mobilenum = backendData['secondary_contact'];
-              newJSON.countryCode = backendData['secondary_contact_cc'];
-              newJSON.whatsappNum = backendData['is_secondary_contact_wp'];
-              newJSON.secondary = true;
+              if (
+                backendData['secondary_contact'] &&
+                backendData['secondary_contact_cc'] &&
+                backendData['is_secondary_contact_wp']
+              ) {
+                const newJSON = {};
+                newJSON.mobilenum = backendData['secondary_contact'];
+                newJSON.countryCode = backendData['secondary_contact_cc'];
+                newJSON.whatsappNum = backendData['is_secondary_contact_wp'];
+                newJSON.secondary = true;
 
-              newFormData.personalInfo.mobilenumInfo.push(newJSON);
+                newFormData.personalInfo.mobilenumInfo.push(newJSON);
+              }
             } else {
               if (newFormData.personalInfo.mobilenumInfo[1].mobilenum) {
                 newFormData.personalInfo.mobilenumInfo[1].secondary = true;
@@ -190,11 +196,13 @@ export const ProfileSignup = ({
             }
 
             if (newFormData.personalInfo.emailInfo.length <= 1) {
-              const newJSON = {};
-              newJSON.email = backendData['secondary_email'];
-              newJSON.secondary = true;
+              if (backendData['secondary_email']) {
+                const newJSON = {};
+                newJSON.email = backendData['secondary_email'];
+                newJSON.secondary = true;
 
-              newFormData.personalInfo.emailInfo.push(newJSON);
+                newFormData.personalInfo.emailInfo.push(newJSON);
+              }
             } else {
               if (newFormData.personalInfo.emailInfo[1].email) {
                 newFormData.personalInfo.emailInfo[1].secondary = true;
@@ -478,7 +486,10 @@ export const ProfileSignup = ({
         setIsParentLoading(false);
 
         if (response.resType === 'SUCCESS') {
-          navigation.navigate('LoginSuccess', {type: 'Profile'});
+          const setuserprofileDone = setUserProfilingDone(true);
+          if (setuserprofileDone === 'SUCCESS') {
+            navigation.navigate('LoginSuccess', {type: 'Profile'});
+          }
         } else {
           Toast.show(response.message, 2);
         }

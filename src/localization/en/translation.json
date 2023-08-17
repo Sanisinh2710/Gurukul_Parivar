@@ -187,6 +187,13 @@
     },
     "ChangeLanguage": {
       "Heading": "Change Language"
+    },
+    "EditProfile": {
+      "Heading": "Edit Profile",
+      "PersonalInfo": "Personal Info",
+      "AddressInfo": "Address Info",
+      "EduBussInfo": "Education/Business Info",
+      "GurukulConnect": "GurukulConnect"
     }
   }
 }

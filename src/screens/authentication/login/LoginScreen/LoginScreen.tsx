@@ -112,7 +112,7 @@ export const LoginScreen = ({
       // data.countryCode = countryCodeSelect.split('(')[0].toString();
 
       setIsApiloading(true);
-      data.countryCode = countryCodeSelect ?? '+91(IN)';
+      data.countryCode = countryCodeSelect || '+91(IN)';
       data.mobileNumber = data.mobileNumber.toString();
 
       // Do something with mobile number and than navigate to OTP Screen;

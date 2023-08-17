@@ -8,6 +8,7 @@ import {
   EduBusinessInfoValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
+import {skillsList} from '../../../../utils';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
@@ -83,7 +84,7 @@ export const EduBusinessInfo = React.memo(
         lable: t('education/BusinessInfo.SKills'),
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
-        menuList: ['Music', 'Dancing', 'Games', 'Cricket', 'gtdrdrghfdghr'],
+        menuList: skillsList,
       },
       {
         name: 'otherComment',

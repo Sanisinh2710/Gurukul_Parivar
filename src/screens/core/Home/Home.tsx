@@ -1,18 +1,17 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {HomeGrid} from '../../../utils';
 import {
   ImageBackground,
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {CommonStyle} from '../../../../assets/styles';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {HomeGrid} from '../../../utils';
 
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
@@ -83,28 +82,34 @@ export const HomeScreen = ({
           onPress: () => {},
         }}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: '30%',
-        }}>
-        <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-          <View
-            onTouchStart={e => (TouchX.current = e.nativeEvent.pageX)}
-            onTouchEnd={e => {
-              if (TouchX.current - e.nativeEvent.pageX > 20) {
-                if (currentPage < 3) {
-                  setCurrentPage(currentPage + 1);
-                }
+      <View style={[commonStyle.commonContentView, {height: '100%'}]}>
+        <View
+          style={{}}
+          onTouchStart={e => {
+            e.stopPropagation();
+
+            TouchX.current = e.nativeEvent.pageX;
+          }}
+          onTouchEnd={e => {
+            e.stopPropagation();
+            if (TouchX.current - e.nativeEvent.pageX > 20) {
+              if (currentPage < 3) {
+                setCurrentPage(currentPage + 1);
               }
-              if (TouchX.current - e.nativeEvent.pageX < -20) {
-                if (currentPage > 1 && currentPage <= 3) {
-                  setCurrentPage(currentPage - 1);
-                }
+            }
+            if (TouchX.current - e.nativeEvent.pageX < -20) {
+              if (currentPage > 1 && currentPage <= 3) {
+                setCurrentPage(currentPage - 1);
               }
-            }}>
-            <PagerView currentPage={currentPage} />
-          </View>
+            }
+          }}>
+          <PagerView currentPage={currentPage} />
+        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: '52%',
+          }}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
@@ -131,8 +136,8 @@ export const HomeScreen = ({
               </ImageBackground>
             ))}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </ScreenWrapper>
   );
 };

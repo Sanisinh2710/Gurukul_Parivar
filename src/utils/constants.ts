@@ -444,11 +444,11 @@ export const months = [
   'December',
 ];
 
-export const MyProfileData = () => [
-  {title: 'Personal Info', icon: AllIcons.RightArrow},
-  {title: 'Address Info', icon: AllIcons.RightArrow},
-  {title: 'Education/Business Info', icon: AllIcons.RightArrow},
-  {title: 'Gurukul Connect', icon: AllIcons.RightArrow},
+export const MyProfileData = (t: any) => [
+  {title: t('EditProfile.PersonalInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.AddressInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.EduBussInfo'), icon: AllIcons.RightArrow},
+  {title: t('EditProfile.GurukulConnect'), icon: AllIcons.RightArrow},
 ];
 
 export const DailyDarshanAllImages = () => {
@@ -654,3 +654,5 @@ export const Quiz = [
     correctIndex: 0,
   },
 ];
+
+export const skillsList = ['Music', 'Dancing', 'Games', 'Cricket'];

@@ -187,6 +187,13 @@
     },
     "ChangeLanguage": {
       "Heading": "ભાષા બદલો"
+    },
+    "EditProfile": {
+      "Heading": "પ્રોફાઇલ સંપાદિત કરો",
+      "PersonalInfo": "વ્યક્તિગત માહિતી",
+      "AddressInfo": "સરનામું માહિતી",
+      "EduBussInfo": "શિક્ષણ / વ્યાપાર માહિતી",
+      "GurukulConnect": "ગુરુકુલ કનેક્ટ"
     }
   }
 }

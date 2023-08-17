@@ -113,8 +113,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .padStart(2, '0')}`;
   };
 
-  console.log(route.params, 'route params');
-
   return (
     <ScreenWrapper>
       <ScreenHeader
