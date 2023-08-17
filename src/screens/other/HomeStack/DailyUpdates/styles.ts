@@ -34,15 +34,16 @@ export const styles = () => {
     image: {
       height: 44,
       width: 44,
-      borderRadius: 60,
     },
     imageContainer: {
       borderRadius: 60,
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
-      marginVertical: '5%',
+      marginTop: '5%',
+      marginBottom: '20%',
+      padding: 5,
     },
   });
 };

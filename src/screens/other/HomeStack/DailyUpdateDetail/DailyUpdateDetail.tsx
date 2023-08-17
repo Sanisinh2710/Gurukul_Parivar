@@ -53,7 +53,7 @@ export const DailyUpdateDetail = ({
           </View>
           <View style={style.imageContainer}>
             <Image
-              source={{uri: `https://gurukul.taskgrids.com/${Data.images}`}}
+              source={{uri: `https://gurukul.taskgrids.com/${Data.images[0]}`}}
               style={style.image}
             />
           </View>
@@ -69,17 +69,21 @@ export const DailyUpdateDetail = ({
                 gap: 10,
                 marginTop: 10,
               }}
-              data={PhotoGallery()}
-              renderItem={item => (
-                <TouchableOpacity activeOpacity={0.5}>
-                  {item.item.image && (
-                    <Image
-                      source={item.item.image}
-                      key={item.item.id}
-                      style={{height: 105, width: 110, borderRadius: 8}}
-                    />
-                  )}
-                </TouchableOpacity>
+              data={Data.images}
+              renderItem={({item, index}) => (
+                <>
+                  <TouchableOpacity activeOpacity={0.5}>
+                    {item && (
+                      <Image
+                        source={{
+                          uri: `https://gurukul.taskgrids.com/${item}`,
+                        }}
+                        key={index}
+                        style={{height: 105, width: 110, borderRadius: 8}}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </>
               )}
             />
           </View>

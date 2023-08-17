@@ -5,6 +5,7 @@ import {
   BASE_URL,
   DAILY_DARSHAN_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
+  DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
@@ -13,6 +14,7 @@ import {
 } from '@env';
 import {getBearerToken} from './AuthServices';
 import {ApiDateFormat} from '../utils';
+import i18n from '../localization/i18n';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -52,7 +54,6 @@ const apiRequest = async (
       },
       ...(method === 'get' ? {params: requestData} : {data: requestData}),
     });
-
     return handleApiResponse(response);
   } catch (error: any) {
     return {
@@ -111,10 +112,17 @@ export const DailyDarshanApi = async (date: Date, time: string) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
   return await apiRequest(DAILY_DARSHAN_GET_ENDPOINT, 'get', {
     date: newDate,
-    time,
+    time: time,
   });
 };
 
 export const DailyUpdatesApi = async () => {
   return await apiRequest(DAILY_UPDATES_GET_ENDPOINT, 'get');
+};
+
+export const DailySatsangApi = async (date: Date) => {
+  const newDate = date.toLocaleString('en-US', ApiDateFormat);
+  return await apiRequest(DAILY_SATSANG_GET_ENDPOINT, 'get', {
+    date: newDate,
+  });
 };

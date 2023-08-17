@@ -90,7 +90,7 @@ export const ProfileScreen = ({
           </View>
         </View>
         <View style={style.mapContainer}>
-          {EditProfile(t, i18n).map((item, index) => {
+          {ProfileList.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}

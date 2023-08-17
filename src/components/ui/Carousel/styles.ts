@@ -28,6 +28,7 @@ export const style = (currentPage?: number) => {
       justifyContent: 'center',
       alignItems: 'center',
       // backgroundColor: 'blue',
+      // marginBottom: '5%',
     },
     pagerViewImageView: {
       justifyContent: 'center',

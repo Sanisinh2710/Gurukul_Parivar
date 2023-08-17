@@ -23,7 +23,7 @@ import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
 type ShareDownloadProps = {
-  imgURL?: string;
+  imgURL: string | undefined;
   wallpaper: boolean;
 };
 
@@ -36,12 +36,11 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     React.useState<boolean>(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
-
+  console.log(imgURL!);
   const onShare = async () => {
     try {
       const response = await RNFS.downloadFile({
-        fromUrl:
-          'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png',
+        fromUrl: imgURL!,
         toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
 
