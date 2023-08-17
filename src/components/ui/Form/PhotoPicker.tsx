@@ -45,7 +45,7 @@ export const PhotoPicker = React.memo(
               onPress: async () => {
                 let path = await captureImage('photo');
                 if (path) {
-                  onChange(path.uri);
+                  onChange(path);
                 }
               },
             },
