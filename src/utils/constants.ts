@@ -444,7 +444,7 @@ export const months = [
   'December',
 ];
 
-export const MyProfileData = () => [
+export const MyProfileData = (t: any) => [
   {title: t('EditProfile.PersonalInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.AddressInfo'), icon: AllIcons.RightArrow},
   {title: t('EditProfile.EduBussInfo'), icon: AllIcons.RightArrow},
@@ -649,4 +649,14 @@ export const Quiz = [
     ],
     correctIndex: 0,
   },
+];
+
+export const skillsList = ['Music', 'Dancing', 'Games', 'Cricket'];
+
+export const OccupationList = [
+  'Government Job',
+  'Engineer',
+  'Doctor',
+  'Private Job',
+  'Other',
 ];

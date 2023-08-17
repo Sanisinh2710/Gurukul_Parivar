@@ -17,7 +17,6 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {useAppSelector} from '../../../redux/hooks';
 import {removeAuthToken, removeProfToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, EditProfile} from '../../../utils';
@@ -90,7 +89,7 @@ export const ProfileScreen = ({
           </View>
         </View>
         <View style={style.mapContainer}>
-          {EditProfile(t).map((item, index) => {
+          {ProfileList.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}

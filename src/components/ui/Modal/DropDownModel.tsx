@@ -329,53 +329,55 @@ export const DropDownModel = React.memo(
     >([]);
 
     React.useEffect(() => {
-      if (isStringArray(inputList)) {
-        let temp = [...inputList];
+      if (inputList) {
+        if (isStringArray(inputList)) {
+          let temp = [...inputList];
 
-        if (
-          searchvalue !== null &&
-          searchvalue !== undefined &&
-          searchvalue !== ''
-        ) {
-          let abc = temp.filter((mainitem: string) => {
-            if (
-              mainitem
-                .toString()
-                .toLowerCase()
-                .includes(searchvalue.trim().toLowerCase())
-            ) {
-              return mainitem;
-            }
-          });
-          setSearchedData(abc);
-        } else {
-          setSearchedData([...inputList]);
-        }
-      }
-      if (isObjectArray(inputList)) {
-        let temp = [...inputList];
-
-        if (
-          searchvalue !== null &&
-          searchvalue !== undefined &&
-          searchvalue !== ''
-        ) {
-          let abc = temp.filter((mainitem: any) =>
-            Object.keys(mainitem).some((column: any) => {
+          if (
+            searchvalue !== null &&
+            searchvalue !== undefined &&
+            searchvalue !== ''
+          ) {
+            let abc = temp.filter((mainitem: string) => {
               if (
-                mainitem[column]
+                mainitem
                   .toString()
                   .toLowerCase()
                   .includes(searchvalue.trim().toLowerCase())
               ) {
                 return mainitem;
               }
-            }),
-          );
+            });
+            setSearchedData(abc);
+          } else {
+            setSearchedData([...inputList]);
+          }
+        }
+        if (isObjectArray(inputList)) {
+          let temp = [...inputList];
 
-          setSearchedData(abc);
-        } else {
-          setSearchedData([...inputList]);
+          if (
+            searchvalue !== null &&
+            searchvalue !== undefined &&
+            searchvalue !== ''
+          ) {
+            let abc = temp.filter((mainitem: any) =>
+              Object.keys(mainitem).some((column: any) => {
+                if (
+                  mainitem[column]
+                    .toString()
+                    .toLowerCase()
+                    .includes(searchvalue.trim().toLowerCase())
+                ) {
+                  return mainitem;
+                }
+              }),
+            );
+
+            setSearchedData(abc);
+          } else {
+            setSearchedData([...inputList]);
+          }
         }
       }
     }, [searchvalue]);

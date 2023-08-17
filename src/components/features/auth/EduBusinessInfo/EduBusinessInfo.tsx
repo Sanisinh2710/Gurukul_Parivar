@@ -12,6 +12,7 @@ import {
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
+import {OccupationList, skillsList} from '../../../../utils';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
@@ -59,10 +60,7 @@ export const EduBusinessInfo = React.memo(
         lable: t('education/BusinessInfo.OccuTypePlaceHolder'),
         placeholder: '',
         type: 'radio',
-        menuList: [
-          {name: t('education/BusinessInfo.Occupation1')},
-          {name: t('education/BusinessInfo.Occupation2')},
-        ],
+        menuList: [{name: 'I am an employee'}, {name: 'I run a business'}],
         customProps: {
           showHeading: true,
           wantFullSpace: true,
@@ -73,20 +71,14 @@ export const EduBusinessInfo = React.memo(
         lable: t('education/BusinessInfo.OccupationType'),
         placeholder: t('education/BusinessInfo.OccuTypePlaceHolder'),
         type: 'select',
-        menuList: [
-          'Developer',
-          'Designer',
-          'H.R. Executive',
-          'C.E.O.',
-          'C.T.O.',
-        ],
+        menuList: OccupationList,
       },
       {
         name: 'skills',
         lable: t('education/BusinessInfo.SKills'),
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
-        menuList: ['Music', 'Dancing', 'Games', 'Cricket'],
+        menuList: skillsList,
       },
       {
         name: 'other',

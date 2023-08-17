@@ -25,6 +25,7 @@ import {
 } from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {COLORS} from '../../../utils';
+import Toast from 'react-native-simple-toast';
 
 export const ProfileSignup = ({
   navigation,
@@ -150,6 +151,7 @@ export const ProfileSignup = ({
 
     await CallBackButtonAxiosGet();
   }, [formStep]);
+  console.log(formData.gurukulInfo.exGurukulStudent);
 
   const submitButton = async (
     receivedData: any,
@@ -194,10 +196,17 @@ export const ProfileSignup = ({
         if (receivedData !== undefined) {
           newFormData.address_details = receivedData;
           setFormData(newFormData);
-          await AddressInfoPostApi(newFormData.address_details);
+          const response = await AddressInfoPostApi(
+            newFormData.address_details,
+          );
+
+          if (response.resType === 'SUCCESS') {
+            setwidth(width + 20);
+            setFormStep(formStep + 1);
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
         }
-        setwidth(width + 20);
-        setFormStep(formStep + 1);
       }
       if (typecase === 'skip') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
@@ -217,7 +226,15 @@ export const ProfileSignup = ({
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
           setFormData(newFormData);
-          await EducationInfoPostApi(newFormData.edu_businessInfo);
+          const response = await EducationInfoPostApi(
+            newFormData.edu_businessInfo,
+          );
+          if (response.resType === 'SUCCESS') {
+            setwidth(width + 20);
+            setFormStep(formStep + 1);
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
         }
         setwidth(width + 20);
         setFormStep(formStep + 1);
@@ -241,15 +258,19 @@ export const ProfileSignup = ({
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
 
-          await GurukulConnectPostApi(newFormData.gurukulInfo.gurukulData[0]);
+          const response = await GurukulConnectPostApi(
+            newFormData.gurukulInfo.gurukulData[0],
+          );
 
           setFormData(newFormData);
           const resType = setUserProfilingDone(
             newFormData.personalInfo.mobilenumInfo.at(0)?.mobilenum,
           );
 
-          if (resType === 'SUCCESS') {
+          if (resType === 'SUCCESS' && response.resType === 'SUCCESS') {
             navigation.navigate('LoginSuccess', {type: 'Profile'});
+          } else {
+            Toast.show(response.message, Toast.SHORT);
           }
         }
       }

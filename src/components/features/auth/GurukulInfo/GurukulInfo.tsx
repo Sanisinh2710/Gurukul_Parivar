@@ -75,6 +75,7 @@ export const GurukulInfo = React.memo(
 
       const timer = setTimeout(() => {
         if (initialValues) {
+          setExstudent(initialValues.exGurukulStudent);
           replace(initialValues.gurukulData[0]);
           setLoader(false);
         }
