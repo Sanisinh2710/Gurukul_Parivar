@@ -3,6 +3,7 @@ import {
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
+  CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
@@ -172,4 +173,10 @@ export const GurukulConnectGetApi = async () => {
 
 export const GurukulConnectPostApi = async (gurukulInfo: any) => {
   return await apiRequest(GURUKUL_CONNECT_POST_ENDPOINT, 'post', gurukulInfo);
+};
+export const CalendarGetApi = async (date: Date) => {
+  const newDate = date.toLocaleString('en-US', ApiDateFormat);
+  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {
+    date: newDate,
+  });
 };

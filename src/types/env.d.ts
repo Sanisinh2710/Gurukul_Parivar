@@ -17,4 +17,5 @@ declare module '@env' {
   export const DAILY_QUOTES_GET_ENDPOINT: string;
   export const DAILY_UPDATES_GET_ENDPOINT: string;
   export const DAILY_SATSANG_GET_ENDPOINT: string;
+  export const CALENDAR_GET_ENDPOINT: string;
 }

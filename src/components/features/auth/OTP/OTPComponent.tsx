@@ -45,7 +45,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             }}
             onChangeText={val => {
               const newOtpValue = [...num];
-              newOtpValue[index] = val;
+              newOtpValue[index] = val.trim();
               setNum(newOtpValue);
             }}
             keyboardType="number-pad"

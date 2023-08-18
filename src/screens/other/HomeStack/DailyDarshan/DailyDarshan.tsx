@@ -50,13 +50,10 @@ export const DailyDarshan = ({
       );
 
       if (res.resType === 'SUCCESS') {
-        if (res.resType === 'SUCCESS') {
-          setTimeout(() => {
-            setData(res.data.image_paths);
-            setData(res.data.image_paths);
-            setLoader(false);
-          }, 200);
-        }
+        setTimeout(() => {
+          setData(res.data.image_paths);
+          setLoader(false);
+        }, 200);
       }
     } catch (error) {
       console.log(error);
