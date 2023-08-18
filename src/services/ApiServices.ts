@@ -7,14 +7,19 @@ import {
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
+  EDUCATION_INFO_GET_ENDPOINT,
+  EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
+  GURUKUL_CONNECT_GET_ENDPOINT,
+  GURUKUL_CONNECT_POST_ENDPOINT,
   LOGIN_POST_ENDPOINT,
+  PERSONAL_INFO_GET_ENDPOINT,
+  PERSONAL_INFO_POST_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
 import {getBearerToken} from './AuthServices';
 import {ApiDateFormat} from '../utils';
-import i18n from '../localization/i18n';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -34,6 +39,7 @@ const apiRequest = async (
   endpoint: string,
   method: string,
   requestData = {},
+  headers?: object,
   requireBearerToken = true,
 ) => {
   try {
@@ -47,11 +53,13 @@ const apiRequest = async (
     const response = await axiosInstance({
       method,
       url: endpoint,
-      headers: {
-        ...(requireBearerToken && {
-          Authorization: `Bearer ${getBearerToken().token}`,
-        }),
-      },
+      headers: headers
+        ? {...headers}
+        : {
+            ...(requireBearerToken && {
+              Authorization: `Bearer ${getBearerToken().token}`,
+            }),
+          },
       ...(method === 'get' ? {params: requestData} : {data: requestData}),
     });
     return handleApiResponse(response);
@@ -69,6 +77,7 @@ export const LoginByMobileNumApi = async (mobileNum: string) => {
     LOGIN_POST_ENDPOINT,
     'post',
     {contact: mobileNum},
+    {},
     false,
   );
 };
@@ -81,6 +90,7 @@ export const VerifyOTPApi = async (mobileNum: string, otp: string) => {
       contact: mobileNum,
       otp,
     },
+    {},
     false,
   );
 };
@@ -125,4 +135,41 @@ export const DailySatsangApi = async (date: Date) => {
   return await apiRequest(DAILY_SATSANG_GET_ENDPOINT, 'get', {
     date: newDate,
   });
+};
+
+export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
+  const payloadData = new FormData();
+
+  Object.keys(userPersonalInfo).map(key => {
+    payloadData.append(`${key}`, userPersonalInfo[key]);
+  });
+  return await apiRequest(PERSONAL_INFO_POST_ENDPOINT, 'post', payloadData, {
+    Authorization: `Bearer ${getBearerToken().token}`,
+    'Content-Type': 'multipart/form-data',
+    Accept: 'application/json',
+  });
+};
+
+export const PersonalInfoGetDetailsApi = async () => {
+  return await apiRequest(PERSONAL_INFO_GET_ENDPOINT, 'get');
+};
+
+export const EducationInfoGetApi = async () => {
+  return await apiRequest(EDUCATION_INFO_GET_ENDPOINT, 'get');
+};
+
+export const EducationInfoPostApi = async (education_details: any) => {
+  return await apiRequest(
+    EDUCATION_INFO_POST_ENDPOINT,
+    'post',
+    education_details,
+  );
+};
+
+export const GurukulConnectGetApi = async () => {
+  return await apiRequest(GURUKUL_CONNECT_GET_ENDPOINT, 'get');
+};
+
+export const GurukulConnectPostApi = async (gurukulInfo: any) => {
+  return await apiRequest(GURUKUL_CONNECT_POST_ENDPOINT, 'post', gurukulInfo);
 };

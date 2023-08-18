@@ -3,21 +3,15 @@ import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {GetCountriesApi} from '../../../../services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
   UserAddress,
 } from '../../../../types';
-import {COLORS, countries} from '../../../../utils';
+import {COLORS} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
@@ -37,6 +31,26 @@ export const AdressInfo = React.memo(
 
     const [loader, setLoader] = React.useState<boolean>(false);
 
+    const [countries, setCountries] = React.useState([]);
+    const [checkedArray, setCheckedArray] = React.useState(
+      [
+        ...initialValues?.address_details?.map(item => {
+          return item?.is_preferred_communication === null ||
+            item?.is_preferred_communication === '' ||
+            item?.is_preferred_communication === undefined
+            ? false
+            : item?.is_preferred_communication;
+        }),
+      ] || [false],
+    );
+
+    React.useMemo(async () => {
+      const res = await GetCountriesApi();
+      if (res.resType === 'SUCCESS') {
+        setCountries(res.data.countries);
+      }
+    }, []);
+
     const addressFormInputList: {
       name: keyof UserAddress;
       lable: string;
@@ -50,11 +64,7 @@ export const AdressInfo = React.memo(
         lable: t('addressInfo.CountryLbl'),
         placeholder: t('addressInfo.CountryPlaceHolder'),
         type: 'select',
-        menuList: [
-          ...countries.map(item => {
-            return item.country;
-          }),
-        ],
+        menuList: countries,
       },
       {
         name: 'address',
@@ -111,7 +121,31 @@ export const AdressInfo = React.memo(
 
       const timer = setTimeout(() => {
         if (initialValues) {
-          replace(initialValues.address_details);
+          setCheckedArray([
+            ...initialValues?.address_details?.map(item => {
+              return item?.is_preferred_communication === null ||
+                item?.is_preferred_communication === '' ||
+                item?.is_preferred_communication === undefined
+                ? false
+                : item?.is_preferred_communication;
+            }),
+          ]);
+
+          replace([
+            ...initialValues.address_details.map(item => {
+              return {
+                id: item.id,
+                address: item.address,
+                address_type: item.address_type,
+                city: item.city,
+                country_id: item.country_id,
+                pincode: item.pincode,
+                is_preferred_communication:
+                  item.is_preferred_communication ?? false,
+              };
+            }),
+          ]);
+
           setLoader(false);
         }
       }, 1000);
@@ -119,21 +153,15 @@ export const AdressInfo = React.memo(
       return () => clearTimeout(timer);
     }, [initialValues]);
 
-    const [checkedArray, setCheckedArray] = React.useState(
-      [
-        ...initialValues?.address_details?.map(item => {
-          return item?.communicationAddr;
-        }),
-      ] || [false],
-    );
-
     const onSubmit = (data: AddressFormValidationSchemaType) => {
       if (data.address_details !== undefined) {
         let newData = [...data.address_details].map((item, index) => {
-          item.country_id = 101;
-          item.communicationAddr = checkedArray[index];
+          item.is_preferred_communication = checkedArray[index];
+          // item.country_id = parseInt(item.country_id);
+          // item.pincode = parseInt(item.pincode);
           return item;
         });
+
         onSubmitEvent([...newData], 'next');
       }
     };
@@ -236,12 +264,12 @@ export const AdressInfo = React.memo(
               title={t('common.AddAddress')}
               onPress={() => {
                 append({
-                  country_id: 0,
+                  country_id: '',
                   address: '',
-                  pincode: 0,
+                  pincode: '',
                   city: '',
                   address_type: '',
-                  communicationAddr: false,
+                  is_preferred_communication: false,
                 });
 
                 let newArr = JSON.parse(JSON.stringify(checkedArray));

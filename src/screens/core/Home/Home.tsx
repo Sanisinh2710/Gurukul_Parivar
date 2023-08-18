@@ -7,13 +7,11 @@ import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {COLORS, HomeGrid} from '../../../utils';
 import {
   ImageBackground,
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -38,7 +36,6 @@ export const HomeScreen = ({
 
   const style = styles();
   const TouchX = React.useRef<any>();
-  const theme = useAppSelector(state => state.theme.theme);
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();

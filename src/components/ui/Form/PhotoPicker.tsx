@@ -36,7 +36,7 @@ export const PhotoPicker = React.memo(
               onPress: async () => {
                 let path = await chooseFile('photo');
                 if (path) {
-                  onChange(path.uri);
+                  onChange(path);
                 }
               },
             },
@@ -45,7 +45,7 @@ export const PhotoPicker = React.memo(
               onPress: async () => {
                 let path = await captureImage('photo');
                 if (path) {
-                  onChange(path.uri);
+                  onChange(path);
                 }
               },
             },
@@ -54,7 +54,7 @@ export const PhotoPicker = React.memo(
         <View style={style.photOutSideView}>
           <View style={style.photoView}>
             {value ? (
-              <Image source={{uri: value}} style={style.image} />
+              <Image source={{uri: value?.[0]?.uri}} style={style.image} />
             ) : (
               <Image source={AllIcons.Avtar} style={style.avtar} />
             )}

@@ -8,8 +8,9 @@ import {
   EduBusinessInfoValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
+import {OccupationList, skillsList} from '../../../../utils';
 import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
 
 type EduBusinessInfoProps = {
@@ -23,8 +24,10 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
+    console.log(initialValues);
 
     const style = styles();
+    const [loader, setLoader] = React.useState<boolean>(false);
 
     const EduBusinessInfoFormInputList: {
       name: keyof EduBusinessInfoValidationSchemaType;
@@ -36,7 +39,7 @@ export const EduBusinessInfo = React.memo(
       customProps?: object;
     }[] = [
       {
-        name: 'maxEduLevel',
+        name: 'education',
         lable: t('education/BusinessInfo.HighesteduLbl'),
         placeholder: t('education/BusinessInfo.HighesteduPlaceHolder'),
         type: 'select',
@@ -49,6 +52,7 @@ export const EduBusinessInfo = React.memo(
           'U.G.',
           'P.G.',
           'Ph.d.',
+          'BE',
         ],
       },
       {
@@ -56,37 +60,28 @@ export const EduBusinessInfo = React.memo(
         lable: t('education/BusinessInfo.OccuTypePlaceHolder'),
         placeholder: '',
         type: 'radio',
-        menuList: [
-          {name: t('education/BusinessInfo.Occupation1')},
-          {name: t('education/BusinessInfo.Occupation2')},
-        ],
+        menuList: [{name: 'I am an employee'}, {name: 'I run a business'}],
         customProps: {
           showHeading: true,
           wantFullSpace: true,
         },
       },
       {
-        name: 'occupationType',
+        name: 'occupation_type',
         lable: t('education/BusinessInfo.OccupationType'),
         placeholder: t('education/BusinessInfo.OccuTypePlaceHolder'),
         type: 'select',
-        menuList: [
-          'Developer',
-          'Designer',
-          'H.R. Executive',
-          'C.E.O.',
-          'C.T.O.',
-        ],
+        menuList: OccupationList,
       },
       {
         name: 'skills',
         lable: t('education/BusinessInfo.SKills'),
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
-        menuList: ['Music', 'Dancing', 'Games', 'Cricket', 'gtdrdrghfdghr'],
+        menuList: skillsList,
       },
       {
-        name: 'otherComment',
+        name: 'other',
         lable: t('education/BusinessInfo.Other'),
         placeholder: t('education/BusinessInfo.OtherPlaceHolder'),
         type: 'textarea',
@@ -96,6 +91,7 @@ export const EduBusinessInfo = React.memo(
     const {
       control,
       handleSubmit,
+      setValue,
       formState: {errors},
     } = useForm<EduBusinessInfoValidationSchemaType>({
       defaultValues: initialValues,
@@ -112,55 +108,81 @@ export const EduBusinessInfo = React.memo(
     const leftOnSubmit = () => {
       onSubmitEvent(initialValues, 'skip');
     };
+
+    React.useEffect(() => {
+      setLoader(true);
+
+      const timer = setTimeout(() => {
+        if (initialValues) {
+          console.log('hello');
+
+          setValue('education', initialValues.education ?? '');
+          setValue('occupation', initialValues.occupation ?? '');
+          setValue('occupation_type', initialValues.occupation_type ?? '');
+          setValue('skills', initialValues.skills ?? []);
+          setValue('other', initialValues.other ?? '');
+          setLoader(false);
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }, [initialValues]);
+
     return (
-      <ScrollView
-        contentContainerStyle={style.scrollViewContainer}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={true}>
-        <FlatList
-          data={[...EduBusinessInfoFormInputList]}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={style.flatListContainer}
-          scrollEnabled={false}
-          renderItem={({item}) => {
-            return (
-              <Controller
-                control={control}
-                name={item.name}
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      icon={item.icon}
-                      type={item.type}
-                      name={item.name}
-                      label={item.lable}
-                      placeholder={item.placeholder}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      menuList={item.menuList}
-                      customProps={item.customProps}
-                      error={errors[item.name]?.message?.toString()}
-                    />
-                  );
-                }}
+      <>
+        {loader ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            contentContainerStyle={style.scrollViewContainer}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}>
+            <FlatList
+              data={[...EduBusinessInfoFormInputList]}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={style.flatListContainer}
+              scrollEnabled={false}
+              renderItem={({item}) => {
+                return (
+                  <Controller
+                    control={control}
+                    name={item.name}
+                    render={({field: {onBlur, onChange, value}}) => {
+                      return (
+                        <FormInput
+                          icon={item.icon}
+                          type={item.type}
+                          name={item.name}
+                          label={item.lable}
+                          placeholder={item.placeholder}
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={onChange}
+                          menuList={item.menuList}
+                          customProps={item.customProps}
+                          error={errors[item.name]?.message?.toString()}
+                        />
+                      );
+                    }}
+                  />
+                );
+              }}
+            />
+            <View style={style.submitButtonView}>
+              <SecondaryButton
+                title={t('common.SkipNow')}
+                onPress={leftOnSubmit}
+                buttonStyle={style.submitButtonStyle}
               />
-            );
-          }}
-        />
-        <View style={style.submitButtonView}>
-          <SecondaryButton
-            title={t('common.SkipNow')}
-            onPress={leftOnSubmit}
-            buttonStyle={style.submitButtonStyle}
-          />
-          <PrimaryButton
-            title={t('common.Save&Next')}
-            onPress={handleSubmit(onSubmit)}
-            buttonStyle={style.submitButtonStyle}
-          />
-        </View>
-      </ScrollView>
+              <PrimaryButton
+                title={t('common.Save&Next')}
+                onPress={handleSubmit(onSubmit)}
+                buttonStyle={style.submitButtonStyle}
+              />
+            </View>
+          </ScrollView>
+        )}
+      </>
     );
   },
 );

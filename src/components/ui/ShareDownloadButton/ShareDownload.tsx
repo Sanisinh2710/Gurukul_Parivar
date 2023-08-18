@@ -43,7 +43,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         fromUrl: imgURL!,
         toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
-
       if ((await response.promise).statusCode === 200) {
         const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');

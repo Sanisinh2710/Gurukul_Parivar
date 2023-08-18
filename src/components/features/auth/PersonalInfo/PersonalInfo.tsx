@@ -11,9 +11,10 @@ import {
 } from '../../../../types';
 import {COLORS, CustomFonts} from '../../../../utils';
 import {PersonalInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, PrimaryButton, SecondaryButton} from '../../../ui';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 
 type PersonalInfoProps = {
+  isParentLoading: boolean;
   initialValues: PersonalInfoFormValidationSchemaType;
   onSubmitEvent: (
     receivedData: any,
@@ -22,13 +23,19 @@ type PersonalInfoProps = {
 };
 
 export const PersonalInfo = React.memo(
-  ({initialValues, onSubmitEvent}: PersonalInfoProps): React.JSX.Element => {
+  ({
+    isParentLoading,
+    initialValues,
+    onSubmitEvent,
+  }: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
     const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =
       React.useState('');
+
+    const [localLoading, setIsLocalLoading] = React.useState(false);
 
     const [checkedArray, setCheckedArray] = React.useState(
       [
@@ -37,6 +44,8 @@ export const PersonalInfo = React.memo(
         }),
       ] || [true],
     );
+
+    const [isArraySet, setIsArrayset] = React.useState(false);
 
     const PerosnalInfoForm1InputList: {
       name: keyof PersonalInfoFormValidationSchemaType;
@@ -66,13 +75,13 @@ export const PersonalInfo = React.memo(
         },
       },
       {
-        name: 'fullname',
+        name: 'full_name',
         lable: t('personalInfo.FullNameLable'),
         placeholder: t('personalInfo.FullNamePlaceholder'),
         type: 'text',
       },
       {
-        name: 'fatherFullName',
+        name: 'father_name',
         lable: t('personalInfo.FatherNameLable'),
         placeholder: t('personalInfo.FatherNamePlaceholder'),
         type: 'text',
@@ -84,7 +93,7 @@ export const PersonalInfo = React.memo(
         type: 'dob',
       },
       {
-        name: 'bloodGroup',
+        name: 'blood_group',
         lable: t('personalInfo.BloodGroup'),
         placeholder: t('personalInfo.BloodGroupDropDown'),
         type: 'select',
@@ -96,6 +105,7 @@ export const PersonalInfo = React.memo(
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: {errors},
     } = useForm<PersonalInfoFormValidationSchemaType>({
       defaultValues: initialValues,
@@ -108,6 +118,7 @@ export const PersonalInfo = React.memo(
       append: mobileappend,
       remove: mobileremove,
       update: mobileupdate,
+      replace: mobilereplace,
     } = useFieldArray({
       control,
       name: 'mobilenumInfo',
@@ -117,60 +128,12 @@ export const PersonalInfo = React.memo(
       fields: emailfield,
       append: emailappend,
       remove: emailremove,
+      update: emailupdate,
+      replace: emailreplace,
     } = useFieldArray({
       control,
       name: 'emailInfo',
     });
-
-    const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
-        const formSubmitData = {
-          gender: data.gender || '',
-          fullname: data.fullname || '',
-          fatherFullName: data.fatherFullName || '',
-          dob: data.dob || '',
-          bloodGroup: data.bloodGroup || '',
-          mobilenumInfo:
-            [...data.mobilenumInfo].map((item: any, index: any) => {
-              let newItem: any = {};
-
-              newItem.mobilenum = item.mobilenum;
-              newItem.secondary = item.secondary;
-              newItem.whatsappNum = checkedArray[index];
-              newItem.countryCode = item.countryCode;
-
-              return newItem;
-            }) || [],
-          emailInfo: data.emailInfo,
-        };
-        onSubmitEvent(formSubmitData, 'next');
-      }
-    };
-
-    const leftOnSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
-        const formSubmitData = {
-          gender: data.gender || '',
-          fullname: data.fullname || '',
-          fatherFullName: data.fatherFullName || '',
-          dob: data.dob || '',
-          bloodGroup: data.bloodGroup || '',
-          mobilenumInfo:
-            [...data.mobilenumInfo].map((item: any, index: any) => {
-              let newItem: any = {};
-
-              newItem.mobilenum = item.mobilenum;
-              newItem.secondary = item.secondary;
-              newItem.whatsappNum = checkedArray[index];
-              newItem.countryCode = item.countryCode;
-
-              return newItem;
-            }) || [],
-          emailInfo: data.emailInfo,
-        };
-        onSubmitEvent(formSubmitData, 'exit');
-      }
-    };
 
     React.useEffect(() => {
       if (primarycountryCodeSelect) {
@@ -194,259 +157,364 @@ export const PersonalInfo = React.memo(
       }
     }, [getValues, mobileupdate, secondarycountryCodeSelect]);
 
-    return (
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: '30%',
-          flexGrow: 1,
-        }}>
-        <>
-          <FlatList
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{gap: 15}}
-            data={[...PerosnalInfoForm1InputList]}
-            renderItem={({item}) => {
-              return (
-                <Controller
-                  control={control}
-                  name={item.name}
-                  render={({field: {onChange, onBlur, value}}) => {
-                    return (
-                      <FormInput
-                        icon={item.icon}
-                        type={item.type}
-                        name={item.name}
-                        label={item.lable}
-                        placeholder={item.placeholder}
-                        value={value}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        error={errors[item.name]?.message?.toString()}
-                        menuList={item.menuList}
-                        customProps={item.customProps}
-                      />
-                    );
-                  }}
-                />
-              );
-            }}
-          />
-          <View style={{gap: 15, marginTop: '5%'}}>
-            {mobilefield.map((mainitem, mainindex) => {
-              return (
-                <View key={mainindex}>
-                  {mainindex >= 1 && (
-                    <View
-                      style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                      onTouchEnd={() => mobileremove(mainindex)}>
-                      <Image
-                        source={AllIcons.Cancel}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    </View>
-                  )}
-                  <Controller
-                    control={control}
-                    name={`mobilenumInfo.${mainindex}.mobilenum`}
-                    render={({field: {onChange, onBlur, value}}) => {
-                      return (
-                        <FormInput
-                          type={'phone'}
-                          name={`mobilenumInfo.${mainindex}.mobilenum`}
-                          label={t('personalInfo.MobileNumber')}
-                          placeholder={t('common.EnterMobileNum')}
-                          value={value}
-                          onBlur={onBlur}
-                          onChange={onChange}
-                          error={errors?.mobilenumInfo?.[
-                            mainindex
-                          ]?.mobilenum?.message?.toString()}
-                          state={
-                            mainindex === 0
-                              ? {
-                                  countryCodeSelect: primarycountryCodeSelect,
-                                  setCountryCodeSelect:
-                                    setPrimaryCountryCodeSelect,
-                                }
-                              : {
-                                  countryCodeSelect: secondarycountryCodeSelect,
-                                  setCountryCodeSelect:
-                                    setSecondaryCountryCodeSelect,
-                                }
-                          }
-                          defaultPhoneCountryCode={
-                            getValues()?.mobilenumInfo?.[mainindex].countryCode
-                          }
-                          rightText={
-                            mainindex === 0
-                              ? t('personalInfo.AddSecondaryNumber')
-                              : ''
-                          }
-                          editable={mainindex === 0 ? false : true}
-                          rightTextOnPress={
-                            mainindex === 0
-                              ? () => {
-                                  if (mobilefield.length <= 1) {
-                                    mobileappend({
-                                      mobilenum: '',
-                                      secondary: true,
-                                      whatsappNum: false,
-                                      countryCode: '',
-                                    });
+    React.useMemo(() => {
+      if (initialValues) {
+        if (initialValues.mobilenumInfo.length > 1) {
+          if (mobilefield.length <= 1) {
+            mobileappend(initialValues.mobilenumInfo[1]);
+          }
+        }
+        if (initialValues.emailInfo.length > 1) {
+          if (emailfield.length <= 1) {
+            emailappend(initialValues.emailInfo[1]);
+          }
+        }
+        setIsArrayset(true);
+      }
+    }, [initialValues]);
 
-                                    let newArr = JSON.parse(
-                                      JSON.stringify(checkedArray),
-                                    );
-                                    newArr.push(false);
-                                    setCheckedArray(newArr);
-                                  }
-                                }
-                              : () => {}
-                          }
-                        />
-                      );
-                    }}
-                  />
-                  <View
-                    style={{
-                      marginTop: '5%',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        gap: 10,
-                        marginBottom: '5%',
-                      }}>
-                      <View
-                        style={{
-                          height: 20,
-                          width: 20,
-                          alignItems: 'center',
-                          borderRadius: 5,
-                          borderColor: COLORS.primaryColor,
-                          borderWidth: checkedArray[mainindex] ? 0 : 1,
-                        }}
-                        onTouchEnd={() => {
-                          let newArr = JSON.parse(JSON.stringify(checkedArray));
-                          let returnArr = newArr.map(
-                            (item: any, index: number) => {
-                              return mainindex === index ? !item : false;
-                            },
-                          );
-                          setCheckedArray(returnArr);
-                        }}>
-                        {checkedArray[mainindex] ? (
+    React.useEffect(() => {
+      if (isArraySet) {
+        setIsLocalLoading(true);
+        Object.keys(initialValues).map((key, index) => {
+          if (key === 'mobilenumInfo') {
+            const mobileArr = initialValues.mobilenumInfo;
+            mobileArr.map((item, index) => {
+              mobileupdate(index, item);
+            });
+          } else if (key === 'emailInfo') {
+            const emailArr = initialValues.emailInfo;
+            emailArr.map((item, index) => {
+              emailupdate(index, item);
+            });
+          } else {
+            setValue(key, initialValues[key]);
+          }
+        });
+
+        setCheckedArray([
+          ...initialValues?.mobilenumInfo?.map(item => {
+            return item.whatsappNum;
+          }),
+        ]);
+        setIsLocalLoading(false);
+      }
+    }, [initialValues, isArraySet]);
+
+    const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
+      if (data && data.mobilenumInfo && data.emailInfo) {
+        const formSubmitData = {
+          gender: data.gender || '',
+          full_name: data.full_name || '',
+          father_name: data.father_name || '',
+          dob: data.dob || '',
+          blood_group: data.blood_group || '',
+          mobilenumInfo:
+            [...data.mobilenumInfo].map((item: any, index: any) => {
+              let newItem: any = {};
+
+              newItem.mobilenum = item.mobilenum;
+              newItem.secondary = item.secondary;
+              newItem.whatsappNum = checkedArray[index];
+              newItem.countryCode = item.countryCode;
+
+              return newItem;
+            }) || [],
+          emailInfo: data.emailInfo,
+        };
+        onSubmitEvent(formSubmitData, 'next');
+      }
+    };
+
+    const leftOnSubmit = (data: PersonalInfoFormValidationSchemaType) => {
+      if (data && data.mobilenumInfo && data.emailInfo) {
+        const formSubmitData = {
+          gender: data.gender || '',
+          full_name: data.full_name || '',
+          father_name: data.father_name || '',
+          dob: data.dob || '',
+          blood_group: data.blood_group || '',
+          mobilenumInfo:
+            [...data.mobilenumInfo].map((item: any, index: any) => {
+              let newItem: any = {};
+
+              newItem.mobilenum = item.mobilenum;
+              newItem.secondary = item.secondary;
+              newItem.whatsappNum = checkedArray[index];
+              newItem.countryCode = item.countryCode;
+
+              return newItem;
+            }) || [],
+          emailInfo: data.emailInfo,
+        };
+        onSubmitEvent(formSubmitData, 'exit');
+      }
+    };
+
+    return (
+      <>
+        {isParentLoading || localLoading ? (
+          <Loader screenHeight={'90%'} />
+        ) : (
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: '30%',
+              flexGrow: 1,
+            }}>
+            <>
+              <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{gap: 15}}
+                data={[...PerosnalInfoForm1InputList]}
+                renderItem={({item}) => {
+                  return (
+                    <Controller
+                      control={control}
+                      name={item.name}
+                      render={({field: {onChange, onBlur, value}}) => {
+                        return (
+                          <FormInput
+                            icon={item.icon}
+                            type={item.type}
+                            name={item.name}
+                            label={item.lable}
+                            placeholder={item.placeholder}
+                            value={value}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            error={errors[item.name]?.message?.toString()}
+                            menuList={item.menuList}
+                            customProps={item.customProps}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                }}
+              />
+              <View style={{gap: 15, marginTop: '5%'}}>
+                {mobilefield.map((mainitem, mainindex) => {
+                  return (
+                    <View key={mainitem.id}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          onTouchEnd={() => mobileremove(mainindex)}>
                           <Image
-                            source={AllIcons.Checkbox}
+                            source={AllIcons.Cancel}
                             style={{
-                              height: '100%',
                               width: '100%',
+                              height: '100%',
                             }}
                           />
-                        ) : null}
-                      </View>
-                      <Text
+                        </View>
+                      )}
+                      <Controller
+                        control={control}
+                        name={`mobilenumInfo.${mainindex}.mobilenum`}
+                        render={({field: {onChange, onBlur, value}}) => {
+                          return (
+                            <FormInput
+                              type={'phone'}
+                              name={`mobilenumInfo.${mainindex}.mobilenum`}
+                              label={t('personalInfo.MobileNumber')}
+                              placeholder={t('common.EnterMobileNum')}
+                              value={value}
+                              onBlur={onBlur}
+                              onChange={onChange}
+                              error={errors?.mobilenumInfo?.[
+                                mainindex
+                              ]?.mobilenum?.message?.toString()}
+                              state={
+                                mainindex === 0
+                                  ? {
+                                      countryCodeSelect:
+                                        primarycountryCodeSelect,
+                                      setCountryCodeSelect:
+                                        setPrimaryCountryCodeSelect,
+                                    }
+                                  : {
+                                      countryCodeSelect:
+                                        secondarycountryCodeSelect,
+                                      setCountryCodeSelect:
+                                        setSecondaryCountryCodeSelect,
+                                    }
+                              }
+                              defaultPhoneCountryCode={
+                                getValues()?.mobilenumInfo?.[mainindex]
+                                  ?.countryCode
+                              }
+                              rightText={
+                                mainindex === 0
+                                  ? t('personalInfo.AddSecondaryNumber')
+                                  : ''
+                              }
+                              editable={mainindex === 0 ? false : true}
+                              rightTextOnPress={
+                                mainindex === 0
+                                  ? () => {
+                                      if (mobilefield.length <= 1) {
+                                        mobileappend({
+                                          mobilenum: '',
+                                          secondary: true,
+                                          whatsappNum: false,
+                                          countryCode: '',
+                                        });
+
+                                        let newArr = JSON.parse(
+                                          JSON.stringify(checkedArray),
+                                        );
+                                        newArr.push(false);
+                                        setCheckedArray(newArr);
+                                      }
+                                    }
+                                  : () => {}
+                              }
+                            />
+                          );
+                        }}
+                      />
+                      <View
                         style={{
-                          ...CustomFonts.body.medium12,
-                          fontSize: 14,
-                          fontWeight: '400',
-                          lineHeight: 18.9,
-                          color: COLORS.lightModetextColor,
+                          marginTop: '5%',
                         }}>
-                        {t('personalInfo.MobileFieldCheckbox')}
-                      </Text>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            gap: 10,
+                            marginBottom: '5%',
+                          }}>
+                          <View
+                            style={{
+                              height: 20,
+                              width: 20,
+                              alignItems: 'center',
+                              borderRadius: 5,
+                              borderColor: COLORS.primaryColor,
+                              borderWidth: checkedArray[mainindex] ? 0 : 1,
+                            }}
+                            onTouchEnd={() => {
+                              let newArr = JSON.parse(
+                                JSON.stringify(checkedArray),
+                              );
+                              let returnArr = newArr.map(
+                                (item: any, index: number) => {
+                                  return mainindex === index ? !item : false;
+                                },
+                              );
+                              setCheckedArray(returnArr);
+                            }}>
+                            {checkedArray[mainindex] ? (
+                              <Image
+                                source={AllIcons.Checkbox}
+                                style={{
+                                  height: '100%',
+                                  width: '100%',
+                                }}
+                              />
+                            ) : null}
+                          </View>
+                          <Text
+                            style={{
+                              ...CustomFonts.body.medium12,
+                              fontSize: 14,
+                              fontWeight: '400',
+                              lineHeight: 18.9,
+                              color: COLORS.lightModetextColor,
+                            }}>
+                            {t('personalInfo.MobileFieldCheckbox')}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                  </View>
-                </View>
-              );
-            })}
-            {emailfield.map((mainitem, mainindex) => {
-              return (
-                <View key={mainindex}>
-                  {mainindex >= 1 && (
-                    <View
-                      style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                      onTouchEnd={() => emailremove(mainindex)}>
-                      <Image
-                        source={AllIcons.Cancel}
-                        style={{
-                          width: '100%',
-                          height: '100%',
+                  );
+                })}
+                {emailfield.map((mainitem, mainindex) => {
+                  return (
+                    <View key={mainitem.id}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          onTouchEnd={() => emailremove(mainindex)}>
+                          <Image
+                            source={AllIcons.Cancel}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </View>
+                      )}
+                      <Controller
+                        control={control}
+                        name={`emailInfo.${mainindex}.email`}
+                        render={({field: {onChange, onBlur, value}}) => {
+                          return (
+                            <FormInput
+                              type={'email'}
+                              name={`emailInfo.${mainindex}.email`}
+                              label={t('personalInfo.EmailAddress')}
+                              placeholder={t(
+                                'personalInfo.EnterYourEmailPlaceholder',
+                              )}
+                              value={value}
+                              onBlur={onBlur}
+                              onChange={onChange}
+                              error={errors?.emailInfo?.[
+                                mainindex
+                              ]?.email?.message?.toString()}
+                              rightText={
+                                mainindex === 0
+                                  ? t('personalInfo.AddSecondaryEmail')
+                                  : ''
+                              }
+                              rightTextOnPress={
+                                mainindex === 0
+                                  ? () => {
+                                      if (emailfield.length <= 1) {
+                                        emailappend({
+                                          email: '',
+                                          secondary: true,
+                                        });
+                                      }
+                                    }
+                                  : () => {}
+                              }
+                            />
+                          );
                         }}
                       />
                     </View>
-                  )}
-                  <Controller
-                    control={control}
-                    name={`emailInfo.${mainindex}.email`}
-                    render={({field: {onChange, onBlur, value}}) => {
-                      return (
-                        <FormInput
-                          type={'email'}
-                          name={`emailInfo.${mainindex}.email`}
-                          label={t('personalInfo.EmailAddress')}
-                          placeholder={t(
-                            'personalInfo.EnterYourEmailPlaceholder',
-                          )}
-                          value={value}
-                          onBlur={onBlur}
-                          onChange={onChange}
-                          error={errors?.emailInfo?.[
-                            mainindex
-                          ]?.email?.message?.toString()}
-                          rightText={
-                            mainindex === 0
-                              ? t('personalInfo.AddSecondaryEmail')
-                              : ''
-                          }
-                          rightTextOnPress={
-                            mainindex === 0
-                              ? () => {
-                                  if (emailfield.length <= 1) {
-                                    emailappend({
-                                      email: '',
-                                      secondary: true,
-                                    });
-                                  }
-                                }
-                              : () => {}
-                          }
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              );
-            })}
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: '5%',
-            }}>
-            <SecondaryButton
-              title={t('common.Save&Exit')}
-              onPress={handleSubmit(leftOnSubmit)}
-              buttonStyle={{
-                width: '47%',
-              }}
-            />
-            <PrimaryButton
-              title={t('common.Save&Next')}
-              onPress={handleSubmit(onSubmit)}
-              buttonStyle={{width: '47%'}}
-            />
-          </View>
-        </>
-      </ScrollView>
+                  );
+                })}
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: '5%',
+                }}>
+                <SecondaryButton
+                  title={t('common.Save&Exit')}
+                  onPress={handleSubmit(leftOnSubmit)}
+                  buttonStyle={{
+                    width: '47%',
+                  }}
+                />
+                <PrimaryButton
+                  title={t('common.Save&Next')}
+                  onPress={handleSubmit(onSubmit)}
+                  buttonStyle={{width: '47%'}}
+                />
+              </View>
+            </>
+          </ScrollView>
+        )}
+      </>
     );
   },
 );

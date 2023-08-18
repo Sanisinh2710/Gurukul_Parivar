@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Image, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -40,18 +41,13 @@ export const DailyDarshanDetail = ({
         headerTitle={route.params.date}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <>
-          <View style={{height: '80%', marginTop: '5%'}}>
-            <Image
-              source={{
-                uri: `https://gurukul.taskgrids.com${currentImageUri}`,
-              }}
-              style={style.images}
-            />
-          </View>
-
-          <ShareDownload wallpaper={true} imgURL={wallpaper && wallpaper} />
-        </>
+        <View style={{height: '80%', marginTop: '5%'}}>
+          <Image
+            source={{uri: `${BASE_URL}${route.params.image}`}}
+            style={style.images}
+          />
+        </View>
+        <ShareDownload wallpaper={true} imgURL={wallpaper && wallpaper} />
       </View>
       <CustomNavigate
         text={`${pagination}/${TotalImages}`}

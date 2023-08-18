@@ -26,8 +26,8 @@ export const CompleteProfileFormValidationSchema =
   (): yup.ObjectSchema<CompleteProfileFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      profilePic: yup.string(),
-      gurukulName: yup.string().trim().required(t('common.EmptyError')),
+      profile: yup.mixed(),
+      branch_id: yup.number().required(t('common.EmptyError')),
     });
   };
 
@@ -36,18 +36,18 @@ export const PersonalInfoFormValidationSchema =
     const {t} = useTranslation();
     return yup.object().shape({
       gender: yup.string().trim().required(t('common.EmptyError')),
-      fullname: yup
+      full_name: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      fatherFullName: yup
+      father_name: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
-      bloodGroup: yup.string().required(t('common.EmptyError')),
+      blood_group: yup.string().required(t('common.EmptyError')),
       mobilenumInfo: yup
         .array()
         .of(
@@ -86,12 +86,12 @@ export const AddressFormValidationSchema =
         .of(
           yup.object().shape({
             id: yup.number(),
-            country_id: yup.number().required(t('common.EmptyError')),
+            country_id: yup.string().required(t('common.EmptyError')),
             address: yup.string().trim().required(t('common.EmptyError')),
-            pincode: yup.number().required(t('common.EmptyError')),
+            pincode: yup.string().required(t('common.EmptyError')),
             city: yup.string().trim().required(t('common.EmptyError')),
             address_type: yup.string().trim().required(t('common.EmptyError')),
-            communicationAddr: yup.boolean(),
+            is_preferred_communication: yup.boolean(),
           }),
         )
         .required(),
@@ -102,14 +102,14 @@ export const EduBusinessInfoFormValidationSchema =
   (): yup.ObjectSchema<EduBusinessInfoValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      maxEduLevel: yup.string().trim().required(t('common.EmptyError')),
+      education: yup.string().trim().required(t('common.EmptyError')),
       occupation: yup.string().trim().required(t('common.EmptyError')),
-      occupationType: yup.string().trim().required(t('common.EmptyError')),
+      occupation_type: yup.string().trim().required(t('common.EmptyError')),
       skills: yup
         .array()
         .min(1, t('common.EmptyError'))
         .required(t('common.EmptyError')),
-      otherComment: yup.string().trim(),
+      other: yup.string(),
     });
   };
 
@@ -119,17 +119,64 @@ export const GurukulFormValidationSchema =
     return yup.object().shape({
       gurukulData: yup.array().of(
         yup.object().shape({
-          gurukulBranch: yup.string().trim().required(t('common.EmptyError')),
-          attendGurukul: yup.string().trim().required(t('common.EmptyError')),
-          stdFrom: yup.string().trim().required(t('common.EmptyError')),
-          stdTo: yup.string().trim().required(t('common.EmptyError')),
-          sscYear: yup.string().trim().required(t('common.EmptyError')),
-          hscYear: yup.string().trim().required(t('common.EmptyError')),
-          knowSaintPersonally: yup
+          branch_id: yup.string().trim().required(t('common.EmptyError')),
+          attend: yup.string().trim().required(t('common.EmptyError')),
+          standard_from: yup.string().trim().required(t('common.EmptyError')),
+          standard_to: yup
+            .string()
+            .trim()
+            .required(t('common.EmptyError'))
+            .test({
+              name: 'standard_to',
+              skipAbsent: true,
+              test(value, err) {
+                let flag: boolean = false;
+                if (parseInt(value) <= parseInt(this.parent.standard_from)) {
+                  flag = true;
+                }
+
+                if (!flag) {
+                  return true;
+                } else {
+                  return err.createError({
+                    message: 'Select Valid Standard',
+                  });
+                }
+              },
+            }),
+          ssc_year: yup
+            .string()
+            .trim()
+            .notOneOf([yup.ref('hsc_year')], 'Select Valid Year')
+            .required(t('common.EmptyError')),
+          hsc_year: yup
+            .string()
+            .trim()
+            .notOneOf([yup.ref('ssc_year')], 'Select Valid Year')
+            .required(t('common.EmptyError'))
+            .test({
+              name: 'hsc_year',
+              skipAbsent: true,
+              test(value, err) {
+                let flag: boolean = false;
+                if (parseInt(value) >= parseInt(this.parent.ssc_year) + 2) {
+                  flag = true;
+                }
+
+                if (flag) {
+                  return true;
+                } else {
+                  return err.createError({
+                    message: 'Select Valid Year',
+                  });
+                }
+              },
+            }),
+          known_saint: yup.string().trim().required(t('common.EmptyError')),
+          known_haribhakta: yup
             .string()
             .trim()
             .required(t('common.EmptyError')),
-          knowHaribhakt: yup.string().trim().required(t('common.EmptyError')),
           RelativeOfSaint: yup.string().trim().required(t('common.EmptyError')),
           FromFamily: yup.string().test({
             name: 'FromFamily',
@@ -148,8 +195,8 @@ export const GurukulFormValidationSchema =
               return true;
             },
           }),
-          SaintName: yup.string().test({
-            name: 'SaintName',
+          saint_from_family: yup.string().test({
+            name: 'saint_from_family',
             skipAbsent: true,
             test(value, ctx) {
               if (
@@ -165,8 +212,8 @@ export const GurukulFormValidationSchema =
               return true;
             },
           }),
-          YourRelation: yup.string().test({
-            name: 'YourRelation',
+          relation: yup.string().test({
+            name: 'relation',
             skipAbsent: true,
             test(value, ctx) {
               if (

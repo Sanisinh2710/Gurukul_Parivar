@@ -1,23 +1,30 @@
 import React from 'react';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+
+import {BASE_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  CustomNavigate,
+  Loader,
   NoData,
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {DailyDarshanApi} from '../../../../services/ApiServices';
 import {RootStackParamList} from '../../../../types';
 import {d, options} from '../../../../utils';
 import {styles} from './styles';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {useTranslation} from 'react-i18next';
-import {DailyDarshanApi} from '../../../../services/ApiServices';
-import {Loader} from '../../../../components';
-import {AllImages} from '../../../../../assets/images';
+
+const TimeArray = (t: any) => [
+  {name: t('DailyDarshan.All'), id: 'both'},
+  {name: t('DailyDarshan.Morning'), id: 'Morning'},
+  {name: t('DailyDarshan.Evening'), id: 'Evening'},
+];
 
 export const DailyDarshan = ({
   navigation,
@@ -26,27 +33,36 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const [selectedItem, setselectedItem] = React.useState('both');
   const [Data, setData] = React.useState<Array<String>>([]);
+
   const {t} = useTranslation();
+
+  const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
 
   const style = styles();
 
   React.useMemo(async () => {
     setLoader(true);
     try {
-      const res = await DailyDarshanApi(selectedDate, selectedItem);
+      const res = await DailyDarshanApi(
+        selectedDate,
+        TimeArray(t).find(item => item.name === selectedItem)?.id ?? 'both',
+      );
 
       if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setData(res.data.image_paths);
-          setLoader(false);
-        }, 200);
+        if (res.resType === 'SUCCESS') {
+          setTimeout(() => {
+            setData(res.data.image_paths);
+            setData(res.data.image_paths);
+            setLoader(false);
+          }, 200);
+        }
       }
     } catch (error) {
       console.log(error);
     }
   }, [selectedItem, selectedDate]);
+
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -92,12 +108,7 @@ export const DailyDarshan = ({
           }}
           value={selectedItem}
           onChange={setselectedItem}
-          heading={''}
-          list={[
-            {name: 'both'},
-            {name: t('DailyDarshan.Morning')},
-            {name: t('DailyDarshan.Evening')},
-          ]}
+          list={TimeArray(t)}
           showHeading={false}
         />
 
@@ -143,7 +154,7 @@ export const DailyDarshan = ({
                       }}>
                       <Image
                         source={{
-                          uri: `https://gurukul.taskgrids.com${item}`,
+                          uri: `${BASE_URL}${item}`,
                         }}
                         style={style.images}
                       />

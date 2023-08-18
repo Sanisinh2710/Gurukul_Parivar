@@ -17,18 +17,18 @@ export type LoginFormValidationSchemaType = {
 
 export type CompleteProfileFormValidationSchemaType = {
   [key: string]: any;
-  profilePic: string | undefined;
-  gurukulName: string;
+  profile: any;
+  branch_id: number;
 };
 
 export type UserAddress = {
   id?: number | undefined;
-  country_id: number;
+  country_id: string;
   address: string;
-  pincode: number;
+  pincode: string;
   city: string;
   address_type: string;
-  communicationAddr?: boolean;
+  is_preferred_communication?: boolean;
 };
 
 export type AddressFormValidationSchemaType = {
@@ -36,18 +36,19 @@ export type AddressFormValidationSchemaType = {
 };
 
 export type SingleGurukulRecType = {
-  gurukulBranch: string;
-  attendGurukul: string;
-  stdFrom: string;
-  stdTo: string;
-  sscYear: string;
-  hscYear: string;
-  knowSaintPersonally: string;
-  knowHaribhakt: string;
+  branch_id: string;
+  attend: string;
+  standard_from: string;
+  standard_to: string;
+  ssc_year: string;
+  hsc_year: string;
+  known_saint: string;
+  known_haribhakta: string;
   RelativeOfSaint: string;
   FromFamily?: string | undefined;
+  saint_from_family?: string | undefined;
   SaintName?: string | undefined;
-  YourRelation?: string | undefined;
+  relation?: string | undefined;
 };
 
 export type GurukulFormValidationSchemaType = {
@@ -59,10 +60,10 @@ export type InitialThemeType = {theme: Theme; themeMode: string};
 
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
-  fullname: string;
-  fatherFullName: string;
+  full_name: string;
+  father_name: string;
   dob: string;
-  bloodGroup: string;
+  blood_group: string;
   mobilenumInfo: {
     mobilenum: string | undefined;
     whatsappNum?: boolean | undefined;
@@ -76,11 +77,11 @@ export type PersonalInfoFormValidationSchemaType = {
 };
 
 export type EduBusinessInfoValidationSchemaType = {
-  maxEduLevel: string;
+  education: string;
   occupation: string;
-  occupationType: string;
+  occupation_type: string;
   skills: string[];
-  otherComment?: string | undefined;
+  other?: string | undefined;
 };
 
 export type SupportedFormInputTypes =

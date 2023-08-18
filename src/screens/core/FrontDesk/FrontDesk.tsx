@@ -1,16 +1,16 @@
 import React from 'react';
 
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
 import {useAppSelector} from '../../../redux/hooks';
-import {CustomFonts, FrontDesk} from '../../../utils';
-import {styles} from './styles';
-import {AllIcons} from '../../../../assets/icons';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../types';
 import {AllImages} from '../../../../assets/images';
+import {FrontDesk} from '../../../utils';
+import {styles} from './styles';
 
 export const FrontDeskScreen = ({
   navigation,

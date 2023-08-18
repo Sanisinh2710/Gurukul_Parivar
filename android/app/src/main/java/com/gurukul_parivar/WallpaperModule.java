@@ -1,4 +1,5 @@
 package com.gurukul_parivar;
+
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class WallpaperModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
-    WallpaperModule(ReactApplicationContext context){
+    WallpaperModule(ReactApplicationContext context) {
         super(context);
 
         context.addLifecycleEventListener(this);
@@ -34,8 +35,8 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     }
 
     @ReactMethod
-    public void setAsWallpaper(String fileURL,String mode, final Promise promise){
-        Log.d("GOGO","Function Called");
+    public void setAsWallpaper(String fileURL, String mode, final Promise promise) {
+        Log.d("GOGO", "Function Called");
         try {
             URL url = new URL(fileURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -45,19 +46,20 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
             Bitmap bitmap = BitmapFactory.decodeStream(input);
 
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getReactApplicationContext());
-            if(mode.equals("HOME")) {
+            if (mode.equals("HOME")) {
                 wallpaperManager.setBitmap(bitmap);// For Home screen
             }
-            if(mode.equals("LOCK")) {
+            if (mode.equals("LOCK")) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    wallpaperManager.setBitmap(bitmap,null,true, WallpaperManager.FLAG_LOCK);//For Lock screen
-                }
-            }if(mode.equals("BOTH")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    wallpaperManager.setBitmap(bitmap,null,true, WallpaperManager.FLAG_LOCK | WallpaperManager.FLAG_SYSTEM);//For Lock screen
+                    wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);// For Lock screen
                 }
             }
-
+            if (mode.equals("BOTH")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    wallpaperManager.setBitmap(bitmap, null, true,
+                            WallpaperManager.FLAG_LOCK | WallpaperManager.FLAG_SYSTEM);// For Lock screen
+                }
+            }
 
             promise.resolve("SUCCESS");
         } catch (IOException e) {
@@ -77,6 +79,6 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
 
     @Override
     public void onHostDestroy() {
-        Log.d("Host destroy","Destroy");
+        Log.d("Host destroy", "Destroy");
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, Text, View} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
+import {isObjectArray} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
@@ -15,7 +16,7 @@ type SimpleDropdownProps = {
   state?: {
     [key: string]: any;
   };
-  dropDownList: string[];
+  dropDownList: Array<string> | Array<object>;
   customIcon?: any;
 };
 
@@ -51,8 +52,15 @@ export const SimpleDropDown = React.memo(
           }}>
           <Text style={style.placeholderFonts}>
             {type !== 'multi-select'
-              ? value === '' || value === undefined || value === 'undefined'
+              ? value === '' ||
+                value === undefined ||
+                value === 'undefined' ||
+                value === null
                 ? placeholder
+                : value && isObjectArray(dropDownList)
+                ? dropDownList?.find(
+                    (item: any) => parseInt(item.id) === parseInt(value),
+                  )?.name
                 : value
               : placeholder}
           </Text>
