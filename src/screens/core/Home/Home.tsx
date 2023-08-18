@@ -3,7 +3,12 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import LinearGradient from 'react-native-linear-gradient';
 import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {
+  CommingSoon,
+  PagerView,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../components';
 import {COLORS, HomeGrid} from '../../../utils';
 import {
   ImageBackground,
@@ -56,6 +61,9 @@ export const HomeScreen = ({
         break;
       case 'satsang':
         navigation.navigate('liveSatsang');
+        break;
+      case 'program':
+        navigation.navigate('program');
         break;
 
       default:
