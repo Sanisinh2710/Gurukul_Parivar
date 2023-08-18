@@ -4,35 +4,36 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {d, op} from '../../../../utils';
-import {styles} from './styles';
 import {DailyUpdatesApi} from '../../../../services';
-import {AllImages} from '../../../../../assets/images';
+import {RootStackParamList} from '../../../../types';
+import {d} from '../../../../utils';
+import {styles} from './styles';
 
 export const DailyUpdates = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
-  const [Data, setData] = React.useState<Array<String>>([]);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const NewDate = d.toISOString().split('T')[0];
-  console.log(Data);
   const commonStyle = CommonStyle();
   React.useMemo(async () => {
     setLoader(true);
     try {
       const res = await DailyUpdatesApi();
-      console.log(res.data.daily_updates);
 
       if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          console.log(res.data.daily_updates);
+        const timer = setTimeout(() => {
           setData(res.data.daily_updates);
           setLoader(false);
         }, 200);
+
+        return () => {
+          clearTimeout(timer);
+        };
       }
     } catch (error) {
       console.log(error);
@@ -43,7 +44,6 @@ export const DailyUpdates = ({
   //   const createdAt = new Date(time);
 
   //   const timeDifference = currentTime - createdAt;
-  //   console.log(timeDifference, '::::::::::');
 
   //   if (timeDifference < 60000) {
   //     return 'Now';

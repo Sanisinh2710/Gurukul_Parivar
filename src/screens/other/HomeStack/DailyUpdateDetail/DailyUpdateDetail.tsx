@@ -10,11 +10,10 @@ import {
   View,
 } from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {PhotoGallery, d, options} from '../../../../utils';
+import {d, options} from '../../../../utils';
 import {styles} from './styles';
 export const DailyUpdateDetail = ({
   route,
@@ -23,7 +22,6 @@ export const DailyUpdateDetail = ({
   const style = styles();
   const commonstyle = CommonStyle();
   const Data = route.params.data;
-  console.log(Data, 'Data');
 
   return (
     <ScreenWrapper>

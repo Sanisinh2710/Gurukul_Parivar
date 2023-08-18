@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import * as Progress from 'react-native-progress';
@@ -31,6 +32,7 @@ import {
   COLORS,
   CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
+  isString,
 } from '../../../utils';
 
 export const ProfileSignup = ({
@@ -117,9 +119,19 @@ export const ProfileSignup = ({
             response.data !== undefined &&
             response.data !== ''
           ) {
-            newFormData.completeProfile =
-              response.data.completeProfile ?? newFormData.completeProfile;
-            setFormData(newFormData);
+            if (response.data.personal_details) {
+              const profileData = {
+                profile: response.data.personal_details.profile
+                  ? `${BASE_URL}${response.data.personal_details.profile}`
+                  : newFormData.completeProfile.profile,
+                branch_id:
+                  response.data.personal_details.branch_id ??
+                  newFormData.completeProfile.branch_id,
+              };
+              newFormData.completeProfile =
+                profileData ?? newFormData.completeProfile;
+              setFormData(newFormData);
+            }
           }
         }
       }
@@ -306,9 +318,15 @@ export const ProfileSignup = ({
 
         // Convert the submitted data in the backend format :-
         const image = {
-          uri: newFormData.completeProfile.profile?.at(0)?.uri,
-          name: newFormData.completeProfile.profile?.at(0)?.fileName,
-          type: newFormData.completeProfile.profile?.at(0)?.type,
+          uri: isString(newFormData.completeProfile.profile)
+            ? newFormData.completeProfile.profile
+            : newFormData.completeProfile.profile?.at(0)?.uri,
+          name: isString(newFormData.completeProfile.profile)
+            ? `${Date.now().toString()}.jpeg`
+            : newFormData.completeProfile.profile?.at(0)?.fileName,
+          type: isString(newFormData.completeProfile.profile)
+            ? 'image/jpeg'
+            : newFormData.completeProfile.profile?.at(0)?.type,
         };
 
         const toSubmitPersonalInfoData: any = {
@@ -566,14 +584,11 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          console.log(receivedData, 'resdaata');
-
           newFormData.address_details = receivedData;
           setFormData(newFormData);
           const response = await AddressInfoPostApi(
             newFormData.address_details,
           );
-          console.log(response, 'resdaata');
 
           if (response.resType === 'SUCCESS') {
             setwidth(width + 20);
@@ -677,8 +692,6 @@ export const ProfileSignup = ({
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep, t]);
-
-  console.log(getAuthToken());
 
   return (
     <ScreenWrapper>

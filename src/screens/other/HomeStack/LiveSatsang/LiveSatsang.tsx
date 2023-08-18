@@ -3,18 +3,18 @@ import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {Alert, FlatList, ScrollView, Text, View} from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import {AllIcons} from '../../../../../assets/icons';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   NoData,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {DailySatsangApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
 import {COLORS, d} from '../../../../utils';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import {CommonStyle} from '../../../../../assets/styles';
-import {DailySatsangApi} from '../../../../services';
 
 export const LiveSatsang = ({
   navigation,
@@ -23,7 +23,7 @@ export const LiveSatsang = ({
   const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
-  const [Data, setData] = React.useState<Array<String>>([]);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const commonstyle = CommonStyle();
 

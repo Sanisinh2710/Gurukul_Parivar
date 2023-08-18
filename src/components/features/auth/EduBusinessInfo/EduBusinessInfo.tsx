@@ -24,7 +24,6 @@ type EduBusinessInfoProps = {
 export const EduBusinessInfo = React.memo(
   ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-    console.log(initialValues);
 
     const style = styles();
     const [loader, setLoader] = React.useState<boolean>(false);
@@ -114,8 +113,6 @@ export const EduBusinessInfo = React.memo(
 
       const timer = setTimeout(() => {
         if (initialValues) {
-          console.log('hello');
-
           setValue('education', initialValues.education ?? '');
           setValue('occupation', initialValues.occupation ?? '');
           setValue('occupation_type', initialValues.occupation_type ?? '');

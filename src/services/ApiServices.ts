@@ -1,4 +1,3 @@
-import axios, {AxiosResponse} from 'axios';
 import {
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
@@ -18,8 +17,9 @@ import {
   PERSONAL_INFO_POST_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
-import {getBearerToken} from './AuthServices';
+import axios, {AxiosResponse} from 'axios';
 import {ApiDateFormat} from '../utils';
+import {getBearerToken} from './AuthServices';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -140,14 +140,47 @@ export const DailySatsangApi = async (date: Date) => {
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
   const payloadData = new FormData();
 
-  Object.keys(userPersonalInfo).map(key => {
-    payloadData.append(`${key}`, userPersonalInfo[key]);
+  let newUserPersonalInfo = JSON.parse(JSON.stringify(userPersonalInfo));
+
+  Object.keys(newUserPersonalInfo).map(key => {
+    if (key === 'profile') {
+      if (
+        newUserPersonalInfo[key].uri === '' ||
+        newUserPersonalInfo[key].uri === null ||
+        newUserPersonalInfo[key].uri === undefined
+      ) {
+        delete newUserPersonalInfo[key];
+      }
+    }
+    payloadData.append(`${key}`, newUserPersonalInfo[key]);
   });
-  return await apiRequest(PERSONAL_INFO_POST_ENDPOINT, 'post', payloadData, {
-    Authorization: `Bearer ${getBearerToken().token}`,
-    'Content-Type': 'multipart/form-data',
-    Accept: 'application/json',
-  });
+
+  const headers =
+    newUserPersonalInfo.profile === '' ||
+    newUserPersonalInfo.profile === null ||
+    newUserPersonalInfo.profile === undefined
+      ? {
+          Authorization: `Bearer ${getBearerToken().token}`,
+        }
+      : {
+          Authorization: `Bearer ${getBearerToken().token}`,
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+        };
+
+  const finalPayload =
+    newUserPersonalInfo.profile === '' ||
+    newUserPersonalInfo.profile === null ||
+    newUserPersonalInfo.profile === undefined
+      ? newUserPersonalInfo
+      : payloadData;
+
+  return await apiRequest(
+    PERSONAL_INFO_POST_ENDPOINT,
+    'post',
+    finalPayload,
+    headers,
+  );
 };
 
 export const PersonalInfoGetDetailsApi = async () => {

@@ -139,7 +139,7 @@ export const GurukulFormValidationSchema =
                   return true;
                 } else {
                   return err.createError({
-                    message: 'Select Valid Standard',
+                    message: t('common.SelectValidStd'),
                   });
                 }
               },
@@ -147,12 +147,12 @@ export const GurukulFormValidationSchema =
           ssc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('hsc_year')], 'Select Valid Year')
+            .notOneOf([yup.ref('hsc_year')], t('common.SelectValidYear'))
             .required(t('common.EmptyError')),
           hsc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('ssc_year')], 'Select Valid Year')
+            .notOneOf([yup.ref('ssc_year')], t('common.SelectValidYear'))
             .required(t('common.EmptyError'))
             .test({
               name: 'hsc_year',
@@ -167,7 +167,7 @@ export const GurukulFormValidationSchema =
                   return true;
                 } else {
                   return err.createError({
-                    message: 'Select Valid Year',
+                    message: t('common.SelectValidYear'),
                   });
                 }
               },
