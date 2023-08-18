@@ -2,19 +2,17 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, View} from 'react-native';
-import * as Progress from 'react-native-progress';
+import {View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../assets/styles';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   AdressInfo,
-  CompleteYourProfile,
   EduBusinessInfo,
   GurukulInfo,
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
-} from '../../../components';
+} from '../../../../components';
 import {
   AddressInfoGetApi,
   AddressInfoPostApi,
@@ -24,28 +22,40 @@ import {
   GurukulConnectPostApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
+  SaintNameGetApi,
   getAuthToken,
   setUserData,
   setUserProfilingDone,
-} from '../../../services';
-import {ProfileSignupProps} from '../../../types';
+} from '../../../../services';
+import {ProfileSignupEditProps} from '../../../../types';
 import {
-  COLORS,
   CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
   isString,
-} from '../../../utils';
+} from '../../../../utils';
 
-export const ProfileSignup = ({
+export const ProfileSignupWithEdit = ({
+  route,
   navigation,
-}: ProfileSignupProps): React.JSX.Element => {
+}: ProfileSignupEditProps): React.JSX.Element => {
   const commonStyle = CommonStyle();
-
-  const [width, setwidth] = React.useState(20);
 
   const {t} = useTranslation();
 
-  const [formStep, setFormStep] = React.useState(1);
+  const paramsFormstep = route.params?.formStep;
+
+  const [width, setwidth] = React.useState(
+    paramsFormstep ? 25 * paramsFormstep : 25,
+  );
+
+  const [formStep, setFormStep] = React.useState(paramsFormstep ?? 1);
+
+  React.useEffect(() => {
+    if (paramsFormstep !== null && paramsFormstep !== undefined) {
+      setwidth(paramsFormstep * 25);
+      setFormStep(paramsFormstep);
+    }
+  }, [paramsFormstep]);
 
   const [isParentLoading, setIsParentLoading] = React.useState(false);
 
@@ -60,17 +70,15 @@ export const ProfileSignup = ({
       father_name: '',
       dob: '',
       blood_group: '',
-      emailInfo: [
-        {email: getAuthToken().loginData.primary_email, secondary: false},
-      ],
       mobilenumInfo: [
         {
-          mobilenum: '',
+          mobilenum: getAuthToken().loginData.mobileNum,
           secondary: false,
           whatsappNum: false,
-          countryCode: '',
+          countryCode: getAuthToken().loginData.countryCode,
         },
       ],
+      emailInfo: [{email: '', secondary: false}],
     },
     address_details: [
       {
@@ -118,37 +126,22 @@ export const ProfileSignup = ({
         const response = await PersonalInfoGetDetailsApi();
         if (response.resType === 'SUCCESS') {
           if (
-            response.data !== null &&
-            response.data !== undefined &&
-            response.data !== ''
-          ) {
-            if (response.data.personal_details) {
-              const profileData = {
-                profile: response.data.personal_details.profile
-                  ? `${BASE_URL}${response.data.personal_details.profile}`
-                  : newFormData.completeProfile.profile,
-                branch_id:
-                  response.data.personal_details.branch_id ??
-                  newFormData.completeProfile.branch_id,
-              };
-              newFormData.completeProfile =
-                profileData ?? newFormData.completeProfile;
-              setFormData(newFormData);
-            }
-          }
-        }
-      }
-      if (formStep === 2) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const response = await PersonalInfoGetDetailsApi();
-        if (response.resType === 'SUCCESS') {
-          if (
             response.data.personal_details !== null &&
             response.data.personal_details !== undefined &&
             response.data.personal_details !== ''
           ) {
             const backendData: any = response.data.personal_details;
+
+            const profileData = {
+              profile: response.data.personal_details.profile
+                ? `${BASE_URL}${response.data.personal_details.profile}`
+                : newFormData.completeProfile.profile,
+              branch_id:
+                response.data.personal_details.branch_id ??
+                newFormData.completeProfile.branch_id,
+            };
+            newFormData.completeProfile =
+              profileData ?? newFormData.completeProfile;
 
             Object.keys(backendData).map((key, index) => {
               if (key === 'dob') {
@@ -234,10 +227,11 @@ export const ProfileSignup = ({
           }
         }
       }
-      if (formStep === 3) {
+      if (formStep === 2) {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         const fetchData = await AddressInfoGetApi();
+
         if (fetchData.resType === 'SUCCESS') {
           if (
             fetchData.data.address_details !== null &&
@@ -254,7 +248,7 @@ export const ProfileSignup = ({
           Toast.show(fetchData.message, Toast.SHORT);
         }
       }
-      if (formStep === 4) {
+      if (formStep === 3) {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         const fetchData = await EducationInfoGetApi();
@@ -270,12 +264,17 @@ export const ProfileSignup = ({
           }
         }
       }
-      if (formStep === 5) {
+      if (formStep === 4) {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         const fetchData = await GurukulConnectGetApi();
 
-        if (fetchData.resType === 'SUCCESS') {
+        const fetchSaintres = await SaintNameGetApi();
+
+        if (
+          fetchData.resType === 'SUCCESS' &&
+          fetchSaintres.resType === 'SUCCESS'
+        ) {
           if (
             fetchData.data.gurukul_connect_details !== undefined &&
             fetchData.data.gurukul_connect_details !== null &&
@@ -289,6 +288,20 @@ export const ProfileSignup = ({
             if (fetchData.data.gurukul_connect_details.saint_from_family) {
               newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'Yes';
             }
+
+            newFormData.gurukulInfo.gurukulData[0].FromFamily =
+              fetchSaintres.data.saints.find(
+                (item: any) =>
+                  item.id ===
+                  fetchData.data.gurukul_connect_details.saint_from_family,
+              ).type ?? '';
+
+            newFormData.gurukulInfo.gurukulData[0].saint_from_family =
+              fetchSaintres.data.saints.find(
+                (item: any) =>
+                  item.id ===
+                  fetchData.data.gurukul_connect_details.saint_from_family,
+              ).id ?? '';
 
             setFormData(newFormData);
           }
@@ -304,15 +317,6 @@ export const ProfileSignup = ({
     typecase: 'next' | 'skip' | 'exit',
   ) => {
     if (formStep === 1) {
-      let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-      newFormData.completeProfile = receivedData;
-
-      setFormData(newFormData);
-      setwidth(width + 20);
-      setFormStep(formStep + 1);
-    }
-    if (formStep === 2) {
       let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
       if (typecase === 'next') {
         setIsParentLoading(true);
@@ -458,7 +462,7 @@ export const ProfileSignup = ({
             );
 
             if (setuserdataresponse === 'SUCCESS') {
-              setwidth(width + 20);
+              setwidth(width + 25);
               setFormStep(formStep + 1);
             }
           }
@@ -605,7 +609,8 @@ export const ProfileSignup = ({
             if (setuserdataresponse === 'SUCCESS') {
               const setuserprofileDone = setUserProfilingDone(true);
               if (setuserprofileDone === 'SUCCESS') {
-                navigation.navigate('LoginSuccess', {type: 'Profile'});
+                //After successfull save and exit:-
+                navigation.goBack();
               }
             }
           }
@@ -614,8 +619,27 @@ export const ProfileSignup = ({
         }
       }
     }
-    if (formStep === 3) {
+    if (formStep === 2) {
       if (typecase === 'next') {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+
+        if (receivedData !== undefined) {
+          newFormData.address_details = receivedData;
+          setFormData(newFormData);
+
+          const response = await AddressInfoPostApi(
+            newFormData.address_details,
+          );
+
+          if (response.resType === 'SUCCESS') {
+            setwidth(width + 25);
+            setFormStep(formStep + 1);
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
+        }
+      }
+      if (typecase === 'exit') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
@@ -626,25 +650,16 @@ export const ProfileSignup = ({
           );
 
           if (response.resType === 'SUCCESS') {
-            setwidth(width + 20);
-            setFormStep(formStep + 1);
+            // After complete save and exit :---------
+
+            navigation.goBack();
           } else {
             Toast.show(response.message, Toast.SHORT);
           }
         }
       }
-      if (typecase === 'skip') {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        if (receivedData !== undefined) {
-          newFormData.address_details = receivedData;
-          setFormData(newFormData);
-        }
-        setwidth(width + 20);
-        setFormStep(formStep + 1);
-      }
     }
-    if (formStep === 4) {
+    if (formStep === 3) {
       if (typecase === 'next') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
@@ -655,28 +670,36 @@ export const ProfileSignup = ({
             newFormData.edu_businessInfo,
           );
           if (response.resType === 'SUCCESS') {
-            setwidth(width + 20);
+            setwidth(width + 25);
             setFormStep(formStep + 1);
           } else {
             Toast.show(response.message, Toast.SHORT);
           }
         }
-        setwidth(width + 20);
+        setwidth(width + 25);
         setFormStep(formStep + 1);
       }
-
-      if (typecase === 'skip') {
+      if (typecase === 'exit') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
           newFormData.edu_businessInfo = receivedData;
           setFormData(newFormData);
+          const response = await EducationInfoPostApi(
+            newFormData.edu_businessInfo,
+          );
+          if (response.resType === 'SUCCESS') {
+            // After complete save and exit :---------
+            navigation.goBack();
+          } else {
+            Toast.show(response.message, Toast.SHORT);
+          }
         }
-        setwidth(width + 20);
+        setwidth(width + 25);
         setFormStep(formStep + 1);
       }
     }
-    if (formStep === 5) {
+    if (formStep === 4) {
       if (typecase === 'next') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
@@ -694,21 +717,9 @@ export const ProfileSignup = ({
             setuserprofileDone === 'SUCCESS' &&
             response.resType === 'SUCCESS'
           ) {
-            navigation.navigate('LoginSuccess', {type: 'Profile'});
+            navigation.goBack();
           } else {
             Toast.show(response.message, Toast.SHORT);
-          }
-        }
-      }
-      if (typecase === 'skip') {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-        if (receivedData !== undefined) {
-          newFormData.gurukulInfo = receivedData;
-
-          setFormData(newFormData);
-          const setuserprofileDone = setUserProfilingDone(true);
-          if (setuserprofileDone === 'SUCCESS') {
-            navigation.navigate('LoginSuccess', {type: 'Profile'});
           }
         }
       }
@@ -717,49 +728,29 @@ export const ProfileSignup = ({
 
   const headerTitle = React.useMemo(() => {
     return formStep === 1
-      ? t('uploadPhoto.HederText')
-      : formStep === 2
       ? t('personalInfo.personalInfoHeader')
-      : formStep === 3
+      : formStep === 2
       ? t('addressInfo.AddressHeader')
-      : formStep === 4
+      : formStep === 3
       ? t('education/BusinessInfo.EduHeader')
-      : formStep === 5
+      : formStep === 4
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep, t]);
 
   return (
     <ScreenWrapper>
-      <Progress.Bar
-        progress={width / 100}
-        width={Dimensions.get('window').width}
-        borderRadius={0}
-        color={COLORS.primaryColor}
-        unfilledColor={COLORS.unfilledProgressbar}
-        borderWidth={0}
-      />
-
       <ScreenHeader
         showLeft={true}
         headerTitle={headerTitle}
         headerTitleAlign="left"
         leftOnPress={() => {
-          if (width > 20) {
-            setwidth(width - 20);
-            setFormStep(formStep - 1);
-          }
+          navigation.goBack();
         }}
       />
 
       <View style={[commonStyle.commonContentView]}>
         {formStep === 1 ? (
-          <CompleteYourProfile
-            isParentLoading={isParentLoading}
-            initialValues={formData.completeProfile}
-            onSubmitEvent={submitButton}
-          />
-        ) : formStep === 2 ? (
           <PersonalInfo
             isParentLoading={isParentLoading}
             initialValues={{
@@ -783,24 +774,52 @@ export const ProfileSignup = ({
               emailInfo: formData.personalInfo.emailInfo,
             }}
             onSubmitEvent={submitButton}
+            leftButtonProps={{
+              title: t('common.Save&Exit'),
+              case: 'exit',
+            }}
+            rightButtonProps={{
+              title: t('common.Next'),
+              case: 'next',
+            }}
           />
-        ) : formStep === 3 ? (
+        ) : formStep === 2 ? (
           <AdressInfo
             initialValues={{address_details: [...formData.address_details]}}
             formData={formData}
             setFormData={setFormData}
             onSubmitEvent={submitButton}
+            leftButtonProps={{
+              title: t('common.Save&Exit'),
+              case: 'exit',
+            }}
+            rightButtonProps={{
+              title: t('common.Next'),
+              case: 'next',
+            }}
           />
-        ) : formStep === 4 ? (
+        ) : formStep === 3 ? (
           <EduBusinessInfo
             initialValues={formData.edu_businessInfo}
             onSubmitEvent={submitButton}
+            leftButtonProps={{
+              title: t('common.Save&Exit'),
+              case: 'exit',
+            }}
+            rightButtonProps={{
+              title: t('common.Next'),
+              case: 'next',
+            }}
           />
         ) : (
-          formStep === 5 && (
+          formStep === 4 && (
             <GurukulInfo
               initialValues={formData.gurukulInfo}
               onSubmitEvent={submitButton}
+              rightButtonProps={{
+                title: t('common.Update'),
+                case: 'next',
+              }}
             />
           )
         )}

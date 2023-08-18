@@ -15,6 +15,14 @@ import {styles} from './style';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
+  leftButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
+  rightButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
   onSubmitEvent: (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -22,7 +30,12 @@ type EduBusinessInfoProps = {
 };
 
 export const EduBusinessInfo = React.memo(
-  ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
+  ({
+    initialValues,
+    leftButtonProps,
+    rightButtonProps,
+    onSubmitEvent,
+  }: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
 
     const style = styles();
@@ -100,12 +113,15 @@ export const EduBusinessInfo = React.memo(
 
     const onSubmit = (data: EduBusinessInfoValidationSchemaType) => {
       if (data !== undefined) {
-        onSubmitEvent(data, 'next');
+        onSubmitEvent(data, rightButtonProps ? rightButtonProps.case : 'next');
       }
     };
 
     const leftOnSubmit = () => {
-      onSubmitEvent(initialValues, 'skip');
+      onSubmitEvent(
+        initialValues,
+        leftButtonProps ? leftButtonProps.case : 'skip',
+      );
     };
 
     React.useEffect(() => {
@@ -128,7 +144,7 @@ export const EduBusinessInfo = React.memo(
     return (
       <>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
             contentContainerStyle={style.scrollViewContainer}
@@ -167,12 +183,18 @@ export const EduBusinessInfo = React.memo(
             />
             <View style={style.submitButtonView}>
               <SecondaryButton
-                title={t('common.SkipNow')}
+                title={
+                  leftButtonProps ? leftButtonProps.title : t('common.SkipNow')
+                }
                 onPress={leftOnSubmit}
                 buttonStyle={style.submitButtonStyle}
               />
               <PrimaryButton
-                title={t('common.Save&Next')}
+                title={
+                  rightButtonProps
+                    ? rightButtonProps.title
+                    : t('common.Save&Next')
+                }
                 onPress={handleSubmit(onSubmit)}
                 buttonStyle={style.submitButtonStyle}
               />

@@ -21,8 +21,7 @@ import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
-  const mobileNum = route.params?.mobileNum;
-  const countryCode = route.params?.countryCode;
+  const primary_email = route.params?.primary_email;
   const style = styles();
   const CommonStyles = CommonStyle();
   const {t} = useTranslation();
@@ -46,19 +45,18 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       return;
     } else {
       setOtp([num.join('')]);
-      if (mobileNum && num.join('')) {
+      if (primary_email && num.join('')) {
         setIsApiloading(true);
-        const response = await VerifyOTPApi(mobileNum, num.join(''));
+        const response = await VerifyOTPApi(primary_email, num.join(''));
 
         if (response.resType === 'SUCCESS') {
           const resType = setAuthToken({
-            mobileNum: mobileNum,
-            countryCode: countryCode,
+            primary_email: primary_email,
             token: response.data.token,
             is_profile_updated: response.data.is_profile_updated,
           });
           if (resType === 'SUCCESS') {
-            const isProfileSignupDone = isProfilingDone(mobileNum);
+            const isProfileSignupDone = isProfilingDone(primary_email);
             setIsApiloading(false);
 
             if (isProfileSignupDone === 'SUCCESS') {
@@ -130,10 +128,8 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             {t('otpScreen.OtpContainerText')}
           </Text>
           <View style={style.phoneEditContainer}>
-            {countryCode && mobileNum && (
-              <Text style={style.phoneNumber}>
-                {countryCode.split('(')[0].toString() + mobileNum}
-              </Text>
+            {primary_email && (
+              <Text style={style.phoneNumber}>{primary_email}</Text>
             )}
             <View style={style.editIconStyle}>
               <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />

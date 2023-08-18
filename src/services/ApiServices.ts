@@ -1,4 +1,5 @@
 import {
+  ADDRESS_DELETE_ENDPOINT,
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
@@ -15,6 +16,8 @@ import {
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
+  SAINTFROMFAMILY_GET_ENDPOINT,
+  SAINT_NAME_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
 import axios, {AxiosResponse} from 'axios';
@@ -60,7 +63,9 @@ const apiRequest = async (
               Authorization: `Bearer ${getBearerToken().token}`,
             }),
           },
-      ...(method === 'get' ? {params: requestData} : {data: requestData}),
+      ...(method === 'get' || method === 'delete'
+        ? {params: requestData}
+        : {data: requestData}),
     });
     return handleApiResponse(response);
   } catch (error: any) {
@@ -72,22 +77,22 @@ const apiRequest = async (
   }
 };
 
-export const LoginByMobileNumApi = async (mobileNum: string) => {
+export const LoginByEmailApi = async (primary_email: string) => {
   return await apiRequest(
     LOGIN_POST_ENDPOINT,
     'post',
-    {contact: mobileNum},
+    {email: primary_email},
     {},
     false,
   );
 };
 
-export const VerifyOTPApi = async (mobileNum: string, otp: string) => {
+export const VerifyOTPApi = async (email: string, otp: string) => {
   return await apiRequest(
     VERIFY_POST_ENDPONT,
     'post',
     {
-      contact: mobileNum,
+      email: email,
       otp,
     },
     {},
@@ -205,4 +210,16 @@ export const GurukulConnectGetApi = async () => {
 
 export const GurukulConnectPostApi = async (gurukulInfo: any) => {
   return await apiRequest(GURUKUL_CONNECT_POST_ENDPOINT, 'post', gurukulInfo);
+};
+
+export const SaintNameGetApi = async () => {
+  return await apiRequest(SAINT_NAME_GET_ENDPOINT, 'get');
+};
+
+export const SaintFromFamilyGetApi = async (type: number) => {
+  return await apiRequest(`${SAINTFROMFAMILY_GET_ENDPOINT}=${type}`, 'get');
+};
+
+export const AddressDeleteApi = async (id: any) => {
+  return await apiRequest(`${ADDRESS_DELETE_ENDPOINT}${id}`, 'delete');
 };

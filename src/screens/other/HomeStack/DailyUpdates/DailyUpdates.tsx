@@ -84,7 +84,6 @@ export const DailyUpdates = ({
             }}
             data={Data}
             renderItem={({item, index}) => {
-              console.log(index);
               return (
                 <TouchableOpacity
                   activeOpacity={0.5}

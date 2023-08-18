@@ -5,7 +5,11 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {GurukulBranchGetApi} from '../../../../services';
+import {
+  GurukulBranchGetApi,
+  SaintFromFamilyGetApi,
+  SaintNameGetApi,
+} from '../../../../services';
 import {
   GurukulFormValidationSchemaType,
   SingleGurukulRecType,
@@ -18,6 +22,14 @@ import {styles} from './style';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
+  leftButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
+  rightButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
   onSubmitEvent: (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -35,14 +47,33 @@ type GurukulInfoListType = {
   rightTextOnPress?: (...event: any[]) => void;
 };
 
+const attendOpt = (t: any) => [
+  {name: t('gurukulInfo.StayGurukulOpt1'), id: 'HOSTEL'},
+  {name: t('gurukulInfo.StayGurukulOpt2'), id: 'SCHOOL'},
+  {name: t('gurukulInfo.StayGurukulOpt3'), id: 'BOTH'},
+];
+
+const GurukulRelativeList = (t: any) => [
+  {name: t('gurukulInfo.FromFamilyOpt1'), id: 'Saint'},
+  {name: t('gurukulInfo.FromFamilyOpt2'), id: 'Sankyayogi Bahen'},
+];
+
 export const GurukulInfo = React.memo(
-  ({initialValues, onSubmitEvent}: GurukulInfoProps): React.JSX.Element => {
+  ({
+    initialValues,
+    leftButtonProps,
+    rightButtonProps,
+    onSubmitEvent,
+  }: GurukulInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
     const style = styles();
 
     const [loader, setLoader] = React.useState<boolean>(false);
 
     const [branches, setbranches] = React.useState([]);
+    const [saints, setSaint] = React.useState([]);
+
+    const [saintFromFamily, setSaintFromFamily] = React.useState([]);
 
     const [exstudent, setExstudent] = React.useState(
       initialValues.exGurukulStudent || '',
@@ -65,18 +96,55 @@ export const GurukulInfo = React.memo(
     });
 
     React.useMemo(async () => {
-      setLoader(true);
-      if (branches.length === 0) {
-        const res = await GurukulBranchGetApi();
-        if (res.resType === 'SUCCESS') {
-          setbranches(res.data.branches);
-        }
+      if (
+        GurukulRelativeList(t).find(
+          items => items.name === watch().gurukulData?.at(0)?.FromFamily,
+        )?.id === 'Saint'
+      ) {
+        const res = await SaintFromFamilyGetApi(0);
+        setSaintFromFamily(res.data.saints);
+      } else if (
+        GurukulRelativeList(t).find(
+          items => items.name === watch().gurukulData?.at(0)?.FromFamily,
+        )?.id === 'Sankyayogi Bahen'
+      ) {
+        const res = await SaintFromFamilyGetApi(1);
+        setSaintFromFamily(res.data.saints);
       }
+    }, [watch().gurukulData?.at(0)?.FromFamily]);
 
-      const timer = setTimeout(() => {
+    React.useMemo(() => {
+      setLoader(true);
+      const timer = setTimeout(async () => {
+        if (branches.length === 0) {
+          const res = await GurukulBranchGetApi();
+          if (res.resType === 'SUCCESS') {
+            setbranches(res.data.branches);
+          }
+        }
+
+        if (saints.length === 0) {
+          const res = await SaintNameGetApi();
+
+          if (res.resType === 'SUCCESS') {
+            setSaint(res.data.saints);
+          }
+        }
+
         if (initialValues) {
           setExstudent(initialValues.exGurukulStudent);
-          replace(initialValues?.gurukulData?.[0]);
+          let newData: any = JSON.parse(
+            JSON.stringify(initialValues?.gurukulData?.[0]),
+          );
+
+          newData.attend = attendOpt(t).find(
+            items => items.id === newData?.attend,
+          )?.name;
+          newData.FromFamily = GurukulRelativeList(t).find(
+            items => items.id === newData.FromFamily,
+          )?.name;
+
+          replace(newData);
           setLoader(false);
         }
       }, 1000);
@@ -124,11 +192,7 @@ export const GurukulInfo = React.memo(
         lable: t('gurukulInfo.StayGurukul'),
         placeholder: '',
         type: 'radio',
-        menuList: [
-          {name: t('gurukulInfo.StayGurukulOpt1')},
-          {name: t('gurukulInfo.StayGurukulOpt2')},
-          {name: t('gurukulInfo.StayGurukulOpt3')},
-        ],
+        menuList: attendOpt(t),
         customProps: {
           wantFullSpace: false,
           customStyle: {borderRadius: 50, height: 35, borderWidth: 0},
@@ -201,7 +265,7 @@ export const GurukulInfo = React.memo(
         lable: t('gurukulInfo.KnowSaint'),
         placeholder: t('gurukulInfo.Select'),
         type: 'select',
-        menuList: ['1', '2', '3'],
+        menuList: saints,
       },
       {
         name: 'known_haribhakta',
@@ -227,59 +291,68 @@ export const GurukulInfo = React.memo(
       menuList?: any;
       customProps?: object;
       rightText?: string;
-    }[] = [
-      {
-        name: 'FromFamily',
-        lable: t('gurukulInfo.FromFamily'),
-        placeholder: '',
-        type: 'radio',
-        menuList: [
-          {name: t('gurukulInfo.FromFamilyOpt1')},
-          {name: t('gurukulInfo.FromFamilyOpt2')},
-        ],
-      },
-      {
-        name: 'saint_from_family',
-        lable: t('gurukulInfo.NameSaintlbl'),
-        placeholder: t('gurukulInfo.NameSaint'),
-        type: 'select',
-        menuList: ['1', '2', '3'],
-      },
-      {
-        name: 'relation',
-        lable: t('gurukulInfo.YourRelationLbl'),
-        placeholder: t('gurukulInfo.YourRelation'),
-        type: 'select',
-        menuList: ['Father', 'Mother', 'Brother'],
-      },
-    ];
+    }[] = React.useMemo(() => {
+      return [
+        {
+          name: 'FromFamily',
+          lable: t('gurukulInfo.FromFamily'),
+          placeholder: '',
+          type: 'radio',
+          menuList: GurukulRelativeList(t),
+        },
+        {
+          name: 'saint_from_family',
+          lable: t('gurukulInfo.NameSaintlbl'),
+          placeholder: t('gurukulInfo.NameSaint'),
+          type: 'select',
+          menuList: saintFromFamily,
+        },
+        {
+          name: 'relation',
+          lable: t('gurukulInfo.YourRelationLbl'),
+          placeholder: t('gurukulInfo.YourRelation'),
+          type: 'select',
+          menuList: ['Father', 'Mother', 'Brother'],
+        },
+      ];
+    }, [saintFromFamily]);
 
     const onSubmit = (data: GurukulFormValidationSchemaType) => {
       const newData = data;
 
       newData.exGurukulStudent = exstudent;
       newData.gurukulData = newData?.gurukulData?.map(item => {
+        item.attend =
+          attendOpt(t).find(items => items.name === item.attend)?.id ?? '';
+
+        item.FromFamily = GurukulRelativeList(t).find(
+          items => items.name === item.FromFamily,
+        )?.id;
         if (item.RelativeOfSaint === 'No') {
           item.FromFamily = '';
           item.saint_from_family = '';
           item.relation = '';
+
           return item;
         } else {
           return item;
         }
       });
 
-      onSubmitEvent(newData, 'next');
+      onSubmitEvent(newData, rightButtonProps ? rightButtonProps.case : 'next');
     };
 
     const onSubmitWithoutExstudent = () => {
-      onSubmitEvent(initialValues, 'skip');
+      onSubmitEvent(
+        initialValues,
+        leftButtonProps ? leftButtonProps.case : 'skip',
+      );
     };
 
     return (
       <>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
             contentContainerStyle={style.scrollViewContainer}
@@ -460,7 +533,9 @@ export const GurukulInfo = React.memo(
               </View>
             ) : null}
             <PrimaryButton
-              title={t('common.Complete')}
+              title={
+                rightButtonProps ? rightButtonProps.title : t('common.Complete')
+              }
               onPress={
                 exstudent === 'Yes'
                   ? handleSubmit(onSubmit)

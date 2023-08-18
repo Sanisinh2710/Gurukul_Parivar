@@ -15,7 +15,9 @@
       "No": "ના",
       "Complete": "પૂર્ણ કરો",
       "SelectValidYear": "માન્ય વર્ષ પસંદ કરો",
-      "SelectValidStd": "માન્ય વર્ગ પસંદ કરો"
+      "SelectValidStd": "માન્ય વર્ગ પસંદ કરો",
+      "Next": "આગળ",
+      "Update": "અપડેટ"
     },
     "loginScreen": {
       "WelcomeTitle1": "આપનું સ્વાગત છે",

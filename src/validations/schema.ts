@@ -14,11 +14,11 @@ export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      mobileNumber: yup
+      primary_email: yup
         .string()
         .trim()
-        .required(t('loginScreen.MobileEmptyErrMsg'))
-        .matches(phoneRegex, {message: t('loginScreen.MobileErrMsg1')}),
+        .required(t('common.EmptyError'))
+        .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
     });
   };
 
@@ -48,6 +48,18 @@ export const PersonalInfoFormValidationSchema =
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
       blood_group: yup.string().required(t('common.EmptyError')),
+      emailInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            email: yup
+              .string()
+              .required(t('common.EmptyError'))
+              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+            secondary: yup.boolean(),
+          }),
+        )
+        .required(),
       mobilenumInfo: yup
         .array()
         .of(
@@ -59,18 +71,6 @@ export const PersonalInfoFormValidationSchema =
             whatsappNum: yup.boolean(),
             secondary: yup.boolean(),
             countryCode: yup.string(),
-          }),
-        )
-        .required(),
-      emailInfo: yup
-        .array()
-        .of(
-          yup.object().shape({
-            email: yup
-              .string()
-              .required(t('common.EmptyError'))
-              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
-            secondary: yup.boolean(),
           }),
         )
         .required(),

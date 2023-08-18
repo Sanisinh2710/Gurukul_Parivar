@@ -1,10 +1,9 @@
 import React from 'react';
 
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {COLORS, HomeGrid} from '../../../utils';
 import {
   ImageBackground,
   ScrollView,
@@ -12,14 +11,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {styles} from './styles';
 import {AllImages} from '../../../../assets/images';
+import {CommonStyle} from '../../../../assets/styles';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {getUserData} from '../../../services';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {COLORS, HomeGrid} from '../../../utils';
+import {styles} from './styles';
 
 export const HomeScreen = ({
   navigation,
@@ -36,6 +36,10 @@ export const HomeScreen = ({
 
   const style = styles();
   const TouchX = React.useRef<any>();
+
+  const userData = React.useMemo(() => {
+    return getUserData();
+  }, []);
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
@@ -74,10 +78,10 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {t('homeScreen.Name')}
+                {userData.userdata.full_name}
                 <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
                   {' '}
-                  (AB0011)
+                  {userData.userdata.id}
                 </Text>
               </Text>
             </View>

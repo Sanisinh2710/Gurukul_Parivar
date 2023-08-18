@@ -15,7 +15,9 @@
       "No": "ना",
       "Complete": "पूरा करें",
       "SelectValidYear": "मान्य वर्ष चुनें",
-      "SelectValidStd": "मान्य वर्ग का चयन करें"
+      "SelectValidStd": "मान्य वर्ग का चयन करें",
+      "Next": "आगे",
+      "Update": "अपडेट"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",

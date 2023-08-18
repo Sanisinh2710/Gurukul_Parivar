@@ -15,7 +15,9 @@
       "No": "No",
       "Complete": "Complete",
       "SelectValidYear": "Select valid year",
-      "SelectValidStd": "Select Valid Standard"
+      "SelectValidStd": "Select Valid Standard",
+      "Next": "Next",
+      "Update": "Update"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -122,7 +124,7 @@
       "StayGurukul": "Did you stay in gurukul hostel or just attended gurukul school?",
       "StayGurukulOpt1": "I stayed in gurukul hostel",
       "StayGurukulOpt2": "I just attended gurukul school",
-      "StayGurukulOpt3": "BOTH",
+      "StayGurukulOpt3": "Both",
       "StdFrom": "Standard from",
       "StdTo": "Standard To",
       "Select": "Select",
@@ -134,7 +136,7 @@
       "RelativeOfSaint": "Are you a relative of any gurukul saint?",
       "FromFamily": "is any gurukul saint / sankyayogi bahen come from your family?",
       "FromFamilyOpt1": "Saint",
-      "FromFamilyOpt2": "Sankyayogi bahen",
+      "FromFamilyOpt2": "Sankyayogi Bahen",
       "NameSaintlbl": "Name of the saint",
       "NameSaint": "Select Saint",
       "YourRelationLbl": "Which is your relation?",

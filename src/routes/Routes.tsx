@@ -31,6 +31,7 @@ import {
   LoginSuccess,
   ProfileScreen,
   ProfileSignup,
+  ProfileSignupWithEdit,
   QuizResult,
   Status,
 } from '../screens';
@@ -142,6 +143,10 @@ export const Routes = (): React.JSX.Element => {
             />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
+            <NativeStack.Screen
+              name="ProfileEdit"
+              component={ProfileSignupWithEdit}
+            />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

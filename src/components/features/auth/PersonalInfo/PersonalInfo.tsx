@@ -16,6 +16,14 @@ import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 type PersonalInfoProps = {
   isParentLoading: boolean;
   initialValues: PersonalInfoFormValidationSchemaType;
+  leftButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
+  rightButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
   onSubmitEvent: (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -26,6 +34,8 @@ export const PersonalInfo = React.memo(
   ({
     isParentLoading,
     initialValues,
+    leftButtonProps,
+    rightButtonProps,
     onSubmitEvent,
   }: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
@@ -160,6 +170,7 @@ export const PersonalInfo = React.memo(
     React.useMemo(() => {
       if (initialValues) {
         setIsLocalLoading(true);
+
         if (initialValues.mobilenumInfo.length > 1) {
           if (mobilefield.length <= 1) {
             mobileappend(initialValues.mobilenumInfo[1]);
@@ -222,7 +233,10 @@ export const PersonalInfo = React.memo(
             }) || [],
           emailInfo: data.emailInfo,
         };
-        onSubmitEvent(formSubmitData, 'next');
+        onSubmitEvent(
+          formSubmitData,
+          rightButtonProps ? rightButtonProps.case : 'next',
+        );
       }
     };
 
@@ -247,7 +261,10 @@ export const PersonalInfo = React.memo(
             }) || [],
           emailInfo: data.emailInfo,
         };
-        onSubmitEvent(formSubmitData, 'exit');
+        onSubmitEvent(
+          formSubmitData,
+          leftButtonProps ? leftButtonProps.case : 'exit',
+        );
       }
     };
 
@@ -297,6 +314,65 @@ export const PersonalInfo = React.memo(
                 }}
               />
               <View style={{gap: 15, marginTop: '5%'}}>
+                {emailfield.map((mainitem, mainindex) => {
+                  return (
+                    <View key={mainitem.id}>
+                      {mainindex >= 1 && (
+                        <View
+                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          onTouchEnd={() => emailremove(mainindex)}>
+                          <Image
+                            source={AllIcons.Cancel}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </View>
+                      )}
+                      <Controller
+                        control={control}
+                        name={`emailInfo.${mainindex}.email`}
+                        render={({field: {onChange, onBlur, value}}) => {
+                          return (
+                            <FormInput
+                              type={'email'}
+                              name={`emailInfo.${mainindex}.email`}
+                              label={t('personalInfo.EmailAddress')}
+                              placeholder={t(
+                                'personalInfo.EnterYourEmailPlaceholder',
+                              )}
+                              value={value}
+                              onBlur={onBlur}
+                              onChange={onChange}
+                              error={errors?.emailInfo?.[
+                                mainindex
+                              ]?.email?.message?.toString()}
+                              rightText={
+                                mainindex === 0
+                                  ? t('personalInfo.AddSecondaryEmail')
+                                  : ''
+                              }
+                              editable={mainindex === 0 ? false : true}
+                              rightTextOnPress={
+                                mainindex === 0
+                                  ? () => {
+                                      if (emailfield.length <= 1) {
+                                        emailappend({
+                                          email: '',
+                                          secondary: true,
+                                        });
+                                      }
+                                    }
+                                  : () => {}
+                              }
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  );
+                })}
                 {mobilefield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainitem.id}>
@@ -353,7 +429,6 @@ export const PersonalInfo = React.memo(
                                   ? t('personalInfo.AddSecondaryNumber')
                                   : ''
                               }
-                              editable={mainindex === 0 ? false : true}
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {
@@ -433,64 +508,6 @@ export const PersonalInfo = React.memo(
                     </View>
                   );
                 })}
-                {emailfield.map((mainitem, mainindex) => {
-                  return (
-                    <View key={mainitem.id}>
-                      {mainindex >= 1 && (
-                        <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
-                          onTouchEnd={() => emailremove(mainindex)}>
-                          <Image
-                            source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        </View>
-                      )}
-                      <Controller
-                        control={control}
-                        name={`emailInfo.${mainindex}.email`}
-                        render={({field: {onChange, onBlur, value}}) => {
-                          return (
-                            <FormInput
-                              type={'email'}
-                              name={`emailInfo.${mainindex}.email`}
-                              label={t('personalInfo.EmailAddress')}
-                              placeholder={t(
-                                'personalInfo.EnterYourEmailPlaceholder',
-                              )}
-                              value={value}
-                              onBlur={onBlur}
-                              onChange={onChange}
-                              error={errors?.emailInfo?.[
-                                mainindex
-                              ]?.email?.message?.toString()}
-                              rightText={
-                                mainindex === 0
-                                  ? t('personalInfo.AddSecondaryEmail')
-                                  : ''
-                              }
-                              rightTextOnPress={
-                                mainindex === 0
-                                  ? () => {
-                                      if (emailfield.length <= 1) {
-                                        emailappend({
-                                          email: '',
-                                          secondary: true,
-                                        });
-                                      }
-                                    }
-                                  : () => {}
-                              }
-                            />
-                          );
-                        }}
-                      />
-                    </View>
-                  );
-                })}
               </View>
               <View
                 style={{
@@ -499,14 +516,22 @@ export const PersonalInfo = React.memo(
                   marginTop: '5%',
                 }}>
                 <SecondaryButton
-                  title={t('common.Save&Exit')}
+                  title={
+                    leftButtonProps
+                      ? leftButtonProps.title
+                      : t('common.Save&Exit')
+                  }
                   onPress={handleSubmit(leftOnSubmit)}
                   buttonStyle={{
                     width: '47%',
                   }}
                 />
                 <PrimaryButton
-                  title={t('common.Save&Next')}
+                  title={
+                    rightButtonProps
+                      ? rightButtonProps.title
+                      : t('common.Save&Next')
+                  }
                   onPress={handleSubmit(onSubmit)}
                   buttonStyle={{width: '47%'}}
                 />
