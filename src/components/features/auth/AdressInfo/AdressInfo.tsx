@@ -3,9 +3,9 @@ import React from 'react';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, ScrollView, Text, View} from 'react-native';
+import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {GetCountriesApi} from '../../../../services';
+import {AddressDeleteApi, GetCountriesApi} from '../../../../services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
@@ -15,6 +15,7 @@ import {COLORS} from '../../../../utils';
 import {AddressFormValidationSchema} from '../../../../validations';
 import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
 import {styles} from './style';
+import Toast from 'react-native-simple-toast';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;
@@ -173,7 +174,7 @@ export const AdressInfo = React.memo(
     return (
       <View>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
             contentContainerStyle={style.scrollViewContainer}
@@ -185,7 +186,46 @@ export const AdressInfo = React.memo(
                   {mainindex >= 1 && (
                     <View
                       style={style.cancelImgView}
-                      onTouchEnd={() => remove(mainindex)}>
+                      onTouchEnd={
+                        async () => {
+                          if (initialValues.address_details[mainindex].id) {
+                            Alert.alert(
+                              'Are you sure you want to delete this address..?',
+                              '',
+                              [
+                                {
+                                  text: 'Cancel',
+                                  onPress: () => {},
+                                  style: 'cancel',
+                                },
+                                {
+                                  text: 'OK',
+                                  onPress: async () => {
+                                    const response = await AddressDeleteApi(
+                                      initialValues.address_details[mainindex]
+                                        .id,
+                                    );
+
+                                    if (response.resType === 'SUCCESS') {
+                                      remove(mainindex);
+
+                                      Toast.show(
+                                        'Addres deleted successfully',
+                                        Toast.SHORT,
+                                      );
+                                    } else {
+                                      Toast.show(response.message, Toast.SHORT);
+                                    }
+                                  },
+                                },
+                              ],
+                            );
+                          } else {
+                            remove(mainindex);
+                          }
+                        }
+                        // console.log(initialValues.address_details[mainindex].id)
+                      }>
                       <Image source={AllIcons.Cancel} style={style.cancelImg} />
                     </View>
                   )}

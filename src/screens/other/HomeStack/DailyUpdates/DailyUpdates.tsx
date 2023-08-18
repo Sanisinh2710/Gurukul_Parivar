@@ -19,17 +19,14 @@ export const DailyUpdates = ({
   const [Data, setData] = React.useState<Array<String>>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const NewDate = d.toISOString().split('T')[0];
-  console.log(Data);
   const commonStyle = CommonStyle();
   React.useMemo(async () => {
     setLoader(true);
     try {
       const res = await DailyUpdatesApi();
-      console.log(res.data.daily_updates);
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
-          console.log(res.data.daily_updates);
           setData(res.data.daily_updates);
           setLoader(false);
         }, 200);
@@ -84,7 +81,6 @@ export const DailyUpdates = ({
             }}
             data={Data}
             renderItem={({item, index}) => {
-              console.log(index);
               return (
                 <TouchableOpacity
                   activeOpacity={0.5}

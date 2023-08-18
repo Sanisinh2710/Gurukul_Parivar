@@ -23,7 +23,6 @@ export const DailyUpdateDetail = ({
   const style = styles();
   const commonstyle = CommonStyle();
   const Data = route.params.data;
-  console.log(Data, 'Data');
 
   return (
     <ScreenWrapper>

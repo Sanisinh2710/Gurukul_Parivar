@@ -159,6 +159,8 @@ export const PersonalInfo = React.memo(
 
     React.useMemo(() => {
       if (initialValues) {
+        setIsLocalLoading(true);
+
         if (initialValues.mobilenumInfo.length > 1) {
           if (mobilefield.length <= 1) {
             mobileappend(initialValues.mobilenumInfo[1]);
@@ -175,7 +177,6 @@ export const PersonalInfo = React.memo(
 
     React.useEffect(() => {
       if (isArraySet) {
-        setIsLocalLoading(true);
         Object.keys(initialValues).map((key, index) => {
           if (key === 'mobilenumInfo') {
             const mobileArr = initialValues.mobilenumInfo;

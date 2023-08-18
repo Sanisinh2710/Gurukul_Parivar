@@ -5,7 +5,11 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {GurukulBranchGetApi} from '../../../../services';
+import {
+  GurukulBranchGetApi,
+  SaintFromFamilyGetApi,
+  SaintNameGetApi,
+} from '../../../../services';
 import {
   GurukulFormValidationSchemaType,
   SingleGurukulRecType,
@@ -35,6 +39,12 @@ type GurukulInfoListType = {
   rightTextOnPress?: (...event: any[]) => void;
 };
 
+const attendOpt = (t: any) => [
+  {name: t('gurukulInfo.StayGurukulOpt1'), id: 'HOSTEL'},
+  {name: t('gurukulInfo.StayGurukulOpt2'), id: 'SCHOOL'},
+  {name: t('gurukulInfo.StayGurukulOpt3'), id: 'BOTH'},
+];
+
 export const GurukulInfo = React.memo(
   ({initialValues, onSubmitEvent}: GurukulInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
@@ -43,6 +53,9 @@ export const GurukulInfo = React.memo(
     const [loader, setLoader] = React.useState<boolean>(false);
 
     const [branches, setbranches] = React.useState([]);
+    const [saints, setSaint] = React.useState([]);
+
+    const [saintFromFamily, setSaintFromFamily] = React.useState([]);
 
     const [exstudent, setExstudent] = React.useState(
       initialValues.exGurukulStudent || '',
@@ -65,6 +78,18 @@ export const GurukulInfo = React.memo(
     });
 
     React.useMemo(async () => {
+      if (watch().gurukulData?.at(0)?.FromFamily === 'Saint') {
+        const res = await SaintFromFamilyGetApi(0);
+        setSaintFromFamily(res.data.saints);
+      } else if (
+        watch().gurukulData?.at(0)?.FromFamily === 'Sankyayogi bahen'
+      ) {
+        const res = await SaintFromFamilyGetApi(1);
+        setSaintFromFamily(res.data.saints);
+      }
+    }, [watch().gurukulData?.at(0)?.FromFamily]);
+
+    React.useMemo(async () => {
       setLoader(true);
       if (branches.length === 0) {
         const res = await GurukulBranchGetApi();
@@ -73,10 +98,25 @@ export const GurukulInfo = React.memo(
         }
       }
 
+      if (saints.length === 0) {
+        const res = await SaintNameGetApi();
+        if (res.resType === 'SUCCESS') {
+          setSaint(res.data.saints);
+        }
+      }
+
       const timer = setTimeout(() => {
         if (initialValues) {
           setExstudent(initialValues.exGurukulStudent);
-          replace(initialValues?.gurukulData?.[0]);
+          let newData: any = JSON.parse(
+            JSON.stringify(initialValues?.gurukulData?.[0]),
+          );
+
+          newData.attend = attendOpt(t).find(
+            items => items.id === newData?.attend,
+          )?.name;
+
+          replace(newData);
           setLoader(false);
         }
       }, 1000);
@@ -124,11 +164,7 @@ export const GurukulInfo = React.memo(
         lable: t('gurukulInfo.StayGurukul'),
         placeholder: '',
         type: 'radio',
-        menuList: [
-          {name: t('gurukulInfo.StayGurukulOpt1')},
-          {name: t('gurukulInfo.StayGurukulOpt2')},
-          {name: t('gurukulInfo.StayGurukulOpt3')},
-        ],
+        menuList: attendOpt(t),
         customProps: {
           wantFullSpace: false,
           customStyle: {borderRadius: 50, height: 35, borderWidth: 0},
@@ -201,7 +237,7 @@ export const GurukulInfo = React.memo(
         lable: t('gurukulInfo.KnowSaint'),
         placeholder: t('gurukulInfo.Select'),
         type: 'select',
-        menuList: ['1', '2', '3'],
+        menuList: saints,
       },
       {
         name: 'known_haribhakta',
@@ -227,44 +263,52 @@ export const GurukulInfo = React.memo(
       menuList?: any;
       customProps?: object;
       rightText?: string;
-    }[] = [
-      {
-        name: 'FromFamily',
-        lable: t('gurukulInfo.FromFamily'),
-        placeholder: '',
-        type: 'radio',
-        menuList: [
-          {name: t('gurukulInfo.FromFamilyOpt1')},
-          {name: t('gurukulInfo.FromFamilyOpt2')},
-        ],
-      },
-      {
-        name: 'saint_from_family',
-        lable: t('gurukulInfo.NameSaintlbl'),
-        placeholder: t('gurukulInfo.NameSaint'),
-        type: 'select',
-        menuList: ['1', '2', '3'],
-      },
-      {
-        name: 'relation',
-        lable: t('gurukulInfo.YourRelationLbl'),
-        placeholder: t('gurukulInfo.YourRelation'),
-        type: 'select',
-        menuList: ['Father', 'Mother', 'Brother'],
-      },
-    ];
+    }[] = React.useMemo(() => {
+      return [
+        {
+          name: 'FromFamily',
+          lable: t('gurukulInfo.FromFamily'),
+          placeholder: '',
+          type: 'radio',
+          menuList: [
+            {name: t('gurukulInfo.FromFamilyOpt1')},
+            {name: t('gurukulInfo.FromFamilyOpt2')},
+          ],
+        },
+        {
+          name: 'saint_from_family',
+          lable: t('gurukulInfo.NameSaintlbl'),
+          placeholder: t('gurukulInfo.NameSaint'),
+          type: 'select',
+          menuList: saintFromFamily,
+        },
+        {
+          name: 'relation',
+          lable: t('gurukulInfo.YourRelationLbl'),
+          placeholder: t('gurukulInfo.YourRelation'),
+          type: 'select',
+          menuList: ['Father', 'Mother', 'Brother'],
+        },
+      ];
+    }, [saintFromFamily]);
 
     const onSubmit = (data: GurukulFormValidationSchemaType) => {
       const newData = data;
 
       newData.exGurukulStudent = exstudent;
       newData.gurukulData = newData?.gurukulData?.map(item => {
+        item.attend =
+          attendOpt(t).find(items => items.name === item.attend)?.id ?? '';
         if (item.RelativeOfSaint === 'No') {
           item.FromFamily = '';
           item.saint_from_family = '';
           item.relation = '';
+          console.log(item);
+
           return item;
         } else {
+          console.log(item);
+
           return item;
         }
       });
@@ -279,7 +323,7 @@ export const GurukulInfo = React.memo(
     return (
       <>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
             contentContainerStyle={style.scrollViewContainer}

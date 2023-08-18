@@ -36,7 +36,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     React.useState<boolean>(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
-  console.log(imgURL!);
   const onShare = async () => {
     try {
       const response = await RNFS.downloadFile({
@@ -133,14 +132,11 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
   const handleWallpaperMode = async (mode: string) => {
-    console.log(mode);
     await setWallPaper(imgURL ? imgURL : 'wallpaperImage', `${mode}`);
   };
 
   const setWallPaper = async (imgUrl: string, mode: string) => {
     try {
-      console.log('function called');
-      console.log(imgUrl);
       const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
     } catch (error) {
       console.log(error, 'wallpaper error');

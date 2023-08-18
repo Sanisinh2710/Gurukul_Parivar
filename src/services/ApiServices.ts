@@ -1,5 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {
+  ADDRESS_DELETE_ENDPOINT,
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
@@ -16,6 +17,8 @@ import {
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
+  SAINTFROMFAMILY_GET_ENDPOINT,
+  SAINT_NAME_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
 import {getBearerToken} from './AuthServices';
@@ -172,4 +175,16 @@ export const GurukulConnectGetApi = async () => {
 
 export const GurukulConnectPostApi = async (gurukulInfo: any) => {
   return await apiRequest(GURUKUL_CONNECT_POST_ENDPOINT, 'post', gurukulInfo);
+};
+
+export const SaintNameGetApi = async () => {
+  return await apiRequest(SAINT_NAME_GET_ENDPOINT, 'get');
+};
+
+export const SaintFromFamilyGetApi = async (type: number) => {
+  return await apiRequest(`${SAINTFROMFAMILY_GET_ENDPOINT}=${type}`, 'get');
+};
+
+export const AddressDeleteApi = async (id: any) => {
+  return await apiRequest(`${ADDRESS_DELETE_ENDPOINT}${id}`, 'delete');
 };

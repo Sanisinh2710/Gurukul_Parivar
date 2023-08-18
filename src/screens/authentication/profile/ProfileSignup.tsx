@@ -566,14 +566,11 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          console.log(receivedData, 'resdaata');
-
           newFormData.address_details = receivedData;
           setFormData(newFormData);
           const response = await AddressInfoPostApi(
             newFormData.address_details,
           );
-          console.log(response, 'resdaata');
 
           if (response.resType === 'SUCCESS') {
             setwidth(width + 20);
@@ -632,6 +629,8 @@ export const ProfileSignup = ({
 
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
+          console.log(newFormData.gurukulInfo.gurukulData[0]);
+
           setFormData(newFormData);
 
           const response = await GurukulConnectPostApi(
@@ -677,8 +676,6 @@ export const ProfileSignup = ({
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep, t]);
-
-  console.log(getAuthToken());
 
   return (
     <ScreenWrapper>

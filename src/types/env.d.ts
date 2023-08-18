@@ -17,4 +17,7 @@ declare module '@env' {
   export const DAILY_QUOTES_GET_ENDPOINT: string;
   export const DAILY_UPDATES_GET_ENDPOINT: string;
   export const DAILY_SATSANG_GET_ENDPOINT: string;
+  export const SAINT_NAME_GET_ENDPOINT: string;
+  export const SAINTFROMFAMILY_GET_ENDPOINT: string;
+  export const ADDRESS_DELETE_ENDPOINT: string;
 }
