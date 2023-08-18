@@ -5,10 +5,16 @@ export type RootStackParamList = {
   Auth: undefined;
   BottomNavBar: undefined;
   dailyDarshan: undefined;
-  dailyDarshanDetail: {image: any; date: string; totalImages: number};
+  dailyDarshanDetail: {
+    image: any;
+    date: string;
+    totalImages: number;
+    data: String[];
+    currentImageIndex: number;
+  };
   dailyQuotes: undefined;
   dailyUpdates: undefined;
-  dailyUpdateDetail: {title: string};
+  dailyUpdateDetail: {title: string; data: any};
   calendar: undefined;
   liveSatsang: undefined;
   changeLanguage: undefined;

@@ -31,7 +31,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(true);
   const [disabled, setDisabled] = React.useState(true);
-
   const [isApiLoading, setIsApiloading] = React.useState(false);
 
   const handleLogin = async () => {

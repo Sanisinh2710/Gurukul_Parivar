@@ -6,15 +6,15 @@ import {AllImages} from '../../../../assets/images';
 
 type PagerViewProps = {
   currentPage: number;
+  images: any[];
 };
 
-export const PagerView = ({currentPage}: PagerViewProps): React.JSX.Element => {
+export const PagerView = ({
+  currentPage,
+  images,
+}: PagerViewProps): React.JSX.Element => {
   const image = useMemo(() => {
-    return currentPage === 1
-      ? AllImages.Rectangle
-      : currentPage === 2
-      ? AllImages.Rectangle2
-      : AllImages.Rectangle3;
+    return images[currentPage];
   }, [currentPage]);
 
   return (
@@ -23,7 +23,7 @@ export const PagerView = ({currentPage}: PagerViewProps): React.JSX.Element => {
         <Image source={image} style={style().pagerViewImage} />
       </View>
 
-      <Snail snailLength={3} activeTabIndex={currentPage} />
+      <Snail snailLength={images.length} activeTabIndex={currentPage + 1} />
     </View>
   );
 };

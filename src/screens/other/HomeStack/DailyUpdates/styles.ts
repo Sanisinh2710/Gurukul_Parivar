@@ -23,10 +23,8 @@ export const styles = () => {
       borderRadius: 10,
     },
     textContainer: {
-      // borderWidth: 1,
       width: '80%',
       alignSelf: 'center',
-      // paddingHorizontal: 20,
     },
     time: {
       color: 'rgba(23,23,23,0.5)',

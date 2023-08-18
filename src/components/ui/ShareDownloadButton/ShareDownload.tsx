@@ -6,6 +6,7 @@ import {
   NativeModules,
   PermissionsAndroid,
   Platform,
+  Pressable,
   Text,
   View,
 } from 'react-native';
@@ -22,26 +23,26 @@ import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
 type ShareDownloadProps = {
+  imgURL: string | undefined;
   wallpaper: boolean;
 };
 
-export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
+export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const {WallpaperModule} = NativeModules;
-
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  const [modalForWallpaper, setModalForWallpaper] =
+    React.useState<boolean>(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
-
+  console.log(imgURL!);
   const onShare = async () => {
     try {
       const response = await RNFS.downloadFile({
-        fromUrl:
-          'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png',
+        fromUrl: imgURL!,
         toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
-
       if ((await response.promise).statusCode === 200) {
         const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
@@ -64,8 +65,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     }
   };
 
-  const REMOTE_IMAGE_PATH =
-    'https://e7.pngegg.com/pngimages/514/813/png-clipart-child-computer-icons-avatar-user-avatar-child-face.png';
+  const REMOTE_IMAGE_PATH = imgURL;
   const checkPermission = async () => {
     if (Platform.OS === 'ios') {
       downloadImage();
@@ -92,7 +92,7 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
     // Image URL which we want to download
     let image_URL = REMOTE_IMAGE_PATH;
     // Getting the extention of the file
-    let ext: any = getExtention(image_URL);
+    let ext: any = image_URL && getExtention(image_URL);
     ext = '.' + ext[0];
     // Get config and fs from RNFetchBlob
     // config: To pass the downloading related options
@@ -113,9 +113,10 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         description: 'Image',
       },
     };
-    config(options)
-      .fetch('GET', image_URL)
-      .then(res => {});
+    image_URL &&
+      config(options)
+        .fetch('GET', image_URL)
+        .then(res => {});
   };
 
   const getExtention = (filename: string) => {
@@ -131,14 +132,18 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
       useNativeDriver: false,
     }).start();
   }, [modalVisible]);
+  const handleWallpaperMode = async (mode: string) => {
+    console.log(mode);
+    await setWallPaper(imgURL ? imgURL : 'wallpaperImage', `${mode}`);
+  };
 
-  const imgURL = `https://img.freepik.com/premium-photo/ready-serve-shot-tennis-ball-lying-court-outlined-by-shadow-racket_590464-5276.jpg?t=st=1691665426~exp=1691666026~hmac=341c3bea3f1ebe4b4692743aec138eb64cf2773345d6c34d2305cad8a471c81e`;
-
-  const setWallPaper = async (imgUrl: string) => {
+  const setWallPaper = async (imgUrl: string, mode: string) => {
     try {
-      const result = await WallpaperModule.setAsWallpaper(imgUrl);
+      console.log('function called');
+      console.log(imgUrl);
+      const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
     } catch (error) {
-      console.log(error);
+      console.log(error, 'wallpaper error');
     }
   };
 
@@ -154,8 +159,8 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
-              onTouchEnd={async () => {
-                await setWallPaper(imgURL);
+              onTouchEnd={() => {
+                setModalForWallpaper(!modalForWallpaper);
               }}
               style={[
                 style.iconContainer,
@@ -218,6 +223,34 @@ export const ShareDownload = ({wallpaper}: ShareDownloadProps) => {
         setModelVisible={setModalVisible}
         type={'none'}
         modelVisible={modalVisible}
+      />
+      <DropDownModel
+        customModelchild={
+          <>
+            <Pressable
+              onPress={() => {
+                handleWallpaperMode('HOME');
+              }}>
+              <Text style={style.wallpaperText}>Set as a Home screen</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                handleWallpaperMode('LOCK');
+              }}>
+              <Text style={style.wallpaperText}>Set as a Lock screen</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                handleWallpaperMode('BOTH');
+              }}>
+              <Text style={style.wallpaperText}>Both</Text>
+            </Pressable>
+          </>
+        }
+        modalHeight="30%"
+        setModelVisible={setModalForWallpaper}
+        type={'none'}
+        modelVisible={modalForWallpaper}
       />
     </>
   );
