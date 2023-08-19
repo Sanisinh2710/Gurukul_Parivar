@@ -7,7 +7,7 @@ interface Props {
 interface State {
   hasError: boolean;
 }
-class ErrorBoundary extends React.Component<Props, State> {
+export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {hasError: false};
@@ -43,8 +43,6 @@ class ErrorBoundary extends React.Component<Props, State> {
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;
 
 const styles = StyleSheet.create({
   container: {
