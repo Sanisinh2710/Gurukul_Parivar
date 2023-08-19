@@ -57,7 +57,11 @@ export const DropDownModel = React.memo(
 
     const [searchedData, setSearchedData] = React.useState<
       Array<string> | Array<object>
-    >([]);
+    >(inputList ?? []);
+
+    React.useEffect(() => {
+      setSearchedData(inputList ?? searchedData);
+    }, [inputList]);
 
     React.useEffect(() => {
       if (inputList) {

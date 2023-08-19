@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
+import Toast from 'react-native-simple-toast';
+
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
@@ -15,10 +17,14 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {DailyDarshanApi} from '../../../../services/ApiServices';
+import {
+  DailyDarshanApi,
+  GurukulBranchGetApi,
+} from '../../../../services/ApiServices';
 import {RootStackParamList} from '../../../../types';
 import {d, options} from '../../../../utils';
 import {styles} from './styles';
+import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 
 const TimeArray = (t: any) => [
   {name: t('DailyDarshan.All'), id: 'both'},
@@ -33,11 +39,33 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const [Data, setData] = React.useState<Array<String>>([]);
-
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
+  const [changeValue, setChangeValue] = React.useState(1);
   const {t} = useTranslation();
 
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
+  const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
+  const [BranchName, setBranchName] = React.useState();
+  const [DarshanImages, setDarshanImages] = React.useState([]);
+  React.useMemo(async () => {
+    // setIsLoading(true);
+    const response = await GurukulBranchGetApi();
+    if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
+      setGurukulList(response.data.branches);
+    } else {
+      Toast.show(response.message, 2);
+    }
+    // setIsLoading(false);
+  }, []);
+  React.useEffect(() => {
+    if (GurukulList.length > 0) {
+      const name = GurukulList.find(item => item.id == changeValue)?.name;
+      console.log(name);
+      setBranchName(name);
+    }
+  }, [changeValue, GurukulList]);
 
   const style = styles();
 
@@ -50,16 +78,13 @@ export const DailyDarshan = ({
       );
 
       if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setData(res.data.image_paths);
-          setLoader(false);
-        }, 200);
+        setData(res.data);
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);
     }
-  }, [selectedItem, selectedDate]);
-
+  }, [selectedItem, selectedDate, BranchName]);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -78,6 +103,23 @@ export const DailyDarshan = ({
     const NextDate = getNextDate();
     setSelectedDate(NextDate);
   };
+  const Image_Data = () => {
+    if (Data.length > 0 && Data !== undefined) {
+      let newImges = Data.filter(item => {
+        if (item.branch === BranchName) {
+          return item.image_paths;
+          // console.log(item.image_paths, item.branch);
+          // setDarshanImages(item.image_paths);
+        }
+      })?.[0]?.image_paths;
+
+      setDarshanImages(newImges);
+    }
+  };
+  React.useEffect(() => {
+    // console.log(Image_Data(), 'this');
+    Image_Data();
+  }, [Data, BranchName]);
 
   return (
     <ScreenWrapper>
@@ -96,6 +138,36 @@ export const DailyDarshan = ({
         }}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
+        <View style={{height: '8%', marginBottom: '8%'}}>
+          <View>
+            <Text>Gurukul Branch</Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: 'rgba(172,43,49,0.05)',
+              paddingHorizontal: '2%',
+              borderWidth: 1,
+              borderColor: 'rgba(172, 43, 49, 0.1)',
+              borderRadius: 12,
+            }}>
+            <SimpleDropDown
+              placeholder="Select Gurukul Branch"
+              label="Gurukul"
+              dropDownList={GurukulList}
+              type={'simple'}
+              value={changeValue}
+              onChange={setChangeValue}
+              onBlur={function (...event: any[]): void {
+                throw new Error('Function not implemented.');
+              }}
+              setFocused={function (
+                value: React.SetStateAction<boolean>,
+              ): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
+          </View>
+        </View>
         <RadioLable
           wantFullSpace={false}
           customStyle={{
@@ -108,7 +180,6 @@ export const DailyDarshan = ({
           list={TimeArray(t)}
           showHeading={false}
         />
-
         <View>
           <Calendar
             setCalendarVisible={setCalendarVisible}
@@ -122,10 +193,10 @@ export const DailyDarshan = ({
           <Loader />
         ) : (
           <View style={{height: '90%'}}>
-            {Data.length > 0 ? (
+            {Data.find(item => item.branch === BranchName) !== undefined ? (
               <FlatList
                 showsVerticalScrollIndicator={false}
-                data={Data}
+                data={DarshanImages}
                 numColumns={2}
                 columnWrapperStyle={{justifyContent: 'space-between'}}
                 contentContainerStyle={{
@@ -139,8 +210,8 @@ export const DailyDarshan = ({
                       style={style.imageContainer}
                       onPress={() => {
                         navigation.navigate('dailyDarshanDetail', {
-                          totalImages: Data.length,
-                          data: Data,
+                          totalImages: DarshanImages.length,
+                          data: DarshanImages,
                           image: item,
                           currentImageIndex: index,
                           date: selectedDate.toLocaleDateString(

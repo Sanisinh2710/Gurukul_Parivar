@@ -17,6 +17,7 @@ export const DailyDarshanDetail = ({
   const style = styles();
   const commonStyle = CommonStyle();
   const currentImageIndex = route.params.currentImageIndex;
+
   const [wallpaper, setWallpaper] = React.useState('');
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
@@ -25,7 +26,7 @@ export const DailyDarshanDetail = ({
   const AllData = route.params.data;
   const [Data, setData] = React.useState<Array<String>>(AllData);
   const currentImageUri = Data[pagination - 1];
-
+  console.log(AllData, pagination, currentImageIndex);
   React.useEffect(() => {
     setWallpaper(`https://gurukul.taskgrids.com${currentImageUri}`);
   }, [currentImageUri]);
@@ -43,7 +44,7 @@ export const DailyDarshanDetail = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '80%', marginTop: '5%'}}>
           <Image
-            source={{uri: `${BASE_URL}${route.params.image}`}}
+            source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
           />
         </View>
