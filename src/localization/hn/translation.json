@@ -13,7 +13,15 @@
       "EnterMobileNum": "मोबाइल नंबर खाली नहीं हो सकता..!",
       "Yes": "हाँ",
       "No": "ना",
-      "Complete": "पूरा करें"
+      "Complete": "पूरा करें",
+      "SelectValidYear": "मान्य वर्ष चुनें",
+      "SelectValidStd": "मान्य वर्ग का चयन करें",
+      "Next": "आगे",
+      "Update": "अपडेट",
+      "PhotoGallery": "फोटो गैलरी",
+      "AppName": "गुरुकुल परिवार",
+      "AppExitMsg": "क्या आप वाकई ऐप से बाहर निकलना चाहते हैं..?",
+      "TodayEventMsg": "आज की इवेंट"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",

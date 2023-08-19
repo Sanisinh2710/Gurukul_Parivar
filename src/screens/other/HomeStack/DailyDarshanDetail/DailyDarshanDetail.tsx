@@ -4,9 +4,12 @@ import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Image, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {
+  CustomNavigate,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
 
@@ -26,7 +29,7 @@ export const DailyDarshanDetail = ({
   const AllData = route.params.data;
   const [Data, setData] = React.useState<Array<String>>(AllData);
   const currentImageUri = Data[pagination - 1];
-  console.log(AllData, pagination, currentImageIndex);
+
   React.useEffect(() => {
     setWallpaper(`https://gurukul.taskgrids.com${currentImageUri}`);
   }, [currentImageUri]);

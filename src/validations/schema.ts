@@ -14,11 +14,11 @@ export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      mobileNumber: yup
+      primary_email: yup
         .string()
         .trim()
-        .required(t('loginScreen.MobileEmptyErrMsg'))
-        .matches(phoneRegex, {message: t('loginScreen.MobileErrMsg1')}),
+        .required(t('common.EmptyError'))
+        .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
     });
   };
 
@@ -48,6 +48,18 @@ export const PersonalInfoFormValidationSchema =
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
       dob: yup.string().trim().required(t('common.EmptyError')),
       blood_group: yup.string().required(t('common.EmptyError')),
+      emailInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            email: yup
+              .string()
+              .required(t('common.EmptyError'))
+              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+            secondary: yup.boolean(),
+          }),
+        )
+        .required(),
       mobilenumInfo: yup
         .array()
         .of(
@@ -59,18 +71,6 @@ export const PersonalInfoFormValidationSchema =
             whatsappNum: yup.boolean(),
             secondary: yup.boolean(),
             countryCode: yup.string(),
-          }),
-        )
-        .required(),
-      emailInfo: yup
-        .array()
-        .of(
-          yup.object().shape({
-            email: yup
-              .string()
-              .required(t('common.EmptyError'))
-              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
-            secondary: yup.boolean(),
           }),
         )
         .required(),
@@ -139,7 +139,7 @@ export const GurukulFormValidationSchema =
                   return true;
                 } else {
                   return err.createError({
-                    message: 'Select Valid Standard',
+                    message: t('common.SelectValidStd'),
                   });
                 }
               },
@@ -147,12 +147,12 @@ export const GurukulFormValidationSchema =
           ssc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('hsc_year')], 'Select Valid Year')
+            .notOneOf([yup.ref('hsc_year')], t('common.SelectValidYear'))
             .required(t('common.EmptyError')),
           hsc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('ssc_year')], 'Select Valid Year')
+            .notOneOf([yup.ref('ssc_year')], t('common.SelectValidYear'))
             .required(t('common.EmptyError'))
             .test({
               name: 'hsc_year',
@@ -167,7 +167,7 @@ export const GurukulFormValidationSchema =
                   return true;
                 } else {
                   return err.createError({
-                    message: 'Select Valid Year',
+                    message: t('common.SelectValidYear'),
                   });
                 }
               },

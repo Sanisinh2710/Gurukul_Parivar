@@ -39,13 +39,11 @@ export const setAuthToken = (loginData: any) => {
 export const getAuthToken = () => {
   let resType: 'SUCCESS' | 'ERROR';
   let loginData: {
-    mobileNum: string;
-    countryCode: string;
+    primary_email: string;
     token: string;
     is_profile_updated: boolean;
   } = {
-    mobileNum: '',
-    countryCode: '',
+    primary_email: '',
     token: '',
     is_profile_updated: false,
   };
@@ -53,8 +51,7 @@ export const getAuthToken = () => {
     const auth_token = storage.getString('auth_token');
     if (auth_token) {
       const newAuthToken = JSON.parse(auth_token);
-      loginData.mobileNum = newAuthToken.mobileNum;
-      loginData.countryCode = newAuthToken.countryCode;
+      loginData.primary_email = newAuthToken.primary_email;
       loginData.token = newAuthToken.token;
       loginData.is_profile_updated = newAuthToken.is_profile_updated;
       resType = 'SUCCESS';
@@ -142,4 +139,36 @@ export const getBearerToken = () => {
     resType = 'ERROR';
   }
   return {resType, token};
+};
+
+export const setUserData = (userdata: any) => {
+  let resType: 'SUCCESS' | 'ERROR';
+
+  try {
+    storage.set('currentUser', JSON.stringify(userdata));
+
+    resType = 'SUCCESS';
+  } catch (error) {
+    resType = 'ERROR';
+  }
+
+  return resType;
+};
+
+export const getUserData = () => {
+  let resType: 'SUCCESS' | 'ERROR';
+  let userdata: any = {};
+
+  try {
+    const udata = storage.getString('currentUser');
+    if (udata) {
+      userdata = JSON.parse(udata);
+      resType = 'SUCCESS';
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return {resType, userdata};
 };

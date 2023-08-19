@@ -15,7 +15,7 @@ import {
   PrimaryButton,
   ScreenWrapper,
 } from '../../../../components';
-import {LoginByMobileNumApi} from '../../../../services';
+import {LoginByEmailApi} from '../../../../services';
 import {storage} from '../../../../storage';
 import {
   LoginFormValidationSchemaType,
@@ -99,7 +99,7 @@ export const LoginScreen = ({
   }, [language]);
 
   React.useEffect(() => {
-    if (Object.keys(errors).length === 0 && watch().mobileNumber) {
+    if (Object.keys(errors).length === 0 && watch().primary_email) {
       setDisabled(false);
     } else {
       setDisabled(true);
@@ -111,18 +111,17 @@ export const LoginScreen = ({
       // data.countryCode = countryCodeSelect.split('(')[0].toString();
 
       setIsApiloading(true);
-      data.countryCode = countryCodeSelect || '+91(IN)';
-      data.mobileNumber = data.mobileNumber.toString();
+      // data.countryCode = countryCodeSelect || '+91(IN)';
+      // data.mobileNumber = data.mobileNumber.toString();
 
       // Do something with mobile number and than navigate to OTP Screen;
-      const response = await LoginByMobileNumApi(data.mobileNumber);
+      const response = await LoginByEmailApi(data.primary_email);
 
       setIsApiloading(false);
 
       if (response.resType === 'SUCCESS') {
         navigation.navigate('MobileLoginOTP', {
-          mobileNum: data.mobileNumber,
-          countryCode: data.countryCode,
+          primary_email: data.primary_email,
         });
       } else {
         Toast.show(response.message, 2);
@@ -159,19 +158,19 @@ export const LoginScreen = ({
           <View key={'LoginFormInputs'} style={style.formInputsView}>
             <Controller
               control={control}
-              name="mobileNumber"
+              name="primary_email"
               render={({field: {onBlur, onChange, value}}) => {
                 return (
                   <FormInput
-                    type={'phone'}
-                    name={'mobileNumber'}
-                    label={t('loginScreen.MobileNumber')}
-                    placeholder={t('loginScreen.EnterMobileNum')}
+                    type={'email'}
+                    name={'primary_email'}
+                    label={t('personalInfo.EmailAddress')}
+                    placeholder={t('personalInfo.EnterYourEmailPlaceholder')}
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
                     editable={true}
-                    error={errors['mobileNumber']?.message?.toString()}
+                    error={errors['primary_email']?.message?.toString()}
                     state={{
                       countryCodeSelect,
                       setCountryCodeSelect,

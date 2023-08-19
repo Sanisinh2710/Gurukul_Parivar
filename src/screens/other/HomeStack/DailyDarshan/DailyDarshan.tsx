@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import Toast from 'react-native-simple-toast';
+import {AllIcons} from '../../../../../assets/icons';
 
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -16,15 +16,15 @@ import {
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
+  SimpleDropDown,
 } from '../../../../components';
 import {
   DailyDarshanApi,
   GurukulBranchGetApi,
 } from '../../../../services/ApiServices';
 import {RootStackParamList} from '../../../../types';
-import {d, options} from '../../../../utils';
+import {COLORS, CustomFonts, d, options} from '../../../../utils';
 import {styles} from './styles';
-import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 
 const TimeArray = (t: any) => [
   {name: t('DailyDarshan.All'), id: 'both'},
@@ -49,16 +49,16 @@ export const DailyDarshan = ({
   );
   const [BranchName, setBranchName] = React.useState();
   const [DarshanImages, setDarshanImages] = React.useState([]);
+
   React.useMemo(async () => {
-    // setIsLoading(true);
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
     } else {
       Toast.show(response.message, 2);
     }
-    // setIsLoading(false);
   }, []);
+
   React.useEffect(() => {
     if (GurukulList.length > 0) {
       const name = GurukulList.find(item => item.id == changeValue)?.name;
@@ -110,12 +110,11 @@ export const DailyDarshan = ({
         }
       })?.[0]?.image_paths;
 
-      setDarshanImages(newImges);
+      setDarshanImages(newImges ?? []);
     }
   };
   console.log(Data, 'DFSFSDDGDG');
   React.useEffect(() => {
-    // console.log(Image_Data(), 'this');
     Image_Data();
   }, [Data, BranchName]);
 
@@ -136,36 +135,49 @@ export const DailyDarshan = ({
         }}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View style={{height: '8%', marginBottom: '8%'}}>
-          <View>
-            <Text>Gurukul Branch</Text>
-          </View>
+        <View style={{height: '8%', marginBottom: '16%'}}>
           <View
             style={{
-              backgroundColor: 'rgba(172,43,49,0.05)',
-              paddingHorizontal: '2%',
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.1)',
-              borderRadius: 12,
+              marginTop: '5%',
             }}>
-            <SimpleDropDown
-              placeholder="Select Gurukul Branch"
-              label="Gurukul"
-              dropDownList={GurukulList}
-              type={'simple'}
-              value={changeValue}
-              onChange={setChangeValue}
-              onBlur={function (...event: any[]): void {
-                throw new Error('Function not implemented.');
-              }}
-              setFocused={function (
-                value: React.SetStateAction<boolean>,
-              ): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
+            <Text
+              style={{
+                ...CustomFonts.body.large14,
+                color: COLORS.lightModetextColor,
+                fontSize: 15,
+              }}>
+              {t('uploadPhoto.DropdownTitle')}
+            </Text>
+
+            <View
+              style={{
+                marginTop: '2%',
+                backgroundColor: 'rgba(172,43,49,0.05)',
+                paddingHorizontal: '2%',
+                borderWidth: 1,
+                borderColor: 'rgba(172, 43, 49, 0.1)',
+                borderRadius: 12,
+              }}>
+              <SimpleDropDown
+                placeholder="Select Gurukul Branch"
+                label="Gurukul"
+                dropDownList={GurukulList}
+                type={'simple'}
+                value={changeValue}
+                onChange={setChangeValue}
+                onBlur={function (...event: any[]): void {
+                  throw new Error('Function not implemented.');
+                }}
+                setFocused={function (
+                  value: React.SetStateAction<boolean>,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </View>
           </View>
         </View>
+
         <RadioLable
           wantFullSpace={false}
           customStyle={{
@@ -178,20 +190,13 @@ export const DailyDarshan = ({
           list={TimeArray(t)}
           showHeading={false}
         />
-        <View>
-          <Calendar
-            setCalendarVisible={setCalendarVisible}
-            calendarVisible={calendarVisible}
-            // saveParentDate={saveDate}
-            selectedParentDate={selectedDate}
-            setSelectedParentDate={setSelectedDate}
-          />
-        </View>
+
         {loader ? (
           <Loader />
         ) : (
           <View style={{height: '90%'}}>
-            {Data.find(item => item.branch === BranchName) !== undefined ? (
+            {Data.find(item => item.branch === BranchName) !== undefined &&
+            DarshanImages.length > 0 ? (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 data={DarshanImages}
@@ -229,10 +234,24 @@ export const DailyDarshan = ({
                 }}
               />
             ) : (
-              <NoData />
+              <View
+                style={{
+                  height: '80%',
+                }}>
+                <NoData />
+              </View>
             )}
           </View>
         )}
+      </View>
+      <View>
+        <Calendar
+          setCalendarVisible={setCalendarVisible}
+          calendarVisible={calendarVisible}
+          // saveParentDate={saveDate}
+          selectedParentDate={selectedDate}
+          setSelectedParentDate={setSelectedDate}
+        />
       </View>
       <CustomNavigate
         text={

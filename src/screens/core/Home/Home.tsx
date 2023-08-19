@@ -1,25 +1,28 @@
 import React from 'react';
 
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {COLORS, HomeGrid} from '../../../utils';
 import {
+  Alert,
+  BackHandler,
   ImageBackground,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {styles} from './styles';
 import {AllImages} from '../../../../assets/images';
+import {CommonStyle} from '../../../../assets/styles';
+import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {getUserData} from '../../../services';
+import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {COLORS, HomeGrid} from '../../../utils';
+import {styles} from './styles';
 
 export const HomeScreen = ({
   navigation,
@@ -37,8 +40,39 @@ export const HomeScreen = ({
   const style = styles();
   const TouchX = React.useRef<any>();
 
+  const userData = React.useMemo(() => {
+    return getUserData();
+  }, []);
+
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
+
+  const onBackPress = () => {
+    Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
+      {
+        text: t('common.Yes'),
+        onPress: () => {
+          BackHandler.exitApp();
+        },
+      },
+      {text: t('common.No'), onPress: () => null},
+    ]);
+    // Return true to stop default back navigaton
+    // Return false to keep default back navigaton
+    return true;
+  };
+
+  const ExitCallBack = React.useCallback(() => {
+    // Add Event Listener for hardwareBackPress
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => {
+      // Once the Screen gets blur Remove Event Listener
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  }, []);
+
+  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
   const handlePress = (val: string) => {
     switch (val) {
@@ -46,7 +80,7 @@ export const HomeScreen = ({
         navigation.navigate('dailyDarshan');
         break;
       case 'quotes':
-        navigation.navigate('dailyQuotes');
+        // navigation.navigate('dailyQuotes');
         break;
       case 'update':
         navigation.navigate('dailyUpdates');
@@ -56,6 +90,9 @@ export const HomeScreen = ({
         break;
       case 'satsang':
         navigation.navigate('liveSatsang');
+        break;
+      case 'program':
+        navigation.navigate('program');
         break;
 
       default:
@@ -74,10 +111,10 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {t('homeScreen.Name')}
+                {userData.userdata.full_name}
                 <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
                   {' '}
-                  (AB0011)
+                  {userData.userdata.id}
                 </Text>
               </Text>
             </View>
@@ -90,7 +127,9 @@ export const HomeScreen = ({
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate('dailyUpdates');
+          },
         }}
       />
 

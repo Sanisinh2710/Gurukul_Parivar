@@ -15,6 +15,14 @@ import {styles} from './style';
 
 type EduBusinessInfoProps = {
   initialValues: EduBusinessInfoValidationSchemaType;
+  leftButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
+  rightButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
   onSubmitEvent: (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -22,9 +30,13 @@ type EduBusinessInfoProps = {
 };
 
 export const EduBusinessInfo = React.memo(
-  ({initialValues, onSubmitEvent}: EduBusinessInfoProps): React.JSX.Element => {
+  ({
+    initialValues,
+    leftButtonProps,
+    rightButtonProps,
+    onSubmitEvent,
+  }: EduBusinessInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-    console.log(initialValues);
 
     const style = styles();
     const [loader, setLoader] = React.useState<boolean>(false);
@@ -105,6 +117,14 @@ export const EduBusinessInfo = React.memo(
       }
     };
 
+    const leftOnSubmitWithData = (
+      data: EduBusinessInfoValidationSchemaType,
+    ) => {
+      if (data !== undefined) {
+        onSubmitEvent(data, 'exit');
+      }
+    };
+
     const leftOnSubmit = () => {
       onSubmitEvent(initialValues, 'skip');
     };
@@ -114,8 +134,6 @@ export const EduBusinessInfo = React.memo(
 
       const timer = setTimeout(() => {
         if (initialValues) {
-          console.log('hello');
-
           setValue('education', initialValues.education ?? '');
           setValue('occupation', initialValues.occupation ?? '');
           setValue('occupation_type', initialValues.occupation_type ?? '');
@@ -131,7 +149,7 @@ export const EduBusinessInfo = React.memo(
     return (
       <>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
             contentContainerStyle={style.scrollViewContainer}
@@ -170,12 +188,22 @@ export const EduBusinessInfo = React.memo(
             />
             <View style={style.submitButtonView}>
               <SecondaryButton
-                title={t('common.SkipNow')}
-                onPress={leftOnSubmit}
+                title={
+                  leftButtonProps ? leftButtonProps.title : t('common.SkipNow')
+                }
+                onPress={
+                  leftButtonProps
+                    ? handleSubmit(leftOnSubmitWithData)
+                    : leftOnSubmit
+                }
                 buttonStyle={style.submitButtonStyle}
               />
               <PrimaryButton
-                title={t('common.Save&Next')}
+                title={
+                  rightButtonProps
+                    ? rightButtonProps.title
+                    : t('common.Save&Next')
+                }
                 onPress={handleSubmit(onSubmit)}
                 buttonStyle={style.submitButtonStyle}
               />

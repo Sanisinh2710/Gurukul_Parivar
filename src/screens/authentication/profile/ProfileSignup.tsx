@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, View} from 'react-native';
 import * as Progress from 'react-native-progress';
@@ -24,6 +25,7 @@ import {
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
   getAuthToken,
+  setUserData,
   setUserProfilingDone,
 } from '../../../services';
 import {ProfileSignupProps} from '../../../types';
@@ -31,6 +33,7 @@ import {
   COLORS,
   CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
+  isString,
 } from '../../../utils';
 
 export const ProfileSignup = ({
@@ -57,15 +60,17 @@ export const ProfileSignup = ({
       father_name: '',
       dob: '',
       blood_group: '',
+      emailInfo: [
+        {email: getAuthToken().loginData.primary_email, secondary: false},
+      ],
       mobilenumInfo: [
         {
-          mobilenum: getAuthToken().loginData.mobileNum,
+          mobilenum: '',
           secondary: false,
           whatsappNum: false,
-          countryCode: getAuthToken().loginData.countryCode,
+          countryCode: '',
         },
       ],
-      emailInfo: [{email: '', secondary: false}],
     },
     address_details: [
       {
@@ -117,9 +122,19 @@ export const ProfileSignup = ({
             response.data !== undefined &&
             response.data !== ''
           ) {
-            newFormData.completeProfile =
-              response.data.completeProfile ?? newFormData.completeProfile;
-            setFormData(newFormData);
+            if (response.data.personal_details) {
+              const profileData = {
+                profile: response.data.personal_details.profile
+                  ? `${BASE_URL}${response.data.personal_details.profile}`
+                  : newFormData.completeProfile.profile,
+                branch_id:
+                  response.data.personal_details.branch_id ??
+                  newFormData.completeProfile.branch_id,
+              };
+              newFormData.completeProfile =
+                profileData ?? newFormData.completeProfile;
+              setFormData(newFormData);
+            }
           }
         }
       }
@@ -306,9 +321,15 @@ export const ProfileSignup = ({
 
         // Convert the submitted data in the backend format :-
         const image = {
-          uri: newFormData.completeProfile.profile?.at(0)?.uri,
-          name: newFormData.completeProfile.profile?.at(0)?.fileName,
-          type: newFormData.completeProfile.profile?.at(0)?.type,
+          uri: isString(newFormData.completeProfile.profile)
+            ? newFormData.completeProfile.profile
+            : newFormData.completeProfile.profile?.at(0)?.uri,
+          name: isString(newFormData.completeProfile.profile)
+            ? `${Date.now().toString()}.jpeg`
+            : newFormData.completeProfile.profile?.at(0)?.fileName,
+          type: isString(newFormData.completeProfile.profile)
+            ? 'image/jpeg'
+            : newFormData.completeProfile.profile?.at(0)?.type,
         };
 
         const toSubmitPersonalInfoData: any = {
@@ -422,9 +443,25 @@ export const ProfileSignup = ({
 
         setIsParentLoading(false);
 
-        if (response.resType === 'SUCCESS') {
-          setwidth(width + 20);
-          setFormStep(formStep + 1);
+        const backenduserresponse = await PersonalInfoGetDetailsApi();
+        if (
+          backenduserresponse.resType === 'SUCCESS' &&
+          response.resType === 'SUCCESS'
+        ) {
+          if (
+            backenduserresponse.data.personal_details !== null &&
+            backenduserresponse.data.personal_details !== undefined &&
+            backenduserresponse.data.personal_details !== ''
+          ) {
+            const setuserdataresponse = setUserData(
+              backenduserresponse.data.personal_details,
+            );
+
+            if (setuserdataresponse === 'SUCCESS') {
+              setwidth(width + 20);
+              setFormStep(formStep + 1);
+            }
+          }
         } else {
           Toast.show(response.message, 2);
         }
@@ -436,9 +473,15 @@ export const ProfileSignup = ({
 
         // Convert the submitted data in the backend format :-
         const image = {
-          uri: newFormData.completeProfile.profile?.at(0)?.uri,
-          name: newFormData.completeProfile.profile?.at(0)?.fileName,
-          type: newFormData.completeProfile.profile?.at(0)?.type,
+          uri: isString(newFormData.completeProfile.profile)
+            ? newFormData.completeProfile.profile
+            : newFormData.completeProfile.profile?.at(0)?.uri,
+          name: isString(newFormData.completeProfile.profile)
+            ? `${Date.now().toString()}.jpeg`
+            : newFormData.completeProfile.profile?.at(0)?.fileName,
+          type: isString(newFormData.completeProfile.profile)
+            ? 'image/jpeg'
+            : newFormData.completeProfile.profile?.at(0)?.type,
         };
 
         const toSubmitPersonalInfoData: any = {
@@ -551,10 +594,30 @@ export const ProfileSignup = ({
         );
         setIsParentLoading(false);
 
-        if (response.resType === 'SUCCESS') {
-          const setuserprofileDone = setUserProfilingDone(true);
-          if (setuserprofileDone === 'SUCCESS') {
-            navigation.navigate('LoginSuccess', {type: 'Profile'});
+        const backenduserresponse = await PersonalInfoGetDetailsApi();
+        if (
+          backenduserresponse.resType === 'SUCCESS' &&
+          response.resType === 'SUCCESS'
+        ) {
+          if (
+            backenduserresponse.data.personal_details !== null &&
+            backenduserresponse.data.personal_details !== undefined &&
+            backenduserresponse.data.personal_details !== ''
+          ) {
+            let finalData = JSON.parse(
+              JSON.stringify(backenduserresponse.data.personal_details),
+            );
+
+            finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+            const setuserdataresponse = setUserData(finalData);
+
+            if (setuserdataresponse === 'SUCCESS') {
+              const setuserprofileDone = setUserProfilingDone(true);
+              if (setuserprofileDone === 'SUCCESS') {
+                navigation.navigate('LoginSuccess', {type: 'Profile'});
+              }
+            }
           }
         } else {
           Toast.show(response.message, 2);
@@ -566,14 +629,11 @@ export const ProfileSignup = ({
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
         if (receivedData !== undefined) {
-          console.log(receivedData, 'resdaata');
-
           newFormData.address_details = receivedData;
           setFormData(newFormData);
           const response = await AddressInfoPostApi(
             newFormData.address_details,
           );
-          console.log(response, 'resdaata');
 
           if (response.resType === 'SUCCESS') {
             setwidth(width + 20);
@@ -632,6 +692,7 @@ export const ProfileSignup = ({
 
         if (receivedData !== undefined) {
           newFormData.gurukulInfo = receivedData;
+
           setFormData(newFormData);
 
           const response = await GurukulConnectPostApi(
@@ -677,8 +738,6 @@ export const ProfileSignup = ({
       ? t('gurukulInfo.GurukulHeader')
       : '';
   }, [formStep, t]);
-
-  console.log(getAuthToken());
 
   return (
     <ScreenWrapper>
@@ -738,6 +797,8 @@ export const ProfileSignup = ({
         ) : formStep === 3 ? (
           <AdressInfo
             initialValues={{address_details: [...formData.address_details]}}
+            formData={formData}
+            setFormData={setFormData}
             onSubmitEvent={submitButton}
           />
         ) : formStep === 4 ? (

@@ -1,23 +1,22 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, View} from 'react-native';
-import {AllImages} from '../../../../../assets/images';
+import {Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  CustomNavigate,
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
+  ShareDownload,
 } from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {CalendarGetApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
 import {d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
-import {CalendarGetApi} from '../../../../services';
-import {BASE_URL} from '@env';
 
 export const CalendarScreen = ({
   navigation,
@@ -30,6 +29,7 @@ export const CalendarScreen = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [todayEvent, setEvents] = React.useState<{[key: string]: any}[]>([]);
+
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setMonth(selectedDate.getMonth() - 1);
@@ -48,6 +48,7 @@ export const CalendarScreen = ({
     const NextDate = getNextDate();
     setSelectedDate(NextDate);
   };
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -64,11 +65,12 @@ export const CalendarScreen = ({
       }
     } catch (error) {}
   }, [selectedDate]);
+
   React.useEffect(() => {
     Data.map(item => setEvents(item.events));
     Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
   }, [Data]);
-  console.log();
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -85,7 +87,7 @@ export const CalendarScreen = ({
         ) : Data.length > 0 && Data[0].image != undefined ? (
           <View>
             <View>
-              <Text style={style.title}>આજનો દિવસ રળીયામણો</Text>
+              <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
             </View>
             {todayEvent
               .filter(event => event.date === d.toISOString().substring(0, 10))
@@ -113,7 +115,12 @@ export const CalendarScreen = ({
             <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
         ) : (
-          <NoData />
+          <View
+            style={{
+              height: '90%',
+            }}>
+            <NoData />
+          </View>
         )}
       </View>
       <CustomNavigate
