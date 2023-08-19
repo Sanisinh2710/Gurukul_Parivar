@@ -24,7 +24,7 @@ export const LoginSuccess = ({
   return (
     <ScreenWrapper>
       <ScreenHeader
-        showLeft={true}
+        showLeft={false}
         headerTitleAlign="center"
         leftOnPress={() => navigation.goBack()}
       />

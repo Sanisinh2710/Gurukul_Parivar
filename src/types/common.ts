@@ -12,7 +12,7 @@ export type Theme = {
 
 export type LoginFormValidationSchemaType = {
   [key: string]: string;
-  mobileNumber: string;
+  primary_email: string;
 };
 
 export type CompleteProfileFormValidationSchemaType = {
@@ -64,15 +64,15 @@ export type PersonalInfoFormValidationSchemaType = {
   father_name: string;
   dob: string;
   blood_group: string;
+  emailInfo: {
+    email: string;
+    secondary?: boolean | undefined;
+  }[];
   mobilenumInfo: {
     mobilenum: string | undefined;
     whatsappNum?: boolean | undefined;
     secondary?: boolean | undefined;
     countryCode?: string | undefined;
-  }[];
-  emailInfo: {
-    email: string;
-    secondary?: boolean | undefined;
   }[];
 };
 

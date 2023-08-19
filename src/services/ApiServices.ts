@@ -1,4 +1,3 @@
-import axios, {AxiosResponse} from 'axios';
 import {
   ADDRESS_DELETE_ENDPOINT,
   ADDRESS_INFO_GET_ENDPOINT,
@@ -21,8 +20,9 @@ import {
   SAINT_NAME_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
-import {getBearerToken} from './AuthServices';
+import axios, {AxiosResponse} from 'axios';
 import {ApiDateFormat} from '../utils';
+import {getBearerToken} from './AuthServices';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -63,7 +63,9 @@ const apiRequest = async (
               Authorization: `Bearer ${getBearerToken().token}`,
             }),
           },
-      ...(method === 'get' ? {params: requestData} : {data: requestData}),
+      ...(method === 'get' || method === 'delete'
+        ? {params: requestData}
+        : {data: requestData}),
     });
     return handleApiResponse(response);
   } catch (error: any) {
@@ -75,22 +77,22 @@ const apiRequest = async (
   }
 };
 
-export const LoginByMobileNumApi = async (mobileNum: string) => {
+export const LoginByEmailApi = async (primary_email: string) => {
   return await apiRequest(
     LOGIN_POST_ENDPOINT,
     'post',
-    {contact: mobileNum},
+    {email: primary_email},
     {},
     false,
   );
 };
 
-export const VerifyOTPApi = async (mobileNum: string, otp: string) => {
+export const VerifyOTPApi = async (email: string, otp: string) => {
   return await apiRequest(
     VERIFY_POST_ENDPONT,
     'post',
     {
-      contact: mobileNum,
+      email: email,
       otp,
     },
     {},
@@ -143,14 +145,47 @@ export const DailySatsangApi = async (date: Date) => {
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
   const payloadData = new FormData();
 
-  Object.keys(userPersonalInfo).map(key => {
-    payloadData.append(`${key}`, userPersonalInfo[key]);
+  let newUserPersonalInfo = JSON.parse(JSON.stringify(userPersonalInfo));
+
+  Object.keys(newUserPersonalInfo).map(key => {
+    if (key === 'profile') {
+      if (
+        newUserPersonalInfo[key].uri === '' ||
+        newUserPersonalInfo[key].uri === null ||
+        newUserPersonalInfo[key].uri === undefined
+      ) {
+        delete newUserPersonalInfo[key];
+      }
+    }
+    payloadData.append(`${key}`, newUserPersonalInfo[key]);
   });
-  return await apiRequest(PERSONAL_INFO_POST_ENDPOINT, 'post', payloadData, {
-    Authorization: `Bearer ${getBearerToken().token}`,
-    'Content-Type': 'multipart/form-data',
-    Accept: 'application/json',
-  });
+
+  const headers =
+    newUserPersonalInfo.profile === '' ||
+    newUserPersonalInfo.profile === null ||
+    newUserPersonalInfo.profile === undefined
+      ? {
+          Authorization: `Bearer ${getBearerToken().token}`,
+        }
+      : {
+          Authorization: `Bearer ${getBearerToken().token}`,
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+        };
+
+  const finalPayload =
+    newUserPersonalInfo.profile === '' ||
+    newUserPersonalInfo.profile === null ||
+    newUserPersonalInfo.profile === undefined
+      ? newUserPersonalInfo
+      : payloadData;
+
+  return await apiRequest(
+    PERSONAL_INFO_POST_ENDPOINT,
+    'post',
+    finalPayload,
+    headers,
+  );
 };
 
 export const PersonalInfoGetDetailsApi = async () => {

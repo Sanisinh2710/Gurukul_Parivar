@@ -16,7 +16,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {removeAuthToken} from '../../../services';
+import {getUserData, removeAuthToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, EditProfile} from '../../../utils';
 import {styles} from './styles';
@@ -35,6 +35,10 @@ export const ProfileScreen = ({
   const ProfileList = React.useMemo(() => {
     return EditProfile(t, i18n);
   }, [t, i18n]);
+
+  const userData = React.useMemo(() => {
+    return getUserData();
+  }, []);
 
   const style = styles();
   const commonStyle = CommonStyle();
@@ -80,8 +84,11 @@ export const ProfileScreen = ({
         <View style={style.imageContainer}>
           <Image source={AllImages.Person} style={{height: 64, width: 64}} />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
-            <Text style={style.profileName}>{t('myProfile.Name')}</Text>
-            <Text style={{color: 'rgba(23,23,23,0.5)'}}>+91-9873957274</Text>
+            <Text style={style.profileName}>{userData.userdata.full_name}</Text>
+            <Text style={{color: 'rgba(23,23,23,0.5)'}}>
+              {userData.userdata.primary_contact_cc.toString().split('(')[0]}
+              {userData.userdata.primary_contact}
+            </Text>
             <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
             </View>

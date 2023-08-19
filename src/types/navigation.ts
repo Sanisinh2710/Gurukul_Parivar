@@ -25,6 +25,7 @@ export type RootStackParamList = {
   dailyQuizDetail: undefined;
   donation: undefined;
   QuizResult: {marks: number};
+  ProfileEdit: {formStep: number} | undefined;
 };
 
 export type RootBottomTabParamList = {
@@ -35,7 +36,7 @@ export type RootBottomTabParamList = {
 
 export type RootAuthStackParamList = {
   MobileLogin: undefined;
-  MobileLoginOTP: {mobileNum: string; countryCode: string} | undefined;
+  MobileLoginOTP: {primary_email: string} | undefined;
   LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
   ProfileSignup: undefined;
 };
@@ -51,4 +52,14 @@ export type LoginSuccessStackScreenProps = CompositeScreenProps<
 export type ProfileSignupProps = NativeStackScreenProps<
   RootAuthStackParamList,
   'ProfileSignup'
+>;
+
+export type ProfileSignupEditProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ProfileEdit'
+>;
+
+export type EditProfileProps = NativeStackScreenProps<
+  RootStackParamList,
+  'editProfile'
 >;

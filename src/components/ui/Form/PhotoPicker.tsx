@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert, Image, Text, View} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
-import {captureImage, chooseFile} from '../../../utils';
+import {captureImage, chooseFile, isString} from '../../../utils';
 import {FormInputStyle} from './style';
 
 type PhotoPickerProps = {
@@ -54,7 +54,10 @@ export const PhotoPicker = React.memo(
         <View style={style.photOutSideView}>
           <View style={style.photoView}>
             {value ? (
-              <Image source={{uri: value?.[0]?.uri}} style={style.image} />
+              <Image
+                source={{uri: isString(value) ? value : value?.[0]?.uri}}
+                style={style.image}
+              />
             ) : (
               <Image source={AllIcons.Avtar} style={style.avtar} />
             )}

@@ -22,6 +22,14 @@ import {styles} from './style';
 
 type GurukulInfoProps = {
   initialValues: GurukulFormValidationSchemaType;
+  leftButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
+  rightButtonProps?: {
+    title: string;
+    case: 'next' | 'skip' | 'exit';
+  };
   onSubmitEvent: (
     receivedData: any,
     typecase: 'next' | 'skip' | 'exit',
@@ -45,8 +53,18 @@ const attendOpt = (t: any) => [
   {name: t('gurukulInfo.StayGurukulOpt3'), id: 'BOTH'},
 ];
 
+const GurukulRelativeList = (t: any) => [
+  {name: t('gurukulInfo.FromFamilyOpt1'), id: 'Saint'},
+  {name: t('gurukulInfo.FromFamilyOpt2'), id: 'Sankyayogi Bahen'},
+];
+
 export const GurukulInfo = React.memo(
-  ({initialValues, onSubmitEvent}: GurukulInfoProps): React.JSX.Element => {
+  ({
+    initialValues,
+    leftButtonProps,
+    rightButtonProps,
+    onSubmitEvent,
+  }: GurukulInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
     const style = styles();
 
@@ -78,34 +96,41 @@ export const GurukulInfo = React.memo(
     });
 
     React.useMemo(async () => {
-      if (watch().gurukulData?.at(0)?.FromFamily === 'Saint') {
+      if (
+        GurukulRelativeList(t).find(
+          items => items.name === watch().gurukulData?.at(0)?.FromFamily,
+        )?.id === 'Saint'
+      ) {
         const res = await SaintFromFamilyGetApi(0);
         setSaintFromFamily(res.data.saints);
       } else if (
-        watch().gurukulData?.at(0)?.FromFamily === 'Sankyayogi bahen'
+        GurukulRelativeList(t).find(
+          items => items.name === watch().gurukulData?.at(0)?.FromFamily,
+        )?.id === 'Sankyayogi Bahen'
       ) {
         const res = await SaintFromFamilyGetApi(1);
         setSaintFromFamily(res.data.saints);
       }
     }, [watch().gurukulData?.at(0)?.FromFamily]);
 
-    React.useMemo(async () => {
+    React.useMemo(() => {
       setLoader(true);
-      if (branches.length === 0) {
-        const res = await GurukulBranchGetApi();
-        if (res.resType === 'SUCCESS') {
-          setbranches(res.data.branches);
+      const timer = setTimeout(async () => {
+        if (branches.length === 0) {
+          const res = await GurukulBranchGetApi();
+          if (res.resType === 'SUCCESS') {
+            setbranches(res.data.branches);
+          }
         }
-      }
 
-      if (saints.length === 0) {
-        const res = await SaintNameGetApi();
-        if (res.resType === 'SUCCESS') {
-          setSaint(res.data.saints);
+        if (saints.length === 0) {
+          const res = await SaintNameGetApi();
+
+          if (res.resType === 'SUCCESS') {
+            setSaint(res.data.saints);
+          }
         }
-      }
 
-      const timer = setTimeout(() => {
         if (initialValues) {
           setExstudent(initialValues.exGurukulStudent);
           let newData: any = JSON.parse(
@@ -114,6 +139,9 @@ export const GurukulInfo = React.memo(
 
           newData.attend = attendOpt(t).find(
             items => items.id === newData?.attend,
+          )?.name;
+          newData.FromFamily = GurukulRelativeList(t).find(
+            items => items.id === newData.FromFamily,
           )?.name;
 
           replace(newData);
@@ -270,10 +298,7 @@ export const GurukulInfo = React.memo(
           lable: t('gurukulInfo.FromFamily'),
           placeholder: '',
           type: 'radio',
-          menuList: [
-            {name: t('gurukulInfo.FromFamilyOpt1')},
-            {name: t('gurukulInfo.FromFamilyOpt2')},
-          ],
+          menuList: GurukulRelativeList(t),
         },
         {
           name: 'saint_from_family',
@@ -299,25 +324,29 @@ export const GurukulInfo = React.memo(
       newData.gurukulData = newData?.gurukulData?.map(item => {
         item.attend =
           attendOpt(t).find(items => items.name === item.attend)?.id ?? '';
+
+        item.FromFamily = GurukulRelativeList(t).find(
+          items => items.name === item.FromFamily,
+        )?.id;
         if (item.RelativeOfSaint === 'No') {
           item.FromFamily = '';
           item.saint_from_family = '';
           item.relation = '';
-          console.log(item);
 
           return item;
         } else {
-          console.log(item);
-
           return item;
         }
       });
 
-      onSubmitEvent(newData, 'next');
+      onSubmitEvent(newData, rightButtonProps ? rightButtonProps.case : 'next');
     };
 
     const onSubmitWithoutExstudent = () => {
-      onSubmitEvent(initialValues, 'skip');
+      onSubmitEvent(
+        initialValues,
+        leftButtonProps ? leftButtonProps.case : 'skip',
+      );
     };
 
     return (
@@ -504,7 +533,9 @@ export const GurukulInfo = React.memo(
               </View>
             ) : null}
             <PrimaryButton
-              title={t('common.Complete')}
+              title={
+                rightButtonProps ? rightButtonProps.title : t('common.Complete')
+              }
               onPress={
                 exstudent === 'Yes'
                   ? handleSubmit(onSubmit)

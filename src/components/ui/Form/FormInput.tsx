@@ -77,7 +77,7 @@ export const FormInput = React.memo(
       case 'phone':
         fieldblock = (
           <PhoneDropdownInput
-            editable={editable}
+            editable={editable ?? true}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
@@ -218,6 +218,7 @@ export const FormInput = React.memo(
       case 'email':
         fieldblock = (
           <TextInput
+            editable={editable ?? true}
             inputMode={'email'}
             keyboardType={'email-address'}
             onFocus={() => setFocused(true)}

@@ -13,7 +13,11 @@
       "EnterMobileNum": "Enter mobile number",
       "Yes": "Yes",
       "No": "No",
-      "Complete": "Complete"
+      "Complete": "Complete",
+      "SelectValidYear": "Select valid year",
+      "SelectValidStd": "Select Valid Standard",
+      "Next": "Next",
+      "Update": "Update"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -132,7 +136,7 @@
       "RelativeOfSaint": "Are you a relative of any gurukul saint?",
       "FromFamily": "is any gurukul saint / sankyayogi bahen come from your family?",
       "FromFamilyOpt1": "Saint",
-      "FromFamilyOpt2": "Sankyayogi bahen",
+      "FromFamilyOpt2": "Sankyayogi Bahen",
       "NameSaintlbl": "Name of the saint",
       "NameSaint": "Select Saint",
       "YourRelationLbl": "Which is your relation?",

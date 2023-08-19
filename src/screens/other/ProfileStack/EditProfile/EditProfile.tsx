@@ -1,17 +1,14 @@
 import React from 'react';
 
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {RootAuthStackParamList} from '../../../../types';
+import {EditProfileProps} from '../../../../types';
 import {MyProfileData} from '../../../../utils';
 import {styles} from './styles';
 
-export const EditProfile = ({
-  navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+export const EditProfile = ({navigation}: EditProfileProps) => {
   const {t} = useTranslation();
   const style = styles();
 
@@ -30,10 +27,15 @@ export const EditProfile = ({
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
           data={MyProfileData(t)}
-          renderItem={item => {
+          renderItem={({item, index}) => {
             return (
               <>
                 <View
+                  onTouchEnd={() => {
+                    navigation.navigate('ProfileEdit', {
+                      formStep: index + 1,
+                    });
+                  }}
                   style={{
                     height: 60,
                     width: 'auto',
@@ -47,13 +49,10 @@ export const EditProfile = ({
                     paddingLeft: '5%',
                   }}>
                   <View style={{justifyContent: 'center'}}>
-                    <Text style={style.title}>{item.item.title}</Text>
+                    <Text style={style.title}>{item.title}</Text>
                   </View>
                   <View style={{justifyContent: 'center'}}>
-                    <Image
-                      source={item.item.icon}
-                      style={{height: 24, width: 24}}
-                    />
+                    <Image source={item.icon} style={{height: 24, width: 24}} />
                   </View>
                 </View>
               </>
