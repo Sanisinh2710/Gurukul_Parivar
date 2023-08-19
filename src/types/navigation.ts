@@ -20,6 +20,7 @@ export type RootStackParamList = {
   changeLanguage: undefined;
   editProfile: undefined;
   status: undefined;
+  program: undefined;
   dailyQuiz: undefined;
   dailyQuizDetail: undefined;
   donation: undefined;

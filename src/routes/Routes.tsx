@@ -8,7 +8,12 @@ import {
 } from '@react-navigation/native-stack';
 import {useColorScheme} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {CustomBottomTabBar, CustomStatusBar, Loader} from '../components';
+import {
+  CommingSoon,
+  CustomBottomTabBar,
+  CustomStatusBar,
+  Loader,
+} from '../components';
 import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {
@@ -113,6 +118,7 @@ export const Routes = (): React.JSX.Element => {
               headerShown: false,
             }}>
             <NativeStack.Screen name="Auth" component={AuthStackNavigator} />
+
             <NativeStack.Screen
               name="BottomNavBar"
               component={BottomTabNavigator}
@@ -143,6 +149,7 @@ export const Routes = (): React.JSX.Element => {
             />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
+            <NativeStack.Screen name="program" component={CommingSoon} />
             <NativeStack.Screen
               name="ProfileEdit"
               component={ProfileSignupWithEdit}
@@ -169,7 +176,7 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
       }}>
       <BottomTab.Screen name="Home" component={HomeScreen} />
-      <BottomTab.Screen name="FrontDesk" component={FrontDeskScreen} />
+      <BottomTab.Screen name="FrontDesk" component={CommingSoon} />
       <BottomTab.Screen name="Profile" component={ProfileScreen} />
     </BottomTab.Navigator>
   );

@@ -61,6 +61,9 @@ export const HomeScreen = ({
       case 'satsang':
         navigation.navigate('liveSatsang');
         break;
+      case 'program':
+        navigation.navigate('program');
+        break;
 
       default:
         break;
