@@ -177,7 +177,7 @@ export const GurukulFormValidationSchema =
             .string()
             .trim()
             .required(t('common.EmptyError')),
-          RelativeOfSaint: yup.string(),
+          RelativeOfSaint: yup.string().trim().required(t('common.EmptyError')),
           FromFamily: yup.string().test({
             name: 'FromFamily',
             skipAbsent: true,

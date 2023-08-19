@@ -11,8 +11,11 @@ export const styles = () => {
     },
     NoDataContent: {
       ...CustomFonts.body.large14,
+      fontSize: 16,
       color: 'rgba(23,23,23,0.5)',
       lineHeight: 18,
+      textAlign: 'center',
+      top: 8,
     },
   });
 };

@@ -1,15 +1,12 @@
 import React, {ErrorInfo, ReactNode} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import RNRestart from 'react-native-restart';
-
+import {StyleSheet, View} from 'react-native';
+import {NoData} from '../../ui';
 interface Props {
   children: ReactNode;
 }
-
 interface State {
   hasError: boolean;
 }
-
 class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -31,10 +28,14 @@ class ErrorBoundary extends React.Component<Props, State> {
       // You can render any custom fallback UI
       return (
         <View style={styles.container}>
-          <Text style={styles.message}>
-            Something went wrong.{'\n'} Our team has taken a note of this issue.
-          </Text>
-          <Button title="Try Again" onPress={() => RNRestart.Restart()} />
+          <NoData
+            title="Oops..! An error occurred..!"
+            content={
+              'Our team has taken a note of this issue.' +
+              '\n' +
+              'Please restart your app again to continue..!'
+            }
+          />
         </View>
       );
     }
@@ -48,8 +49,6 @@ export default ErrorBoundary;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   message: {
     fontSize: 16,

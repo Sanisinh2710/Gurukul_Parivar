@@ -143,7 +143,6 @@ export const GurukulInfo = React.memo(
           newData.FromFamily = GurukulRelativeList(t).find(
             items => items.id === newData.FromFamily,
           )?.name;
-
           replace(newData);
           setLoader(false);
         }

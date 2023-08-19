@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import {BASE_URL} from '@env';
+import {useTranslation} from 'react-i18next';
+import {View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { CommonStyle } from '../../../../../assets/styles';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   AdressInfo,
   EduBusinessInfo,
@@ -27,7 +27,7 @@ import {
   setUserData,
   setUserProfilingDone,
 } from '../../../../services';
-import { ProfileSignupEditProps } from '../../../../types';
+import {ProfileSignupEditProps} from '../../../../types';
 import {
   CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
@@ -287,7 +287,16 @@ export const ProfileSignupWithEdit = ({
 
             if (fetchData.data.gurukul_connect_details.saint_from_family) {
               newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'Yes';
+            } else {
+              newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'No';
             }
+
+            newFormData.gurukulInfo.gurukulData[0].relation =
+              fetchData.data.gurukul_connect_details.relation === null ||
+              fetchData.data.gurukul_connect_details.relation === undefined ||
+              fetchData.data.gurukul_connect_details.relation === ''
+                ? ''
+                : fetchData.data.gurukul_connect_details.relation;
 
             newFormData.gurukulInfo.gurukulData[0].FromFamily =
               fetchSaintres.data.saints.find(
