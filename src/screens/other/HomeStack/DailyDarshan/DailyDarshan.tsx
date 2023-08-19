@@ -62,7 +62,6 @@ export const DailyDarshan = ({
   React.useEffect(() => {
     if (GurukulList.length > 0) {
       const name = GurukulList.find(item => item.id == changeValue)?.name;
-      console.log(name);
       setBranchName(name);
     }
   }, [changeValue, GurukulList]);
@@ -108,14 +107,13 @@ export const DailyDarshan = ({
       let newImges = Data.filter(item => {
         if (item.branch === BranchName) {
           return item.image_paths;
-          // console.log(item.image_paths, item.branch);
-          // setDarshanImages(item.image_paths);
         }
       })?.[0]?.image_paths;
 
       setDarshanImages(newImges);
     }
   };
+  console.log(Data, 'DFSFSDDGDG');
   React.useEffect(() => {
     // console.log(Image_Data(), 'this');
     Image_Data();
