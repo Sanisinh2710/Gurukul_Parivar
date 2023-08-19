@@ -40,4 +40,5 @@ export const AllIcons = {
   RoundCheckedCircle: require('../icons/RoundCheckedCircle.png'),
   ArrowSimpleLeft: require('../icons/ArrowSimpleLeft.png'),
   OTPEdit: require('../icons/OTPEdit.png'),
+  // ForwardIcon: require('../icons/ForwardIcon.png'),
 };
