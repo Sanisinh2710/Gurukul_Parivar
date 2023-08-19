@@ -14,6 +14,8 @@ export const styles = () => {
     },
     updateContainer: {
       flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
       width: '100%',
       padding: 5,
       backgroundColor: 'white',
