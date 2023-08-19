@@ -17,7 +17,11 @@
       "SelectValidYear": "Select valid year",
       "SelectValidStd": "Select Valid Standard",
       "Next": "Next",
-      "Update": "Update"
+      "Update": "Update",
+      "PhotoGallery": "Photo Gallery",
+      "AppName": "Gurukul Parivar",
+      "AppExitMsg": "Do you really want to exit the app..?",
+      "TodayEventMsg": "Today's Event"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -219,9 +223,7 @@
       "Title": "Congratulations",
       "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
     },
-    "DailyCalendar": {
-      "Heading": "Daily Calendar"
-    },
+
     "Donation": {
       "Heading": "Donation",
       "Quote": "In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",

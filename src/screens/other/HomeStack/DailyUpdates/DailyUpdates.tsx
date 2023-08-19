@@ -2,14 +2,13 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyUpdatesApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {d} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdates = ({
@@ -18,8 +17,8 @@ export const DailyUpdates = ({
   const style = styles();
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const NewDate = d.toISOString().split('T')[0];
   const commonStyle = CommonStyle();
+  const {t} = useTranslation();
 
   React.useMemo(async () => {
     setLoader(true);
@@ -88,7 +87,7 @@ export const DailyUpdates = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Daily Update'}
+        headerTitle={t('DailyUpdate.Heading')}
       />
       <View style={commonStyle.commonContentView}>
         {loader ? (

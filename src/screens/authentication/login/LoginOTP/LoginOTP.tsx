@@ -103,12 +103,17 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   };
 
   React.useEffect(() => {
+    let flag = 0;
     for (let i = 0; i < num.length; i++) {
-      if (num[i] !== '' || num[i] === undefined) {
-        setDisabled(false);
-      } else {
-        setDisabled(true);
+      if (num[i] === '' || num[i] === undefined) {
+        flag = 1;
+        break;
       }
+    }
+    if (flag === 0) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [num]);
   React.useEffect(() => {
@@ -163,6 +168,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
           </View>
 
           <OtpComponent num={num} setNum={setNum} />
+          {/* <OtpInput /> */}
 
           <View style={style.otpNotRecieveContainer}>
             <Text style={style.smallText}>{t('otpScreen.OtpNotRecieve')} </Text>

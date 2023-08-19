@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
@@ -23,6 +23,8 @@ export const DailyUpdateDetail = ({
   const commonstyle = CommonStyle();
   const Data = route.params.data;
 
+  const {t} = useTranslation();
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -31,11 +33,7 @@ export const DailyUpdateDetail = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Daily Updates'}
-        headerRight={{
-          icon: AllIcons.Filter,
-          onPress: () => {},
-        }}
+        headerTitle={t('DailyUpdate.Heading')}
       />
       <View style={commonstyle.commonContentView}>
         <ScrollView
@@ -59,7 +57,7 @@ export const DailyUpdateDetail = ({
             <Text style={style.content}>{Data.description}</Text>
           </View>
           <View style={{marginTop: 24}}>
-            <Text style={style.title}>Photo Gallery</Text>
+            <Text style={style.title}>{t('common.PhotoGallery')}</Text>
             <FlatList
               horizontal
               contentContainerStyle={{

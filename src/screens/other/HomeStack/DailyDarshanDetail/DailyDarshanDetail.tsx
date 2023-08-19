@@ -4,9 +4,12 @@ import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Image, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {
+  CustomNavigate,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
 
@@ -17,6 +20,7 @@ export const DailyDarshanDetail = ({
   const style = styles();
   const commonStyle = CommonStyle();
   const currentImageIndex = route.params.currentImageIndex;
+
   const [wallpaper, setWallpaper] = React.useState('');
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
@@ -43,7 +47,7 @@ export const DailyDarshanDetail = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '80%', marginTop: '5%'}}>
           <Image
-            source={{uri: `${BASE_URL}${route.params.image}`}}
+            source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
           />
         </View>

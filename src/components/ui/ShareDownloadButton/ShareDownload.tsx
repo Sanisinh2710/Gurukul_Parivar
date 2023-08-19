@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import LottieView from 'lottie-react-native';
+import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
@@ -42,6 +43,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         fromUrl: imgURL!,
         toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
       });
+
       if ((await response.promise).statusCode === 200) {
         const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
@@ -70,9 +72,16 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       downloadImage();
     } else {
       try {
-        const granted = await PermissionsAndroid.request(
-          'android.permission.WRITE_EXTERNAL_STORAGE',
-        );
+        let deviceVersion = DeviceInfo.getSystemVersion();
+        let granted = PermissionsAndroid.RESULTS.DENIED;
+        if (parseInt(deviceVersion) >= 13) {
+          granted = PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          );
+        }
+
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           downloadImage();
           setModalVisible(!modalVisible);
@@ -138,6 +147,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const setWallPaper = async (imgUrl: string, mode: string) => {
     try {
       const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
+      if (result === 'SUCCESS') {
+        Toast.show('Wallpaper set successfully..!', Toast.LONG);
+      }
     } catch (error) {
       console.log(error, 'wallpaper error');
     }

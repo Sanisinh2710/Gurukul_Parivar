@@ -28,7 +28,6 @@ import {
   DailyUpdates,
   DonationScreen,
   EditProfile,
-  FrontDeskScreen,
   HomeScreen,
   LiveSatsang,
   LoginOTP,

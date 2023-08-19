@@ -71,7 +71,9 @@ export const ProfileScreen = ({
         }
         headerRight={{
           icon: AllIcons.Notification,
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate('dailyUpdates');
+          },
         }}
       />
       <ScrollView
@@ -100,6 +102,7 @@ export const ProfileScreen = ({
           {ProfileList.map((item, index) => {
             return (
               <TouchableOpacity
+                activeOpacity={0.8}
                 key={index}
                 onPress={() => {
                   handlePress(item.id);

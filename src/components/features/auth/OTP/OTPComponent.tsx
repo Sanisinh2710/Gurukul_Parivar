@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {TextInput, View} from 'react-native';
 import {COLORS} from '../../../../utils';
 import {useOtpStyle} from './otpStyle';
@@ -45,7 +46,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             }}
             onChangeText={val => {
               const newOtpValue = [...num];
-              newOtpValue[index] = val;
+              newOtpValue[index] = val.trim();
               setNum(newOtpValue);
             }}
             keyboardType="number-pad"

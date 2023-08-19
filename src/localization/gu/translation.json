@@ -17,7 +17,11 @@
       "SelectValidYear": "માન્ય વર્ષ પસંદ કરો",
       "SelectValidStd": "માન્ય વર્ગ પસંદ કરો",
       "Next": "આગળ",
-      "Update": "અપડેટ"
+      "Update": "અપડેટ",
+      "PhotoGallery": "ફોટો ગેલેરી",
+      "AppName": "ગુરુકુલ પરિવાર",
+      "AppExitMsg": "શું તમે વાસ્તવમાં એપને બંધ કરવા માંગો છો..?",
+      "TodayEventMsg": "આજનો દિવસ રળીયામણો"
     },
     "loginScreen": {
       "WelcomeTitle1": "આપનું સ્વાગત છે",
@@ -218,9 +222,6 @@
     "ResultModel": {
       "Title": "અભિનંદન",
       "Content": "તમે ક્વિઝ પૂર્ણ કર્યું છે અને સૉલ્યુશનથી પરંતુ પરંતુ ઉચ્ચ શ્રેણીમાં. શાબાશ! આગળ વધતી રહો!"
-    },
-    "DailyCalendar": {
-      "Heading": "દૈનિક કેલેન્ડર"
     },
     "Donation": {
       "Heading": "દાન",
