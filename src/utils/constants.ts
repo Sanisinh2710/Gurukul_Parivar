@@ -44,7 +44,7 @@ export const GurukulTheme: {[key: string]: Theme} = {
 
 export const nameRegex = /^[a-zA-Z\s]*$/;
 export const phoneRegex = /^[6-9]\d{9}$/;
-export const mailRegex = /^\w+[@]{1}\w+(\.[a-zA-Z]{2,3})+$/;
+export const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const passwordRegex = /^[A-Z]{1}[a-zA-Z]+[@$.]{1}[a-zA-Z\d]+$/;
 
 export const countries = [

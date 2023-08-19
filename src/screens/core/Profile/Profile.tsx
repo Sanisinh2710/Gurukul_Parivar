@@ -19,6 +19,7 @@ import {getUserData, removeAuthToken} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, EditProfile} from '../../../utils';
 import {styles} from './styles';
+import {AllImages} from '../../../../assets/images';
 
 export const ProfileScreen = ({
   navigation,
@@ -83,10 +84,29 @@ export const ProfileScreen = ({
         ]}
         showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
-          <Image
-            source={{uri: `${userData.userdata?.profile}`}}
-            style={{height: 64, width: 64}}
-          />
+          {userData.userdata?.profile.toString().includes('null') ? (
+            <View
+              style={[
+                style.profileImgView,
+                {
+                  backgroundColor: COLORS.primaryLightColor,
+                  justifyContent: 'center',
+                },
+              ]}>
+              <Image
+                source={AllIcons.Avtar}
+                style={{height: '70%', width: '70%', alignSelf: 'center'}}
+                resizeMode="contain"
+              />
+            </View>
+          ) : (
+            <View style={style.profileImgView}>
+              <Image
+                source={{uri: `${userData.userdata?.profile}`}}
+                style={style.profileImg}
+              />
+            </View>
+          )}
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>{userData.userdata.full_name}</Text>
             <Text style={{color: 'rgba(23,23,23,0.5)'}}>

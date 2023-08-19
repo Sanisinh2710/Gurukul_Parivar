@@ -2,7 +2,7 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Alert, FlatList, ScrollView, Text, View} from 'react-native';
+import {Alert, FlatList, Text, View} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -15,7 +15,7 @@ import {
 } from '../../../../components';
 import {DailySatsangApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, d} from '../../../../utils';
+import {COLORS, CustomFonts, d} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,
@@ -29,6 +29,8 @@ export const LiveSatsang = ({
   const commonstyle = CommonStyle();
 
   const [playing, setPlaying] = React.useState(false);
+  let sd = 'https://youtu.be/vhwr4vc_GY0';
+  console.log(sd.toString().split('/')[3]);
 
   const onStateChange = React.useCallback((state: string) => {
     if (state === 'ended') {
@@ -45,7 +47,7 @@ export const LiveSatsang = ({
         setTimeout(() => {
           setData(res.data.live_satasang);
           setLoader(false);
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.log(error);
@@ -73,18 +75,36 @@ export const LiveSatsang = ({
             style={{
               marginTop: '3%',
               gap: 10,
-              paddingBottom: '30%',
             }}>
-            <Text style={{color: COLORS.black}}>YouTube Live Katha</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                color: COLORS.black,
+              }}>
+              YouTube Live Katha
+            </Text>
             <FlatList
-              scrollEnabled={false}
               data={Data}
+              contentContainerStyle={{paddingBottom: '30%'}}
+              showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
-                <View>
+                <View style={{marginVertical: '3%', gap: 15}}>
+                  <Text
+                    style={{
+                      ...CustomFonts.body.large14,
+                      fontSize: 18,
+                      color: COLORS.black,
+                    }}>
+                    {item.title}
+                  </Text>
                   <YoutubePlayer
                     height={200}
                     play={playing}
-                    videoId={item.url.split('=')[1]}
+                    videoId={
+                      item.url.toString().includes('=')
+                        ? item.url.split('=')[1]
+                        : item.url.split('/')[3]
+                    }
                     onChangeState={onStateChange}
                     webViewProps={{
                       containerStyle: {borderRadius: 15},

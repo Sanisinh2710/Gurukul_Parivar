@@ -1,10 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.large36,
@@ -19,6 +16,17 @@ export const styles = () => {
       padding: 20,
       borderRadius: 8,
     },
+    profileImgView: {
+      height: 64,
+      width: 64,
+      overflow: 'hidden',
+      borderRadius: 60,
+    },
+    profileImg: {
+      height: '100%',
+      width: '100%',
+    },
+
     profileName: {
       ...CustomFonts.header.medium20,
       fontSize: 16,
