@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {BASE_URL} from '@env';
-import {useTranslation} from 'react-i18next';
-import {View} from 'react-native';
+import { BASE_URL } from '@env';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../../assets/styles';
+import { CommonStyle } from '../../../../../assets/styles';
 import {
   AdressInfo,
   EduBusinessInfo,
@@ -27,7 +27,7 @@ import {
   setUserData,
   setUserProfilingDone,
 } from '../../../../services';
-import {ProfileSignupEditProps} from '../../../../types';
+import { ProfileSignupEditProps } from '../../../../types';
 import {
   CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
@@ -294,14 +294,14 @@ export const ProfileSignupWithEdit = ({
                 (item: any) =>
                   item.id ===
                   fetchData.data.gurukul_connect_details.saint_from_family,
-              ).type ?? '';
+              )?.type ?? '';
 
             newFormData.gurukulInfo.gurukulData[0].saint_from_family =
               fetchSaintres.data.saints.find(
                 (item: any) =>
                   item.id ===
                   fetchData.data.gurukul_connect_details.saint_from_family,
-              ).id ?? '';
+              )?.id ?? '';
 
             setFormData(newFormData);
           }
@@ -457,9 +457,13 @@ export const ProfileSignupWithEdit = ({
             backenduserresponse.data.personal_details !== undefined &&
             backenduserresponse.data.personal_details !== ''
           ) {
-            const setuserdataresponse = setUserData(
-              backenduserresponse.data.personal_details,
+            let finalData = JSON.parse(
+              JSON.stringify(backenduserresponse.data.personal_details),
             );
+
+            finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+            const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
               setwidth(width + 25);
@@ -477,9 +481,15 @@ export const ProfileSignupWithEdit = ({
 
         // Convert the submitted data in the backend format :-
         const image = {
-          uri: newFormData.completeProfile.profile?.at(0)?.uri,
-          name: newFormData.completeProfile.profile?.at(0)?.fileName,
-          type: newFormData.completeProfile.profile?.at(0)?.type,
+          uri: isString(newFormData.completeProfile.profile)
+            ? newFormData.completeProfile.profile
+            : newFormData.completeProfile.profile?.at(0)?.uri,
+          name: isString(newFormData.completeProfile.profile)
+            ? `${Date.now().toString()}.jpeg`
+            : newFormData.completeProfile.profile?.at(0)?.fileName,
+          type: isString(newFormData.completeProfile.profile)
+            ? 'image/jpeg'
+            : newFormData.completeProfile.profile?.at(0)?.type,
         };
 
         const toSubmitPersonalInfoData: any = {
@@ -602,15 +612,23 @@ export const ProfileSignupWithEdit = ({
             backenduserresponse.data.personal_details !== undefined &&
             backenduserresponse.data.personal_details !== ''
           ) {
-            const setuserdataresponse = setUserData(
-              backenduserresponse.data.personal_details,
+            let finalData = JSON.parse(
+              JSON.stringify(backenduserresponse.data.personal_details),
             );
+
+            finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+            const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
               const setuserprofileDone = setUserProfilingDone(true);
               if (setuserprofileDone === 'SUCCESS') {
                 //After successfull save and exit:-
-                navigation.goBack();
+                // navigation.goBack();
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'BottomNavBar'}],
+                });
               }
             }
           }
@@ -721,6 +739,20 @@ export const ProfileSignupWithEdit = ({
           } else {
             Toast.show(response.message, Toast.SHORT);
           }
+        }
+      }
+      if (typecase === 'skip') {
+        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
+        if (receivedData !== undefined) {
+          newFormData.gurukulInfo = receivedData;
+
+          setFormData(newFormData);
+          const setuserprofileDone = setUserProfilingDone(true);
+          if (setuserprofileDone === 'SUCCESS') {
+            navigation.goBack();
+          }
+        } else {
+          navigation.goBack();
         }
       }
     }

@@ -7,7 +7,6 @@ import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   DropDownModel,
@@ -80,14 +79,17 @@ export const ProfileScreen = ({
           commonStyle.commonContentView,
           {paddingBottom: '25%'},
         ]}
-        showsVerticalScrollIndicator={true}>
+        showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
-          <Image source={AllImages.Person} style={{height: 64, width: 64}} />
+          <Image
+            source={{uri: `${userData.userdata?.profile}`}}
+            style={{height: 64, width: 64}}
+          />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>{userData.userdata.full_name}</Text>
             <Text style={{color: 'rgba(23,23,23,0.5)'}}>
-              {userData.userdata.primary_contact_cc.toString().split('(')[0]}
-              {userData.userdata.primary_contact}
+              {userData.userdata?.primary_contact_cc?.toString()?.split('(')[0]}
+              {userData.userdata?.primary_contact}
             </Text>
             <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>

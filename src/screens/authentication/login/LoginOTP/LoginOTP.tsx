@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, Image, Pressable, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
@@ -12,9 +13,11 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
+  PersonalInfoGetDetailsApi,
   VerifyOTPApi,
   isProfilingDone,
   setAuthToken,
+  setUserData,
 } from '../../../../services';
 import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
@@ -60,7 +63,30 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             setIsApiloading(false);
 
             if (isProfileSignupDone === 'SUCCESS') {
-              navigation.replace('BottomNavBar');
+              const backenduserresponse = await PersonalInfoGetDetailsApi();
+
+              if (backenduserresponse.resType === 'SUCCESS') {
+                if (
+                  backenduserresponse.data.personal_details !== null &&
+                  backenduserresponse.data.personal_details !== undefined &&
+                  backenduserresponse.data.personal_details !== ''
+                ) {
+                  let finalData = JSON.parse(
+                    JSON.stringify(backenduserresponse.data.personal_details),
+                  );
+
+                  finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+                  const setuserdataresponse = setUserData(finalData);
+
+                  if (setuserdataresponse === 'SUCCESS') {
+                    navigation.replace('BottomNavBar');
+                  }
+                }
+              } else {
+                setIsApiloading(false);
+                Toast.show(backenduserresponse.message, 2);
+              }
             } else {
               navigation.replace('LoginSuccess', {type: 'Login'});
             }

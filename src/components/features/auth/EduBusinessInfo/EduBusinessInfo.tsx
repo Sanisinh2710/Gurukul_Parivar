@@ -113,15 +113,20 @@ export const EduBusinessInfo = React.memo(
 
     const onSubmit = (data: EduBusinessInfoValidationSchemaType) => {
       if (data !== undefined) {
-        onSubmitEvent(data, rightButtonProps ? rightButtonProps.case : 'next');
+        onSubmitEvent(data, 'next');
+      }
+    };
+
+    const leftOnSubmitWithData = (
+      data: EduBusinessInfoValidationSchemaType,
+    ) => {
+      if (data !== undefined) {
+        onSubmitEvent(data, 'exit');
       }
     };
 
     const leftOnSubmit = () => {
-      onSubmitEvent(
-        initialValues,
-        leftButtonProps ? leftButtonProps.case : 'skip',
-      );
+      onSubmitEvent(initialValues, 'skip');
     };
 
     React.useEffect(() => {
@@ -186,7 +191,11 @@ export const EduBusinessInfo = React.memo(
                 title={
                   leftButtonProps ? leftButtonProps.title : t('common.SkipNow')
                 }
-                onPress={leftOnSubmit}
+                onPress={
+                  leftButtonProps
+                    ? handleSubmit(leftOnSubmitWithData)
+                    : leftOnSubmit
+                }
                 buttonStyle={style.submitButtonStyle}
               />
               <PrimaryButton

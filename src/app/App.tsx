@@ -8,6 +8,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Loader} from '../components';
+import ErrorBoundary from '../components/features/ErrorBoundary/ErrorBoundary';
 import {persistor, store} from '../redux/store';
 import {Routes} from '../routes';
 import {storage} from '../storage';
@@ -55,7 +56,9 @@ export const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Loader />}>
-        <Routes />
+        <ErrorBoundary>
+          <Routes />
+        </ErrorBoundary>
       </PersistGate>
     </Provider>
   );

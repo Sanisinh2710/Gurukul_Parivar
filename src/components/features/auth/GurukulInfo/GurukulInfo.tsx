@@ -339,14 +339,11 @@ export const GurukulInfo = React.memo(
         }
       });
 
-      onSubmitEvent(newData, rightButtonProps ? rightButtonProps.case : 'next');
+      onSubmitEvent(newData, 'next');
     };
 
     const onSubmitWithoutExstudent = () => {
-      onSubmitEvent(
-        initialValues,
-        leftButtonProps ? leftButtonProps.case : 'skip',
-      );
+      onSubmitEvent(initialValues, 'skip');
     };
 
     return (

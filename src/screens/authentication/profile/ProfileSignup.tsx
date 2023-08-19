@@ -473,9 +473,15 @@ export const ProfileSignup = ({
 
         // Convert the submitted data in the backend format :-
         const image = {
-          uri: newFormData.completeProfile.profile?.at(0)?.uri,
-          name: newFormData.completeProfile.profile?.at(0)?.fileName,
-          type: newFormData.completeProfile.profile?.at(0)?.type,
+          uri: isString(newFormData.completeProfile.profile)
+            ? newFormData.completeProfile.profile
+            : newFormData.completeProfile.profile?.at(0)?.uri,
+          name: isString(newFormData.completeProfile.profile)
+            ? `${Date.now().toString()}.jpeg`
+            : newFormData.completeProfile.profile?.at(0)?.fileName,
+          type: isString(newFormData.completeProfile.profile)
+            ? 'image/jpeg'
+            : newFormData.completeProfile.profile?.at(0)?.type,
         };
 
         const toSubmitPersonalInfoData: any = {
@@ -598,9 +604,13 @@ export const ProfileSignup = ({
             backenduserresponse.data.personal_details !== undefined &&
             backenduserresponse.data.personal_details !== ''
           ) {
-            const setuserdataresponse = setUserData(
-              backenduserresponse.data.personal_details,
+            let finalData = JSON.parse(
+              JSON.stringify(backenduserresponse.data.personal_details),
             );
+
+            finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+            const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
               const setuserprofileDone = setUserProfilingDone(true);
