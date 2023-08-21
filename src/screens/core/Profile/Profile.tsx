@@ -52,7 +52,7 @@ export const ProfileScreen = ({
   const [modelVisible, setModelVisible] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
-
+  const [imageUpdate, setImageUpdate] = React.useState(true);
   const {t, i18n} = useTranslation();
 
   const ProfileList = React.useMemo(() => {
@@ -68,50 +68,43 @@ export const ProfileScreen = ({
     name: '',
     type: '',
   });
+  console.log(userData, 'DATA');
+  const userProfileUpdate = async (selectedImage: any) => {
+    if (userData.resType == 'SUCCESS') {
+      const userDataClone = JSON.parse(JSON.stringify(userData.userdata));
+      userDataClone.profile = selectedImage;
+      userDataClone.dob = CustomBackendDateSplitAndFormat(
+        userDataClone.dob,
+        '-',
+        '/',
+        'mm/dd/yyyy',
+      );
 
-  React.useMemo(async () => {
-    if (
-      profileImage.uri != '' &&
-      profileImage.uri !== null &&
-      profileImage.uri !== undefined
-    ) {
-      if (userData.resType == 'SUCCESS') {
-        const userDataClone = JSON.parse(JSON.stringify(userData.userdata));
-        userDataClone.profile = profileImage;
-        userDataClone.dob = CustomBackendDateSplitAndFormat(
-          userDataClone.dob,
-          '-',
-          '/',
-          'mm/dd/yyyy',
-        );
+      const userDataCloneObj = {...userDataClone};
 
-        const userDataCloneObj = {...userDataClone};
-
-        for (let i in userDataClone) {
-          if (
-            userDataCloneObj[i] === null ||
-            userDataCloneObj[i] === undefined
-          ) {
-            delete userDataCloneObj[i];
-          }
-        }
-
-        const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
-
-        if (response.resType == 'SUCCESS') {
-          const updatedReponse = await PersonalInfoGetDetailsApi();
-          if (response.resType == 'SUCCESS') {
-            const personalInfo = updatedReponse.data.personal_details;
-            personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
-            const updateResult = setUserData(personalInfo);
-            if (updateResult == 'SUCCESS')
-              Toast.show('Profile Image Updated Successfully', Toast.LONG);
-          }
-        } else {
+      for (let i in userDataClone) {
+        if (userDataCloneObj[i] === null || userDataCloneObj[i] === undefined) {
+          delete userDataCloneObj[i];
         }
       }
+      console.log(userDataCloneObj, 'ONJ USER');
+      const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
+
+      if (response.resType == 'SUCCESS') {
+        const updatedReponse = await PersonalInfoGetDetailsApi();
+        if (response.resType == 'SUCCESS') {
+          const personalInfo = updatedReponse.data.personal_details;
+          personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
+          const updateResult = setUserData(personalInfo);
+          if (updateResult == 'SUCCESS')
+            Toast.show('Profile Image Updated Successfully', Toast.LONG);
+        }
+      } else {
+        Toast.show(`Image Couldn't Get Updated`, Toast.LONG);
+      }
+      return response;
     }
-  }, [profileImage.uri]);
+  };
 
   const style = styles();
   const commonStyle = CommonStyle();
@@ -137,21 +130,39 @@ export const ProfileScreen = ({
     switch (val) {
       case 'gallery':
         let pathGallery = await chooseFile('photo');
-        if (pathGallery)
-          setProfileImage({
+        if (pathGallery) {
+          userProfileUpdate({
             uri: pathGallery[0].uri,
             name: pathGallery[0].fileName,
             type: pathGallery[0].type,
+          }).then(res => {
+            if (res?.resType == 'SUCCESS') {
+              setProfileImage({
+                uri: pathGallery[0].uri,
+                name: pathGallery[0].fileName,
+                type: pathGallery[0].type,
+              });
+            }
           });
+        }
         break;
       case 'camera':
         let pathCamera = await captureImage('photo');
-        if (pathCamera)
-          setProfileImage({
+        if (pathCamera) {
+          userProfileUpdate({
             uri: pathCamera[0].uri,
             name: pathCamera[0].fileName,
             type: pathCamera[0].type,
+          }).then(res => {
+            if (res?.resType == 'SUCCESS') {
+              setProfileImage({
+                uri: pathCamera[0].uri,
+                name: pathCamera[0].fileName,
+                type: pathCamera[0].type,
+              });
+            }
           });
+        }
         break;
       default:
         break;
