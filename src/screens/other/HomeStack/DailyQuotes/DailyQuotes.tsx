@@ -214,14 +214,16 @@ export const DailyQuotes = ({
                             />
                           </View>
                           <View>
-                            <Text style={style.quote}>{item.quote}</Text>
+                            <Text style={style.quote} selectable={true}>
+                              {item.quote}
+                            </Text>
                           </View>
                         </View>
                       )}
                     />
                     <ShareDownload
                       wallpaper={false}
-                      imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
+                      imgURL={DailyQuotes?.[itemIndex]?.image}
                     />
                   </View>
                 ) : (
