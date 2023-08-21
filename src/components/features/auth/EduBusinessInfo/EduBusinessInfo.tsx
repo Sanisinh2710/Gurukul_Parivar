@@ -49,6 +49,7 @@ export const EduBusinessInfo = React.memo(
       type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
+      required: boolean;
     }[] = [
       {
         name: 'education',
@@ -66,6 +67,7 @@ export const EduBusinessInfo = React.memo(
           'Ph.d.',
           'BE',
         ],
+        required: true,
       },
       {
         name: 'occupation',
@@ -77,6 +79,7 @@ export const EduBusinessInfo = React.memo(
           showHeading: true,
           wantFullSpace: true,
         },
+        required: true,
       },
       {
         name: 'occupation_type',
@@ -84,6 +87,7 @@ export const EduBusinessInfo = React.memo(
         placeholder: t('education/BusinessInfo.OccuTypePlaceHolder'),
         type: 'select',
         menuList: OccupationList,
+        required: true,
       },
       {
         name: 'skills',
@@ -91,12 +95,14 @@ export const EduBusinessInfo = React.memo(
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
         menuList: skillsList,
+        required: true,
       },
       {
         name: 'other',
         lable: t('education/BusinessInfo.Other'),
         placeholder: t('education/BusinessInfo.OtherPlaceHolder'),
         type: 'textarea',
+        required: false,
       },
     ];
 
@@ -178,6 +184,7 @@ export const EduBusinessInfo = React.memo(
                           onChange={onChange}
                           menuList={item.menuList}
                           customProps={item.customProps}
+                          required={item.required}
                           error={errors[item.name]?.message?.toString()}
                         />
                       );

@@ -2,7 +2,15 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Image, Pressable, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -163,63 +171,72 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
 
   return (
     <ScreenWrapper>
-      <ScreenHeader
-        showLeft={true}
-        leftOnPress={() => {
-          navigation.goBack();
-        }}
-      />
-      <View style={CommonStyles.commonContentView}>
-        <View style={style.textWrapper}>
-          <Text style={style.headerText}>{t('otpScreen.OtpHeader')}</Text>
-          <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
-        </View>
-        <View style={style.otpContainer}>
-          <Text style={style.otpContainerHeader}>
-            {t('otpScreen.OtpContainerText')}
-          </Text>
-          <View style={style.phoneEditContainer}>
-            {primary_email && (
-              <Text style={style.phoneNumber}>{primary_email}</Text>
-            )}
-            <View style={style.editIconStyle}>
-              <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <ScreenHeader
+          showLeft={true}
+          leftOnPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={CommonStyles.commonContentView}>
+          <View style={style.textWrapper}>
+            <Text style={style.headerText}>{t('otpScreen.OtpHeader')}</Text>
+            <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
+          </View>
+          <View style={style.otpContainer}>
+            <Text style={style.otpContainerHeader}>
+              {t('otpScreen.OtpContainerText')}
+            </Text>
+            <View style={style.phoneEditContainer}>
+              {primary_email && (
+                <Text style={style.phoneNumber}>{primary_email}</Text>
+              )}
+              <View
+                style={style.editIconStyle}
+                onTouchEnd={() => navigation.goBack()}>
+                <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
+              </View>
             </View>
+
+            <OtpComponent num={num} setNum={setNum} />
+            {/* <OtpInput /> */}
+
+            <View style={style.otpNotRecieveContainer}>
+              <Text style={style.smallText}>
+                {t('otpScreen.OtpNotRecieve')}{' '}
+              </Text>
+
+              {countdown > 0 ? (
+                <Text style={style.otpResend}>{formatTime(countdown)}</Text>
+              ) : isApiResendLoading ? (
+                <ActivityIndicator color={COLORS.primaryColor} size={20} />
+              ) : (
+                <Pressable onPress={handleResendOTP}>
+                  <Text style={style.otpResend}>
+                    {t('otpScreen.OtpResend')}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+            <PrimaryButton
+              onPress={handleLogin}
+              title={t('otpScreen.Verify&Login')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
+              disabled={disabled}
+            />
           </View>
-
-          <OtpComponent num={num} setNum={setNum} />
-          {/* <OtpInput /> */}
-
-          <View style={style.otpNotRecieveContainer}>
-            <Text style={style.smallText}>{t('otpScreen.OtpNotRecieve')} </Text>
-
-            {countdown > 0 ? (
-              <Text style={style.otpResend}>{formatTime(countdown)}</Text>
-            ) : isApiResendLoading ? (
-              <ActivityIndicator color={COLORS.primaryColor} size={20} />
-            ) : (
-              <Pressable onPress={handleResendOTP}>
-                <Text style={style.otpResend}>{t('otpScreen.OtpResend')}</Text>
-              </Pressable>
-            )}
-          </View>
-          <PrimaryButton
-            onPress={handleLogin}
-            title={t('otpScreen.Verify&Login')}
-            customWidget={
-              isApiLoading ? (
-                <>
-                  <ActivityIndicator
-                    size={25}
-                    color={COLORS.darkModetextColor}
-                  />
-                </>
-              ) : undefined
-            }
-            disabled={disabled}
-          />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ScreenWrapper>
   );
 };

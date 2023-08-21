@@ -38,6 +38,7 @@ export const CompleteYourProfile = React.memo(
         name: string;
         placeholder: string;
         label: string;
+        required: boolean;
       };
       gurukulName: {
         icon?: any;
@@ -45,6 +46,7 @@ export const CompleteYourProfile = React.memo(
         name: string;
         placeholder: string;
         label: string;
+        required: boolean;
       };
     } = {
       profilePic: {
@@ -52,12 +54,14 @@ export const CompleteYourProfile = React.memo(
         type: 'photo',
         name: 'profile',
         placeholder: t('uploadPhoto.PickPhotoBTN'),
+        required: false,
       },
       gurukulName: {
         label: t('uploadPhoto.DropdownTitle'),
         type: 'select',
         name: 'branch_id',
         placeholder: t('uploadPhoto.DropdownLable'),
+        required: true,
       },
     };
 
@@ -120,6 +124,7 @@ export const CompleteYourProfile = React.memo(
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
+                      required={completeProfileInputList.profilePic.required}
                       error={errors[
                         completeProfileInputList.profilePic.name
                       ]?.message?.toString()}
@@ -153,6 +158,9 @@ export const CompleteYourProfile = React.memo(
                           }
                           value={value}
                           onBlur={onBlur}
+                          required={
+                            completeProfileInputList.gurukulName.required
+                          }
                           onChange={onChange}
                           error={errors[
                             completeProfileInputList.gurukulName.name

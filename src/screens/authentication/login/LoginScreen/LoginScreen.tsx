@@ -4,7 +4,14 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Image, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -135,86 +142,89 @@ export const LoginScreen = ({
   } else {
     return (
       <ScreenWrapper>
-        <View style={commonStyle.commonContentView}>
-          {/* Header:------------------------------------------------------------------------ */}
-          <View key={'LoginFormHeader'} style={style.headerView}>
-            <View style={style.imgLogoView}>
-              <Image source={AllImages.AppLogo} style={style.imgLogo} />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+          <View style={commonStyle.commonContentView}>
+            {/* Header:------------------------------------------------------------------------ */}
+            <View key={'LoginFormHeader'} style={style.headerView}>
+              <View style={style.imgLogoView}>
+                <Image source={AllImages.AppLogo} style={style.imgLogo} />
+              </View>
+              <View style={style.welcomeTitleView}>
+                <Text style={style.welcomeTitle1Text}>
+                  {t('loginScreen.WelcomeTitle1')}
+                </Text>
+                <Text style={style.welcomeTitle2Text}>
+                  {t('loginScreen.WelcomeTitle2')}
+                </Text>
+                <Text style={style.welcomeSubtitleText}>
+                  {t('loginScreen.WelcomeSubtitle')}
+                </Text>
+              </View>
             </View>
-            <View style={style.welcomeTitleView}>
-              <Text style={style.welcomeTitle1Text}>
-                {t('loginScreen.WelcomeTitle1')}
-              </Text>
-              <Text style={style.welcomeTitle2Text}>
-                {t('loginScreen.WelcomeTitle2')}
-              </Text>
-              <Text style={style.welcomeSubtitleText}>
-                {t('loginScreen.WelcomeSubtitle')}
-              </Text>
-            </View>
-          </View>
 
-          {/* FormInputs:------------------------------------------------------------------------ */}
-          <View key={'LoginFormInputs'} style={style.formInputsView}>
-            <Controller
-              control={control}
-              name="primary_email"
-              render={({field: {onBlur, onChange, value}}) => {
-                return (
-                  <FormInput
-                    type={'email'}
-                    name={'primary_email'}
-                    label={t('personalInfo.EmailAddress')}
-                    placeholder={t('personalInfo.EnterYourEmailPlaceholder')}
-                    value={value}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    editable={true}
-                    error={errors['primary_email']?.message?.toString()}
-                    state={{
-                      countryCodeSelect,
-                      setCountryCodeSelect,
-                    }}
-                  />
-                );
-              }}
-            />
-          </View>
-
-          {/* LoginFormFooter:------------------------------------------------------------------------ */}
-          <View key={'LoginFormFooter'} style={style.footerView}>
-            <PrimaryButton
-              title={t('common.Signin')}
-              customWidget={
-                isApiLoading ? (
-                  <>
-                    <ActivityIndicator
-                      size={25}
-                      color={COLORS.darkModetextColor}
+            {/* FormInputs:------------------------------------------------------------------------ */}
+            <View key={'LoginFormInputs'} style={style.formInputsView}>
+              <Controller
+                control={control}
+                name="primary_email"
+                render={({field: {onBlur, onChange, value}}) => {
+                  return (
+                    <FormInput
+                      type={'email'}
+                      name={'primary_email'}
+                      label={t('personalInfo.EmailAddress')}
+                      placeholder={t('personalInfo.EnterYourEmailPlaceholder')}
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      editable={true}
+                      error={errors['primary_email']?.message?.toString()}
+                      state={{
+                        countryCodeSelect,
+                        setCountryCodeSelect,
+                      }}
                     />
-                  </>
-                ) : undefined
-              }
-              onPress={handleSubmit(onSubmit)}
-              disabled={disabled}
-            />
-            <Text style={style.footerText}>
-              {t('loginScreen.FooterText1')}{' '}
-              <Text style={style.footerRedText}>{t('loginScreen.FT1')}</Text>{' '}
-              {t('loginScreen.FooterText2').split(' ')[0]}
-              <Text style={style.footerRedText}>
-                {' '}
-                {t('loginScreen.FT2')}
-              </Text>{' '}
-              {t('loginScreen.FooterText2')
-                .split(' ')
-                .filter((val: any, index: number) => {
-                  return index !== 0 && val;
-                })
-                .join(' ')}
-            </Text>
+                  );
+                }}
+              />
+            </View>
+
+            {/* LoginFormFooter:------------------------------------------------------------------------ */}
+            <View key={'LoginFormFooter'} style={style.footerView}>
+              <PrimaryButton
+                title={t('common.Signin')}
+                customWidget={
+                  isApiLoading ? (
+                    <>
+                      <ActivityIndicator
+                        size={25}
+                        color={COLORS.darkModetextColor}
+                      />
+                    </>
+                  ) : undefined
+                }
+                onPress={handleSubmit(onSubmit)}
+                disabled={disabled}
+              />
+              <Text style={style.footerText}>
+                {t('loginScreen.FooterText1')}{' '}
+                <Text style={style.footerRedText}>{t('loginScreen.FT1')}</Text>{' '}
+                {t('loginScreen.FooterText2').split(' ')[0]}
+                <Text style={style.footerRedText}>
+                  {' '}
+                  {t('loginScreen.FT2')}
+                </Text>{' '}
+                {t('loginScreen.FooterText2')
+                  .split(' ')
+                  .filter((val: any, index: number) => {
+                    return index !== 0 && val;
+                  })
+                  .join(' ')}
+              </Text>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
 
         {/* Language Model.................................................................. */}
         <DropDownModel
