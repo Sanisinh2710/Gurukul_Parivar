@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
@@ -8,6 +9,7 @@ import {
   ActivityIndicator,
   Image,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Text,
   View,
@@ -209,9 +211,15 @@ export const LoginScreen = ({
               />
               <Text style={style.footerText}>
                 {t('loginScreen.FooterText1')}{' '}
-                <Text style={style.footerRedText}>{t('loginScreen.FT1')}</Text>{' '}
+                <Text
+                  style={style.footerRedText}
+                  onPress={() => Linking.openURL(`${BASE_URL}/term&condition`)}>
+                  {t('loginScreen.FT1')}
+                </Text>{' '}
                 {t('loginScreen.FooterText2').split(' ')[0]}
-                <Text style={style.footerRedText}>
+                <Text
+                  style={style.footerRedText}
+                  onPress={() => Linking.openURL(`${BASE_URL}/privacy-policy`)}>
                   {' '}
                   {t('loginScreen.FT2')}
                 </Text>{' '}
