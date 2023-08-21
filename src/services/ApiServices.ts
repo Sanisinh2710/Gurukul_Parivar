@@ -122,7 +122,7 @@ export const DailyQuotesApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
   return await apiRequest(DAILY_QUOTES_GET_ENDPOINT, 'get', {date: newDate});
 };
-  
+
 export const DailyDarshanApi = async (date: Date, time: string) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
   return await apiRequest(DAILY_DARSHAN_GET_ENDPOINT, 'get', {
@@ -179,6 +179,8 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
     newUserPersonalInfo.profile === undefined
       ? newUserPersonalInfo
       : payloadData;
+
+  console.log(finalPayload, 'FINAL');
 
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,

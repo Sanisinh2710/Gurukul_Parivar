@@ -4,7 +4,15 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
@@ -16,10 +24,24 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {getUserData, removeAuthToken} from '../../../services';
+import {
+  PersonalInfoGetDetailsApi,
+  PersonalInfoSaveDetailsApi,
+  getUserData,
+  removeAuthToken,
+  setUserData,
+} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {COLORS, EditProfile} from '../../../utils';
+import {
+  COLORS,
+  CustomBackendDateSplitAndFormat,
+  EditProfile,
+  captureImage,
+  chooseFile,
+} from '../../../utils';
 import {styles} from './styles';
+import Toast from 'react-native-simple-toast';
+import {BASE_URL} from '@env';
 
 export const ProfileScreen = ({
   navigation,
@@ -29,6 +51,7 @@ export const ProfileScreen = ({
 >) => {
   const [modelVisible, setModelVisible] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
+  const [profileModel, setProfileModel] = React.useState(false);
 
   const {t, i18n} = useTranslation();
 
@@ -39,6 +62,56 @@ export const ProfileScreen = ({
   const userData = React.useMemo(() => {
     return getUserData();
   }, []);
+
+  const [profileImage, setProfileImage] = React.useState<{[key: string]: any}>({
+    uri: userData.userdata?.profile,
+    name: '',
+    type: '',
+  });
+
+  React.useMemo(async () => {
+    if (
+      profileImage.uri != '' &&
+      profileImage.uri !== null &&
+      profileImage.uri !== undefined
+    ) {
+      if (userData.resType == 'SUCCESS') {
+        const userDataClone = JSON.parse(JSON.stringify(userData.userdata));
+        userDataClone.profile = profileImage;
+        userDataClone.dob = CustomBackendDateSplitAndFormat(
+          userDataClone.dob,
+          '-',
+          '/',
+          'mm/dd/yyyy',
+        );
+
+        const userDataCloneObj = {...userDataClone};
+
+        for (let i in userDataClone) {
+          if (
+            userDataCloneObj[i] === null ||
+            userDataCloneObj[i] === undefined
+          ) {
+            delete userDataCloneObj[i];
+          }
+        }
+
+        const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
+
+        if (response.resType == 'SUCCESS') {
+          const updatedReponse = await PersonalInfoGetDetailsApi();
+          if (response.resType == 'SUCCESS') {
+            const personalInfo = updatedReponse.data.personal_details;
+            personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
+            const updateResult = setUserData(personalInfo);
+            if (updateResult == 'SUCCESS')
+              Toast.show('Profile Image Updated Successfully', Toast.LONG);
+          }
+        } else {
+        }
+      }
+    }
+  }, [profileImage.uri]);
 
   const style = styles();
   const commonStyle = CommonStyle();
@@ -60,6 +133,31 @@ export const ProfileScreen = ({
     }
   };
 
+  const handleProfile = async (val: string) => {
+    switch (val) {
+      case 'gallery':
+        let pathGallery = await chooseFile('photo');
+        if (pathGallery)
+          setProfileImage({
+            uri: pathGallery[0].uri,
+            name: pathGallery[0].fileName,
+            type: pathGallery[0].type,
+          });
+        break;
+      case 'camera':
+        let pathCamera = await captureImage('photo');
+        if (pathCamera)
+          setProfileImage({
+            uri: pathCamera[0].uri,
+            name: pathCamera[0].fileName,
+            type: pathCamera[0].type,
+          });
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -75,6 +173,7 @@ export const ProfileScreen = ({
           onPress: () => {},
         }}
       />
+
       <ScrollView
         contentContainerStyle={[
           commonStyle.commonContentView,
@@ -82,11 +181,25 @@ export const ProfileScreen = ({
         ]}
         showsVerticalScrollIndicator={true}>
         <View style={style.imageContainer}>
-          <Image source={AllImages.Person} style={{height: 64, width: 64}} />
+          <View onTouchEnd={() => setProfileModel(true)}>
+            <View style={{height: 64, width: 64}}>
+              <Image
+                source={
+                  profileImage.uri != ''
+                    ? {uri: profileImage.uri}
+                    : AllIcons.ProfileUser
+                }
+                style={{height: '100%', width: '100%', borderRadius: 50}}
+              />
+            </View>
+            <View style={style.pictureUpdateIcon}>
+              <Image source={AllIcons.Camera} style={{height: 20, width: 20}} />
+            </View>
+          </View>
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>{userData.userdata.full_name}</Text>
             <Text style={{color: 'rgba(23,23,23,0.5)'}}>
-              {userData.userdata.primary_contact_cc.toString().split('(')[0]}
+              {userData.userdata.primary_contact_cc?.toString().split('(')[0]}
               {userData.userdata.primary_contact}
             </Text>
             <View style={style.familyIdView}>
@@ -217,6 +330,29 @@ export const ProfileScreen = ({
               </View>
             </View>
           }
+        />
+        <DropDownModel
+          modelVisible={profileModel}
+          setModelVisible={setProfileModel}
+          customModelchild={
+            <View style={{justifyContent: 'center'}}>
+              <Pressable
+                onPress={() => {
+                  handleProfile('gallery');
+                }}
+                style={{justifyContent: 'center'}}>
+                <Text style={style.pictureUpdateText}>Upload From Gallery</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  handleProfile('camera');
+                }}>
+                <Text style={style.pictureUpdateText}>Take Photo</Text>
+              </Pressable>
+            </View>
+          }
+          type={'none'}
+          modalHeight={'30%'}
         />
       </ScrollView>
     </ScreenWrapper>
