@@ -63,7 +63,9 @@ export const CalendarScreen = ({
           setLoader(false);
         }, 200);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, [selectedDate]);
 
   React.useEffect(() => {

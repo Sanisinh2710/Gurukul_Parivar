@@ -80,7 +80,7 @@ export const HomeScreen = ({
         navigation.navigate('dailyDarshan');
         break;
       case 'quotes':
-        // navigation.navigate('dailyQuotes');
+        navigation.navigate('dailyQuotes');
         break;
       case 'update':
         navigation.navigate('dailyUpdates');

@@ -13,7 +13,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {d, options} from '../../../../utils';
+import {options} from '../../../../utils';
 import {styles} from './styles';
 export const DailyUpdateDetail = ({
   route,
@@ -44,7 +44,7 @@ export const DailyUpdateDetail = ({
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
             <Text style={style.date}>
-              {d.toLocaleDateString('en-IN', options)}
+              {new Date(Data.date).toLocaleString('en-US', options)}
             </Text>
           </View>
           <View style={style.imageContainer}>

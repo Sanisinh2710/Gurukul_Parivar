@@ -33,11 +33,12 @@ export const DailyUpdates = ({
               images: any;
               title: any;
               created_at: string | number | Date;
+              date: any;
             }) => {
               data.description = data.description;
               data.images = data.images;
               data.title = data.title;
-
+              data.date = data.created_at;
               if (
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
