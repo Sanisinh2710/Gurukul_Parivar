@@ -3,7 +3,7 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, Text, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -49,6 +49,8 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
+  console.log(todayEvent);
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -56,21 +58,14 @@ export const CalendarScreen = ({
         `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
       );
       const res = await CalendarGetApi(newDate);
-
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
           setData(res.data.calendar);
           setLoader(false);
         }, 200);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [selectedDate]);
-  console.log(
-    todayEvent.filter(event => event.date === d.toISOString().substring(0, 10)),
-    'event',
-  );
 
   React.useEffect(() => {
     Data.map(item => setEvents(item.events));
@@ -90,41 +85,51 @@ export const CalendarScreen = ({
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         {loader ? (
           <Loader />
-        ) : Data.length > 0 && Data[0].image != undefined ? (
-          <View style={{backgroundColor: 'blue', height: '30%'}}>
+        ) : Data.length > 0 && Data[0].image !== undefined ? (
+          <View>
             {todayEvent.filter(
               // event => event.date === d.toISOString().substring(0, 10),
               event => event.date === d.toISOString().substring(0, 10),
-            ) && (
-              <View>
-                <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
-              </View>
+            ).length > 0 && (
+              <>
+                <View>
+                  <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
+                </View>
+                <ScrollView style={{height: '28%'}}>
+                  {todayEvent
+                    .filter(
+                      event => event.date === d.toISOString().substring(0, 10),
+                    )
+                    .map((item, index) => (
+                      <View key={index} style={style.textBoxContainer}>
+                        <View style={style.dateContainer}>
+                          <Text style={style.date}>
+                            {item.date.split('-')[2]}
+                          </Text>
+                          <Text style={style.day}>
+                            {daysArray[new Date(item.date).getDay()]}
+                          </Text>
+                        </View>
+                        <View style={style.contentContainer}>
+                          <Text style={style.content1}>{item.title}</Text>
+                          <Text style={style.content2}>{item.description}</Text>
+                        </View>
+                      </View>
+                    ))}
+                </ScrollView>
+              </>
             )}
 
-            {todayEvent
-              .filter(event => event.date === d.toISOString().substring(0, 10))
-              .map((item, index) => (
-                <>
-                  <View key={index} style={style.textBoxContainer}>
-                    <View style={style.dateContainer}>
-                      <Text style={style.date}>{item.date.split('-')[2]}</Text>
-                      <Text style={style.day}>
-                        {daysArray[new Date(item.date).getDay()]}
-                      </Text>
-                    </View>
-                    <View style={style.contentContainer}>
-                      <Text style={style.content1}>{item.title}</Text>
-                      <Text style={style.content2}>{item.description}</Text>
-                    </View>
-                  </View>
-                </>
-              ))}
-
             <View
-              style={{
-                marginTop: '15%',
-                alignItems: 'center',
-              }}>
+              style={[
+                {marginTop: '15%', alignSelf: 'center'},
+                todayEvent.filter(
+                  // event => event.date === d.toISOString().substring(0, 10),
+                  event => event.date === d.toISOString().substring(0, 10),
+                ).length === 0 && {
+                  marginTop: '50%',
+                },
+              ]}>
               <Image
                 source={{uri: `${BASE_URL}${Data[0].image}`}}
                 style={{height: 264, width: 345}}
