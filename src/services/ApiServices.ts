@@ -19,6 +19,7 @@ import {
   PERSONAL_INFO_POST_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
   SAINT_NAME_GET_ENDPOINT,
+  SLIDER_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
 import axios, {AxiosResponse} from 'axios';
@@ -228,4 +229,8 @@ export const AddressDeleteApi = async (id: any) => {
 export const CalendarGetApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
   return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {date: newDate});
+};
+
+export const SliderGetApi = async () => {
+  return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
 };

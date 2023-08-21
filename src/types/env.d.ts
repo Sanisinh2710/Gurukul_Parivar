@@ -21,4 +21,5 @@ declare module '@env' {
   export const SAINTFROMFAMILY_GET_ENDPOINT: string;
   export const ADDRESS_DELETE_ENDPOINT: string;
   export const CALENDAR_GET_ENDPOINT: string;
+  export const SLIDER_GET_ENDPOINT: string;
 }
