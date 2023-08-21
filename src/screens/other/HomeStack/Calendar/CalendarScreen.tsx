@@ -65,6 +65,10 @@ export const CalendarScreen = ({
       }
     } catch (error) {}
   }, [selectedDate]);
+  console.log(
+    todayEvent.filter(event => event.date === d.toISOString().substring(0, 10)),
+    'event',
+  );
 
   React.useEffect(() => {
     Data.map(item => setEvents(item.events));
@@ -85,28 +89,40 @@ export const CalendarScreen = ({
         {loader ? (
           <Loader />
         ) : Data.length > 0 && Data[0].image != undefined ? (
-          <View>
-            <View>
-              <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
-            </View>
+          <View style={{backgroundColor: 'blue', height: '30%'}}>
+            {todayEvent.filter(
+              // event => event.date === d.toISOString().substring(0, 10),
+              event => event.date === d.toISOString().substring(0, 10),
+            ) && (
+              <View>
+                <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
+              </View>
+            )}
+
             {todayEvent
               .filter(event => event.date === d.toISOString().substring(0, 10))
               .map((item, index) => (
-                <View key={index} style={style.textBoxContainer}>
-                  <View style={style.dateContainer}>
-                    <Text style={style.date}>{item.date.split('-')[2]}</Text>
-                    <Text style={style.day}>
-                      {daysArray[new Date(item.date).getDay()]}
-                    </Text>
+                <>
+                  <View key={index} style={style.textBoxContainer}>
+                    <View style={style.dateContainer}>
+                      <Text style={style.date}>{item.date.split('-')[2]}</Text>
+                      <Text style={style.day}>
+                        {daysArray[new Date(item.date).getDay()]}
+                      </Text>
+                    </View>
+                    <View style={style.contentContainer}>
+                      <Text style={style.content1}>{item.title}</Text>
+                      <Text style={style.content2}>{item.description}</Text>
+                    </View>
                   </View>
-                  <View style={style.contentContainer}>
-                    <Text style={style.content1}>{item.title}</Text>
-                    <Text style={style.content2}>{item.description}</Text>
-                  </View>
-                </View>
+                </>
               ))}
 
-            <View style={{marginTop: '15%'}}>
+            <View
+              style={{
+                marginTop: '15%',
+                alignItems: 'center',
+              }}>
               <Image
                 source={{uri: `${BASE_URL}${Data[0].image}`}}
                 style={{height: 264, width: 345}}

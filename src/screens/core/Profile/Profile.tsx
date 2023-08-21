@@ -70,7 +70,7 @@ export const ProfileScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
+          icon: AllIcons.NotificationOutline,
           onPress: () => {
             navigation.navigate('dailyUpdates');
           },
@@ -85,7 +85,7 @@ export const ProfileScreen = ({
         <View style={style.imageContainer}>
           <Image
             source={{uri: `${userData.userdata?.profile}`}}
-            style={{height: 64, width: 64}}
+            style={{height: 64, width: 64, borderRadius: 60}}
           />
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>{userData.userdata.full_name}</Text>

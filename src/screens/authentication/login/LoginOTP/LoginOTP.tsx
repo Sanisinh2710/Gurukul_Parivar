@@ -24,7 +24,7 @@ import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
-const staticSeconds = 30;
+const staticSeconds = 120;
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const primary_email = route.params?.primary_email;

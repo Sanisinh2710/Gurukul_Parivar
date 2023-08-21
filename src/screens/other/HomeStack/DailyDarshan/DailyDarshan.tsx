@@ -194,17 +194,24 @@ export const DailyDarshan = ({
         {loader ? (
           <Loader />
         ) : (
-          <View style={{height: '90%'}}>
+          <View
+            style={{
+              height: '76%',
+              paddingTop: '3%',
+            }}>
             {Data.find(item => item.branch === BranchName) !== undefined &&
             DarshanImages.length > 0 ? (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 data={DarshanImages}
                 numColumns={2}
-                columnWrapperStyle={{justifyContent: 'space-between'}}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                }}
                 contentContainerStyle={{
                   gap: 15,
                   marginTop: '3%',
+                  paddingBottom: '10%',
                 }}
                 renderItem={({item, index}) => {
                   return (

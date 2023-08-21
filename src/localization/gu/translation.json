@@ -184,8 +184,9 @@
       "Evening": "સાંજ"
     },
     "DailyDarshanDetail": {
-      "Ghanshyam Maharaj": "ઘનશ્યામ મહારાજ",
-      "Subtext": "આજના દર્શન યાદ રાખવાનો અભ્યાસ કરવો"
+      "GhanshyamMaharaj": "ઘંષ્યામ મહારાજ",
+      "Subtext": "આજનું દર્શન યાદ રાખવાનું અભ્યાસ કરો",
+      "SuccessfulDownload": "ફોટો ડાઉનલોડ સફળ!"
     },
     "DailyQuote": {
       "Heading": "દૈનિક સુવિચાર"

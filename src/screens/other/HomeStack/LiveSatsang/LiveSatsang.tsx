@@ -77,6 +77,7 @@ export const LiveSatsang = ({
             }}>
             <Text style={{color: COLORS.black}}>YouTube Live Katha</Text>
             <FlatList
+              showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               data={Data}
               renderItem={({item}) => (

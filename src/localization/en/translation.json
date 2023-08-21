@@ -184,8 +184,10 @@
       "Evening": "Evening"
     },
     "DailyDarshanDetail": {
-      "Ghanshyam Maharaj": "Ghanshyam Maharaj",
-      "Subtext": "Practice remembering today's darshan"
+      "GhanshyamMaharaj": "Ghanshyam Maharaj",
+      "Subtext": "Practice remembering today's darshan",
+      "SuccessfulDownload":"Image Download Successful!"
+
     },
     "DailyQuote": {
       "Heading": "Daily Quote"
