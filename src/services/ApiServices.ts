@@ -8,6 +8,7 @@ import {
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
+  DELETE_USER_ENDPOINT,
   EDUCATION_INFO_GET_ENDPOINT,
   EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
@@ -182,8 +183,6 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
-  console.log(finalPayload, 'FINAL');
-
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
@@ -235,4 +234,8 @@ export const CalendarGetApi = async (date: Date) => {
 
 export const SliderGetApi = async () => {
   return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
+};
+
+export const DeleteMydataApi = async () => {
+  return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };

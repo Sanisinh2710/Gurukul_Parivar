@@ -1,8 +1,12 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, Image, Text, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -13,19 +17,13 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
+import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {DailyQuotesApi, GurukulBranchGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
 import {d, options} from '../../../../utils';
 import {styles} from './styles';
-import {
-  DailyQuotesApi,
-  GurukulBranchGetApi,
-  getUserData,
-} from '../../../../services';
-import Toast from 'react-native-simple-toast';
-import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
-import {BASE_URL} from '@env';
-import Carousel from 'react-native-snap-carousel';
+
 export const DailyQuotes = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -47,7 +45,6 @@ export const DailyQuotes = ({
   const [itemIndex, setItemIndex] = React.useState(0);
 
   React.useMemo(async () => {
-    console.log('THIS SET GURURKUl');
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
@@ -59,7 +56,6 @@ export const DailyQuotes = ({
   React.useEffect(() => {
     if (GurukulList.length > 0 && GurukulList !== undefined) {
       const name = GurukulList.find(item => item.id == changeValue)?.name;
-      console.log(name);
       setBranchName(name);
     }
   }, [changeValue, GurukulList]);
@@ -110,9 +106,7 @@ export const DailyQuotes = ({
       let newImges = Data.filter((item: any) => {
         return item.branch == BranchName;
       })?.[0]?.daily_quotes;
-      console.log('>>>>>>>IMAGES', newImges);
       if (newImges != undefined || newImges != null || newImges != '') {
-        console.log('IF EXECE');
         setDailQuotes(newImges);
       } else {
         setDailQuotes([]);
@@ -121,10 +115,14 @@ export const DailyQuotes = ({
   };
 
   React.useEffect(() => {
-    // console.log(Image_Data(), 'this');
     Image_Data();
   }, [Data, BranchName]);
-  // console.log(DailyQuotes.length,"<<");
+
+  const handleClipBoard = (item: any) => {
+    const clip = Clipboard.setString(item);
+
+    Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
+  };
 
   return (
     <ScreenWrapper>
@@ -170,6 +168,14 @@ export const DailyQuotes = ({
               type={'simple'}
               value={changeValue}
               onChange={setChangeValue}
+              onBlur={function (...event: any[]): void {
+                throw new Error('Function not implemented.');
+              }}
+              setFocused={function (
+                value: React.SetStateAction<boolean>,
+              ): void {
+                throw new Error('Function not implemented.');
+              }}
             />
           </View>
         </View>
@@ -214,7 +220,13 @@ export const DailyQuotes = ({
                             />
                           </View>
                           <View>
-                            <Text style={style.quote}>{item.quote}</Text>
+                            <Text
+                              style={style.quote}
+                              selectable={true}
+                              onLongPress={() => handleClipBoard(item.quote)}
+                              selectionColor={'red'}>
+                              {item.quote}
+                            </Text>
                           </View>
                         </View>
                       )}

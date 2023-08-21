@@ -16,10 +16,9 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {getUserData, SliderGetApi} from '../../../services';
+import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
 import {styles} from './styles';
@@ -43,7 +42,6 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        console.log(res.data.images);
         setDashboardImages(res.data.images);
         setLoader(false);
       }

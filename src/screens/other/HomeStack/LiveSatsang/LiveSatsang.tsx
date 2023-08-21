@@ -2,13 +2,14 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Alert, Dimensions, FlatList, Text, View} from 'react-native';
+import {Alert, FlatList, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -16,8 +17,6 @@ import {
 import {DailySatsangApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
-import LinearGradient from 'react-native-linear-gradient';
-import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 
 export const LiveSatsang = ({
   navigation,
@@ -29,8 +28,6 @@ export const LiveSatsang = ({
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const commonstyle = CommonStyle();
-
-  console.log(Data);
 
   const [playing, setPlaying] = React.useState(false);
 

@@ -453,9 +453,13 @@ export const ProfileSignup = ({
             backenduserresponse.data.personal_details !== undefined &&
             backenduserresponse.data.personal_details !== ''
           ) {
-            const setuserdataresponse = setUserData(
-              backenduserresponse.data.personal_details,
+            let finalData = JSON.parse(
+              JSON.stringify(backenduserresponse.data.personal_details),
             );
+
+            finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+            const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
               setwidth(width + 20);

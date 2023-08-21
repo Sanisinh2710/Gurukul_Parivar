@@ -49,8 +49,6 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
-  console.log(todayEvent);
-
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -134,11 +132,8 @@ export const CalendarScreen = ({
                 source={{uri: `${BASE_URL}${Data[0].image}`}}
                 style={{height: 264, width: 345}}
               />
-              <ShareDownload
-                wallpaper={false}
-                imgURL={wallpaper && wallpaper}
-              />
             </View>
+            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
         ) : (
           <View
