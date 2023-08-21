@@ -17,7 +17,11 @@ import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/Share
 import {RootStackParamList} from '../../../../types';
 import {d, options} from '../../../../utils';
 import {styles} from './styles';
-import {DailyQuotesApi, GurukulBranchGetApi} from '../../../../services';
+import {
+  DailyQuotesApi,
+  GurukulBranchGetApi,
+  getUserData,
+} from '../../../../services';
 import Toast from 'react-native-simple-toast';
 import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 import {BASE_URL} from '@env';
@@ -32,9 +36,16 @@ export const DailyQuotes = ({
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [changeValue, setChangeValue] = React.useState(1);
-  const [GurukulList, setGurukulList] = React.useState<Array<Object>>([]);
+  const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
   const [BranchName, setBranchName] = React.useState();
-  const [DailyQuotes, setDailQuotes] = React.useState<Array<Object>>([]);
+  const [DailyQuotes, setDailQuotes] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
+
+  const [itemIndex, setItemIndex] = React.useState(0);
+
   React.useMemo(async () => {
     console.log('THIS SET GURURKUl');
     const response = await GurukulBranchGetApi();
@@ -73,7 +84,6 @@ export const DailyQuotes = ({
     }
   }, [selectedDate, BranchName]);
 
-  console.log(Data, 'DATA OF ');
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -111,8 +121,11 @@ export const DailyQuotes = ({
   };
 
   React.useEffect(() => {
+    // console.log(Image_Data(), 'this');
     Image_Data();
   }, [Data, BranchName]);
+  // console.log(DailyQuotes.length,"<<");
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -157,8 +170,6 @@ export const DailyQuotes = ({
               type={'simple'}
               value={changeValue}
               onChange={setChangeValue}
-              onBlur={() => {}}
-              setFocused={() => {}}
             />
           </View>
         </View>
@@ -168,8 +179,7 @@ export const DailyQuotes = ({
           <>
             {Data.length > 0 ? (
               <>
-                {Data.find(item => item.branch == BranchName) !== undefined &&
-                DailyQuotes.length > 0 ? (
+                {Data.find((item: any) => item.branch == BranchName) ? (
                   <View
                     style={{
                       justifyContent: 'center',
@@ -177,11 +187,13 @@ export const DailyQuotes = ({
                       marginTop: '3%',
                     }}>
                     <Carousel
-                      layoutCardOffset={0.5}
                       sliderWidth={screenWidth}
                       slideStyle={{
                         height: Dimensions.get('window').height * 0.6,
                         borderRadius: 20,
+                      }}
+                      onSnapToItem={index => {
+                        setItemIndex(index);
                       }}
                       itemWidth={Dimensions.get('window').width * 0.8}
                       data={DailyQuotes}
@@ -207,7 +219,10 @@ export const DailyQuotes = ({
                         </View>
                       )}
                     />
-                    <ShareDownload wallpaper={false} />
+                    <ShareDownload
+                      wallpaper={false}
+                      imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
+                    />
                   </View>
                 ) : (
                   <NoData />

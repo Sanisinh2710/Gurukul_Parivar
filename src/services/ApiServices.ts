@@ -182,6 +182,8 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
+  console.log(finalPayload, 'FINAL');
+
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
