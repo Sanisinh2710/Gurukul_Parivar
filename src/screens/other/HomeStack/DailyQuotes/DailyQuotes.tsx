@@ -32,9 +32,33 @@ export const DailyQuotes = ({
   const style = styles();
   const {t} = useTranslation();
   const [Data, setData] = React.useState<{[key: string]: any}>([]);
+  const [Data, setData] = React.useState<{[key: string]: any}>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
+  const [changeValue, setChangeValue] = React.useState(1);
+  const [GurukulList, setGurukulList] = React.useState<Array<Object>>([]);
+  const [BranchName, setBranchName] = React.useState();
+  const [DailyQuotes, setDailQuotes] = React.useState<Array<Object>>([]);
+  React.useMemo(async () => {
+    console.log('THIS SET GURURKUl');
+    const response = await GurukulBranchGetApi();
+    if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
+      setGurukulList(response.data.branches);
+    } else {
+      Toast.show(response.message, 2);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (GurukulList.length > 0 && GurukulList !== undefined) {
+      const name = GurukulList.find(item => item.id == changeValue)?.name;
+      console.log(name);
+      setBranchName(name);
+    }
+  }, [changeValue, GurukulList]);
+
+  const {width: screenWidth} = Dimensions.get('window');
   const [changeValue, setChangeValue] = React.useState(1);
   const [GurukulList, setGurukulList] = React.useState<Array<Object>>([]);
   const [BranchName, setBranchName] = React.useState();

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   Modal,
   Pressable,
   ScrollView,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {COLORS, months, weekDays} from '../../../utils';
 
 const minAllowedDOBDate = new Date();
@@ -230,7 +232,7 @@ export const Calendar = ({
             <TouchableOpacity onPress={handleOpenYearModal}>
               <Text style={styles.monthText}>
                 {months[currentMonth]} {currentYear}
-                {' >'}
+                {' > '}
               </Text>
             </TouchableOpacity>
             <View style={{flexDirection: 'row', gap: 20}}>

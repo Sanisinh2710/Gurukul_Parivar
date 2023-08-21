@@ -71,7 +71,7 @@ export const ProfileScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
+          icon: AllIcons.NotificationOutline,
           onPress: () => {
             navigation.navigate('dailyUpdates');
           },

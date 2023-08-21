@@ -99,6 +99,22 @@ export const HomeScreen = ({
         break;
     }
   };
+  const handlePageChange = () => {
+    if (currentPage < dashboardImages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setCurrentPage(0);
+    }
+  };
+
+  React.useMemo(() => {
+    const timer = setTimeout(() => {
+      handlePageChange();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [currentPage]);
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -126,40 +142,23 @@ export const HomeScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
+          icon: AllIcons.NotificationOutline,
           onPress: () => {
             navigation.navigate('dailyUpdates');
           },
         }}
       />
-
-      <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-        <View
-          onTouchStart={e => {
-            TouchX.current = e.nativeEvent.pageX;
-          }}
-          onTouchEnd={e => {
-            if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < dashboardImages.length - 1) {
-                setCurrentPage(currentPage + 1);
-              }
-            }
-            if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (
-                currentPage > 0 &&
-                currentPage <= dashboardImages.length - 1
-              ) {
-                setCurrentPage(currentPage - 1);
-              }
-            }
-          }}>
-          <PagerView currentPage={currentPage} images={dashboardImages} />
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: '50%',
-          }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: '30%',
+        }}>
+        <View style={[commonStyle.commonContentView, {height: '100%'}]}>
+          {dashboardImages.length > 0 && (
+            <View>
+              <PagerView currentPage={currentPage} images={dashboardImages} />
+            </View>
+          )}
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
@@ -186,8 +185,8 @@ export const HomeScreen = ({
               </ImageBackground>
             ))}
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 };

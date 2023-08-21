@@ -1,6 +1,7 @@
 export const AllIcons = {
   RoundedArrow: require('../icons/ArrowCircleDown.png'),
   Notification: require('../icons/Notification.png'),
+  NotificationOutline: require('../icons/NotificationOutline.png'),
   Home: require('../icons/Home.png'),
   HomeOutline: require('../icons/Home-Outline.png'),
   Profile: require('../icons/Profile.png'),
@@ -40,4 +41,5 @@ export const AllIcons = {
   RoundCheckedCircle: require('../icons/RoundCheckedCircle.png'),
   ArrowSimpleLeft: require('../icons/ArrowSimpleLeft.png'),
   OTPEdit: require('../icons/OTPEdit.png'),
+  // ForwardIcon: require('../icons/ForwardIcon.png'),
 };

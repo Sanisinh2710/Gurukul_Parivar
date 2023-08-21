@@ -185,8 +185,9 @@
       "Evening": "शाम"
     },
     "DailyDarshanDetail": {
-      "Ghanshyam Maharaj": "घनश्याम महाराज",
-      "Subtext": "आज के दर्शन को याद करने का अभ्यास करें"
+      "GhanshyamMaharaj": "घनश्याम महाराज",
+      "Subtext": "आज के दर्शन को याद करने का अभ्यास करें",
+      "SuccessfulDownload": "फोटो डाउनलोड सफल!"
     },
     "DailyQuote": {
       "Heading": "दैनिक उद्धरण"

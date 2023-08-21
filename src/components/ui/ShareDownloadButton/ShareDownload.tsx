@@ -22,14 +22,15 @@ import {CommonStyle} from '../../../../assets/styles';
 import {CustomFonts} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {styles} from './style';
+import {useTranslation} from 'react-i18next';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
   wallpaper: boolean;
 };
-
 export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const {WallpaperModule} = NativeModules;
+  const {t} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
@@ -43,7 +44,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         fromUrl: imgURL!,
         toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
       });
-
       if ((await response.promise).statusCode === 200) {
         const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
@@ -56,8 +56,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           subject: 'Share Link', // for email
         };
 
-        const shareResponse = await Share.open(options);
+        await Share.open(options);
         // Handle successful share here
+        console.log(Share.open(options));
       } else {
         // Handle error here
       }
@@ -216,13 +217,30 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 position: 'absolute',
                 left: 0,
                 right: 0,
-                bottom: 60,
+                bottom: 80,
               }}>
-              <Text style={{...CustomFonts.header.medium20, fontSize: 18}}>
-                Ghanshyam Maharaj
+              <Text
+                style={{
+                  ...CustomFonts.header.medium20,
+                  fontSize: 20,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.SuccessfulDownload')}
               </Text>
-              <Text style={{...CustomFonts.header.small18}}>
-                Practice remembering today's darshan.
+              <Text
+                style={{
+                  ...CustomFonts.header.medium20,
+                  fontSize: 18,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.GhanshyamMaharaj')}
+              </Text>
+              <Text
+                style={{
+                  ...CustomFonts.header.small18,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.Subtext')}
               </Text>
             </View>
           </>

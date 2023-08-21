@@ -11,9 +11,15 @@ export const styles = () => {
       color: 'black',
     },
     image: {
-      height: Dimensions.get('window').height * 0.58,
+      resizeMode:'contain',
+      height:'100%',
       width: '100%',
-      borderRadius: 10,
     },
+    quote:{
+      ...CustomFonts.body.large14,
+      fontSize:16,
+      color: 'black',
+      lineHeight:20,
+    }
   });
 };
