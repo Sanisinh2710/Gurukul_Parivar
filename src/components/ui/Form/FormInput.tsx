@@ -36,6 +36,7 @@ export type FormInputProps = {
   rightTextOnPress?: (...event: any[]) => void;
   defaultPhoneCountryCode?: any;
   editable?: boolean;
+  required?: boolean;
 };
 
 export const FormInput = React.memo(
@@ -55,6 +56,7 @@ export const FormInput = React.memo(
     customProps,
     rightText,
     rightTextOnPress,
+    required,
     defaultPhoneCountryCode,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
@@ -143,6 +145,7 @@ export const FormInput = React.memo(
             onChange={onChange}
             customStyle={{}}
             wantFullSpace={true}
+            required={required}
             {...customProps}
           />
         );
@@ -261,12 +264,25 @@ export const FormInput = React.memo(
           {type !== 'photo' && type !== 'radio' ? (
             <>
               <View
-                style={{
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text style={style.labelText}>{label}</Text>
+                style={[
+                  {
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  },
+                ]}>
+                <Text style={[style.labelText]}>
+                  {label}
+                  {required && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        fontSize: 20,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Text>
                 {(type === 'phone' || type === 'email' || type === 'select') &&
                   rightText && (
                     <Text

@@ -38,7 +38,7 @@ export const HomeScreen = ({
   ]);
 
   const style = styles();
-  const TouchX = React.useRef<any>();
+  // const TouchX = React.useRef<any>();
 
   const userData = React.useMemo(() => {
     return getUserData();
@@ -46,6 +46,22 @@ export const HomeScreen = ({
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
+
+  const handlePageChange = () => {
+    if (currentPage < dashboardImages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setCurrentPage(0);
+    }
+  };
+
+  React.useMemo(() => {
+    const timer = setTimeout(() => {
+      handlePageChange();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [currentPage]);
 
   const onBackPress = () => {
     Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
@@ -135,24 +151,26 @@ export const HomeScreen = ({
 
       <View style={[commonStyle.commonContentView, {height: '100%'}]}>
         <View
-          onTouchStart={e => {
-            TouchX.current = e.nativeEvent.pageX;
-          }}
-          onTouchEnd={e => {
-            if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < dashboardImages.length - 1) {
-                setCurrentPage(currentPage + 1);
-              }
-            }
-            if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (
-                currentPage > 0 &&
-                currentPage <= dashboardImages.length - 1
-              ) {
-                setCurrentPage(currentPage - 1);
-              }
-            }
-          }}>
+        // onTouchStart={e => {
+        //   TouchX.current = e.nativeEvent.pageX;
+        // }}
+        // onTouchEnd={e => {
+        //   if (TouchX.current - e.nativeEvent.pageX > 20) {
+        //     if (currentPage < dashboardImages.length - 1) {
+        //       setCurrentPage(currentPage + 1);
+        //     }
+        //   }
+        //   if (TouchX.current - e.nativeEvent.pageX < -20) {
+        //     if (
+        //       currentPage > 0 &&
+        //       currentPage <= dashboardImages.length - 1
+        //     ) {
+        //       setCurrentPage(currentPage - 1);
+        //     }
+        //   }
+        // }
+        // }
+        >
           <PagerView currentPage={currentPage} images={dashboardImages} />
         </View>
         <ScrollView

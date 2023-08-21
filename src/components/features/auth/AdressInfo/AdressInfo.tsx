@@ -88,6 +88,7 @@ export const AdressInfo = React.memo(
       type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
+      required: boolean;
     }[] = [
       {
         name: 'country_id',
@@ -95,24 +96,28 @@ export const AdressInfo = React.memo(
         placeholder: t('addressInfo.CountryPlaceHolder'),
         type: 'select',
         menuList: countries,
+        required: true,
       },
       {
         name: 'address',
         lable: t('addressInfo.AddressLbl'),
         placeholder: t('addressInfo.AddressPlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'pincode',
         lable: t('addressInfo.PincodeLbl'),
         placeholder: t('addressInfo.PincodePlaceholder'),
         type: 'number',
+        required: true,
       },
       {
         name: 'city',
         lable: t('addressInfo.CityVillageLbl'),
         placeholder: t('addressInfo.CityVillagePlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'address_type',
@@ -124,6 +129,7 @@ export const AdressInfo = React.memo(
           wantFullSpace: false,
           customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
         },
+        required: true,
       },
     ];
 
@@ -311,6 +317,9 @@ export const AdressInfo = React.memo(
                                 placeholder={item.placeholder}
                                 value={value}
                                 onBlur={onBlur}
+                                required={
+                                  mainindex === 0 ? item.required : false
+                                }
                                 onChange={onChange}
                                 customProps={item.customProps}
                                 error={errors?.address_details?.[mainindex]?.[

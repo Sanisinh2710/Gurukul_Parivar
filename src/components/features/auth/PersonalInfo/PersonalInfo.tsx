@@ -65,6 +65,7 @@ export const PersonalInfo = React.memo(
       type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
+      required: boolean;
     }[] = [
       {
         name: 'gender',
@@ -83,24 +84,28 @@ export const PersonalInfo = React.memo(
             gap: 10,
           },
         },
+        required: true,
       },
       {
         name: 'full_name',
         lable: t('personalInfo.FullNameLable'),
         placeholder: t('personalInfo.FullNamePlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'father_name',
         lable: t('personalInfo.FatherNameLable'),
         placeholder: t('personalInfo.FatherNamePlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'dob',
         lable: t('personalInfo.DOB'),
         placeholder: 'DD/MM/YYYY',
         type: 'dob',
+        required: true,
       },
       {
         name: 'blood_group',
@@ -108,6 +113,7 @@ export const PersonalInfo = React.memo(
         placeholder: t('personalInfo.BloodGroupDropDown'),
         type: 'select',
         menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+'],
+        required: true,
       },
     ];
 
@@ -306,6 +312,7 @@ export const PersonalInfo = React.memo(
                             error={errors[item.name]?.message?.toString()}
                             menuList={item.menuList}
                             customProps={item.customProps}
+                            required={item.required}
                           />
                         );
                       }}
@@ -353,6 +360,7 @@ export const PersonalInfo = React.memo(
                                   ? t('personalInfo.AddSecondaryEmail')
                                   : ''
                               }
+                              required={mainindex === 0 ? true : false}
                               editable={mainindex === 0 ? false : true}
                               rightTextOnPress={
                                 mainindex === 0
@@ -429,6 +437,7 @@ export const PersonalInfo = React.memo(
                                   ? t('personalInfo.AddSecondaryNumber')
                                   : ''
                               }
+                              required={mainindex === 0 ? true : false}
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {

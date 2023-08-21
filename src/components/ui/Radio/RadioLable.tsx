@@ -20,6 +20,7 @@ interface Props {
   wantFullSpace?: boolean;
   customStyle?: StyleProp<ViewStyle>;
   dailyQuiz?: boolean;
+  required?: boolean;
 }
 
 export const RadioLable = ({
@@ -31,6 +32,7 @@ export const RadioLable = ({
   value,
   onChange,
   dailyQuiz,
+  required,
 }: Props) => {
   const style = genstyle();
 
@@ -40,7 +42,20 @@ export const RadioLable = ({
 
   return (
     <View>
-      {showHeading && <Text style={style.heading}>{heading}</Text>}
+      {showHeading && (
+        <Text style={style.heading}>
+          {heading}
+          {required && (
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 20,
+              }}>
+              *
+            </Text>
+          )}
+        </Text>
+      )}
       <View
         style={[
           [
