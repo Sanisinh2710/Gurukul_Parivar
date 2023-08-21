@@ -20,12 +20,45 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
   React.useEffect(() => {
     for (let i = 0; i < num.length; i++) {
       if (num[i] !== '') {
+        refs.current[i]?.setNativeProps(
+          num.length === 6
+            ? {
+                text: num[i].toString(),
+                maxLength: 1,
+                style: {
+                  borderColor: COLORS.primaryColor,
+                },
+              }
+            : {
+                style: {
+                  borderColor: COLORS.primaryColor,
+                },
+              },
+        );
+      } else {
         refs.current[i]?.setNativeProps({
-          style: {borderColor: COLORS.primaryColor},
+          maxLength: 6,
         });
       }
     }
   }, [num, focus]);
+
+  const handleText = (value: any, index?: any) => {
+    if (value.length === 6) {
+      const copiedOTP = value.split('');
+
+      let newOtpValue = [...num];
+      copiedOTP.map((val, index) => {
+        newOtpValue[index] = val;
+      });
+
+      setNum(newOtpValue);
+    } else {
+      const newOtpValue = [...num];
+      newOtpValue[index] = value.trim();
+      setNum(newOtpValue);
+    }
+  };
 
   return (
     <View style={{justifyContent: 'center', gap: 10, flexDirection: 'row'}}>
@@ -33,6 +66,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
         {num.map((item, index) => (
           <TextInput
             key={index}
+            value={item}
             onSubmitEditing={() => {
               return (
                 num[index] === '' &&
@@ -44,11 +78,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             onFocus={() => {
               setFocus(prev => !prev);
             }}
-            onChangeText={val => {
-              const newOtpValue = [...num];
-              newOtpValue[index] = val.trim();
-              setNum(newOtpValue);
-            }}
+            onChangeText={val => handleText(val, index)}
             keyboardType="number-pad"
             ref={el => (refs.current[index] = el)}
             style={
@@ -63,7 +93,6 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
                 changeFocus(index + 1);
               }
             }}
-            maxLength={1}
           />
         ))}
       </View>

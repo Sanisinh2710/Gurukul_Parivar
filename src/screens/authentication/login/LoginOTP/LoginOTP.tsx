@@ -13,6 +13,7 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
+  LoginByEmailApi,
   PersonalInfoGetDetailsApi,
   VerifyOTPApi,
   isProfilingDone,
@@ -23,6 +24,8 @@ import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
+const staticSeconds = 30;
+
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const primary_email = route.params?.primary_email;
   const style = styles();
@@ -30,10 +33,11 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
-  const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
-  const [resendEnabled, setResendEnabled] = React.useState(true);
+  const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
+  const [resendEnabled, setResendEnabled] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [isApiLoading, setIsApiloading] = React.useState(false);
+  const [isApiResendLoading, setIsApiResendloading] = React.useState(false);
 
   const handleLogin = async () => {
     let flag = 0;
@@ -116,6 +120,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       setDisabled(true);
     }
   }, [num]);
+
   React.useEffect(() => {
     if (countdown > 0) {
       const interval = setInterval(() => {
@@ -125,14 +130,15 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
         clearInterval(interval);
       };
     } else {
-      setResendEnabled(true);
+      setResendEnabled(false);
     }
   }, [countdown]);
 
   const handleResendOTP = () => {
-    setResendEnabled(false);
-    setCountdown(120);
+    setIsApiResendloading(true);
+    setResendEnabled(true);
   };
+
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -140,6 +146,20 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .toString()
       .padStart(2, '0')}`;
   };
+
+  React.useMemo(async () => {
+    if (resendEnabled) {
+      const response = await LoginByEmailApi(primary_email ?? '');
+      setIsApiResendloading(false);
+
+      if (response.resType === 'SUCCESS') {
+        Toast.show('A new OTP has been sent to your mail..!', 2);
+        setCountdown(staticSeconds);
+      } else {
+        Toast.show(response.message, 2);
+      }
+    }
+  }, [resendEnabled]);
 
   return (
     <ScreenWrapper>
@@ -175,6 +195,8 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
 
             {countdown > 0 ? (
               <Text style={style.otpResend}>{formatTime(countdown)}</Text>
+            ) : isApiResendLoading ? (
+              <ActivityIndicator color={COLORS.primaryColor} size={20} />
             ) : (
               <Pressable onPress={handleResendOTP}>
                 <Text style={style.otpResend}>{t('otpScreen.OtpResend')}</Text>
