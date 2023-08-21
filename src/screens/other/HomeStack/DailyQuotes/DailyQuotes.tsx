@@ -26,6 +26,7 @@ import Toast from 'react-native-simple-toast';
 import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 import {BASE_URL} from '@env';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import {TextInput} from 'react-native';
 export const DailyQuotes = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -75,7 +76,7 @@ export const DailyQuotes = ({
     } catch (error) {
       console.log(error);
     }
-  }, [selectedDate , BranchName]);
+  }, [selectedDate, BranchName]);
 
   console.log(Data, 'DATA OF ');
   const getPreviousDate = () => {
@@ -105,14 +106,26 @@ export const DailyQuotes = ({
         return item.branch == BranchName;
       })?.[0]?.daily_quotes;
       console.log('>>>>>>>IMAGES', newImges);
-      if (newImges!= undefined || newImges != null ||newImges != '') {
-        console.log("IF EXECE");
+      if (newImges != undefined || newImges != null || newImges != '') {
+        console.log('IF EXECE');
         setDailQuotes(newImges);
-      }
-      else{
+      } else {
         setDailQuotes([]);
       }
     }
+  };
+  const SelectableText = ({text}) => {
+    return (
+      <View>
+        <TextInput
+          value={text}
+          editable={false}
+          selectTextOnFocus={false}
+          multiline
+          style={style}
+        />
+      </View>
+    );
   };
 
   React.useEffect(() => {
@@ -171,47 +184,55 @@ export const DailyQuotes = ({
           <Loader />
         ) : (
           <>
-            {Data.length > 0  ? (
+            {Data.length > 0 ? (
               <>
-                {Data.find(item => item.branch == BranchName) ? <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '3%',
-                  }}>
-                  <Carousel
-                    layout="default"
-                    sliderWidth={screenWidth}
-                    slideStyle={{
-                      height: Dimensions.get('window').height * 0.6,
-                      borderRadius: 20,
-                    }}
-                    itemWidth={Dimensions.get('window').width * 0.8}
-                    data={DailyQuotes}
-                    renderItem={({item}) => (
-                      <View
-                        style={{
-                          height: '100%',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 20,
-                        }}>
-                        <View style={{flex: 1, width: '100%'}}>
-                          <Image
-                            source={{
-                              uri: `${BASE_URL}${item.image}`,
-                            }}
-                            style={style.image}
-                          />
+                {Data.find(item => item.branch == BranchName) ? (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: '3%',
+                    }}>
+                    <Carousel
+                      layout="default"
+                      sliderWidth={screenWidth}
+                      slideStyle={{
+                        height: Dimensions.get('window').height * 0.6,
+                        borderRadius: 20,
+                      }}
+                      itemWidth={Dimensions.get('window').width * 0.8}
+                      data={DailyQuotes}
+                      renderItem={({item}) => (
+                        <View
+                          style={{
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 20,
+                          }}>
+                          <View style={{flex: 1, width: '100%'}}>
+                            <Image
+                              source={{
+                                uri: `${BASE_URL}${item.image}`,
+                              }}
+                              style={style.image}
+                            />
+                          </View>
+                          <View>
+                            <SelectableText
+                              text={item.quote}
+                              style={style.quote}
+                            />
+                            {/* <Text style={style.quote}>{item.quote}</Text> */}
+                          </View>
                         </View>
-                        <View>
-                          <Text style={style.quote}>{item.quote}</Text>
-                        </View>
-                      </View>
-                    )}
-                  />
-                <ShareDownload wallpaper={false} />
-                </View> : <NoData />}
+                      )}
+                    />
+                    <ShareDownload wallpaper={false} />
+                  </View>
+                ) : (
+                  <NoData />
+                )}
               </>
             ) : (
               <NoData />

@@ -35,7 +35,7 @@ export const style = (currentPage?: number) => {
       alignItems: 'center',
       // backgroundColor: 'yellow',
       borderRightColor: 'black',
-      width: 335,
+      width: '100%',
       height: 164,
     },
     pagerViewImage: {
