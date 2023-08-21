@@ -19,7 +19,7 @@ import {AllIcons} from '../../../../assets/icons';
 import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {getUserData} from '../../../services';
+import {getUserData, SliderGetApi} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
 import {styles} from './styles';
@@ -31,14 +31,26 @@ export const HomeScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const [dashboardImages, setDashboardImages] = React.useState([
-    AllImages.Rectangle,
-    AllImages.Rectangle3,
-    AllImages.Rectangle2,
-  ]);
+  const [dashboardImages, setDashboardImages] = React.useState([]);
+  const [loader, setLoader] = React.useState<boolean>(false);
 
   const style = styles();
   const TouchX = React.useRef<any>();
+
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        console.log(res.data.images);
+        setDashboardImages(res.data.images);
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const userData = React.useMemo(() => {
     return getUserData();
@@ -99,6 +111,7 @@ export const HomeScreen = ({
         break;
     }
   };
+
   const handlePageChange = () => {
     if (currentPage < dashboardImages.length - 1) {
       setCurrentPage(currentPage + 1);
@@ -107,13 +120,13 @@ export const HomeScreen = ({
     }
   };
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     const timer = setTimeout(() => {
       handlePageChange();
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [currentPage]);
+  }, [currentPage, dashboardImages]);
 
   return (
     <ScreenWrapper>
