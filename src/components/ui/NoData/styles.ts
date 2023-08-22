@@ -13,7 +13,7 @@ export const styles = () => {
       ...CustomFonts.body.large14,
       fontSize: 16,
       color: 'rgba(23,23,23,0.5)',
-      lineHeight: 18,
+      lineHeight: 25,
       textAlign: 'center',
       top: 8,
     },

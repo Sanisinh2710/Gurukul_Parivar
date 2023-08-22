@@ -165,7 +165,6 @@ export const ProfileScreen = ({
         break;
     }
   };
-  console.log(profileImage);
   return (
     <ScreenWrapper>
       <ScreenHeader

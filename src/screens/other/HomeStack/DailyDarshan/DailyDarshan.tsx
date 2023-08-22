@@ -221,10 +221,6 @@ export const DailyDarshan = ({
                         navigation.navigate('dailyDarshanDetail', {
                           totalImages: DarshanImages.length,
                           data: DarshanImages,
-<<<<<<< HEAD
-=======
-                          image: item,
->>>>>>> c916f155217c094a9fd5e0233e64536210e88157
                           currentImageIndex: index,
                           date: selectedDate.toLocaleDateString(
                             'en-in',

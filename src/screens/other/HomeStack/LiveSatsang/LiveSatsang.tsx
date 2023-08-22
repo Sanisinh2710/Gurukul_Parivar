@@ -32,7 +32,6 @@ export const LiveSatsang = ({
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
   const onStateChange = React.useCallback((state: string) => {
-    console.log(state, 'STATE');
     if (state === 'ended') {
       setPlaying(false);
       Alert.alert('video has finished playing!');
