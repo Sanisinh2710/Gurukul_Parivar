@@ -2,7 +2,7 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Alert, FlatList, Text, View} from 'react-native';
+import {ActivityIndicator, Alert, FlatList, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -10,6 +10,7 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -29,7 +30,7 @@ export const LiveSatsang = ({
   const commonstyle = CommonStyle();
 
   const [playing, setPlaying] = React.useState(false);
-
+  const [videoLoad, setVideoLoad] = React.useState(false);
   const onStateChange = React.useCallback((state: string) => {
     if (state === 'ended') {
       setPlaying(false);
@@ -86,6 +87,7 @@ export const LiveSatsang = ({
             }}>
             {t('common.YouTubeLiveKatha')}
           </Text>
+
           {loader ? (
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -119,55 +121,78 @@ export const LiveSatsang = ({
               }}
             />
           ) : Data.length !== 0 ? (
-            <FlatList
-              data={Data}
-              contentContainerStyle={{paddingBottom: '30%'}}
-              showsVerticalScrollIndicator={false}
-              renderItem={({item}) => (
-                <View style={{marginVertical: '3%', gap: 15}}>
-                  <View
-                    style={{
-                      flexWrap: 'wrap',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text
+            <>
+              <FlatList
+                data={Data}
+                contentContainerStyle={{paddingBottom: '30%'}}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <View style={{marginVertical: '3%', gap: 15}}>
+                    <View
                       style={{
-                        ...CustomFonts.body.large14,
-                        fontSize: 18,
-                        color: COLORS.black,
+                        flexWrap: 'wrap',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                       }}>
-                      {item.title}
-                    </Text>
-                    <Text
-                      style={{
-                        ...CustomFonts.body.large14,
-                        fontSize: 18,
-                        color: COLORS.black,
-                      }}>
-                      {new Date(item.created_at).toLocaleString(
-                        'en-US',
-                        options,
+                      <Text
+                        style={{
+                          ...CustomFonts.body.large14,
+                          fontSize: 18,
+                          color: COLORS.black,
+                        }}>
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{
+                          ...CustomFonts.body.large14,
+                          fontSize: 18,
+                          color: COLORS.black,
+                        }}>
+                        {new Date(item.created_at).toLocaleString(
+                          'en-US',
+                          options,
+                        )}
+                      </Text>
+                    </View>
+                    <View>
+                      {videoLoad == false && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            justifyContent: 'center',
+                            left: 0,
+                            right: 0,
+                            flex: 1,
+                            height: 200,
+                            // backgroundColor: 'blue',
+                          }}>
+                          <ActivityIndicator
+                            size={30}
+                            color={COLORS.primaryColor}
+                          />
+                        </View>
                       )}
-                    </Text>
+                      <YoutubePlayer
+                        height={200}
+                        play={playing}
+                        onReady={() => {
+                          setVideoLoad(true);
+                        }}
+                        videoId={
+                          item.url.toString().includes('=')
+                            ? item.url.split('=')[1]
+                            : item.url.split('/')[3]
+                        }
+                        onChangeState={onStateChange}
+                        webViewProps={{
+                          containerStyle: {borderRadius: 15},
+                        }}
+                      />
+                    </View>
                   </View>
-
-                  <YoutubePlayer
-                    height={200}
-                    play={playing}
-                    videoId={
-                      item.url.toString().includes('=')
-                        ? item.url.split('=')[1]
-                        : item.url.split('/')[3]
-                    }
-                    onChangeState={onStateChange}
-                    webViewProps={{
-                      containerStyle: {borderRadius: 15},
-                    }}
-                  />
-                </View>
-              )}
-            />
+                )}
+              />
+            </>
           ) : (
             <View style={{width: '100%', height: '90%'}}>
               <NoData />

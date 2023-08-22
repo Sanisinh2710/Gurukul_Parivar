@@ -41,7 +41,7 @@ export const DailyUpdateDetail = ({
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: '90%',
+            paddingBottom: '115%',
           }}>
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
@@ -62,6 +62,7 @@ export const DailyUpdateDetail = ({
             <Text style={style.title}>{t('common.PhotoGallery')}</Text>
             <FlatList
               horizontal
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 flexDirection: 'row',
                 gap: 10,
@@ -70,7 +71,19 @@ export const DailyUpdateDetail = ({
               data={Data.images}
               renderItem={({item, index}) => (
                 <>
-                  <TouchableOpacity activeOpacity={0.5}>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() =>
+                      navigation.navigate('dailyDarshanDetail', {
+                        date: new Date(Data.date).toLocaleString(
+                          'en-US',
+                          options,
+                        ),
+                        data: Data.images,
+                        totalImages: Data.images.length,
+                        currentImageIndex: index,
+                      })
+                    }>
                     {item && (
                       <Image
                         source={{

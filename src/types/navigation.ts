@@ -6,7 +6,6 @@ export type RootStackParamList = {
   BottomNavBar: undefined;
   dailyDarshan: undefined;
   dailyDarshanDetail: {
-    image: any;
     date: string;
     totalImages: number;
     data: String[];
