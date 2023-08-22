@@ -1,6 +1,8 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -9,12 +11,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {d, options} from '../../../../utils';
+import {options} from '../../../../utils';
 import {styles} from './styles';
+
 export const DailyUpdateDetail = ({
   route,
   navigation,
@@ -22,6 +24,8 @@ export const DailyUpdateDetail = ({
   const style = styles();
   const commonstyle = CommonStyle();
   const Data = route.params.data;
+
+  const {t} = useTranslation();
 
   return (
     <ScreenWrapper>
@@ -31,11 +35,7 @@ export const DailyUpdateDetail = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Daily Updates'}
-        headerRight={{
-          icon: AllIcons.Filter,
-          onPress: () => {},
-        }}
+        headerTitle={t('DailyUpdate.Heading')}
       />
       <View style={commonstyle.commonContentView}>
         <ScrollView
@@ -46,12 +46,12 @@ export const DailyUpdateDetail = ({
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
             <Text style={style.date}>
-              {d.toLocaleDateString('en-IN', options)}
+              {new Date(Data.date).toLocaleString('en-US', options)}
             </Text>
           </View>
           <View style={style.imageContainer}>
             <Image
-              source={{uri: `https://gurukul.taskgrids.com/${Data.images[0]}`}}
+              source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
             />
           </View>
@@ -59,7 +59,7 @@ export const DailyUpdateDetail = ({
             <Text style={style.content}>{Data.description}</Text>
           </View>
           <View style={{marginTop: 24}}>
-            <Text style={style.title}>Photo Gallery</Text>
+            <Text style={style.title}>{t('common.PhotoGallery')}</Text>
             <FlatList
               horizontal
               contentContainerStyle={{
@@ -74,7 +74,7 @@ export const DailyUpdateDetail = ({
                     {item && (
                       <Image
                         source={{
-                          uri: `https://gurukul.taskgrids.com/${item}`,
+                          uri: `${BASE_URL}/${item}`,
                         }}
                         key={index}
                         style={{height: 105, width: 110, borderRadius: 8}}

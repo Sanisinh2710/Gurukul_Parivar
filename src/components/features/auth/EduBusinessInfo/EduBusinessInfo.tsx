@@ -49,6 +49,7 @@ export const EduBusinessInfo = React.memo(
       type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
+      required: boolean;
     }[] = [
       {
         name: 'education',
@@ -56,16 +57,14 @@ export const EduBusinessInfo = React.memo(
         placeholder: t('education/BusinessInfo.HighesteduPlaceHolder'),
         type: 'select',
         menuList: [
-          '8th',
-          '9th',
-          '10th',
-          '12th',
+          'Primary Education',
+          'Secondary Education',
           'Diploma',
           'U.G.',
           'P.G.',
           'Ph.d.',
-          'BE',
         ],
+        required: true,
       },
       {
         name: 'occupation',
@@ -77,6 +76,7 @@ export const EduBusinessInfo = React.memo(
           showHeading: true,
           wantFullSpace: true,
         },
+        required: true,
       },
       {
         name: 'occupation_type',
@@ -84,6 +84,7 @@ export const EduBusinessInfo = React.memo(
         placeholder: t('education/BusinessInfo.OccuTypePlaceHolder'),
         type: 'select',
         menuList: OccupationList,
+        required: true,
       },
       {
         name: 'skills',
@@ -91,12 +92,14 @@ export const EduBusinessInfo = React.memo(
         placeholder: t('education/BusinessInfo.SKillsPlaceHolder'),
         type: 'multi-select',
         menuList: skillsList,
+        required: true,
       },
       {
         name: 'other',
         lable: t('education/BusinessInfo.Other'),
         placeholder: t('education/BusinessInfo.OtherPlaceHolder'),
         type: 'textarea',
+        required: false,
       },
     ];
 
@@ -113,15 +116,20 @@ export const EduBusinessInfo = React.memo(
 
     const onSubmit = (data: EduBusinessInfoValidationSchemaType) => {
       if (data !== undefined) {
-        onSubmitEvent(data, rightButtonProps ? rightButtonProps.case : 'next');
+        onSubmitEvent(data, 'next');
+      }
+    };
+
+    const leftOnSubmitWithData = (
+      data: EduBusinessInfoValidationSchemaType,
+    ) => {
+      if (data !== undefined) {
+        onSubmitEvent(data, 'exit');
       }
     };
 
     const leftOnSubmit = () => {
-      onSubmitEvent(
-        initialValues,
-        leftButtonProps ? leftButtonProps.case : 'skip',
-      );
+      onSubmitEvent(initialValues, 'skip');
     };
 
     React.useEffect(() => {
@@ -173,6 +181,7 @@ export const EduBusinessInfo = React.memo(
                           onChange={onChange}
                           menuList={item.menuList}
                           customProps={item.customProps}
+                          required={item.required}
                           error={errors[item.name]?.message?.toString()}
                         />
                       );
@@ -186,7 +195,11 @@ export const EduBusinessInfo = React.memo(
                 title={
                   leftButtonProps ? leftButtonProps.title : t('common.SkipNow')
                 }
-                onPress={leftOnSubmit}
+                onPress={
+                  leftButtonProps
+                    ? handleSubmit(leftOnSubmitWithData)
+                    : leftOnSubmit
+                }
                 buttonStyle={style.submitButtonStyle}
               />
               <PrimaryButton

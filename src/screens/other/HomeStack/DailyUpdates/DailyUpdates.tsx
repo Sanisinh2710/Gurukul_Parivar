@@ -2,14 +2,13 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyUpdatesApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {d} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdates = ({
@@ -18,8 +17,9 @@ export const DailyUpdates = ({
   const style = styles();
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const NewDate = d.toISOString().split('T')[0];
   const commonStyle = CommonStyle();
+  const {t} = useTranslation();
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -27,7 +27,47 @@ export const DailyUpdates = ({
 
       if (res.resType === 'SUCCESS') {
         const timer = setTimeout(() => {
-          setData(res.data.daily_updates);
+          const data = res.data.daily_updates.map(
+            (data: {
+              description: any;
+              images: any;
+              title: any;
+              created_at: string | number | Date;
+              date: any;
+            }) => {
+              data.description = data.description;
+              data.images = data.images;
+              data.title = data.title;
+              data.date = data.created_at;
+              if (
+                new Date(data.created_at).toLocaleDateString() ===
+                new Date().toLocaleDateString()
+              ) {
+                let time = new Date(data.created_at)
+                  .toLocaleTimeString()
+                  .substring(0, 5);
+                let day = new Date(data.created_at)
+                  .toLocaleTimeString()
+                  .substring(9, 12);
+
+                data.created_at = `${time}` + ' ' + `${day}`;
+              } else if (
+                new Date(data.created_at).getDate() ===
+                new Date().getDate() - 1
+              ) {
+                data.created_at = 'Yesterday';
+              } else {
+                data.created_at = new Date(data.created_at)
+                  .toUTCString()
+                  .slice(5, 11)
+                  .concat(',');
+              }
+
+              return data;
+            },
+          );
+
+          setData(data);
           setLoader(false);
         }, 200);
 
@@ -39,25 +79,6 @@ export const DailyUpdates = ({
       console.log(error);
     }
   }, []);
-  // const formatTime = (time: Date) => {
-  //   const currentTime = new Date();
-  //   const createdAt = new Date(time);
-
-  //   const timeDifference = currentTime - createdAt;
-
-  //   if (timeDifference < 60000) {
-  //     return 'Now';
-  //   } else if (timeDifference < 3600000) {
-  //     return Math.floor(timeDifference / 60000) + ' minutes ago';
-  //   } else if (timeDifference < 86400000) {
-  //     return Math.floor(timeDifference / 3600000) + ' hours ago';
-  //   } else if (timeDifference < 172800000) {
-  //     return 'Yesterday';
-  //   } else {
-  //     const options = {year: 'numeric', month: 'short', day: 'numeric'};
-  //     return createdAt.toLocaleDateString(undefined, options);
-  //   }
-  // };
 
   return (
     <ScreenWrapper>
@@ -67,11 +88,7 @@ export const DailyUpdates = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Daily Update'}
-        headerRight={{
-          icon: AllIcons.Filter,
-          onPress: () => {},
-        }}
+        headerTitle={t('DailyUpdate.Heading')}
       />
       <View style={commonStyle.commonContentView}>
         {loader ? (

@@ -17,7 +17,12 @@
       "SelectValidYear": "मान्य वर्ष चुनें",
       "SelectValidStd": "मान्य वर्ग का चयन करें",
       "Next": "आगे",
-      "Update": "अपडेट"
+      "Update": "अपडेट",
+      "PhotoGallery": "फोटो गैलरी",
+      "AppName": "गुरुकुल परिवार",
+      "AppExitMsg": "क्या आप वाकई ऐप से बाहर निकलना चाहते हैं..?",
+      "TodayEventMsg": "आज की इवेंट",
+      "YouTubeLiveKatha": "यूट्यूब लाइव कथा"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",
@@ -181,8 +186,9 @@
       "Evening": "शाम"
     },
     "DailyDarshanDetail": {
-      "Ghanshyam Maharaj": "घनश्याम महाराज",
-      "Subtext": "आज के दर्शन को याद करने का अभ्यास करें"
+      "GhanshyamMaharaj": "घनश्याम महाराज",
+      "Subtext": "आज के दर्शन को याद करने का अभ्यास करें",
+      "SuccessfulDownload": "फोटो डाउनलोड सफल!"
     },
     "DailyQuote": {
       "Heading": "दैनिक उद्धरण"
@@ -219,9 +225,6 @@
     "ResultModel": {
       "Title": "बधाई हो",
       "Content": "आपने क्विज़ को उच्च रंग में पूरा किया है।\n शाबाश! ऐसे ही जारी रखें!"
-    },
-    "DailyCalendar": {
-      "Heading": "दैनिक कैलेंडर"
     },
     "Donation": {
       "Heading": "दान",

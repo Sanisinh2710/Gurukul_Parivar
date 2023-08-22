@@ -1,12 +1,12 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
   Image,
-  Modal,
   Pressable,
   ScrollView,
   Text,
@@ -14,8 +14,8 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {
   DropDownModel,
@@ -25,6 +25,7 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {
+  DeleteMydataApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
   getUserData,
@@ -40,8 +41,6 @@ import {
   chooseFile,
 } from '../../../utils';
 import {styles} from './styles';
-import Toast from 'react-native-simple-toast';
-import {BASE_URL} from '@env';
 
 export const ProfileScreen = ({
   navigation,
@@ -52,7 +51,6 @@ export const ProfileScreen = ({
   const [modelVisible, setModelVisible] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
-  const [imageUpdate, setImageUpdate] = React.useState(true);
   const {t, i18n} = useTranslation();
 
   const ProfileList = React.useMemo(() => {
@@ -68,7 +66,7 @@ export const ProfileScreen = ({
     name: '',
     type: '',
   });
-  console.log(userData, 'DATA');
+
   const userProfileUpdate = async (selectedImage: any) => {
     if (userData.resType == 'SUCCESS') {
       const userDataClone = JSON.parse(JSON.stringify(userData.userdata));
@@ -87,7 +85,6 @@ export const ProfileScreen = ({
           delete userDataCloneObj[i];
         }
       }
-      console.log(userDataCloneObj, 'ONJ USER');
       const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
 
       if (response.resType == 'SUCCESS') {
@@ -180,8 +177,10 @@ export const ProfileScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
-          onPress: () => {},
+          icon: AllIcons.NotificationOutline,
+          onPress: () => {
+            navigation.navigate('dailyUpdates');
+          },
         }}
       />
 
@@ -190,7 +189,7 @@ export const ProfileScreen = ({
           commonStyle.commonContentView,
           {paddingBottom: '25%'},
         ]}
-        showsVerticalScrollIndicator={true}>
+        showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
           <View onTouchEnd={() => setProfileModel(true)}>
             <View style={{height: 64, width: 64}}>
@@ -213,15 +212,16 @@ export const ProfileScreen = ({
               {userData.userdata.primary_contact_cc?.toString().split('(')[0]}
               {userData.userdata.primary_contact}
             </Text>
-            <View style={style.familyIdView}>
+            {/* <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
-            </View>
+            </View> */}
           </View>
         </View>
         <View style={style.mapContainer}>
           {ProfileList.map((item, index) => {
             return (
               <TouchableOpacity
+                activeOpacity={0.8}
                 key={index}
                 onPress={() => {
                   handlePress(item.id);
@@ -329,7 +329,17 @@ export const ProfileScreen = ({
                             navigation.replace('Auth');
                           }
                         }
-                      : () => {}
+                      : async () => {
+                          const response = await DeleteMydataApi();
+
+                          if (response.resType === 'SUCCESS') {
+                            const resRemoveAuthToken = removeAuthToken();
+
+                            if (resRemoveAuthToken === 'SUCCESS') {
+                              navigation.replace('Auth');
+                            }
+                          }
+                        }
                   }
                   buttonStyle={{width: '42%'}}
                   title={

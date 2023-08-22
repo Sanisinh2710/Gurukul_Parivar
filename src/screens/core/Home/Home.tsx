@@ -1,11 +1,14 @@
 import React from 'react';
 
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {CompositeScreenProps} from '@react-navigation/native';
+import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  Alert,
+  BackHandler,
   ImageBackground,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -13,10 +16,9 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
-import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {getUserData} from '../../../services';
+import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
 import {styles} from './styles';
@@ -28,14 +30,25 @@ export const HomeScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const [dashboardImages, setDashboardImages] = React.useState([
-    AllImages.Rectangle,
-    AllImages.Rectangle3,
-    AllImages.Rectangle2,
-  ]);
+  const [dashboardImages, setDashboardImages] = React.useState([]);
+  const [loader, setLoader] = React.useState<boolean>(false);
 
   const style = styles();
   const TouchX = React.useRef<any>();
+
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        setDashboardImages(res.data.images);
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const userData = React.useMemo(() => {
     return getUserData();
@@ -43,6 +56,33 @@ export const HomeScreen = ({
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
+
+  const onBackPress = () => {
+    Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
+      {
+        text: t('common.Yes'),
+        onPress: () => {
+          BackHandler.exitApp();
+        },
+      },
+      {text: t('common.No'), onPress: () => null},
+    ]);
+    // Return true to stop default back navigaton
+    // Return false to keep default back navigaton
+    return true;
+  };
+
+  const ExitCallBack = React.useCallback(() => {
+    // Add Event Listener for hardwareBackPress
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => {
+      // Once the Screen gets blur Remove Event Listener
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  }, []);
+
+  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
   const handlePress = (val: string) => {
     switch (val) {
@@ -69,6 +109,23 @@ export const HomeScreen = ({
         break;
     }
   };
+
+  const handlePageChange = () => {
+    if (currentPage < dashboardImages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setCurrentPage(0);
+    }
+  };
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      handlePageChange();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [currentPage, dashboardImages]);
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -96,38 +153,23 @@ export const HomeScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
-          onPress: () => {},
+          icon: AllIcons.NotificationOutline,
+          onPress: () => {
+            navigation.navigate('dailyUpdates');
+          },
         }}
       />
-
-      <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-        <View
-          onTouchStart={e => {
-            TouchX.current = e.nativeEvent.pageX;
-          }}
-          onTouchEnd={e => {
-            if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < dashboardImages.length - 1) {
-                setCurrentPage(currentPage + 1);
-              }
-            }
-            if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (
-                currentPage > 0 &&
-                currentPage <= dashboardImages.length - 1
-              ) {
-                setCurrentPage(currentPage - 1);
-              }
-            }
-          }}>
-          <PagerView currentPage={currentPage} images={dashboardImages} />
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: '50%',
-          }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: '30%',
+        }}>
+        <View style={[commonStyle.commonContentView, {height: '100%'}]}>
+          {dashboardImages.length > 0 && (
+            <View>
+              <PagerView currentPage={currentPage} images={dashboardImages} />
+            </View>
+          )}
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
@@ -154,8 +196,8 @@ export const HomeScreen = ({
               </ImageBackground>
             ))}
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 };

@@ -88,6 +88,7 @@ export const AdressInfo = React.memo(
       type: SupportedFormInputTypes;
       menuList?: any;
       customProps?: object;
+      required: boolean;
     }[] = [
       {
         name: 'country_id',
@@ -95,24 +96,28 @@ export const AdressInfo = React.memo(
         placeholder: t('addressInfo.CountryPlaceHolder'),
         type: 'select',
         menuList: countries,
+        required: true,
       },
       {
         name: 'address',
         lable: t('addressInfo.AddressLbl'),
         placeholder: t('addressInfo.AddressPlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'pincode',
         lable: t('addressInfo.PincodeLbl'),
         placeholder: t('addressInfo.PincodePlaceholder'),
         type: 'number',
+        required: true,
       },
       {
         name: 'city',
         lable: t('addressInfo.CityVillageLbl'),
         placeholder: t('addressInfo.CityVillagePlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'address_type',
@@ -124,6 +129,7 @@ export const AdressInfo = React.memo(
           wantFullSpace: false,
           customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
         },
+        required: true,
       },
     ];
 
@@ -193,18 +199,28 @@ export const AdressInfo = React.memo(
           return item;
         });
 
-        onSubmitEvent(
-          [...newData],
-          rightButtonProps ? rightButtonProps.case : 'next',
-        );
+        onSubmitEvent([...newData], 'next');
+      }
+    };
+
+    const leftOnSubmitWithdata = (data: AddressFormValidationSchemaType) => {
+      if (data.address_details !== undefined) {
+        let newData = [...data.address_details].map((item, index) => {
+          item.is_preferred_communication = checkedArray[index];
+          item.address_type = TypeAddress(t).find(
+            items => items.name === item.address_type,
+          )?.id;
+          // item.country_id = parseInt(item.country_id);
+          // item.pincode = parseInt(item.pincode);
+          return item;
+        });
+
+        onSubmitEvent([...newData], 'exit');
       }
     };
 
     const leftOnSubmit = () => {
-      onSubmitEvent(
-        initialValues.address_details,
-        leftButtonProps ? leftButtonProps.case : 'skip',
-      );
+      onSubmitEvent(initialValues.address_details, 'skip');
     };
 
     return (
@@ -301,6 +317,9 @@ export const AdressInfo = React.memo(
                                 placeholder={item.placeholder}
                                 value={value}
                                 onBlur={onBlur}
+                                required={
+                                  mainindex === 0 ? item.required : false
+                                }
                                 onChange={onChange}
                                 customProps={item.customProps}
                                 error={errors?.address_details?.[mainindex]?.[
@@ -374,7 +393,11 @@ export const AdressInfo = React.memo(
                 title={
                   leftButtonProps ? leftButtonProps.title : t('common.SkipNow')
                 }
-                onPress={leftOnSubmit}
+                onPress={
+                  leftButtonProps
+                    ? handleSubmit(leftOnSubmitWithdata)
+                    : leftOnSubmit
+                }
                 buttonStyle={style.submitButtonStyle}
               />
               <PrimaryButton

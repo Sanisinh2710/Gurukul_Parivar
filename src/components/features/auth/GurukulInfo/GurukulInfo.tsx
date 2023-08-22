@@ -45,6 +45,7 @@ type GurukulInfoListType = {
   customProps?: object;
   rightText?: string;
   rightTextOnPress?: (...event: any[]) => void;
+  required?: boolean;
 };
 
 const attendOpt = (t: any) => [
@@ -143,7 +144,6 @@ export const GurukulInfo = React.memo(
           newData.FromFamily = GurukulRelativeList(t).find(
             items => items.id === newData.FromFamily,
           )?.name;
-
           replace(newData);
           setLoader(false);
         }
@@ -162,6 +162,7 @@ export const GurukulInfo = React.memo(
       customProps?: object;
       rightText?: string;
       rightTextOnPress?: (...event: any[]) => void;
+      required?: boolean;
     }[] = [
       {
         name: 'branch_id',
@@ -186,6 +187,7 @@ export const GurukulInfo = React.memo(
             relation: '',
           });
         },
+        required: true,
       },
       {
         name: 'attend',
@@ -197,6 +199,7 @@ export const GurukulInfo = React.memo(
           wantFullSpace: false,
           customStyle: {borderRadius: 50, height: 35, borderWidth: 0},
         },
+        required: true,
       },
       {
         mainType: [
@@ -219,6 +222,7 @@ export const GurukulInfo = React.memo(
               '11',
               '12',
             ],
+            required: true,
           },
           {
             name: 'standard_to',
@@ -239,6 +243,7 @@ export const GurukulInfo = React.memo(
               '11',
               '12',
             ],
+            required: true,
           },
         ],
       },
@@ -250,6 +255,7 @@ export const GurukulInfo = React.memo(
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
             menuList: getYearsArray(),
+            required: true,
           },
           {
             name: 'hsc_year',
@@ -257,6 +263,7 @@ export const GurukulInfo = React.memo(
             placeholder: t('gurukulInfo.Select'),
             type: 'select',
             menuList: getYearsArray(),
+            required: true,
           },
         ],
       },
@@ -266,12 +273,14 @@ export const GurukulInfo = React.memo(
         placeholder: t('gurukulInfo.Select'),
         type: 'select',
         menuList: saints,
+        required: true,
       },
       {
         name: 'known_haribhakta',
         lable: t('gurukulInfo.KnowHaribhakta'),
         placeholder: t('gurukulInfo.KnowHaribhaktaPlaceholder'),
         type: 'text',
+        required: true,
       },
       {
         name: 'RelativeOfSaint',
@@ -279,6 +288,7 @@ export const GurukulInfo = React.memo(
         placeholder: '',
         type: 'radio',
         menuList: [{name: 'Yes'}, {name: 'No'}],
+        required: true,
       },
     ];
 
@@ -291,6 +301,7 @@ export const GurukulInfo = React.memo(
       menuList?: any;
       customProps?: object;
       rightText?: string;
+      required: boolean;
     }[] = React.useMemo(() => {
       return [
         {
@@ -299,6 +310,7 @@ export const GurukulInfo = React.memo(
           placeholder: '',
           type: 'radio',
           menuList: GurukulRelativeList(t),
+          required: true,
         },
         {
           name: 'saint_from_family',
@@ -306,6 +318,7 @@ export const GurukulInfo = React.memo(
           placeholder: t('gurukulInfo.NameSaint'),
           type: 'select',
           menuList: saintFromFamily,
+          required: true,
         },
         {
           name: 'relation',
@@ -313,6 +326,7 @@ export const GurukulInfo = React.memo(
           placeholder: t('gurukulInfo.YourRelation'),
           type: 'select',
           menuList: ['Father', 'Mother', 'Brother'],
+          required: true,
         },
       ];
     }, [saintFromFamily]);
@@ -339,14 +353,11 @@ export const GurukulInfo = React.memo(
         }
       });
 
-      onSubmitEvent(newData, rightButtonProps ? rightButtonProps.case : 'next');
+      onSubmitEvent(newData, 'next');
     };
 
     const onSubmitWithoutExstudent = () => {
-      onSubmitEvent(
-        initialValues,
-        leftButtonProps ? leftButtonProps.case : 'skip',
-      );
+      onSubmitEvent(initialValues, 'skip');
     };
 
     return (
@@ -364,6 +375,7 @@ export const GurukulInfo = React.memo(
               value={exstudent}
               onChange={setExstudent}
               list={[{name: 'Yes'}, {name: 'No'}]}
+              required={true}
             />
             {exstudent === 'Yes' ? (
               <View>
@@ -422,6 +434,9 @@ export const GurukulInfo = React.memo(
                                                   placeholder={
                                                     arrayItem.item.placeholder
                                                   }
+                                                  required={
+                                                    arrayItem.item.required
+                                                  }
                                                   value={value}
                                                   onBlur={onBlur}
                                                   onChange={onChange}
@@ -465,6 +480,7 @@ export const GurukulInfo = React.memo(
                                         value={value}
                                         onBlur={onBlur}
                                         onChange={onChange}
+                                        required={item?.required}
                                         customProps={item?.customProps}
                                         error={
                                           item.name
@@ -512,6 +528,7 @@ export const GurukulInfo = React.memo(
                                         value={value}
                                         onBlur={onBlur}
                                         onChange={onChange}
+                                        required={arrayItem.item.required}
                                         customProps={arrayItem.item.customProps}
                                         error={errors?.gurukulData?.[
                                           mainindex

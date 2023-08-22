@@ -1,13 +1,19 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, View} from 'react-native';
-import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {
+  CustomNavigate,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+} from '../../../../components';
+import {CalendarGetApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
 import {d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
@@ -18,9 +24,12 @@ export const CalendarScreen = ({
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
-  const date = d.getDate().toString().padStart(2, '0');
-  const day = daysArray[d.getDay()];
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
+  const [wallpaper, setWallpaper] = React.useState('');
+  const [loader, setLoader] = React.useState<boolean>(false);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
+  const [todayEvent, setEvents] = React.useState<{[key: string]: any}[]>([]);
+
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setMonth(selectedDate.getMonth() - 1);
@@ -40,6 +49,27 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const newDate = new Date(
+        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
+      );
+      const res = await CalendarGetApi(newDate);
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.calendar);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {}
+  }, [selectedDate]);
+
+  React.useEffect(() => {
+    Data.map(item => setEvents(item.events));
+    Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
+  }, [Data]);
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -48,41 +78,71 @@ export const CalendarScreen = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={t('DailyCalendar.Heading')}
+        headerTitle={t('homeScreen.Calendar')}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <ScrollView>
+        {loader ? (
+          <Loader />
+        ) : Data.length > 0 && Data[0].image !== undefined ? (
           <View>
-            <Text style={style.title}>આજનો દિવસ રળીયામણો</Text>
-          </View>
-          <View style={style.textBoxContainer}>
-            <View style={style.dateContainer}>
-              <Text style={style.date}>{date}</Text>
-              <Text style={style.day}>{day}</Text>
+            {todayEvent.filter(
+              // event => event.date === d.toISOString().substring(0, 10),
+              event => event.date === d.toISOString().substring(0, 10),
+            ).length > 0 && (
+              <>
+                <View>
+                  <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
+                </View>
+                <ScrollView style={{height: '28%'}}>
+                  {todayEvent
+                    .filter(
+                      event => event.date === d.toISOString().substring(0, 10),
+                    )
+                    .map((item, index) => (
+                      <View key={index} style={style.textBoxContainer}>
+                        <View style={style.dateContainer}>
+                          <Text style={style.date}>
+                            {item.date.split('-')[2]}
+                          </Text>
+                          <Text style={style.day}>
+                            {daysArray[new Date(item.date).getDay()]}
+                          </Text>
+                        </View>
+                        <View style={style.contentContainer}>
+                          <Text style={style.content1}>{item.title}</Text>
+                          <Text style={style.content2}>{item.description}</Text>
+                        </View>
+                      </View>
+                    ))}
+                </ScrollView>
+              </>
+            )}
+
+            <View
+              style={[
+                {marginTop: '15%', alignSelf: 'center'},
+                todayEvent.filter(
+                  // event => event.date === d.toISOString().substring(0, 10),
+                  event => event.date === d.toISOString().substring(0, 10),
+                ).length === 0 && {
+                  marginTop: '50%',
+                },
+              ]}>
+              <Image
+                source={{uri: `${BASE_URL}${Data[0].image}`}}
+                style={{height: 264, width: 345}}
+              />
             </View>
-            <View style={style.contentContainer}>
-              <Text style={style.content1}>મુક્તાનંદ સ્વામીનો જન્મ દિવસ</Text>
-              <Text style={style.content2}>૧૫,પૂર્ણિમા - શુક્લ પક્ષ </Text>
-            </View>
+            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
-          <View style={{width: '100%', height: 64, flexDirection: 'row'}}>
-            <View style={style.dateContainer}>
-              <Text style={style.date}>{date}</Text>
-              <Text style={style.day}>{day}</Text>
-            </View>
-            <View style={style.contentContainer}>
-              <Text style={style.content1}>મુક્તાનંદ સ્વામીનો જન્મ દિવસ</Text>
-              <Text style={style.content2}>૧૫,પૂર્ણિમા - શુક્લ પક્ષ </Text>
-            </View>
+        ) : (
+          <View
+            style={{
+              height: '90%',
+            }}>
+            <NoData />
           </View>
-          <View style={{marginTop: '15%'}}>
-            <Image
-              source={AllImages.CalendarImage}
-              style={{height: 264, width: 345}}
-            />
-          </View>
-          <ShareDownload wallpaper={false} />
-        </ScrollView>
+        )}
       </View>
       <CustomNavigate
         handleNextPress={handleNext}

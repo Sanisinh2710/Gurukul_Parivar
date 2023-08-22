@@ -1,15 +1,14 @@
-import {AllImages} from '../../../../assets/images';
 import React from 'react';
-import {Text, View} from 'react-native';
-import {styles} from './styles';
-import {Image} from 'react-native';
-import {useTranslation} from 'react-i18next';
-import {ScreenWrapper} from '../ScreenWrapper';
-import {PrimaryButton} from '../Buttons';
-import {CommonStyle} from '../../../../assets/styles';
+
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {Image, Text, View} from 'react-native';
+import {AllImages} from '../../../../assets/images';
+import {CommonStyle} from '../../../../assets/styles';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
+import {PrimaryButton} from '../Buttons';
+import {ScreenWrapper} from '../ScreenWrapper';
+import {styles} from './styles';
 
 export const CommingSoon = ({
   navigation,
@@ -20,40 +19,42 @@ export const CommingSoon = ({
   const style = styles();
   const CommonStyles = CommonStyle();
 
-  const {t} = useTranslation();
   return (
     <ScreenWrapper>
       <View
         style={[
           CommonStyles.commonContentView,
-          {flex: 0.8, justifyContent: 'center'},
+          {flex: 1, justifyContent: 'center', gap: 50},
         ]}>
         <View>
-          <Image
-            source={AllImages.CommingSoon}
-            style={{
-              width: 213,
-              height: 87,
-              alignSelf: 'center',
-              resizeMode: 'contain',
-            }}
-          />
+          <View>
+            <Image
+              source={AllImages.CommingSoon}
+              style={{
+                width: 213,
+                height: 87,
+                alignSelf: 'center',
+                resizeMode: 'contain',
+              }}
+            />
+          </View>
+          <View>
+            <Text style={style.soon}>Coming Soon...</Text>
+            <Text style={style.NoDataContent}>
+              Looks like our data elves are on a break.
+            </Text>
+            <Text style={style.NoDataContent}>
+              We'll conjure up some information soon.
+            </Text>
+          </View>
         </View>
-        <View>
-          <Text style={style.soon}>Coming Soon...</Text>
-          <Text style={style.NoDataContent}>
-            Looks like our data elves are on a break.
-          </Text>
-          <Text style={style.NoDataContent}>
-            We'll conjure up some information soon.
-          </Text>
-        </View>
+
+        <PrimaryButton
+          title={'Go to Home Page'}
+          onPress={() => navigation.goBack()}
+          buttonStyle={{paddingHorizontal: 20, flex: 0.2}}
+        />
       </View>
-      <PrimaryButton
-        title={'Go to Home Page'}
-        onPress={() => navigation.goBack()}
-        buttonStyle={{paddingHorizontal: 20, flex: 0.2}}
-      />
     </ScreenWrapper>
   );
 };

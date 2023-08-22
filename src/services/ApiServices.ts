@@ -3,10 +3,12 @@ import {
   ADDRESS_INFO_GET_ENDPOINT,
   ADDRESS_INFO_POST_ENDPOINT,
   BASE_URL,
+  CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
+  DELETE_USER_ENDPOINT,
   EDUCATION_INFO_GET_ENDPOINT,
   EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
@@ -18,6 +20,7 @@ import {
   PERSONAL_INFO_POST_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
   SAINT_NAME_GET_ENDPOINT,
+  SLIDER_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
 import axios, {AxiosResponse} from 'axios';
@@ -180,8 +183,6 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
-  console.log(finalPayload, 'FINAL');
-
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
@@ -224,4 +225,17 @@ export const SaintFromFamilyGetApi = async (type: number) => {
 
 export const AddressDeleteApi = async (id: any) => {
   return await apiRequest(`${ADDRESS_DELETE_ENDPOINT}${id}`, 'delete');
+};
+
+export const CalendarGetApi = async (date: Date) => {
+  const newDate = date.toLocaleString('en-US', ApiDateFormat);
+  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {date: newDate});
+};
+
+export const SliderGetApi = async () => {
+  return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
+};
+
+export const DeleteMydataApi = async () => {
+  return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };

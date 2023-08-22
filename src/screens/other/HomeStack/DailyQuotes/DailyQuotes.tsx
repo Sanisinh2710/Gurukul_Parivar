@@ -1,32 +1,29 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, TextInput, View} from 'react-native';
+import {Dimensions, Image, Text, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  CustomNavigate,
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
+  ShareDownload,
+  SimpleDropDown,
 } from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
+import {DailyQuotesApi, GurukulBranchGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {d, options} from '../../../../utils';
+import {COLORS, CustomFonts, d, options} from '../../../../utils';
 import {styles} from './styles';
-import {
-  DailyQuotesApi,
-  GurukulBranchGetApi,
-  getUserData,
-} from '../../../../services';
-import Toast from 'react-native-simple-toast';
-import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
-import {BASE_URL} from '@env';
-import Carousel from 'react-native-snap-carousel';
-import Clipboard from '@react-native-clipboard/clipboard';
+
 export const DailyQuotes = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -48,7 +45,6 @@ export const DailyQuotes = ({
   const [itemIndex, setItemIndex] = React.useState(0);
 
   React.useMemo(async () => {
-    console.log('THIS SET GURURKUl');
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
@@ -60,7 +56,6 @@ export const DailyQuotes = ({
   React.useEffect(() => {
     if (GurukulList.length > 0 && GurukulList !== undefined) {
       const name = GurukulList.find(item => item.id == changeValue)?.name;
-      console.log(name);
       setBranchName(name);
     }
   }, [changeValue, GurukulList]);
@@ -111,9 +106,7 @@ export const DailyQuotes = ({
       let newImges = Data.filter((item: any) => {
         return item.branch == BranchName;
       })?.[0]?.daily_quotes;
-      console.log('>>>>>>>IMAGES', newImges);
       if (newImges != undefined || newImges != null || newImges != '') {
-        console.log('IF EXECE');
         setDailQuotes(newImges);
       } else {
         setDailQuotes([]);
@@ -122,15 +115,15 @@ export const DailyQuotes = ({
   };
 
   React.useEffect(() => {
-    // console.log(Image_Data(), 'this');
     Image_Data();
   }, [Data, BranchName]);
-  // console.log(DailyQuotes.length,"<<");
 
   const handleClipBoard = (item: any) => {
-    Clipboard.setString(item);
-    Toast.show('Quote Copied To Clipboard', Toast.SHORT);
+    const clip = Clipboard.setString(item);
+
+    Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -149,33 +142,44 @@ export const DailyQuotes = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '8%', marginBottom: '8%'}}>
-          <View>
-            <Text>{t('uploadPhoto.DropdownTitle')}</Text>
-          </View>
-          <View>
-            <Calendar
-              setCalendarVisible={setCalendarVisible}
-              calendarVisible={calendarVisible}
-              selectedParentDate={selectedDate}
-              setSelectedParentDate={setSelectedDate}
-            />
-          </View>
           <View
             style={{
-              backgroundColor: 'rgba(172,43,49,0.05)',
-              paddingHorizontal: '2%',
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.1)',
-              borderRadius: 12,
+              marginTop: '5%',
             }}>
-            <SimpleDropDown
-              placeholder="Select Gurukul Branch"
-              label="Gurukul"
-              dropDownList={GurukulList}
-              type={'simple'}
-              value={changeValue}
-              onChange={setChangeValue}
-            />
+            <Text
+              style={{
+                ...CustomFonts.body.large14,
+                color: COLORS.lightModetextColor,
+                fontSize: 15,
+              }}>
+              {t('uploadPhoto.DropdownTitle')}
+            </Text>
+
+            <View
+              style={{
+                backgroundColor: 'rgba(172,43,49,0.05)',
+                paddingHorizontal: '2%',
+                borderWidth: 1,
+                borderColor: 'rgba(172, 43, 49, 0.1)',
+                borderRadius: 12,
+              }}>
+              <SimpleDropDown
+                placeholder="Select Gurukul Branch"
+                label="Gurukul"
+                dropDownList={GurukulList}
+                type={'simple'}
+                value={changeValue}
+                onChange={setChangeValue}
+                onBlur={function (...event: any[]): void {
+                  throw new Error('Function not implemented.');
+                }}
+                setFocused={function (
+                  value: React.SetStateAction<boolean>,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </View>
           </View>
         </View>
         {loader ? (
@@ -220,8 +224,10 @@ export const DailyQuotes = ({
                           </View>
                           <View>
                             <Text
+                              style={style.quote}
+                              selectable={true}
                               onLongPress={() => handleClipBoard(item.quote)}
-                              style={style.quote}>
+                              selectionColor={'red'}>
                               {item.quote}
                             </Text>
                           </View>
@@ -230,7 +236,7 @@ export const DailyQuotes = ({
                     />
                     <ShareDownload
                       wallpaper={false}
-                      imgURL={DailyQuotes?.[itemIndex]?.image}
+                      imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
                     />
                   </View>
                 ) : (
@@ -242,6 +248,14 @@ export const DailyQuotes = ({
             )}
           </>
         )}
+      </View>
+      <View>
+        <Calendar
+          setCalendarVisible={setCalendarVisible}
+          calendarVisible={calendarVisible}
+          selectedParentDate={selectedDate}
+          setSelectedParentDate={setSelectedDate}
+        />
       </View>
       <CustomNavigate
         text={

@@ -1,7 +1,16 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Image, Pressable, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -12,13 +21,18 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
+  LoginByEmailApi,
+  PersonalInfoGetDetailsApi,
   VerifyOTPApi,
   isProfilingDone,
   setAuthToken,
+  setUserData,
 } from '../../../../services';
 import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
+
+const staticSeconds = 120;
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const primary_email = route.params?.primary_email;
@@ -27,10 +41,11 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
-  const [countdown, setCountdown] = React.useState(120); // Initial countdown time in seconds
-  const [resendEnabled, setResendEnabled] = React.useState(true);
+  const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
+  const [resendEnabled, setResendEnabled] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [isApiLoading, setIsApiloading] = React.useState(false);
+  const [isApiResendLoading, setIsApiResendloading] = React.useState(false);
 
   const handleLogin = async () => {
     let flag = 0;
@@ -60,7 +75,30 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             setIsApiloading(false);
 
             if (isProfileSignupDone === 'SUCCESS') {
-              navigation.replace('BottomNavBar');
+              const backenduserresponse = await PersonalInfoGetDetailsApi();
+
+              if (backenduserresponse.resType === 'SUCCESS') {
+                if (
+                  backenduserresponse.data.personal_details !== null &&
+                  backenduserresponse.data.personal_details !== undefined &&
+                  backenduserresponse.data.personal_details !== ''
+                ) {
+                  let finalData = JSON.parse(
+                    JSON.stringify(backenduserresponse.data.personal_details),
+                  );
+
+                  finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+
+                  const setuserdataresponse = setUserData(finalData);
+
+                  if (setuserdataresponse === 'SUCCESS') {
+                    navigation.replace('BottomNavBar');
+                  }
+                }
+              } else {
+                setIsApiloading(false);
+                Toast.show(backenduserresponse.message, 2);
+              }
             } else {
               navigation.replace('LoginSuccess', {type: 'Login'});
             }
@@ -77,14 +115,20 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   };
 
   React.useEffect(() => {
+    let flag = 0;
     for (let i = 0; i < num.length; i++) {
-      if (num[i] !== '' || num[i] === undefined) {
-        setDisabled(false);
-      } else {
-        setDisabled(true);
+      if (num[i] === '' || num[i] === undefined) {
+        flag = 1;
+        break;
       }
     }
+    if (flag === 0) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [num]);
+
   React.useEffect(() => {
     if (countdown > 0) {
       const interval = setInterval(() => {
@@ -94,14 +138,15 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
         clearInterval(interval);
       };
     } else {
-      setResendEnabled(true);
+      setResendEnabled(false);
     }
   }, [countdown]);
 
   const handleResendOTP = () => {
-    setResendEnabled(false);
-    setCountdown(120);
+    setIsApiResendloading(true);
+    setResendEnabled(true);
   };
+
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -110,62 +155,88 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .padStart(2, '0')}`;
   };
 
+  React.useMemo(async () => {
+    if (resendEnabled) {
+      const response = await LoginByEmailApi(primary_email ?? '');
+      setIsApiResendloading(false);
+
+      if (response.resType === 'SUCCESS') {
+        Toast.show('A new OTP has been sent to your mail..!', 2);
+        setCountdown(staticSeconds);
+      } else {
+        Toast.show(response.message, 2);
+      }
+    }
+  }, [resendEnabled]);
+
   return (
     <ScreenWrapper>
-      <ScreenHeader
-        showLeft={true}
-        leftOnPress={() => {
-          navigation.goBack();
-        }}
-      />
-      <View style={CommonStyles.commonContentView}>
-        <View style={style.textWrapper}>
-          <Text style={style.headerText}>{t('otpScreen.OtpHeader')}</Text>
-          <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
-        </View>
-        <View style={style.otpContainer}>
-          <Text style={style.otpContainerHeader}>
-            {t('otpScreen.OtpContainerText')}
-          </Text>
-          <View style={style.phoneEditContainer}>
-            {primary_email && (
-              <Text style={style.phoneNumber}>{primary_email}</Text>
-            )}
-            <View style={style.editIconStyle}>
-              <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <ScreenHeader
+          showLeft={true}
+          leftOnPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={CommonStyles.commonContentView}>
+          <View style={style.textWrapper}>
+            <Text style={style.headerText}>{t('otpScreen.OtpHeader')}</Text>
+            <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
+          </View>
+          <View style={style.otpContainer}>
+            <Text style={style.otpContainerHeader}>
+              {t('otpScreen.OtpContainerText')}
+            </Text>
+            <View style={style.phoneEditContainer}>
+              {primary_email && (
+                <Text style={style.phoneNumber}>{primary_email}</Text>
+              )}
+              <View
+                style={style.editIconStyle}
+                onTouchEnd={() => navigation.goBack()}>
+                <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
+              </View>
             </View>
+
+            <OtpComponent num={num} setNum={setNum} />
+            {/* <OtpInput /> */}
+
+            <View style={style.otpNotRecieveContainer}>
+              <Text style={style.smallText}>
+                {t('otpScreen.OtpNotRecieve')}{' '}
+              </Text>
+
+              {countdown > 0 ? (
+                <Text style={style.otpResend}>{formatTime(countdown)}</Text>
+              ) : isApiResendLoading ? (
+                <ActivityIndicator color={COLORS.primaryColor} size={20} />
+              ) : (
+                <Pressable onPress={handleResendOTP}>
+                  <Text style={style.otpResend}>
+                    {t('otpScreen.OtpResend')}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+            <PrimaryButton
+              onPress={handleLogin}
+              title={t('otpScreen.Verify&Login')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
+              disabled={disabled}
+            />
           </View>
-
-          <OtpComponent num={num} setNum={setNum} />
-
-          <View style={style.otpNotRecieveContainer}>
-            <Text style={style.smallText}>{t('otpScreen.OtpNotRecieve')} </Text>
-
-            {countdown > 0 ? (
-              <Text style={style.otpResend}>{formatTime(countdown)}</Text>
-            ) : (
-              <Pressable onPress={handleResendOTP}>
-                <Text style={style.otpResend}>{t('otpScreen.OtpResend')}</Text>
-              </Pressable>
-            )}
-          </View>
-          <PrimaryButton
-            onPress={handleLogin}
-            title={t('otpScreen.Verify&Login')}
-            customWidget={
-              isApiLoading ? (
-                <>
-                  <ActivityIndicator
-                    size={25}
-                    color={COLORS.darkModetextColor}
-                  />
-                </>
-              ) : undefined
-            }
-            disabled={disabled}
-          />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ScreenWrapper>
   );
 };

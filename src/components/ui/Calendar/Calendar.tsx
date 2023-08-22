@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   Modal,
   Pressable,
   ScrollView,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
 import {COLORS, months, weekDays} from '../../../utils';
 
 const minAllowedDOBDate = new Date();
@@ -227,18 +229,90 @@ export const Calendar = ({
       <View style={styles.mainContainer}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={handleOpenYearModal}>
+            <TouchableOpacity
+              onPress={handleOpenYearModal}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <Text style={styles.monthText}>
                 {months[currentMonth]} {currentYear}
-                {' >'}
               </Text>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  marginLeft: 8,
+                }}>
+                <Image
+                  source={AllIcons.ChevronArrowDown}
+                  style={{
+                    flex: 1,
+                    width: '100%',
+                    height: '100%',
+                    tintColor: COLORS.primaryColor,
+                    resizeMode: 'contain',
+                    transform: [
+                      {
+                        rotate: '270deg',
+                      },
+                    ],
+                  }}
+                />
+              </View>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row', gap: 20}}>
+            <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
               <TouchableOpacity onPress={handlePreviousMonth}>
-                <Text style={styles.monthArrow}>{'<'}</Text>
+                <Text style={styles.monthArrow}>
+                  <View
+                    style={{
+                      width: 18,
+                      height: 18,
+                      marginLeft: 8,
+                    }}>
+                    <Image
+                      source={AllIcons.ChevronArrowDown}
+                      style={{
+                        flex: 1,
+                        width: '100%',
+                        height: '100%',
+                        tintColor: COLORS.primaryColor,
+                        resizeMode: 'contain',
+                        transform: [
+                          {
+                            rotate: '90deg',
+                          },
+                        ],
+                      }}
+                    />
+                  </View>
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleNextMonth}>
-                <Text style={styles.monthArrow}>{'>'}</Text>
+                <Text style={styles.monthArrow}>
+                  <View
+                    style={{
+                      width: 18,
+                      height: 18,
+                      marginLeft: 8,
+                    }}>
+                    <Image
+                      source={AllIcons.ChevronArrowDown}
+                      style={{
+                        flex: 1,
+                        width: '100%',
+                        height: '100%',
+                        tintColor: COLORS.primaryColor,
+                        resizeMode: 'contain',
+                        transform: [
+                          {
+                            rotate: '270deg',
+                          },
+                        ],
+                      }}
+                    />
+                  </View>
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

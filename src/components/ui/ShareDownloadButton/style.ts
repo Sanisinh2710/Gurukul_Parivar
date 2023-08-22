@@ -37,7 +37,7 @@ export const styles = () => {
       marginHorizontal: 20,
       borderBottomWidth: 0.25,
       borderBottomColor: 'rgba(23,23,23,0.3)',
-      paddingBottom: 20,
+      paddingVertical: 15,
     },
   });
 };

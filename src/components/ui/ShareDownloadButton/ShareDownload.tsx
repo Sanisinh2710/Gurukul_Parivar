@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   Image,
@@ -12,13 +13,15 @@ import {
 } from 'react-native';
 
 import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
-import {CustomFonts} from '../../../utils';
+import {COLORS, CustomFonts} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
@@ -26,24 +29,28 @@ type ShareDownloadProps = {
   imgURL: string | undefined;
   wallpaper: boolean;
 };
-
 export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const {WallpaperModule} = NativeModules;
+  const {t} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [modalForWallpaper, setModalForWallpaper] =
     React.useState<boolean>(false);
 
+  const [isSharing, setIsSharing] = React.useState(false);
+
   const animationProgress = React.useRef(new Animated.Value(0));
   const onShare = async () => {
+    setIsSharing(true);
     try {
       const response = await RNFS.downloadFile({
         fromUrl: imgURL!,
-        toFile: `${RNFS.DownloadDirectoryPath}/tempImage.jpg`,
+        toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
       });
+
       if ((await response.promise).statusCode === 200) {
-        const imagePath = `${RNFS.DownloadDirectoryPath}/tempImage.jpg`;
+        const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
@@ -54,13 +61,19 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           subject: 'Share Link', // for email
         };
 
-        const shareResponse = await Share.open(options);
+        setIsSharing(false);
+
+        const shareRes = await Share.open(options);
         // Handle successful share here
       } else {
         // Handle error here
       }
+      setIsSharing(false);
     } catch (error) {
+      setIsSharing(false);
+
       // Handle error here
+      console.log(error);
     }
   };
 
@@ -70,9 +83,16 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       downloadImage();
     } else {
       try {
-        const granted = await PermissionsAndroid.request(
-          'android.permission.WRITE_EXTERNAL_STORAGE',
-        );
+        let deviceVersion = DeviceInfo.getSystemVersion();
+        let granted = PermissionsAndroid.RESULTS.DENIED;
+        if (parseInt(deviceVersion) >= 13) {
+          granted = PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          );
+        }
+
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           downloadImage();
           setModalVisible(!modalVisible);
@@ -138,6 +158,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const setWallPaper = async (imgUrl: string, mode: string) => {
     try {
       const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
+      if (result === 'SUCCESS') {
+        Toast.show('Wallpaper set successfully..!', Toast.LONG);
+      }
     } catch (error) {
       console.log(error, 'wallpaper error');
     }
@@ -169,15 +192,27 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </View>
           )}
           <View
-            onTouchEnd={onShare}
+            onTouchEnd={
+              isSharing === false
+                ? async () => {
+                    await onShare();
+                  }
+                : () => {}
+            }
             style={[
               style.iconContainer,
               {backgroundColor: 'rgba(172, 168, 123, 1)'},
             ]}>
-            <Image
-              source={AllIcons.Share}
-              style={[style.icon, {height: 18, width: 18}]}
-            />
+            <>
+              {isSharing ? (
+                <ActivityIndicator size={25} color={COLORS.darkModetextColor} />
+              ) : (
+                <Image
+                  source={AllIcons.Share}
+                  style={[style.icon, {height: 18, width: 18}]}
+                />
+              )}
+            </>
           </View>
           <View
             onTouchEnd={checkPermission}
@@ -204,13 +239,30 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 position: 'absolute',
                 left: 0,
                 right: 0,
-                bottom: 60,
+                bottom: 80,
               }}>
-              <Text style={{...CustomFonts.header.medium20, fontSize: 18}}>
-                Ghanshyam Maharaj
+              <Text
+                style={{
+                  ...CustomFonts.header.medium20,
+                  fontSize: 20,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.SuccessfulDownload')}
               </Text>
-              <Text style={{...CustomFonts.header.small18}}>
-                Practice remembering today's darshan.
+              <Text
+                style={{
+                  ...CustomFonts.header.medium20,
+                  fontSize: 18,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.GhanshyamMaharaj')}
+              </Text>
+              <Text
+                style={{
+                  ...CustomFonts.header.small18,
+                  color: 'rgba(23,23,23,0.7)',
+                }}>
+                {t('DailyDarshanDetail.Subtext')}
               </Text>
             </View>
           </>
