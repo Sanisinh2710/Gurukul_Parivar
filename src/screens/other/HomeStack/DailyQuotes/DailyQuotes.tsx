@@ -120,7 +120,6 @@ export const DailyQuotes = ({
 
   const handleClipBoard = (item: any) => {
     const clip = Clipboard.setString(item);
-
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
 
@@ -141,7 +140,7 @@ export const DailyQuotes = ({
         }}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View style={{height: '8%', marginBottom: '8%'}}>
+        <View style={{height: '8%', marginBottom: '16%'}}>
           <View
             style={{
               marginTop: '5%',
@@ -157,6 +156,7 @@ export const DailyQuotes = ({
 
             <View
               style={{
+                marginTop: '2%',
                 backgroundColor: 'rgba(172,43,49,0.05)',
                 paddingHorizontal: '2%',
                 borderWidth: 1,
