@@ -150,7 +150,7 @@ export const DailyQuotes = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '8%', marginBottom: '8%'}}>
           <View>
-            <Text>Gurukul Branch</Text>
+            <Text>{t('uploadPhoto.DropdownTitle')}</Text>
           </View>
           <View>
             <Calendar
