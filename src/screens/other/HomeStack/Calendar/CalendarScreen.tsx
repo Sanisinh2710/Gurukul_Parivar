@@ -49,8 +49,6 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
-  console.log(todayEvent);
-
   React.useMemo(async () => {
     setLoader(true);
     try {

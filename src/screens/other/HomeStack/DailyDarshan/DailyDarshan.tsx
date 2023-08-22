@@ -113,7 +113,7 @@ export const DailyDarshan = ({
       setDarshanImages(newImges ?? []);
     }
   };
-  console.log(Data, 'DFSFSDDGDG');
+
   React.useEffect(() => {
     Image_Data();
   }, [Data, BranchName]);
