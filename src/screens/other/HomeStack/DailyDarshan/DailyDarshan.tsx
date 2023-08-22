@@ -6,7 +6,6 @@ import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
-
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,

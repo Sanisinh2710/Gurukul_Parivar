@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
@@ -15,6 +16,7 @@ import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {options} from '../../../../utils';
 import {styles} from './styles';
+
 export const DailyUpdateDetail = ({
   route,
   navigation,
@@ -49,7 +51,7 @@ export const DailyUpdateDetail = ({
           </View>
           <View style={style.imageContainer}>
             <Image
-              source={{uri: `https://gurukul.taskgrids.com/${Data.images[0]}`}}
+              source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
             />
           </View>
@@ -72,7 +74,7 @@ export const DailyUpdateDetail = ({
                     {item && (
                       <Image
                         source={{
-                          uri: `https://gurukul.taskgrids.com/${item}`,
+                          uri: `${BASE_URL}/${item}`,
                         }}
                         key={index}
                         style={{height: 105, width: 110, borderRadius: 8}}

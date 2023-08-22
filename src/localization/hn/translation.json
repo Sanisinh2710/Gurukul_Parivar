@@ -21,7 +21,8 @@
       "PhotoGallery": "फोटो गैलरी",
       "AppName": "गुरुकुल परिवार",
       "AppExitMsg": "क्या आप वाकई ऐप से बाहर निकलना चाहते हैं..?",
-      "TodayEventMsg": "आज की इवेंट"
+      "TodayEventMsg": "आज की इवेंट",
+      "YouTubeLiveKatha": "यूट्यूब लाइव कथा"
     },
     "loginScreen": {
       "WelcomeTitle1": "आपका स्वागत है",

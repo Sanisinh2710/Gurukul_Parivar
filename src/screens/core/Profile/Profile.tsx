@@ -212,9 +212,9 @@ export const ProfileScreen = ({
               {userData.userdata.primary_contact_cc?.toString().split('(')[0]}
               {userData.userdata.primary_contact}
             </Text>
-            <View style={style.familyIdView}>
+            {/* <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
-            </View>
+            </View> */}
           </View>
         </View>
         <View style={style.mapContainer}>
