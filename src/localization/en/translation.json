@@ -262,7 +262,8 @@
       "PasswordLblPlaceholder": "Enter your password",
       "ConfirmPasswordLbl": "Confirm Password",
       "ConfirmPasswordPlaceholder": "Re-enter your password",
-      "ResetPasswordSubmitText": "Reset Password"
+      "ResetPasswordSubmitText": "Reset Password",
+      "PassNotSameErr": "Both password must be same.!"
     },
     "SuccessResetPassword": {
       "SuccessResetPasswordTitle": "Success! Password Reset",

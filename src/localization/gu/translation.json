@@ -72,7 +72,7 @@
     },
     "otpScreen": {
       "OtpHeader": "ઓટીપી ચકાસણી",
-      "OtpSubtext": "આગળ વધવા માટે મોબાઇલ નંબરની ચકાસણી કરો",
+      "OtpSubtext": "ઓટીપી કોડ માટે તમારું ઇમેઇલ ચેક કરો. યથાયોગ્ય ઓટીપી દાખલ કરવીથી તમારી ઓળખ ની પુષ્ટિ થશે.",
       "OtpContainerText": "એક ઓટીપી મોબાઇલ નંબર પર મોકલી છે",
       "OtpNotRecieve": "કોડ મેળવ્યો નથી?",
       "OtpResend": "ફરીથી મોકલો",
@@ -262,7 +262,8 @@
       "PasswordLblPlaceholder": "તમારો પાસવર્ડ દાખલ કરો",
       "ConfirmPasswordLbl": "ખાતરી પાસવર્ડ",
       "ConfirmPasswordPlaceholder": "તમારો પાસવર્ડ ફરી દાખલ કરો",
-      "ResetPasswordSubmitText": "પાસવર્ડને પુન:સુયોજિત કરો"
+      "ResetPasswordSubmitText": "પાસવર્ડને પુન:સુયોજિત કરો",
+      "PassNotSameErr": "બંને પાસવર્ડ સરખા હોવા જોઈએ.!"
     },
     "SuccessResetPassword": {
       "SuccessResetPasswordTitle": "પાસવર્ડ રીસેટ સફળ થયો છે.",

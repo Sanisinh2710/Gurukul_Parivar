@@ -324,6 +324,8 @@ export const ProfileScreen = ({
                     modalType === 'logout'
                       ? () => {
                           const resRemoveAuthToken = removeAuthToken();
+                          // const resRemoveProfileUpdateStatus =
+                          //   removeUserProfilingDone();
 
                           if (resRemoveAuthToken === 'SUCCESS') {
                             navigation.replace('Auth');

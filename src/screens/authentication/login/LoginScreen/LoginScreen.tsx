@@ -24,7 +24,7 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {
-  NewLoginApi,
+  LoginApi,
   PersonalInfoGetDetailsApi,
   getAuthCredentialsForAutoFill,
   isProfilingDone,
@@ -146,7 +146,7 @@ export const LoginScreen = ({
       // data.mobileNumber = data.mobileNumber.toString();
 
       // Do something with mobile number and than navigate to OTP Screen;
-      const response = await NewLoginApi(data);
+      const response = await LoginApi(data);
 
       setIsApiloading(false);
 
@@ -157,7 +157,7 @@ export const LoginScreen = ({
           is_profile_updated: true,
         });
         if (resType === 'SUCCESS') {
-          const isProfileSignupDone = isProfilingDone(data.email);
+          const isProfileSignupDone = isProfilingDone();
 
           if (isProfileSignupDone === 'SUCCESS') {
             const backenduserresponse = await PersonalInfoGetDetailsApi();

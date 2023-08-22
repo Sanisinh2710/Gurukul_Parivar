@@ -11,14 +11,20 @@ import {
   Text,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   FormInput,
-  Loader,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {
+  SetPasswordApi,
+  getAuthToken,
+  getBearerToken,
+  isProfilingDone,
+} from '../../../../services';
 import {
   ResetPasswordProps,
   ResetPasswordValidationSchemaType,
@@ -29,15 +35,16 @@ import {ResetPasswordValidationSchema} from '../../../../validations';
 import {ResetPasswordstyle} from './style';
 
 export const ResetPassword = ({
+  route,
   navigation,
 }: ResetPasswordProps): React.JSX.Element => {
-  const {t, i18n} = useTranslation();
+  const set_Pass = route.params?.set_Pass;
+
+  const {t} = useTranslation();
 
   const commonStyle = CommonStyle();
 
   const style = ResetPasswordstyle();
-
-  const [isLoading, setIsloading] = React.useState(false);
 
   const [isApiLoading, setIsApiloading] = React.useState(false);
 
@@ -88,91 +95,137 @@ export const ResetPassword = ({
     }
   }, [watch()]);
 
-  const onSubmit = (data: ResetPasswordValidationSchemaType) => {
+  const onSubmit = async (data: ResetPasswordValidationSchemaType) => {
     setIsApiloading(true);
-    console.log(data);
-    setIsApiloading(false);
 
-    navigation.navigate('OTP');
+    const bearerToken = getBearerToken();
+    console.log(bearerToken, 'token');
+
+    const response = await SetPasswordApi(data.password);
+    console.log(response, 'token res');
+
+    if (response.resType === 'SUCCESS') {
+      const {resType} = getAuthToken();
+
+      if (resType === 'SUCCESS') {
+        const isProfileSignupDone = isProfilingDone();
+        setIsApiloading(false);
+
+        console.log(isProfileSignupDone, 'profile');
+
+        if (isProfileSignupDone === 'ERROR') {
+          if (set_Pass) {
+            navigation.replace('Success', {type: 'Login'});
+          } else {
+            // Add reset password screen navigate:-
+            navigation.replace('Success', {type: 'Pass'});
+          }
+
+          // const backenduserresponse = await PersonalInfoGetDetailsApi();
+          // if (backenduserresponse.resType === 'SUCCESS') {
+          //   if (
+          //     backenduserresponse.data.personal_details !== null &&
+          //     backenduserresponse.data.personal_details !== undefined &&
+          //     backenduserresponse.data.personal_details !== ''
+          //   ) {
+          //     let finalData = JSON.parse(
+          //       JSON.stringify(backenduserresponse.data.personal_details),
+          //     );
+          //     finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
+          //     const setuserdataresponse = setUserData(finalData);
+          //     if (setuserdataresponse === 'SUCCESS') {
+          //       navigation.replace('BottomNavBar');
+          //     }
+          //   }
+          // } else {
+          //   setIsApiloading(false);
+          //   Toast.show(backenduserresponse.message, 2);
+          // }
+        }
+      } else {
+        setIsApiloading(false);
+        Toast.show(resType, 2);
+      }
+    } else {
+      Toast.show(response.message, Toast.SHORT);
+    }
+
+    setIsApiloading(false);
   };
 
-  if (isLoading) {
-    return <Loader />;
-  } else {
-    return (
-      <ScreenWrapper>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
-          <ScreenHeader
-            showLeft={true}
-            headerTitleAlign={'left'}
-            leftOnPress={() => {
-              navigation.goBack();
-            }}
-          />
-          <View style={commonStyle.commonContentView}>
-            {/* Header:------------------------------------------------------------------------ */}
-            <View key={'ResetPasswordHeader'} style={style.headerView}>
-              <View style={style.welcomeTitleView}>
-                <Text style={style.welcomeTitle1Text}>
-                  {t('ResetPassword.NewPassword')}
-                </Text>
-                <Text style={style.welcomeTitle2Text}>
-                  {t('ResetPassword.NewPasswordSubTitle')}
-                </Text>
-              </View>
-            </View>
-
-            {/* FormInputs:------------------------------------------------------------------------ */}
-
-            <FlatList
-              data={ResetPasswordInputList}
-              renderItem={({item, index}) => (
-                <View key={index} style={style.formInputsView}>
-                  <Controller
-                    control={control}
-                    name={item.name}
-                    render={({field: {onBlur, onChange, value}}) => {
-                      return (
-                        <FormInput
-                          type={item.type}
-                          name={item.name}
-                          label={item.lable}
-                          placeholder={item.placeholder}
-                          value={value}
-                          onBlur={onBlur}
-                          onChange={onChange}
-                          editable={true}
-                          error={errors[item.name]?.message?.toString()}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              )}
-            />
-
-            {/* LoginFormFooter:------------------------------------------------------------------------ */}
-            <View key={'ResetPasswordFormFooter'} style={style.footerView}>
-              <PrimaryButton
-                title={t('ResetPassword.ResetPasswordSubmitText')}
-                customWidget={
-                  isApiLoading ? (
-                    <>
-                      <ActivityIndicator
-                        size={25}
-                        color={COLORS.darkModetextColor}
-                      />
-                    </>
-                  ) : undefined
-                }
-                onPress={handleSubmit(onSubmit)}
-                disabled={disabled}
-              />
+  return (
+    <ScreenWrapper>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <ScreenHeader
+          showLeft={true}
+          headerTitleAlign={'left'}
+          leftOnPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={commonStyle.commonContentView}>
+          {/* Header:------------------------------------------------------------------------ */}
+          <View key={'ResetPasswordHeader'} style={style.headerView}>
+            <View style={style.welcomeTitleView}>
+              <Text style={style.welcomeTitle1Text}>
+                {t('ResetPassword.NewPassword')}
+              </Text>
+              <Text style={style.welcomeTitle2Text}>
+                {t('ResetPassword.NewPasswordSubTitle')}
+              </Text>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScreenWrapper>
-    );
-  }
+
+          {/* FormInputs:------------------------------------------------------------------------ */}
+
+          <FlatList
+            data={ResetPasswordInputList}
+            renderItem={({item, index}) => (
+              <View key={index} style={style.formInputsView}>
+                <Controller
+                  control={control}
+                  name={item.name}
+                  render={({field: {onBlur, onChange, value}}) => {
+                    return (
+                      <FormInput
+                        type={item.type}
+                        name={item.name}
+                        label={item.lable}
+                        placeholder={item.placeholder}
+                        value={value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        editable={true}
+                        error={errors[item.name]?.message?.toString()}
+                      />
+                    );
+                  }}
+                />
+              </View>
+            )}
+          />
+
+          {/* LoginFormFooter:------------------------------------------------------------------------ */}
+          <View key={'ResetPasswordFormFooter'} style={style.footerView}>
+            <PrimaryButton
+              title={t('ResetPassword.ResetPasswordSubmitText')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
+              onPress={handleSubmit(onSubmit)}
+              disabled={disabled}
+            />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </ScreenWrapper>
+  );
 };

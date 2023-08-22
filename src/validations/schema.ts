@@ -50,13 +50,13 @@ export const ResetPasswordValidationSchema =
         .string()
         .trim()
         .required(t('common.EmptyError'))
-        .matches(passwordRegex, {message: t('personalInfo.EmailErr')}),
+        .matches(passwordRegex, {message: t('loginScreen.PassErr')}),
       confirm_password: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
-        .oneOf([yup.ref('password')], t('personalInfo.EmailErr'))
-        .matches(passwordRegex, {message: t('personalInfo.EmailErr')}),
+        .oneOf([yup.ref('password')], t('ResetPassword.PassNotSameErr'))
+        .matches(passwordRegex, {message: t('loginScreen.PassErr')}),
     });
   };
 

@@ -72,7 +72,7 @@
     },
     "otpScreen": {
       "OtpHeader": "ओटीपी सत्यापन",
-      "OtpSubtext": "कृपया आगे बढ़ने के लिए अपना मोबाइल नंबर सत्यापित करें",
+      "OtpSubtext": "ओटीपी कोड के लिए अपने मेल की जाँच करें। सही ओटीपी डालने से आपकी पहचान पुष्टि होगी।",
       "OtpContainerText": "एक ओटीपी मोबाइल नंबर पर भेजा गया है",
       "OtpNotRecieve": "कोड प्राप्त नहीं हुआ?",
       "OtpResend": "फिर से भेजें",
@@ -253,7 +253,7 @@
       "Content": "ऐसा लगता है कि हमारे डेटा सहायक व्यक्ति आराम कर रहे हैं। \n हम जल्द ही कुछ जानकारी तैयार करेंगे।"
     },
     "ForgotPassword": {
-      "ForgotPassword": "पासवर्ड भूल गए??",
+      "ForgotPassword": "पासवर्ड भूल गए?",
       "ForgotPasswordSubTitle": "कुछ सरल चरणों के साथ अपनी पहुंच पुनः प्राप्त करें।"
     },
     "ResetPassword": {
@@ -263,7 +263,8 @@
       "PasswordLblPlaceholder": "अपना पासवर्ड दर्ज करें",
       "ConfirmPasswordLbl": "पासवर्ड की पुष्टि करें",
       "ConfirmPasswordPlaceholder": "अपना पासवर्ड पुन: दर्ज करें",
-      "ResetPasswordSubmitText": "पासवर्ड रीसेट करें"
+      "ResetPasswordSubmitText": "पासवर्ड रीसेट करें",
+      "PassNotSameErr": "दोनों पासवर्ड एक जैसे होने चाहिए.!"
     },
     "SuccessResetPassword": {
       "SuccessResetPasswordTitle": "पासवर्ड सफलतापूर्वक रीसेट हो गया",

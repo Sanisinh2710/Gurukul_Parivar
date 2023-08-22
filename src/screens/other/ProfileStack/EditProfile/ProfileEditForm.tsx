@@ -475,8 +475,11 @@ export const ProfileSignupWithEdit = ({
             const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
-              setwidth(width + 25);
-              setFormStep(formStep + 1);
+              const setuserprofileDone = setUserProfilingDone(true);
+              if (setuserprofileDone === 'SUCCESS') {
+                setwidth(width + 25);
+                setFormStep(formStep + 1);
+              }
             }
           }
         } else {

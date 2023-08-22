@@ -13,7 +13,6 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   FormInput,
-  Loader,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
@@ -34,8 +33,6 @@ export const ForgotPassword = ({
   const commonStyle = CommonStyle();
 
   const style = ForgotPasswordstyle();
-
-  const [isLoading, setIsloading] = React.useState(false);
 
   const [isApiLoading, setIsApiloading] = React.useState(false);
 
@@ -67,77 +64,73 @@ export const ForgotPassword = ({
     navigation.navigate('OTP');
   };
 
-  if (isLoading) {
-    return <Loader />;
-  } else {
-    return (
-      <ScreenWrapper>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
-          <ScreenHeader
-            showLeft={true}
-            headerTitleAlign={'left'}
-            leftOnPress={() => {
-              navigation.goBack();
-            }}
-          />
-          <View style={commonStyle.commonContentView}>
-            {/* Header:------------------------------------------------------------------------ */}
-            <View key={'ForgotPassword'} style={style.headerView}>
-              <View style={style.welcomeTitleView}>
-                <Text style={style.welcomeTitle1Text}>
-                  {t('ForgotPassword.ForgotPassword')}
-                </Text>
-                <Text style={style.welcomeTitle2Text}>
-                  {t('ForgotPassword.ForgotPasswordSubTitle')}
-                </Text>
-              </View>
-            </View>
-
-            {/* FormInputs:------------------------------------------------------------------------ */}
-            <View key={'ForgotPasswordFormInputs'} style={style.formInputsView}>
-              <Controller
-                control={control}
-                name="primary_email"
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      type={'email'}
-                      name={'primary_email'}
-                      label={t('personalInfo.EmailAddress')}
-                      placeholder={t('personalInfo.EnterYourEmailPlaceholder')}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      editable={true}
-                      error={errors['primary_email']?.message?.toString()}
-                    />
-                  );
-                }}
-              />
-            </View>
-
-            {/* LoginFormFooter:------------------------------------------------------------------------ */}
-            <View key={'LoginFormFooter'} style={style.footerView}>
-              <PrimaryButton
-                title={t('otpScreen.SendOtp')}
-                customWidget={
-                  isApiLoading ? (
-                    <>
-                      <ActivityIndicator
-                        size={25}
-                        color={COLORS.darkModetextColor}
-                      />
-                    </>
-                  ) : undefined
-                }
-                onPress={handleSubmit(onSubmit)}
-                disabled={disabled}
-              />
+  return (
+    <ScreenWrapper>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <ScreenHeader
+          showLeft={true}
+          headerTitleAlign={'left'}
+          leftOnPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={commonStyle.commonContentView}>
+          {/* Header:------------------------------------------------------------------------ */}
+          <View key={'ForgotPassword'} style={style.headerView}>
+            <View style={style.welcomeTitleView}>
+              <Text style={style.welcomeTitle1Text}>
+                {t('ForgotPassword.ForgotPassword')}
+              </Text>
+              <Text style={style.welcomeTitle2Text}>
+                {t('ForgotPassword.ForgotPasswordSubTitle')}
+              </Text>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScreenWrapper>
-    );
-  }
+
+          {/* FormInputs:------------------------------------------------------------------------ */}
+          <View key={'ForgotPasswordFormInputs'} style={style.formInputsView}>
+            <Controller
+              control={control}
+              name="primary_email"
+              render={({field: {onBlur, onChange, value}}) => {
+                return (
+                  <FormInput
+                    type={'email'}
+                    name={'primary_email'}
+                    label={t('loginScreen.EmailLBL')}
+                    placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    editable={true}
+                    error={errors['primary_email']?.message?.toString()}
+                  />
+                );
+              }}
+            />
+          </View>
+
+          {/* LoginFormFooter:------------------------------------------------------------------------ */}
+          <View key={'LoginFormFooter'} style={style.footerView}>
+            <PrimaryButton
+              title={t('otpScreen.SendOtp')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
+              onPress={handleSubmit(onSubmit)}
+              disabled={disabled}
+            />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </ScreenWrapper>
+  );
 };

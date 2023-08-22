@@ -1,5 +1,25 @@
 import {storage} from '../storage';
 
+// export const isSignedIn = () => {
+//   let isAuthenticated = false;
+
+//   try {
+//     const auth_token = getAuthToken();
+
+//     const is_profile_updated = isProfilingDone();
+
+//     if (auth_token.resType === 'SUCCESS' && is_profile_updated === 'SUCCESS') {
+//       isAuthenticated = true;
+//     } else {
+//       isAuthenticated = false;
+//     }
+//   } catch (error) {
+//     isAuthenticated = false;
+//   }
+
+//   return isAuthenticated;
+// };
+
 export const isSignedIn = () => {
   let isAuthenticated = false;
 
@@ -76,7 +96,26 @@ export const removeAuthToken = () => {
   return resType;
 };
 
-export const isProfilingDone = (mobileNum: any) => {
+// export const isProfilingDone = () => {
+//   let resType: 'SUCCESS' | 'ERROR';
+
+//   try {
+//     const status = getUserProfilingDone();
+
+//     console.log(status, 'status');
+
+//     if (status.resType === 'SUCCESS' && status.status) {
+//       resType = 'SUCCESS';
+//     } else {
+//       resType = 'ERROR';
+//     }
+//   } catch (error) {
+//     resType = 'ERROR';
+//   }
+//   return resType;
+// };
+
+export const isProfilingDone = () => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {
@@ -96,6 +135,34 @@ export const isProfilingDone = (mobileNum: any) => {
   }
   return resType;
 };
+
+// export const setUserProfilingDone = (status: boolean) => {
+//   let resType: 'SUCCESS' | 'ERROR';
+
+//   try {
+//     const auth_token = getAuthToken();
+
+//     if (auth_token.resType === 'SUCCESS') {
+//       // const newData = auth_token.loginData;
+//       // newData.is_profile_updated = status;
+
+//       storage.set('is_profile_updated', JSON.stringify(status));
+
+//       // const settingAuthToken = setAuthToken(newData);
+//       // if (settingAuthToken === 'SUCCESS') {
+//       resType = 'SUCCESS';
+//       // } else {
+//       // resType = 'ERROR';
+//       // }
+//     } else {
+//       resType = 'SUCCESS';
+//     }
+//   } catch (error) {
+//     resType = 'ERROR';
+//   }
+
+//   return resType;
+// };
 
 export const setUserProfilingDone = (status: boolean) => {
   let resType: 'SUCCESS' | 'ERROR';
@@ -122,6 +189,43 @@ export const setUserProfilingDone = (status: boolean) => {
 
   return resType;
 };
+
+// export const getUserProfilingDone = () => {
+//   let resType: 'SUCCESS' | 'ERROR';
+//   let status: boolean = false;
+
+//   try {
+//     const data = storage.getString('is_profile_updated');
+//     if (data) {
+//       const is_profile_updated = JSON.parse(data);
+
+//       if (is_profile_updated) {
+//         resType = 'SUCCESS';
+//         status = true;
+//       } else {
+//         resType = 'ERROR';
+//       }
+//     } else {
+//       resType = 'ERROR';
+//     }
+//   } catch (error) {
+//     resType = 'ERROR';
+//   }
+
+//   return {resType, status};
+// };
+
+// export const removeUserProfilingDone = () => {
+//   let resType: 'SUCCESS' | 'ERROR';
+
+//   try {
+//     storage.delete('is_profile_updated');
+//     resType = 'SUCCESS';
+//   } catch (error) {
+//     resType = 'ERROR';
+//   }
+//   return resType;
+// };
 
 export const getBearerToken = () => {
   let resType: 'SUCCESS' | 'ERROR';

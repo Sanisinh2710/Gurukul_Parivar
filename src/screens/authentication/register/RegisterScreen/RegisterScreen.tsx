@@ -18,7 +18,7 @@ import Toast from 'react-native-simple-toast';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {FormInput, PrimaryButton, ScreenWrapper} from '../../../../components';
-import {LoginByEmailApi} from '../../../../services';
+import {RegisterApi} from '../../../../services';
 import {
   EmailValidationSchemaType,
   RootAuthStackParamList,
@@ -70,7 +70,7 @@ export const RegisterScreen = ({
       // data.mobileNumber = data.mobileNumber.toString();
 
       // Do something with mobile number and than navigate to OTP Screen;
-      const response = await LoginByEmailApi(data.primary_email);
+      const response = await RegisterApi(data.primary_email);
 
       setIsApiloading(false);
 
@@ -156,7 +156,7 @@ export const RegisterScreen = ({
             </Text>
 
             <PrimaryButton
-              title={t('common.Signin')}
+              title={t('common.Signup')}
               customWidget={
                 isApiLoading ? (
                   <>

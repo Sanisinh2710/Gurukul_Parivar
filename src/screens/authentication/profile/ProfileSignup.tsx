@@ -462,6 +462,13 @@ export const ProfileSignup = ({
             const setuserdataresponse = setUserData(finalData);
 
             if (setuserdataresponse === 'SUCCESS') {
+              // If want to set userProfilingdone status = true on next button of personal info then uncomment this
+              // const setuserprofileDone = setUserProfilingDone(true);
+              // if (setuserprofileDone === 'SUCCESS') {
+              //   setwidth(width + 20);
+              //   setFormStep(formStep + 1);
+              // }
+
               setwidth(width + 20);
               setFormStep(formStep + 1);
             }
@@ -619,7 +626,7 @@ export const ProfileSignup = ({
             if (setuserdataresponse === 'SUCCESS') {
               const setuserprofileDone = setUserProfilingDone(true);
               if (setuserprofileDone === 'SUCCESS') {
-                navigation.navigate('LoginSuccess', {type: 'Profile'});
+                navigation.navigate('Success', {type: 'Profile'});
               }
             }
           }
@@ -708,7 +715,7 @@ export const ProfileSignup = ({
             setuserprofileDone === 'SUCCESS' &&
             response.resType === 'SUCCESS'
           ) {
-            navigation.navigate('LoginSuccess', {type: 'Profile'});
+            navigation.navigate('Success', {type: 'Profile'});
           } else {
             Toast.show(response.message, Toast.SHORT);
           }
@@ -722,7 +729,7 @@ export const ProfileSignup = ({
           setFormData(newFormData);
           const setuserprofileDone = setUserProfilingDone(true);
           if (setuserprofileDone === 'SUCCESS') {
-            navigation.navigate('LoginSuccess', {type: 'Profile'});
+            navigation.navigate('Success', {type: 'Profile'});
           }
         }
       }
