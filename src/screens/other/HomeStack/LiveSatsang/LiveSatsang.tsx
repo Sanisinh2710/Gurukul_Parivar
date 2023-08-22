@@ -21,7 +21,6 @@ import {COLORS, CustomFonts, d, options} from '../../../../utils';
 export const LiveSatsang = ({
   navigation,
 }: NativeStackScreenProps<RootAuthStackParamList>) => {
-  // const style = styles();
   const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
@@ -80,7 +79,7 @@ export const LiveSatsang = ({
               fontSize: 20,
               color: COLORS.black,
             }}>
-            YouTube Live Katha
+            {t('common.YouTubeLiveKatha')}
           </Text>
           {loader ? (
             <FlatList

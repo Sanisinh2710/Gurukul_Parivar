@@ -21,7 +21,8 @@
       "PhotoGallery": "Photo Gallery",
       "AppName": "Gurukul Parivar",
       "AppExitMsg": "Do you really want to exit the app..?",
-      "TodayEventMsg": "Today's Event"
+      "TodayEventMsg": "Today's Event",
+      "YouTubeLiveKatha": "YouTube Live Katha"
     },
     "loginScreen": {
       "WelcomeTitle1": "Welcome to",
@@ -186,8 +187,7 @@
     "DailyDarshanDetail": {
       "GhanshyamMaharaj": "Ghanshyam Maharaj",
       "Subtext": "Practice remembering today's darshan",
-      "SuccessfulDownload":"Image Download Successful!"
-
+      "SuccessfulDownload": "Image Download Successful!"
     },
     "DailyQuote": {
       "Heading": "Daily Quote"

@@ -11,17 +11,17 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  CustomNavigate,
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
+  ShareDownload,
+  SimpleDropDown,
 } from '../../../../components';
-import {CustomNavigate} from '../../../../components/ui/CustomNavigate/CustomNavigate';
-import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
-import {ShareDownload} from '../../../../components/ui/ShareDownloadButton/ShareDownload';
 import {DailyQuotesApi, GurukulBranchGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {d, options} from '../../../../utils';
+import {COLORS, CustomFonts, d, options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyQuotes = ({
@@ -142,41 +142,44 @@ export const DailyQuotes = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View style={{height: '8%', marginBottom: '8%'}}>
-          <View>
-            <Text>Gurukul Branch</Text>
-          </View>
-          <View>
-            <Calendar
-              setCalendarVisible={setCalendarVisible}
-              calendarVisible={calendarVisible}
-              selectedParentDate={selectedDate}
-              setSelectedParentDate={setSelectedDate}
-            />
-          </View>
           <View
             style={{
-              backgroundColor: 'rgba(172,43,49,0.05)',
-              paddingHorizontal: '2%',
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.1)',
-              borderRadius: 12,
+              marginTop: '5%',
             }}>
-            <SimpleDropDown
-              placeholder="Select Gurukul Branch"
-              label="Gurukul"
-              dropDownList={GurukulList}
-              type={'simple'}
-              value={changeValue}
-              onChange={setChangeValue}
-              onBlur={function (...event: any[]): void {
-                throw new Error('Function not implemented.');
-              }}
-              setFocused={function (
-                value: React.SetStateAction<boolean>,
-              ): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
+            <Text
+              style={{
+                ...CustomFonts.body.large14,
+                color: COLORS.lightModetextColor,
+                fontSize: 15,
+              }}>
+              {t('uploadPhoto.DropdownTitle')}
+            </Text>
+
+            <View
+              style={{
+                backgroundColor: 'rgba(172,43,49,0.05)',
+                paddingHorizontal: '2%',
+                borderWidth: 1,
+                borderColor: 'rgba(172, 43, 49, 0.1)',
+                borderRadius: 12,
+              }}>
+              <SimpleDropDown
+                placeholder="Select Gurukul Branch"
+                label="Gurukul"
+                dropDownList={GurukulList}
+                type={'simple'}
+                value={changeValue}
+                onChange={setChangeValue}
+                onBlur={function (...event: any[]): void {
+                  throw new Error('Function not implemented.');
+                }}
+                setFocused={function (
+                  value: React.SetStateAction<boolean>,
+                ): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            </View>
           </View>
         </View>
         {loader ? (
@@ -245,6 +248,14 @@ export const DailyQuotes = ({
             )}
           </>
         )}
+      </View>
+      <View>
+        <Calendar
+          setCalendarVisible={setCalendarVisible}
+          calendarVisible={calendarVisible}
+          selectedParentDate={selectedDate}
+          setSelectedParentDate={setSelectedDate}
+        />
       </View>
       <CustomNavigate
         text={
