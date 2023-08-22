@@ -41,7 +41,7 @@ export const DailyUpdateDetail = ({
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: '90%',
+            paddingBottom: '115%',
           }}>
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
@@ -62,6 +62,7 @@ export const DailyUpdateDetail = ({
             <Text style={style.title}>{t('common.PhotoGallery')}</Text>
             <FlatList
               horizontal
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 flexDirection: 'row',
                 gap: 10,

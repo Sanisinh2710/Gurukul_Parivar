@@ -165,7 +165,7 @@ export const ProfileScreen = ({
         break;
     }
   };
-
+  console.log(profileImage);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -195,9 +195,9 @@ export const ProfileScreen = ({
             <View style={{height: 64, width: 64}}>
               <Image
                 source={
-                  profileImage.uri != ''
+                  profileImage.uri != '' && !profileImage.uri.includes('null')
                     ? {uri: profileImage.uri}
-                    : AllIcons.ProfileUser
+                    : AllIcons.DummyAvtar
                 }
                 style={{height: '100%', width: '100%', borderRadius: 50}}
               />
