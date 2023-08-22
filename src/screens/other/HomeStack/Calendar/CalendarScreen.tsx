@@ -49,8 +49,6 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
-  console.log(todayEvent);
-
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -123,22 +121,19 @@ export const CalendarScreen = ({
             <View
               style={[
                 {marginTop: '15%', alignSelf: 'center'},
-                // todayEvent.filter(
-                //   // event => event.date === d.toISOString().substring(0, 10),
-                //   event => event.date === d.toISOString().substring(0, 10),
-                // ).length === 0 && {
-                //   marginTop: '50%',
-                // },
+                todayEvent.filter(
+                  // event => event.date === d.toISOString().substring(0, 10),
+                  event => event.date === d.toISOString().substring(0, 10),
+                ).length === 0 && {
+                  marginTop: '50%',
+                },
               ]}>
               <Image
                 source={{uri: `${BASE_URL}${Data[0].image}`}}
                 style={{height: 264, width: 345}}
               />
-              <ShareDownload
-                wallpaper={false}
-                imgURL={wallpaper && wallpaper}
-              />
             </View>
+            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
         ) : (
           <View

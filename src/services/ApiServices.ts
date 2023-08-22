@@ -8,6 +8,7 @@ import {
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
+  DELETE_USER_ENDPOINT,
   EDUCATION_INFO_GET_ENDPOINT,
   EDUCATION_INFO_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
@@ -228,10 +229,13 @@ export const AddressDeleteApi = async (id: any) => {
 
 export const CalendarGetApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {
-    date: newDate,
-  });
+  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {date: newDate});
 };
+
 export const SliderGetApi = async () => {
   return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
+};
+
+export const DeleteMydataApi = async () => {
+  return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };

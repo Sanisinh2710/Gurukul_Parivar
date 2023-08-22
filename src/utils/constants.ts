@@ -44,7 +44,7 @@ export const GurukulTheme: {[key: string]: Theme} = {
 
 export const nameRegex = /^[a-zA-Z\s]*$/;
 export const phoneRegex = /^[6-9]\d{9}$/;
-export const mailRegex = /^\w+[@]{1}\w+(\.[a-zA-Z]{2,3})+$/;
+export const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const passwordRegex = /^[A-Z]{1}[a-zA-Z]+[@$.]{1}[a-zA-Z\d]+$/;
 
 export const countries = [
@@ -396,12 +396,12 @@ export const EditProfile = (t: any, i18n: any) => {
       rightIcon: AllIcons.RightArrow,
       id: 'user',
     },
-    {
-      image: AllIcons.MultiUser,
-      name: t('myProfile.Family'),
-      rightIcon: AllIcons.RightArrow,
-      id: 'family',
-    },
+    // {
+    //   image: AllIcons.MultiUser,
+    //   name: t('myProfile.Family'),
+    //   rightIcon: AllIcons.RightArrow,
+    //   id: 'family',
+    // },
     {
       image: AllIcons.Translation,
       name: t('myProfile.Language'),
@@ -409,17 +409,17 @@ export const EditProfile = (t: any, i18n: any) => {
       language: i18n.language.toLocaleUpperCase(),
       id: 'translation',
     },
-    {
-      image: AllIcons.Question,
-      name: t('myProfile.Help'),
-      rightIcon: AllIcons.RightArrow,
-      id: 'help',
-    },
-    {
-      image: AllIcons.Edit,
-      name: t('myProfile.Feedback'),
-      id: 'feedback',
-    },
+    // {
+    //   image: AllIcons.Question,
+    //   name: t('myProfile.Help'),
+    //   rightIcon: AllIcons.RightArrow,
+    //   id: 'help',
+    // },
+    // {
+    //   image: AllIcons.Edit,
+    //   name: t('myProfile.Feedback'),
+    //   id: 'feedback',
+    // },
     {
       image: AllIcons.Logout,
       name: t('myProfile.Logout'),

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
@@ -22,7 +23,6 @@ import {CommonStyle} from '../../../../assets/styles';
 import {CustomFonts} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {styles} from './style';
-import {useTranslation} from 'react-i18next';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
@@ -44,6 +44,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         fromUrl: imgURL!,
         toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
       });
+
       if ((await response.promise).statusCode === 200) {
         const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
         const fileContent = await RNFS.readFile(imagePath, 'base64');
@@ -58,12 +59,12 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
         await Share.open(options);
         // Handle successful share here
-        console.log(Share.open(options));
       } else {
         // Handle error here
       }
     } catch (error) {
       // Handle error here
+      console.log(error);
     }
   };
 

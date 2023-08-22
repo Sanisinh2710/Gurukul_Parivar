@@ -1,10 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.large36,
@@ -12,6 +9,7 @@ export const styles = () => {
     },
     imageContainer: {
       flexDirection: 'row',
+      alignItems: 'center',
       borderWidth: 0.25,
       borderColor: 'rgba(172, 43, 49,0.3)',
       backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -19,6 +17,17 @@ export const styles = () => {
       padding: 20,
       borderRadius: 8,
     },
+    profileImgView: {
+      height: 64,
+      width: 64,
+      overflow: 'hidden',
+      borderRadius: 60,
+    },
+    profileImg: {
+      height: '100%',
+      width: '100%',
+    },
+
     profileName: {
       ...CustomFonts.header.medium20,
       fontSize: 16,
@@ -125,6 +134,37 @@ export const styles = () => {
       borderRadius: 60,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    pictureUpdateIcon: {
+      position: 'absolute',
+      width: 28,
+      height: 28,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 24,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: '#3dadfc',
+      shadowOffset: {
+        width: 0,
+        height: 12,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 13.84,
+      elevation: 7,
+      alignSelf: 'center',
+      bottom: -10,
+      // marginTop: -10,
+      // marginLeft: 'auto',
+      // marginRight: 'auto',
+    },
+    pictureUpdateText: {
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      color: 'black',
+      marginHorizontal: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: 'rgba(23,23,23,0.3)',
+      paddingVertical: 20,
     },
   });
 };

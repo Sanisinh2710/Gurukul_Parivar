@@ -23,7 +23,6 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
         refs.current[i]?.setNativeProps(
           num.length === 6
             ? {
-                text: num[i].toString(),
                 maxLength: 1,
                 style: {
                   borderColor: COLORS.primaryColor,
@@ -48,7 +47,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
       const copiedOTP = value.split('');
 
       let newOtpValue = [...num];
-      copiedOTP.map((val, index) => {
+      copiedOTP.map((val: string, index: any) => {
         newOtpValue[index] = val;
       });
 
