@@ -15,6 +15,17 @@ export type LoginFormValidationSchemaType = {
   primary_email: string;
 };
 
+export type EmailValidationSchemaType = {
+  [key: string]: string;
+  primary_email: string;
+};
+
+export type ResetPasswordValidationSchemaType = {
+  [key: string]: string;
+  password: string;
+  confirm_password: string;
+};
+
 export type CompleteProfileFormValidationSchemaType = {
   [key: string]: any;
   profile: any;
@@ -87,6 +98,7 @@ export type EduBusinessInfoValidationSchemaType = {
 export type SupportedFormInputTypes =
   | 'phone'
   | 'number'
+  | 'password'
   | 'text'
   | 'select'
   | 'photo'

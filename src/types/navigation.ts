@@ -39,6 +39,8 @@ export type RootAuthStackParamList = {
   MobileLoginOTP: {primary_email: string} | undefined;
   LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
   ProfileSignup: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: undefined;
 };
 export type LoginOtpScreenProps = CompositeScreenProps<
   NativeStackScreenProps<RootAuthStackParamList, 'MobileLoginOTP'>,
@@ -62,4 +64,13 @@ export type ProfileSignupEditProps = NativeStackScreenProps<
 export type EditProfileProps = NativeStackScreenProps<
   RootStackParamList,
   'editProfile'
+>;
+
+export type ForgotPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ForgotPassword'
+>;
+export type ResetPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ResetPassword'
 >;

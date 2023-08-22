@@ -28,6 +28,7 @@ import {
   DailyUpdates,
   DonationScreen,
   EditProfile,
+  ForgotPassword,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
@@ -37,6 +38,7 @@ import {
   ProfileSignup,
   ProfileSignupWithEdit,
   QuizResult,
+  ResetPassword,
   Status,
 } from '../screens';
 import {isSignedIn} from '../services';
@@ -78,6 +80,8 @@ export const AuthStackNavigator = ({
         <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
         <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
         <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
+        <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <AuthStack.Screen name="ResetPassword" component={ResetPassword} />
       </AuthStack.Navigator>
     );
   }

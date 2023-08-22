@@ -42,4 +42,6 @@ export const AllIcons = {
   ArrowSimpleLeft: require('../icons/ArrowSimpleLeft.png'),
   OTPEdit: require('../icons/OTPEdit.png'),
   Camera: require('../icons/Camera.png'),
+  OpenEye: require('../icons/OpenEye.png'),
+  ClosedEye: require('../icons/ClosedEye.png'),
 };

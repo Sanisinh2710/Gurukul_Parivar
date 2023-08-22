@@ -65,7 +65,8 @@
       "OtpContainerText": "એક ઓટીપી મોબાઇલ નંબર પર મોકલી છે",
       "OtpNotRecieve": "કોડ મેળવ્યો નથી?",
       "OtpResend": "ફરીથી મોકલો",
-      "Verify&Login": "ચકાસો અને લૉગિન કરો"
+      "Verify&Login": "ચકાસો અને લૉગિન કરો",
+      "SendOtp": "ઓટીપી મોકલો"
     },
     "personalInfo": {
       "personalInfoHeader": "વ્યક્તિગત માહિતી",
@@ -238,6 +239,23 @@
     "NoData": {
       "Title": "ઓહ! કોઈ ડેટા મળ્યો નથી.",
       "Content": "લાગે છે કે અમારા ડેટા એલ્વ્સ વિરામ લેવું ચાલુ છે.\n અમે શીઘ્રજી કેટલીક માહિતી બનાવીશું."
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "પાસવર્ડ ભૂલી ગયા?",
+      "ForgotPasswordSubTitle": "થોડા સરળ પગલાં સાથે તમારી ઍક્સેસનો ફરીથી દાવો કરો."
+    },
+    "ResetPassword": {
+      "NewPassword": "નવો પાસવર્ડ સુયોજિત કરો",
+      "NewPasswordSubTitle": "ઓછામાં ઓછા ૮ અક્ષરો હોવા જ જોઈએ",
+      "PasswordLbl": "પાસવર્ડ",
+      "PasswordLblPlaceholder": "તમારો પાસવર્ડ દાખલ કરો",
+      "ConfirmPasswordLbl": "ખાતરી પાસવર્ડ",
+      "ConfirmPasswordPlaceholder": "તમારો પાસવર્ડ ફરી દાખલ કરો",
+      "ResetPasswordSubmitText": "પાસવર્ડને પુન:સુયોજિત કરો"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "પાસવર્ડ રીસેટ સફળ થયો છે.",
+      "SuccessResetPasswordSubTitle": "અભિનંદન! તમે સફળતાપૂર્વક તમારો પાસવર્ડ રીસેટ કર્યો છે. તમારું ખાતું હવે પહેલા કરતા વધુ સુરક્ષિત છે."
     }
   }
 }

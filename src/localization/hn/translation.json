@@ -65,7 +65,8 @@
       "OtpContainerText": "एक ओटीपी मोबाइल नंबर पर भेजा गया है",
       "OtpNotRecieve": "कोड प्राप्त नहीं हुआ?",
       "OtpResend": "फिर से भेजें",
-      "Verify&Login": "सत्यापित करें और लॉगिन करें"
+      "Verify&Login": "सत्यापित करें और लॉगिन करें",
+      "SendOtp": "ओटीपी भेजें"
     },
     "personalInfo": {
       "personalInfoHeader": "व्यक्तिगत जानकारी",
@@ -235,6 +236,23 @@
     },
     "Payment": {
       "Heading": "भुगतान की विधि चुनें"
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "पासवर्ड भूल गए??",
+      "ForgotPasswordSubTitle": "कुछ सरल चरणों के साथ अपनी पहुंच पुनः प्राप्त करें।"
+    },
+    "ResetPassword": {
+      "NewPassword": "एक नया पासवर्ड सेट करें",
+      "NewPasswordSubTitle": "कम से कम 8 वर्ण होने चाहिए",
+      "PasswordLbl": "पासवर्ड",
+      "PasswordLblPlaceholder": "अपना पासवर्ड दर्ज करें",
+      "ConfirmPasswordLbl": "पासवर्ड की पुष्टि करें",
+      "ConfirmPasswordPlaceholder": "अपना पासवर्ड पुन: दर्ज करें",
+      "ResetPasswordSubmitText": "पासवर्ड रीसेट करें"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "पासवर्ड सफलतापूर्वक रीसेट हो गया",
+      "SuccessResetPasswordSubTitle": "बधाइयाँ! आपने अपना पासवर्ड सफलतापूर्वक रीसेट कर लिया है. आपका खाता अब पहले से कहीं अधिक सुरक्षित है।"
     }
   }
 }

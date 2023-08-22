@@ -1,14 +1,17 @@
+/* eslint-disable radix */
 import {useTranslation} from 'react-i18next';
 import * as yup from 'yup';
 import {
   AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
   EduBusinessInfoValidationSchemaType,
+  EmailValidationSchemaType,
   GurukulFormValidationSchemaType,
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
+  ResetPasswordValidationSchemaType,
 } from '../types';
-import {mailRegex, nameRegex, phoneRegex} from '../utils';
+import {mailRegex, nameRegex, passwordRegex, phoneRegex} from '../utils';
 
 export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {
@@ -19,6 +22,36 @@ export const LoginFormValidationSchema =
         .trim()
         .required(t('common.EmptyError'))
         .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+    });
+  };
+
+export const EmailValidationSchema =
+  (): yup.ObjectSchema<EmailValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      primary_email: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+    });
+  };
+
+export const ResetPasswordValidationSchema =
+  (): yup.ObjectSchema<ResetPasswordValidationSchemaType> => {
+    const {t} = useTranslation();
+    return yup.object().shape({
+      password: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .matches(passwordRegex, {message: t('personalInfo.EmailErr')}),
+      confirm_password: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .oneOf([yup.ref('password')], t('personalInfo.EmailErr'))
+        .matches(passwordRegex, {message: t('personalInfo.EmailErr')}),
     });
   };
 
