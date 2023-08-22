@@ -70,7 +70,19 @@ export const DailyUpdateDetail = ({
               data={Data.images}
               renderItem={({item, index}) => (
                 <>
-                  <TouchableOpacity activeOpacity={0.5}>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() =>
+                      navigation.navigate('dailyDarshanDetail', {
+                        date: new Date(Data.date).toLocaleString(
+                          'en-US',
+                          options,
+                        ),
+                        data: Data.images,
+                        totalImages: Data.images.length,
+                        currentImageIndex: index,
+                      })
+                    }>
                     {item && (
                       <Image
                         source={{
