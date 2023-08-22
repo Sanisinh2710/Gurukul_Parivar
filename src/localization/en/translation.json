@@ -53,11 +53,14 @@
     "loginSuccess": {
       "LoginSuccess": "Login Successful!",
       "ProfileSuccess": "Profile Completed!",
+      "ResetSuccess": "Success! Password Reset",
+      "ResetSuccessSubtitle": "Congratulations! You've successfully reset \n your password. Your account is now more \n secure than ever.",
       "SuccessSubtitle": "Welcome to a world of spirituality and serenity.",
       "SuccessSubtitle2": "Begin your journey now. 🌟",
       "ProfileSuccessSubtitle2": "Start your journey now. 🌟",
       "LoginSuccessBTN": "Let’s Complete your Profile",
-      "ProfileSuccessBTN": "Let’s Start Your Journey"
+      "ProfileSuccessBTN": "Let’s Start Your Journey",
+      "ResetSuccessBTN": "Back to Login"
     },
     "uploadPhoto": {
       "HederText": "Complete your profile",

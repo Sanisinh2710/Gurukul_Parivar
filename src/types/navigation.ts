@@ -39,7 +39,7 @@ export type RootAuthStackParamList = {
   Register: undefined;
 
   OTP: {primary_email: string} | undefined;
-  Success: {type: 'Login' | 'Profile'} | undefined;
+  Success: {type: 'Login' | 'Profile' | 'Pass'} | undefined;
 
   ProfileSignup: undefined;
   ForgotPassword: undefined;

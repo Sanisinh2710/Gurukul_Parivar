@@ -76,7 +76,7 @@ export const removeAuthToken = () => {
   return resType;
 };
 
-export const isProfilingDone = (mobileNum: any) => {
+export const isProfilingDone = () => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {

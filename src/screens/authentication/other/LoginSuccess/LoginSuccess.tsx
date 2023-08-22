@@ -4,11 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {Dimensions, Image, Text, View} from 'react-native';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
+import {PrimaryButton, ScreenWrapper} from '../../../../components';
 import {LoginSuccessStackScreenProps} from '../../../../types';
 import {styles} from './styles';
 
@@ -23,12 +19,6 @@ export const LoginSuccess = ({
 
   return (
     <ScreenWrapper>
-      <ScreenHeader
-        showLeft={false}
-        headerTitleAlign="center"
-        leftOnPress={() => navigation.goBack()}
-      />
-
       <View
         style={[
           commonStyle.commonContentView,
@@ -40,32 +30,50 @@ export const LoginSuccess = ({
           },
         ]}>
         <View style={style.logoView}>
-          <Image source={AllImages.GurukulLogo} style={style.logo} />
+          <Image
+            source={type !== 'Pass' ? AllImages.GurukulLogo : AllImages.Reset}
+            style={[style.logo, type === 'Pass' && {height: 64, width: 64}]}
+          />
         </View>
         <Text style={style.title}>
           {type === 'Login'
             ? t('loginSuccess.LoginSuccess')
-            : t('loginSuccess.ProfileSuccess')}
+            : type === 'Profile'
+            ? t('loginSuccess.ProfileSuccess')
+            : t('loginSuccess.ResetSuccess')}
         </Text>
         <View style={style.subtitleView}>
-          <Text style={style.subtitle}>
-            {t('loginSuccess.SuccessSubtitle')}
-          </Text>
-          <Text style={[style.subtitle, {textAlign: 'center'}]}>
+          {type !== 'Pass' ? (
+            <Text style={style.subtitle}>
+              {t('loginSuccess.SuccessSubtitle')}
+            </Text>
+          ) : null}
+          <Text
+            style={[
+              style.subtitle,
+              {textAlign: 'center'},
+              type === 'Pass' && {fontSize: 24},
+            ]}>
             {type === 'Login'
               ? t('loginSuccess.SuccessSubtitle2')
-              : t('loginSuccess.ProfileSuccessSubtitle2')}
+              : type === 'Profile'
+              ? t('loginSuccess.ProfileSuccessSubtitle2')
+              : t('loginSuccess.ResetSuccessSubtitle')}
           </Text>
           <PrimaryButton
             title={
               type === 'Login'
                 ? t('loginSuccess.LoginSuccessBTN')
-                : t('loginSuccess.ProfileSuccessBTN')
+                : type === 'Profile'
+                ? t('loginSuccess.ProfileSuccessBTN')
+                : t('loginSuccess.ResetSuccessBTN')
             }
             onPress={() => {
               type === 'Login'
                 ? navigation.replace('ProfileSignup')
-                : navigation.replace('BottomNavBar');
+                : type === 'Profile'
+                ? navigation.replace('BottomNavBar')
+                : navigation.replace('Login');
             }}
             buttonStyle={{marginTop: 40}}
           />
