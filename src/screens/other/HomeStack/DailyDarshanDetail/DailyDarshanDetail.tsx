@@ -31,7 +31,7 @@ export const DailyDarshanDetail = ({
   const currentImageUri = Data[pagination - 1];
 
   React.useEffect(() => {
-    setWallpaper(`https://gurukul.taskgrids.com${currentImageUri}`);
+    setWallpaper(`${BASE_URL}${currentImageUri}`);
   }, [currentImageUri]);
 
   return (

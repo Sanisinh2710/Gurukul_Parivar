@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   Image,
@@ -20,7 +21,7 @@ import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
-import {CustomFonts} from '../../../utils';
+import {COLORS, CustomFonts} from '../../../utils';
 import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
@@ -37,8 +38,11 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const [modalForWallpaper, setModalForWallpaper] =
     React.useState<boolean>(false);
 
+  const [isSharing, setIsSharing] = React.useState(false);
+
   const animationProgress = React.useRef(new Animated.Value(0));
   const onShare = async () => {
+    setIsSharing(true);
     try {
       const response = await RNFS.downloadFile({
         fromUrl: imgURL!,
@@ -57,12 +61,17 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           subject: 'Share Link', // for email
         };
 
-        await Share.open(options);
+        setIsSharing(false);
+
+        const shareRes = await Share.open(options);
         // Handle successful share here
       } else {
         // Handle error here
       }
+      setIsSharing(false);
     } catch (error) {
+      setIsSharing(false);
+
       // Handle error here
       console.log(error);
     }
@@ -183,15 +192,27 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </View>
           )}
           <View
-            onTouchEnd={onShare}
+            onTouchEnd={
+              isSharing === false
+                ? async () => {
+                    await onShare();
+                  }
+                : () => {}
+            }
             style={[
               style.iconContainer,
               {backgroundColor: 'rgba(172, 168, 123, 1)'},
             ]}>
-            <Image
-              source={AllIcons.Share}
-              style={[style.icon, {height: 18, width: 18}]}
-            />
+            <>
+              {isSharing ? (
+                <ActivityIndicator size={25} color={COLORS.darkModetextColor} />
+              ) : (
+                <Image
+                  source={AllIcons.Share}
+                  style={[style.icon, {height: 18, width: 18}]}
+                />
+              )}
+            </>
           </View>
           <View
             onTouchEnd={checkPermission}
