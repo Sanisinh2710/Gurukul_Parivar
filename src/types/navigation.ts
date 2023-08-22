@@ -44,7 +44,7 @@ export type RootAuthStackParamList = {
   ForgotPassword: undefined;
   ResetPassword:
     | {
-        set_Pass: boolean;
+        reset_pass?: boolean | undefined;
       }
     | undefined;
 };

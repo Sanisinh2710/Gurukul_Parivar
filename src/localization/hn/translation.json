@@ -267,6 +267,7 @@
       "ConfirmPasswordLbl": "पासवर्ड की पुष्टि करें",
       "ConfirmPasswordPlaceholder": "अपना पासवर्ड पुन: दर्ज करें",
       "ResetPasswordSubmitText": "पासवर्ड रीसेट करें",
+      "ResetPasswordSubmitText2": "पासवर्ड सेट करें",
       "PassNotSameErr": "दोनों पासवर्ड एक जैसे होने चाहिए.!"
     },
     "SuccessResetPassword": {

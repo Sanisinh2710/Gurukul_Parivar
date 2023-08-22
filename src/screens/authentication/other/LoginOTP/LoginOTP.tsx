@@ -73,7 +73,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
               storage.set('resetedPass', JSON.stringify(false));
             }
 
-            navigation.navigate('ResetPassword', {set_Pass: true});
+            navigation.navigate('ResetPassword', {reset_pass: reset_pass});
           } else {
             Toast.show(resType, 2);
           }

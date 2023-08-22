@@ -266,6 +266,7 @@
       "ConfirmPasswordLbl": "ખાતરી પાસવર્ડ",
       "ConfirmPasswordPlaceholder": "તમારો પાસવર્ડ ફરી દાખલ કરો",
       "ResetPasswordSubmitText": "પાસવર્ડને પુન:સુયોજિત કરો",
+      "ResetPasswordSubmitText2": "પાસવર્ડ સેટ કરો",
       "PassNotSameErr": "બંને પાસવર્ડ સરખા હોવા જોઈએ.!"
     },
     "SuccessResetPassword": {

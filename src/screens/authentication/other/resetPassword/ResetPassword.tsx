@@ -38,7 +38,7 @@ export const ResetPassword = ({
   route,
   navigation,
 }: ResetPasswordProps): React.JSX.Element => {
-  const set_Pass = route.params?.set_Pass;
+  const reset_pass = route.params?.reset_pass;
 
   const {t} = useTranslation();
 
@@ -113,7 +113,7 @@ export const ResetPassword = ({
 
         console.log(isProfileSignupDone, 'profile');
 
-        console.log(set_Pass, 'set_pass');
+        // console.log(set_Pass, 'set_pass');
 
         if (isProfileSignupDone === 'ERROR') {
           navigation.replace('Success', {type: 'Login'});
@@ -207,7 +207,11 @@ export const ResetPassword = ({
           {/* LoginFormFooter:------------------------------------------------------------------------ */}
           <View key={'ResetPasswordFormFooter'} style={style.footerView}>
             <PrimaryButton
-              title={t('ResetPassword.ResetPasswordSubmitText')}
+              title={
+                reset_pass
+                  ? t('ResetPassword.ResetPasswordSubmitText')
+                  : t('ResetPassword.ResetPasswordSubmitText2')
+              }
               customWidget={
                 isApiLoading ? (
                   <>
