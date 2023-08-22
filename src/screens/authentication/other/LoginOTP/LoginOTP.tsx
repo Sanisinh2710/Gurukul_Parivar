@@ -18,6 +18,7 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {RegisterApi, VerifyOTPApi, setAuthToken} from '../../../../services';
+import {storage} from '../../../../storage';
 import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
@@ -26,6 +27,7 @@ const staticSeconds = 120;
 
 export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const primary_email = route.params?.primary_email;
+  const reset_pass = route.params?.reset_pass;
 
   const style = styles();
   const CommonStyles = CommonStyle();
@@ -65,6 +67,12 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
           setIsApiloading(false);
 
           if (resType === 'SUCCESS') {
+            if (reset_pass) {
+              storage.set('resetedPass', JSON.stringify(true));
+            } else {
+              storage.set('resetedPass', JSON.stringify(false));
+            }
+
             navigation.navigate('ResetPassword', {set_Pass: true});
           } else {
             Toast.show(resType, 2);

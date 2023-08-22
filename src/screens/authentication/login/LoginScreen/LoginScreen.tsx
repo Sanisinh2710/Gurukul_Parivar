@@ -85,6 +85,8 @@ export const LoginScreen = ({
 
     const auth_token = storage.getString('auth_token');
 
+    const resetedPass = storage.getString('resetedPass');
+
     if (getLangCode) {
       const newLangcode = JSON.parse(getLangCode);
 
@@ -98,8 +100,16 @@ export const LoginScreen = ({
 
     const timer = setTimeout(() => {
       setIsloading(false);
-      if (auth_token) {
-        navigation.replace('ProfileSignup');
+
+      if (resetedPass) {
+        const reseted_pass = JSON.parse(resetedPass);
+
+        if (reseted_pass) {
+        } else {
+          if (auth_token) {
+            navigation.replace('ProfileSignup');
+          }
+        }
       }
     }, 1000);
 

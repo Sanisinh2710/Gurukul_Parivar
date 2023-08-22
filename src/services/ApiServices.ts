@@ -86,11 +86,16 @@ export const LoginApi = async (data: any) => {
   return await apiRequest(LOGIN_POST_ENDPOINT, 'post', data, {}, false);
 };
 
-export const RegisterApi = async (primary_email: string) => {
+export const RegisterApi = async (
+  primary_email: string,
+  type?: 'email' | 'forgot',
+) => {
   return await apiRequest(
     EMAIL_POST_ENDPOINT,
     'post',
-    {email: primary_email},
+    type === 'forgot'
+      ? {email: primary_email, isForgetPassword: true}
+      : {email: primary_email},
     {},
     false,
   );

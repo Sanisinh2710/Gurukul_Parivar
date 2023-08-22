@@ -113,13 +113,10 @@ export const ResetPassword = ({
 
         console.log(isProfileSignupDone, 'profile');
 
+        console.log(set_Pass, 'set_pass');
+
         if (isProfileSignupDone === 'ERROR') {
-          if (set_Pass) {
-            navigation.replace('Success', {type: 'Login'});
-          } else {
-            // Add reset password screen navigate:-
-            navigation.replace('Success', {type: 'Pass'});
-          }
+          navigation.replace('Success', {type: 'Login'});
 
           // const backenduserresponse = await PersonalInfoGetDetailsApi();
           // if (backenduserresponse.resType === 'SUCCESS') {
@@ -141,10 +138,11 @@ export const ResetPassword = ({
           //   setIsApiloading(false);
           //   Toast.show(backenduserresponse.message, 2);
           // }
+        } else {
+          navigation.replace('Success', {type: 'Pass'});
         }
       } else {
         setIsApiloading(false);
-        Toast.show(resType, 2);
       }
     } else {
       Toast.show(response.message, Toast.SHORT);

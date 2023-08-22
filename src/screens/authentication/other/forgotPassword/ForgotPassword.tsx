@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   FormInput,
@@ -17,6 +18,7 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {RegisterApi} from '../../../../services';
 import {
   EmailValidationSchemaType,
   ForgotPasswordProps,
@@ -56,12 +58,21 @@ export const ForgotPassword = ({
     }
   }, [watch()]);
 
-  const onSubmit = (data: EmailValidationSchemaType) => {
+  const onSubmit = async (data: EmailValidationSchemaType) => {
     setIsApiloading(true);
-    console.log(data);
+
+    const response = await RegisterApi(data.primary_email, 'forgot');
+
     setIsApiloading(false);
 
-    navigation.navigate('OTP');
+    if (response.resType === 'SUCCESS') {
+      navigation.navigate('OTP', {
+        primary_email: data.primary_email,
+        reset_pass: true,
+      });
+    } else {
+      Toast.show(response.message, 2);
+    }
   };
 
   return (
