@@ -1,7 +1,7 @@
 {
   "translation": {
     "common": {
-      "Signin": "दाखिल करना",
+      "Signin": "दाखिल करें",
       "Signup": "साइन अप करें",
       "Search": "खोजे",
       "Reset": "रीसेट",
@@ -42,10 +42,12 @@
       "PleaseEnterEmailPass": "कृपया अपना ईमेल और पासवर्ड दर्ज करें",
       "EmailLBL": "ईमेल",
       "EnterYourEmailPlaceholder": "अपना ईमेल दर्ज करें",
+      "RegisterHeaderSubtitle": "कृपया अपना ईमेल दर्ज करें",
       "PasswordLBL": "पासवर्ड",
       "EnterYourPassPlaceholder": "अपना पासवर्ड भरें",
       "RememberMe": "मुझे याद रखो",
-      "DontHaveAc": "कोई खाता नहीं है?",
+      "DontHaveAc": "कोई अकाउंट नहीं है?",
+      "AlreadyHaveAc": "क्या आपके पास पहले से एक अकाउंट मौजूद है?",
       "PassErr": "पासवर्ड आठ अक्षरों का होना चाहिए और इसमें एक अक्षर, एक नंबर और विशेष अक्षर होना चाहिए"
     },
     "loginSuccess": {
@@ -74,7 +76,8 @@
       "OtpContainerText": "एक ओटीपी मोबाइल नंबर पर भेजा गया है",
       "OtpNotRecieve": "कोड प्राप्त नहीं हुआ?",
       "OtpResend": "फिर से भेजें",
-      "Verify&Login": "सत्यापित करें और लॉगिन करें"
+      "Verify&Login": "सत्यापित करें और लॉगिन करें",
+      "SendOtp": "ओटीपी भेजें"
     },
     "personalInfo": {
       "personalInfoHeader": "व्यक्तिगत जानकारी",
@@ -244,6 +247,10 @@
     },
     "Payment": {
       "Heading": "भुगतान की विधि चुनें"
+    },
+    "NoData": {
+      "Title": "कोई डेटा नहीं मिला",
+      "Content": "ऐसा लगता है कि हमारे डेटा सहायक व्यक्ति आराम कर रहे हैं। \n हम जल्द ही कुछ जानकारी तैयार करेंगे।"
     },
     "ForgotPassword": {
       "ForgotPassword": "पासवर्ड भूल गए??",

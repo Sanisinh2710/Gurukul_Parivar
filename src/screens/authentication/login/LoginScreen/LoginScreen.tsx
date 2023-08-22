@@ -317,6 +317,7 @@ export const LoginScreen = ({
               <Text
                 onPress={() => {
                   // Redirect to forgetOtp screen:----------
+                  navigation.navigate('ForgotPassword');
                 }}
                 style={{
                   ...CustomFonts.body.regular14,

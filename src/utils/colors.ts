@@ -30,4 +30,6 @@ export const COLORS = {
 
   darkModeIconColor: '#FFFFFF',
   lightModeIconColor: '#171717',
+
+  resetSubtitleColor: 'rgba(63, 63, 63, 1)',
 };

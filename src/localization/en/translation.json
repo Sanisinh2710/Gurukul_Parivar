@@ -42,10 +42,12 @@
       "PleaseEnterEmailPass": "Please enter your email and password",
       "EmailLBL": "Email",
       "EnterYourEmailPlaceholder": "Enter your email address",
+      "RegisterHeaderSubtitle": "Please enter your email address",
       "PasswordLBL": "Password",
       "EnterYourPassPlaceholder": "Enter your password",
       "RememberMe": "Remember Me",
       "DontHaveAc": "Don’t have an account?",
+      "AlreadyHaveAc": "Already have an account?",
       "PassErr": "A password should be of eight characters, and should consist one letter,one number and special character"
     },
     "loginSuccess": {
@@ -74,7 +76,8 @@
       "OtpContainerText": "An OTP has been sent to mobile number",
       "OtpNotRecieve": "Didn't recieve code?",
       "OtpResend": "Resend",
-      "Verify&Login": "Verify & Login"
+      "Verify&Login": "Verify & Login",
+      "SendOtp": "Send OTP"
     },
     "personalInfo": {
       "personalInfoHeader": "Personal info",
@@ -234,7 +237,6 @@
       "Title": "Congratulations",
       "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
     },
-
     "Donation": {
       "Heading": "Donation",
       "Quote": "In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",

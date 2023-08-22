@@ -42,10 +42,12 @@
       "PleaseEnterEmailPass": "કૃપા કરીને તમારો ઈમેલ અને પાસવર્ડ દાખલ કરો",
       "EmailLBL": "ઈ-મેઈલ",
       "EnterYourEmailPlaceholder": "તમારુ ઇમેઇલ દાખલ કરો",
+      "RegisterHeaderSubtitle": "કૃપા કરીને તમારો ઈમેલ દાખલ કરો",
       "PasswordLBL": "પાસવર્ડ",
       "EnterYourPassPlaceholder": "તમારો પાસવર્ડ નાખો",
       "RememberMe": "મને યાદ રાખજો",
       "DontHaveAc": "એકાઉન્ટ નથી?",
+      "AlreadyHaveAc": "પહેલેથી જ એકાઉન્ટ છે?",
       "PassErr": "પાસવર્ડ આઠ અક્ષરોનો હોવો જોઈએ અને તેમાં એક અક્ષર, એક સંખ્યા અને વિશેષ અક્ષર હોવા જોઈએ"
     },
     "loginSuccess": {
@@ -74,7 +76,8 @@
       "OtpContainerText": "એક ઓટીપી મોબાઇલ નંબર પર મોકલી છે",
       "OtpNotRecieve": "કોડ મેળવ્યો નથી?",
       "OtpResend": "ફરીથી મોકલો",
-      "Verify&Login": "ચકાસો અને લૉગિન કરો"
+      "Verify&Login": "ચકાસો અને લૉગિન કરો",
+      "SendOtp": "ઓટીપી મોકલો"
     },
     "personalInfo": {
       "personalInfoHeader": "વ્યક્તિગત માહિતી",

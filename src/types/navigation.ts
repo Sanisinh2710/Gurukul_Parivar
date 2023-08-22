@@ -42,6 +42,8 @@ export type RootAuthStackParamList = {
   Success: {type: 'Login' | 'Profile'} | undefined;
 
   ProfileSignup: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: undefined;
 };
 
 export type LoginScreenProps = CompositeScreenProps<
@@ -71,4 +73,13 @@ export type ProfileSignupEditProps = NativeStackScreenProps<
 export type EditProfileProps = NativeStackScreenProps<
   RootStackParamList,
   'editProfile'
+>;
+
+export type ForgotPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ForgotPassword'
+>;
+export type ResetPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ResetPassword'
 >;

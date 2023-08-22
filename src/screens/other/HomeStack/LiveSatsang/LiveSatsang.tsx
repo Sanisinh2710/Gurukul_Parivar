@@ -40,17 +40,22 @@ export const LiveSatsang = ({
     setLoader(true);
     try {
       const res = await DailySatsangApi(selectedDate);
+      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
           setData(res.data.live_satasang);
           setLoader(false);
         }, 1000);
+      } else {
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);
     }
   }, [selectedDate]);
+
+  console.log(Data);
 
   return (
     <ScreenWrapper>

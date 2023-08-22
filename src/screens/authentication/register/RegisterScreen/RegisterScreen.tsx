@@ -17,21 +17,14 @@ import {
 import Toast from 'react-native-simple-toast';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {
-  DropDownModel,
-  FormInput,
-  Loader,
-  PrimaryButton,
-  ScreenWrapper,
-} from '../../../../components';
+import {FormInput, PrimaryButton, ScreenWrapper} from '../../../../components';
 import {LoginByEmailApi} from '../../../../services';
-import {storage} from '../../../../storage';
 import {
-  LoginFormValidationSchemaType,
+  EmailValidationSchemaType,
   RootAuthStackParamList,
 } from '../../../../types';
-import {COLORS, Languages} from '../../../../utils';
-import {LoginFormValidationSchema} from '../../../../validations';
+import {COLORS} from '../../../../utils';
+import {EmailValidationSchema} from '../../../../validations';
 import {RegisterScreenstyle} from './style';
 
 export const RegisterScreen = ({
@@ -46,44 +39,9 @@ export const RegisterScreen = ({
 
   const style = RegisterScreenstyle();
 
-  const [isLoading, setIsloading] = React.useState(false);
-
   const [isApiLoading, setIsApiloading] = React.useState(false);
 
   const [disabled, setDisabled] = React.useState(true);
-
-  const [modelVisible, setModelVisible] = React.useState<boolean>(false);
-
-  const [language, setLanguage] = React.useState(Languages.gu);
-
-  const [countryCodeSelect, setCountryCodeSelect] = React.useState('');
-  React.useMemo(() => {
-    setIsloading(true);
-
-    const getLangCode = storage.getString('langCode');
-
-    const auth_token = storage.getString('auth_token');
-
-    if (getLangCode) {
-      const newLangcode = JSON.parse(getLangCode);
-
-      if (newLangcode) {
-        setModelVisible(false);
-        setLanguage(Languages[newLangcode]);
-      }
-    } else {
-      setModelVisible(true);
-    }
-
-    const timer = setTimeout(() => {
-      setIsloading(false);
-      if (auth_token) {
-        navigation.replace('ProfileSignup');
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const {
     control,
@@ -91,21 +49,9 @@ export const RegisterScreen = ({
     handleSubmit,
     formState: {errors},
   } = useForm({
-    resolver: yupResolver(LoginFormValidationSchema()),
+    resolver: yupResolver(EmailValidationSchema()),
     mode: 'onChange',
   });
-
-  React.useEffect(() => {
-    if (language) {
-      for (let lang in Languages) {
-        if (language === Languages[lang]) {
-          i18n.changeLanguage(lang);
-          storage.set('langCode', JSON.stringify(lang));
-          break;
-        }
-      }
-    }
-  }, [language]);
 
   React.useEffect(() => {
     if (Object.keys(errors).length === 0 && watch().primary_email) {
@@ -116,7 +62,7 @@ export const RegisterScreen = ({
   }, [watch()]);
 
   const onSubmit = React.useCallback(
-    async (data: LoginFormValidationSchemaType) => {
+    async (data: EmailValidationSchemaType) => {
       // data.countryCode = countryCodeSelect.split('(')[0].toString();
 
       setIsApiloading(true);
@@ -139,114 +85,105 @@ export const RegisterScreen = ({
     [],
   );
 
-  if (isLoading) {
-    return <Loader />;
-  } else {
-    return (
-      <ScreenWrapper>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
-          <View style={commonStyle.commonContentView}>
-            {/* Header:------------------------------------------------------------------------ */}
-            <View key={'LoginFormHeader'} style={style.headerView}>
-              <View style={style.imgLogoView}>
-                <Image source={AllImages.AppLogo} style={style.imgLogo} />
-              </View>
-              <View style={style.welcomeTitleView}>
-                <Text style={style.welcomeTitle1Text}>
-                  {t('loginScreen.WelcomeTitle1')}
-                </Text>
-                <Text style={style.welcomeTitle2Text}>
-                  {t('loginScreen.WelcomeTitle2')}
-                </Text>
-                <Text style={style.welcomeSubtitleText}>
-                  {t('loginScreen.WelcomeSubtitle')}
-                </Text>
-              </View>
+  return (
+    <ScreenWrapper>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <View style={commonStyle.commonContentView}>
+          {/* Header:------------------------------------------------------------------------ */}
+          <View key={'LoginFormHeader'} style={style.headerView}>
+            <View style={style.imgLogoView}>
+              <Image source={AllImages.AppLogo} style={style.imgLogo} />
             </View>
-
-            {/* FormInputs:------------------------------------------------------------------------ */}
-            <View key={'LoginFormInputs'} style={style.formInputsView}>
-              <Controller
-                control={control}
-                name="primary_email"
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      type={'email'}
-                      name={'primary_email'}
-                      label={t('personalInfo.EmailAddress')}
-                      placeholder={t('personalInfo.EnterYourEmailPlaceholder')}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      editable={true}
-                      error={errors['primary_email']?.message?.toString()}
-                      state={{
-                        countryCodeSelect,
-                        setCountryCodeSelect,
-                      }}
-                    />
-                  );
-                }}
-              />
-            </View>
-
-            {/* LoginFormFooter:------------------------------------------------------------------------ */}
-            <View key={'LoginFormFooter'} style={style.footerView}>
-              <PrimaryButton
-                title={t('common.Signin')}
-                customWidget={
-                  isApiLoading ? (
-                    <>
-                      <ActivityIndicator
-                        size={25}
-                        color={COLORS.darkModetextColor}
-                      />
-                    </>
-                  ) : undefined
-                }
-                onPress={handleSubmit(onSubmit)}
-                disabled={disabled}
-              />
-              <Text style={style.footerText}>
-                {t('loginScreen.FooterText1')}{' '}
-                <Text
-                  style={style.footerRedText}
-                  onPress={() => Linking.openURL(`${BASE_URL}/term&condition`)}>
-                  {t('loginScreen.FT1')}
-                </Text>{' '}
-                {t('loginScreen.FooterText2').split(' ')[0]}
-                <Text
-                  style={style.footerRedText}
-                  onPress={() => Linking.openURL(`${BASE_URL}/privacy-policy`)}>
-                  {' '}
-                  {t('loginScreen.FT2')}
-                </Text>{' '}
-                {t('loginScreen.FooterText2')
-                  .split(' ')
-                  .filter((val: any, index: number) => {
-                    return index !== 0 && val;
-                  })
-                  .join(' ')}
+            <View style={style.welcomeTitleView}>
+              <Text style={style.welcomeTitle1Text}>
+                {t('loginScreen.WelcomeTitle1')}
+              </Text>
+              <Text style={style.welcomeTitle2Text}>
+                {t('loginScreen.WelcomeTitle2')}
+              </Text>
+              <Text style={style.welcomeSubtitleText}>
+                {t('loginScreen.RegisterHeaderSubtitle')}
               </Text>
             </View>
           </View>
-        </KeyboardAvoidingView>
 
-        {/* Language Model.................................................................. */}
-        <DropDownModel
-          modelVisible={modelVisible}
-          setModelVisible={setModelVisible}
-          inputList={Object.values(Languages)}
-          wantSearchBar={false}
-          type={'radio'}
-          selectedItem={language}
-          setSelectedItem={setLanguage}
-          modalHeight={'45%'}
-          label={t('loginScreen.SelectLangLabel')}
-        />
-      </ScreenWrapper>
-    );
-  }
+          {/* FormInputs:------------------------------------------------------------------------ */}
+          <View key={'LoginFormInputs'} style={style.formInputsView}>
+            <Controller
+              control={control}
+              name="primary_email"
+              render={({field: {onBlur, onChange, value}}) => {
+                return (
+                  <FormInput
+                    type={'email'}
+                    name={'primary_email'}
+                    label={t('loginScreen.EmailLBL')}
+                    placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    editable={true}
+                    error={errors['primary_email']?.message?.toString()}
+                  />
+                );
+              }}
+            />
+          </View>
+
+          {/* LoginFormFooter:------------------------------------------------------------------------ */}
+          <View key={'LoginFormFooter'} style={style.footerView}>
+            <Text style={style.footerText}>
+              {t('loginScreen.FooterText1')}{' '}
+              <Text
+                style={style.footerRedText}
+                onPress={() => Linking.openURL(`${BASE_URL}/term&condition`)}>
+                {t('loginScreen.FT1')}
+              </Text>{' '}
+              {t('loginScreen.FooterText2').split(' ')[0]}
+              <Text
+                style={style.footerRedText}
+                onPress={() => Linking.openURL(`${BASE_URL}/privacy-policy`)}>
+                {' '}
+                {t('loginScreen.FT2')}
+              </Text>{' '}
+              {t('loginScreen.FooterText2')
+                .split(' ')
+                .filter((val: any, index: number) => {
+                  return index !== 0 && val;
+                })
+                .join(' ')}
+            </Text>
+
+            <PrimaryButton
+              title={t('common.Signin')}
+              customWidget={
+                isApiLoading ? (
+                  <>
+                    <ActivityIndicator
+                      size={25}
+                      color={COLORS.darkModetextColor}
+                    />
+                  </>
+                ) : undefined
+              }
+              onPress={handleSubmit(onSubmit)}
+              disabled={disabled}
+            />
+
+            <Text style={[style.footerText, {alignSelf: 'center'}]}>
+              {t('loginScreen.AlreadyHaveAc')}{' '}
+              <Text
+                style={[style.footerRedText]}
+                onPress={() => {
+                  navigation.navigate('Login');
+                }}>
+                {t('common.Signin').toLocaleLowerCase()}
+              </Text>
+            </Text>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </ScreenWrapper>
+  );
 };

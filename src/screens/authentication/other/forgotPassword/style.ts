@@ -1,24 +1,14 @@
 import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
-import {CustomFonts} from '../../../../utils';
+import {COLORS, CustomFonts} from '../../../../utils';
 
-export const RegisterScreenstyle = () => {
+export const ForgotPasswordstyle = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
     headerView: {
       gap: 10,
       marginTop: '5%',
-    },
-    imgLogoView: {
-      width: 130,
-      height: 130,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    imgLogo: {
-      flex: 1,
-      resizeMode: 'contain',
     },
     welcomeTitleView: {
       marginTop: 10,
@@ -30,8 +20,8 @@ export const RegisterScreenstyle = () => {
       lineHeight: 43,
     },
     welcomeTitle2Text: {
-      ...CustomFonts.header.large36,
-      color: theme.primary,
+      ...CustomFonts.header.small18,
+      color: COLORS.resetSubtitleColor,
     },
     welcomeSubtitleText: {
       ...CustomFonts.body.large14,
@@ -47,7 +37,7 @@ export const RegisterScreenstyle = () => {
       color: theme.textColor,
     },
     footerView: {
-      marginTop: 18,
+      marginTop: 32,
       gap: 15,
     },
     footerText: {

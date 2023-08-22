@@ -16,6 +16,17 @@ export type LoginFormValidationSchemaType = {
   password: string;
 };
 
+export type EmailValidationSchemaType = {
+  [key: string]: string;
+  primary_email: string;
+};
+
+export type ResetPasswordValidationSchemaType = {
+  [key: string]: string;
+  password: string;
+  confirm_password: string;
+};
+
 export type CompleteProfileFormValidationSchemaType = {
   [key: string]: any;
   profile: any;

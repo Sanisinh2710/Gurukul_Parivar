@@ -236,7 +236,7 @@ export const DailyQuotes = ({
                     />
                     <ShareDownload
                       wallpaper={false}
-                      imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
+                      imgURL={DailyQuotes?.[itemIndex]?.image}
                     />
                   </View>
                 ) : (
