@@ -2,7 +2,7 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, View} from 'react-native';
+import {Dimensions, Image, Text, TextInput, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -26,6 +26,7 @@ import Toast from 'react-native-simple-toast';
 import {SimpleDropDown} from '../../../../components/ui/Form/SimpleDropDown';
 import {BASE_URL} from '@env';
 import Carousel from 'react-native-snap-carousel';
+import Clipboard from '@react-native-clipboard/clipboard';
 export const DailyQuotes = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
@@ -36,13 +37,15 @@ export const DailyQuotes = ({
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [changeValue, setChangeValue] = React.useState(1);
-  const [GurukulList, setGurukulList] = React.useState<{[key:string]:any}[]>([]);
+  const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
   const [BranchName, setBranchName] = React.useState();
-  const [DailyQuotes, setDailQuotes] = React.useState<{[key:string]:any}[]>([]);
+  const [DailyQuotes, setDailQuotes] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
 
-  const [itemIndex,setItemIndex] = React.useState(0);
-
-
+  const [itemIndex, setItemIndex] = React.useState(0);
 
   React.useMemo(async () => {
     console.log('THIS SET GURURKUl');
@@ -80,8 +83,7 @@ export const DailyQuotes = ({
     } catch (error) {
       console.log(error);
     }
-  }, [selectedDate , BranchName]);
-
+  }, [selectedDate, BranchName]);
 
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
@@ -110,11 +112,10 @@ export const DailyQuotes = ({
         return item.branch == BranchName;
       })?.[0]?.daily_quotes;
       console.log('>>>>>>>IMAGES', newImges);
-      if (newImges!= undefined || newImges != null ||newImges != '') {
-        console.log("IF EXECE");
+      if (newImges != undefined || newImges != null || newImges != '') {
+        console.log('IF EXECE');
         setDailQuotes(newImges);
-      }
-      else{
+      } else {
         setDailQuotes([]);
       }
     }
@@ -126,6 +127,10 @@ export const DailyQuotes = ({
   }, [Data, BranchName]);
   // console.log(DailyQuotes.length,"<<");
 
+  const handleClipBoard = (item: any) => {
+    Clipboard.setString(item);
+    Toast.show('Quote Copied To Clipboard', Toast.SHORT);
+  };
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -177,49 +182,60 @@ export const DailyQuotes = ({
           <Loader />
         ) : (
           <>
-            {Data.length > 0  ? (
+            {Data.length > 0 ? (
               <>
-                {Data.find((item:any) => item.branch == BranchName) ? <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '3%',
-                  }}>
-                  <Carousel
-                    sliderWidth={screenWidth}
-                    slideStyle={{
-                      height: Dimensions.get('window').height * 0.6,
-                      borderRadius: 20,
-                    }}
-                    onSnapToItem={(index)=>{setItemIndex(index)
-                     
-                    }}
-                    itemWidth={Dimensions.get('window').width * 0.8}
-                    data={DailyQuotes}
-                    renderItem={({item}) => (
-                      <View
-                        style={{
-                          height: '100%',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 20,
-                        }}>
-                        <View style={{flex: 1, width: '100%'}}>
-                          <Image
-                            source={{
-                              uri: `${BASE_URL}${item.image}`,
-                            }}
-                            style={style.image}
-                          />
+                {Data.find((item: any) => item.branch == BranchName) ? (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: '3%',
+                    }}>
+                    <Carousel
+                      sliderWidth={screenWidth}
+                      slideStyle={{
+                        height: Dimensions.get('window').height * 0.6,
+                        borderRadius: 20,
+                      }}
+                      onSnapToItem={index => {
+                        setItemIndex(index);
+                      }}
+                      itemWidth={Dimensions.get('window').width * 0.8}
+                      data={DailyQuotes}
+                      renderItem={({item}) => (
+                        <View
+                          style={{
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 20,
+                          }}>
+                          <View style={{flex: 1, width: '100%'}}>
+                            <Image
+                              source={{
+                                uri: `${BASE_URL}${item.image}`,
+                              }}
+                              style={style.image}
+                            />
+                          </View>
+                          <View>
+                            <Text
+                              onLongPress={() => handleClipBoard(item.quote)}
+                              style={style.quote}>
+                              {item.quote}
+                            </Text>
+                          </View>
                         </View>
-                        <View>
-                          <Text style={style.quote}>{item.quote}</Text>
-                        </View>
-                      </View>
-                    )}
-                  />
-                <ShareDownload wallpaper={false} imgURL={DailyQuotes?.[itemIndex]?.image} />
-                </View> : <NoData />}
+                      )}
+                    />
+                    <ShareDownload
+                      wallpaper={false}
+                      imgURL={DailyQuotes?.[itemIndex]?.image}
+                    />
+                  </View>
+                ) : (
+                  <NoData />
+                )}
               </>
             ) : (
               <NoData />
