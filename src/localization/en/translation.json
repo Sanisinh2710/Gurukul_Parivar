@@ -2,6 +2,7 @@
   "translation": {
     "common": {
       "Signin": "Sign in",
+      "Signup": "Sign up",
       "Search": "Search",
       "Reset": "Reset",
       "EmptyError": "This Field is required",
@@ -37,7 +38,15 @@
       "FT1": "Terms of Service",
       "FT2": "Privacy Policy",
       "SelectCountryLabel": "Select Country Code",
-      "SelectLangLabel": "Select Language"
+      "SelectLangLabel": "Select Language",
+      "PleaseEnterEmailPass": "Please enter your email and password",
+      "EmailLBL": "Email",
+      "EnterYourEmailPlaceholder": "Enter your email address",
+      "PasswordLBL": "Password",
+      "EnterYourPassPlaceholder": "Enter your password",
+      "RememberMe": "Remember Me",
+      "DontHaveAc": "Don’t have an account?",
+      "PassErr": "A password should be of eight characters, and should consist one letter,one number and special character"
     },
     "loginSuccess": {
       "LoginSuccess": "Login Successful!",
@@ -239,6 +248,23 @@
     "NoData": {
       "Title": "Oops, We're Blanking Out!",
       "Content": "Looks like our data elves are on a break.\n We'll conjure up some information soon."
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "Forgot Password?",
+      "ForgotPasswordSubTitle": "Reclaim Your Access with a Few Simple Steps"
+    },
+    "ResetPassword": {
+      "NewPassword": "Set a New Password",
+      "NewPasswordSubTitle": "Must be at least 8 characters",
+      "PasswordLbl": "Password",
+      "PasswordLblPlaceholder": "Enter your password",
+      "ConfirmPasswordLbl": "Confirm Password",
+      "ConfirmPasswordPlaceholder": "Re-enter your password",
+      "ResetPasswordSubmitText": "Reset Password"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "Success! Password Reset",
+      "SuccessResetPasswordSubTitle": "Congratulations! You've successfully reset your password. Your account is now more secure than ever."
     }
   }
 }

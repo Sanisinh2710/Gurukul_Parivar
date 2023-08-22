@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 
-export const LoginScreenstyle = () => {
+export const RegisterScreenstyle = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
@@ -41,7 +41,6 @@ export const LoginScreenstyle = () => {
     },
     formInputsView: {
       marginTop: '10%',
-      gap: 15,
     },
     mobilenumText: {
       ...CustomFonts.body.large14,
@@ -58,12 +57,6 @@ export const LoginScreenstyle = () => {
     },
     footerRedText: {
       color: theme.primary,
-    },
-    FooterInputs: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 15,
-      justifyContent: 'space-between',
     },
   });
 };

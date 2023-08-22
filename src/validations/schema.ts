@@ -8,17 +8,22 @@ import {
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
 } from '../types';
-import {mailRegex, nameRegex, phoneRegex} from '../utils';
+import {mailRegex, nameRegex, passwordRegex, phoneRegex} from '../utils';
 
 export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      primary_email: yup
+      email: yup
         .string()
         .trim()
         .required(t('common.EmptyError'))
         .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+      password: yup
+        .string()
+        .trim()
+        .required(t('common.EmptyError'))
+        .matches(passwordRegex, {message: t('loginScreen.PassErr')}),
     });
   };
 

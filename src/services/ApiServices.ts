@@ -16,6 +16,7 @@ import {
   GURUKUL_CONNECT_GET_ENDPOINT,
   GURUKUL_CONNECT_POST_ENDPOINT,
   LOGIN_POST_ENDPOINT,
+  NEWLOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
@@ -78,6 +79,10 @@ const apiRequest = async (
       message: error.toString(),
     };
   }
+};
+
+export const NewLoginApi = async (data: any) => {
+  return await apiRequest(NEWLOGIN_POST_ENDPOINT, 'post', data, {}, false);
 };
 
 export const LoginByEmailApi = async (primary_email: string) => {

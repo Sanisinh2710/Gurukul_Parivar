@@ -100,7 +100,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                 Toast.show(backenduserresponse.message, 2);
               }
             } else {
-              navigation.replace('LoginSuccess', {type: 'Login'});
+              navigation.replace('Success', {type: 'Login'});
             }
           } else {
             setIsApiloading(false);

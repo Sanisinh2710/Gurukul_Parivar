@@ -23,4 +23,5 @@ declare module '@env' {
   export const CALENDAR_GET_ENDPOINT: string;
   export const SLIDER_GET_ENDPOINT: string;
   export const DELETE_USER_ENDPOINT: string;
+  export const NEWLOGIN_POST_ENDPOINT: string;
 }

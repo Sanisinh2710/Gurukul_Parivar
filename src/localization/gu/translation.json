@@ -2,6 +2,7 @@
   "translation": {
     "common": {
       "Signin": "સાઇન ઇન કરો",
+      "Signup": "સાઇન અપ કરો",
       "Search": "શોધો",
       "Reset": "રીસેટ",
       "EmptyError": "આ ક્ષેત્ર જરૂરી છે",
@@ -37,7 +38,15 @@
       "FT1": "સેવાની શરતો",
       "FT2": "ગોપનીયતા નીતિ",
       "SelectCountryLabel": "દેશનો કોડ પસંદ કરો",
-      "SelectLangLabel": "ભાષા પસંદ કરો"
+      "SelectLangLabel": "ભાષા પસંદ કરો",
+      "PleaseEnterEmailPass": "કૃપા કરીને તમારો ઈમેલ અને પાસવર્ડ દાખલ કરો",
+      "EmailLBL": "ઈ-મેઈલ",
+      "EnterYourEmailPlaceholder": "તમારુ ઇમેઇલ દાખલ કરો",
+      "PasswordLBL": "પાસવર્ડ",
+      "EnterYourPassPlaceholder": "તમારો પાસવર્ડ નાખો",
+      "RememberMe": "મને યાદ રાખજો",
+      "DontHaveAc": "એકાઉન્ટ નથી?",
+      "PassErr": "પાસવર્ડ આઠ અક્ષરોનો હોવો જોઈએ અને તેમાં એક અક્ષર, એક સંખ્યા અને વિશેષ અક્ષર હોવા જોઈએ"
     },
     "loginSuccess": {
       "LoginSuccess": "લૉગિન સફળ!",
@@ -238,6 +247,23 @@
     "NoData": {
       "Title": "ઓહ! કોઈ ડેટા મળ્યો નથી.",
       "Content": "લાગે છે કે અમારા ડેટા એલ્વ્સ વિરામ લેવું ચાલુ છે.\n અમે શીઘ્રજી કેટલીક માહિતી બનાવીશું."
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "પાસવર્ડ ભૂલી ગયા?",
+      "ForgotPasswordSubTitle": "થોડા સરળ પગલાં સાથે તમારી ઍક્સેસનો ફરીથી દાવો કરો."
+    },
+    "ResetPassword": {
+      "NewPassword": "નવો પાસવર્ડ સુયોજિત કરો",
+      "NewPasswordSubTitle": "ઓછામાં ઓછા ૮ અક્ષરો હોવા જ જોઈએ",
+      "PasswordLbl": "પાસવર્ડ",
+      "PasswordLblPlaceholder": "તમારો પાસવર્ડ દાખલ કરો",
+      "ConfirmPasswordLbl": "ખાતરી પાસવર્ડ",
+      "ConfirmPasswordPlaceholder": "તમારો પાસવર્ડ ફરી દાખલ કરો",
+      "ResetPasswordSubmitText": "પાસવર્ડને પુન:સુયોજિત કરો"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "પાસવર્ડ રીસેટ સફળ થયો છે.",
+      "SuccessResetPasswordSubTitle": "અભિનંદન! તમે સફળતાપૂર્વક તમારો પાસવર્ડ રીસેટ કર્યો છે. તમારું ખાતું હવે પહેલા કરતા વધુ સુરક્ષિત છે."
     }
   }
 }

@@ -2,6 +2,7 @@
   "translation": {
     "common": {
       "Signin": "दाखिल करना",
+      "Signup": "साइन अप करें",
       "Search": "खोजे",
       "Reset": "रीसेट",
       "EmptyError": "यह फ़ील्ड आवश्यक है",
@@ -37,7 +38,15 @@
       "FT1": "सेवा की शर्तों",
       "FT2": "गोपनीयता नीति",
       "SelectCountryLabel": "देश कोड चुनें",
-      "SelectLangLabel": "भाषा चुने"
+      "SelectLangLabel": "भाषा चुने",
+      "PleaseEnterEmailPass": "कृपया अपना ईमेल और पासवर्ड दर्ज करें",
+      "EmailLBL": "ईमेल",
+      "EnterYourEmailPlaceholder": "अपना ईमेल दर्ज करें",
+      "PasswordLBL": "पासवर्ड",
+      "EnterYourPassPlaceholder": "अपना पासवर्ड भरें",
+      "RememberMe": "मुझे याद रखो",
+      "DontHaveAc": "कोई खाता नहीं है?",
+      "PassErr": "पासवर्ड आठ अक्षरों का होना चाहिए और इसमें एक अक्षर, एक नंबर और विशेष अक्षर होना चाहिए"
     },
     "loginSuccess": {
       "LoginSuccess": "लॉग इन सफल!",
@@ -235,6 +244,23 @@
     },
     "Payment": {
       "Heading": "भुगतान की विधि चुनें"
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "पासवर्ड भूल गए??",
+      "ForgotPasswordSubTitle": "कुछ सरल चरणों के साथ अपनी पहुंच पुनः प्राप्त करें।"
+    },
+    "ResetPassword": {
+      "NewPassword": "एक नया पासवर्ड सेट करें",
+      "NewPasswordSubTitle": "कम से कम 8 वर्ण होने चाहिए",
+      "PasswordLbl": "पासवर्ड",
+      "PasswordLblPlaceholder": "अपना पासवर्ड दर्ज करें",
+      "ConfirmPasswordLbl": "पासवर्ड की पुष्टि करें",
+      "ConfirmPasswordPlaceholder": "अपना पासवर्ड पुन: दर्ज करें",
+      "ResetPasswordSubmitText": "पासवर्ड रीसेट करें"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "पासवर्ड सफलतापूर्वक रीसेट हो गया",
+      "SuccessResetPasswordSubTitle": "बधाइयाँ! आपने अपना पासवर्ड सफलतापूर्वक रीसेट कर लिया है. आपका खाता अब पहले से कहीं अधिक सुरक्षित है।"
     }
   }
 }

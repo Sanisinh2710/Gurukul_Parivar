@@ -35,18 +35,27 @@ export type RootBottomTabParamList = {
 };
 
 export type RootAuthStackParamList = {
-  MobileLogin: undefined;
-  MobileLoginOTP: {primary_email: string} | undefined;
-  LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
+  Login: undefined;
+  Register: undefined;
+
+  OTP: {primary_email: string} | undefined;
+  Success: {type: 'Login' | 'Profile'} | undefined;
+
   ProfileSignup: undefined;
 };
+
+export type LoginScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootAuthStackParamList, 'Login'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
 export type LoginOtpScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<RootAuthStackParamList, 'MobileLoginOTP'>,
+  NativeStackScreenProps<RootAuthStackParamList, 'OTP'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 
 export type LoginSuccessStackScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<RootAuthStackParamList, 'LoginSuccess'>,
+  NativeStackScreenProps<RootAuthStackParamList, 'Success'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 export type ProfileSignupProps = NativeStackScreenProps<
