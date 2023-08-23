@@ -23,6 +23,7 @@ import {
   RoundedIcon,
   ScreenHeader,
   ScreenWrapper,
+  SecondaryButton,
 } from '../../../components';
 import {
   DeleteMydataApi,
@@ -309,11 +310,12 @@ export const ProfileScreen = ({
                 </Text>
               </View>
               <View style={style.modalbtnView}>
-                <PrimaryButton
+                <SecondaryButton
                   onPress={() => {
                     setModelVisible(!modelVisible);
                   }}
-                  buttonColor="rgba(172, 43, 49, 0.05)"
+                  buttonColor="rgba(172, 43, 49, 0.02)"
+                  borderColor="rgba(172,43,49,0.3)"
                   buttonStyle={style.modalbtn}
                   titleColor="black"
                   title={t('LogoutModel.CancelBtn')}
@@ -323,8 +325,6 @@ export const ProfileScreen = ({
                     modalType === 'logout'
                       ? () => {
                           const resRemoveAuthToken = removeAuthToken();
-                          // const resRemoveProfileUpdateStatus =
-                          //   removeUserProfilingDone();
 
                           if (resRemoveAuthToken === 'SUCCESS') {
                             navigation.replace('Auth');

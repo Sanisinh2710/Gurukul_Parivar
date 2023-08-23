@@ -164,8 +164,8 @@ export const DailyQuotes = ({
                 borderRadius: 12,
               }}>
               <SimpleDropDown
-                placeholder="Select Gurukul Branch"
-                label="Gurukul"
+                label={t('uploadPhoto.DropdownTitle')}
+                placeholder={t('uploadPhoto.DropdownLable')}
                 dropDownList={GurukulList}
                 type={'simple'}
                 value={changeValue}
@@ -178,12 +178,13 @@ export const DailyQuotes = ({
                 ): void {
                   throw new Error('Function not implemented.');
                 }}
+                wantPlaceholderAsLabelOnModal={true}
               />
             </View>
           </View>
         </View>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'70%'} />
         ) : (
           <>
             {Data.length > 0 ? (

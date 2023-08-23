@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {yupResolver} from '@hookform/resolvers/yup';
 import React from 'react';
+
+import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -22,7 +22,6 @@ import {
 import {
   SetPasswordApi,
   getAuthToken,
-  getBearerToken,
   isProfilingDone,
 } from '../../../../services';
 import {
@@ -98,11 +97,7 @@ export const ResetPassword = ({
   const onSubmit = async (data: ResetPasswordValidationSchemaType) => {
     setIsApiloading(true);
 
-    const bearerToken = getBearerToken();
-    console.log(bearerToken, 'token');
-
     const response = await SetPasswordApi(data.password);
-    console.log(response, 'token res');
 
     if (response.resType === 'SUCCESS') {
       const {resType} = getAuthToken();
@@ -111,33 +106,8 @@ export const ResetPassword = ({
         const isProfileSignupDone = isProfilingDone();
         setIsApiloading(false);
 
-        console.log(isProfileSignupDone, 'profile');
-
-        // console.log(set_Pass, 'set_pass');
-
         if (isProfileSignupDone === 'ERROR') {
           navigation.replace('Success', {type: 'Login'});
-
-          // const backenduserresponse = await PersonalInfoGetDetailsApi();
-          // if (backenduserresponse.resType === 'SUCCESS') {
-          //   if (
-          //     backenduserresponse.data.personal_details !== null &&
-          //     backenduserresponse.data.personal_details !== undefined &&
-          //     backenduserresponse.data.personal_details !== ''
-          //   ) {
-          //     let finalData = JSON.parse(
-          //       JSON.stringify(backenduserresponse.data.personal_details),
-          //     );
-          //     finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
-          //     const setuserdataresponse = setUserData(finalData);
-          //     if (setuserdataresponse === 'SUCCESS') {
-          //       navigation.replace('BottomNavBar');
-          //     }
-          //   }
-          // } else {
-          //   setIsApiloading(false);
-          //   Toast.show(backenduserresponse.message, 2);
-          // }
         } else {
           navigation.replace('Success', {type: 'Pass'});
         }

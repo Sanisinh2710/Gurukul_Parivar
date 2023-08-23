@@ -8,9 +8,8 @@ import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
-  KeyboardAvoidingView,
   Linking,
-  Platform,
+  ScrollView,
   Text,
   View,
 } from 'react-native';
@@ -87,8 +86,11 @@ export const RegisterScreen = ({
 
   return (
     <ScreenWrapper>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: '5%',
+        }}>
         <View style={commonStyle.commonContentView}>
           {/* Header:------------------------------------------------------------------------ */}
           <View key={'LoginFormHeader'} style={style.headerView}>
@@ -183,7 +185,7 @@ export const RegisterScreen = ({
             </Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     </ScreenWrapper>
   );
 };

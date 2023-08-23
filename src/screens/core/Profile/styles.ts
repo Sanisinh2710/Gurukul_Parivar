@@ -48,7 +48,7 @@ export const styles = () => {
     },
     mapContainer: {
       marginTop: 12,
-      borderWidth: 0.25,
+      borderWidth: 0.4,
       borderColor: 'rgba(172, 43, 49,0.3)',
       backgroundColor: 'rgba(255, 255, 255, 0.5)',
       borderRadius: 2,
@@ -74,9 +74,9 @@ export const styles = () => {
     },
     modalbtn: {
       width: '42%',
-      borderWidth: 0.25,
-      borderColor: 'rgba(172,43,49,0.3)',
-      borderRadius: 12,
+      // borderWidth: 1,
+      // borderColor: 'rgba(172,43,49,0.3)',
+      // borderRadius: 12,
     },
     modalbtnView: {
       flexDirection: 'row',

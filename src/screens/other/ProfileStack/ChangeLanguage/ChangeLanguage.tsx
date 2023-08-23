@@ -42,6 +42,7 @@ export const ChangeLanguage = ({
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <TouchableOpacity
+          activeOpacity={0.6}
           onPress={() => {
             setLanguage(Languages.en);
           }}>
@@ -78,6 +79,7 @@ export const ChangeLanguage = ({
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          activeOpacity={0.6}
           onPress={() => {
             setLanguage(Languages.hn);
           }}>
@@ -114,6 +116,7 @@ export const ChangeLanguage = ({
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          activeOpacity={0.6}
           onPress={() => {
             setLanguage(Languages.gu);
           }}>

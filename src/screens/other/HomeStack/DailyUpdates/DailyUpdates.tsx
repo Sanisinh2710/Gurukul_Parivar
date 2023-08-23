@@ -92,12 +92,12 @@ export const DailyUpdates = ({
       />
       <View style={commonStyle.commonContentView}>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'95%'} />
         ) : (
           <FlatList
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
-              paddingBottom: '35%',
+              paddingBottom: '30%',
             }}
             data={Data}
             renderItem={({item, index}) => {

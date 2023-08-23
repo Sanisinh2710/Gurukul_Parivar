@@ -52,7 +52,6 @@ export const EditProfile = ({navigation}: EditProfileProps) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      // overflow: 'hidden',
                       paddingLeft: '5%',
                     }}>
                     <View style={{justifyContent: 'center'}}>
