@@ -7,6 +7,7 @@ import {
   NativeModules,
   PermissionsAndroid,
   Platform,
+  Pressable,
   Text,
   View,
 } from 'react-native';
@@ -150,14 +151,16 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       useNativeDriver: false,
     }).start();
   }, [modalVisible]);
-  const handleWallpaperMode = async (mode: string) => {
-    await setWallPaper(imgURL ? imgURL : 'wallpaperImage', `${mode}`);
+  const handleWallpaperMode = (mode: string) => {
+    setWallPaper(imgURL ? imgURL : 'wallpaperImage', `${mode}`);
   };
 
-  const setWallPaper = async (imgUrl: string, mode: string) => {
+  const setWallPaper = (imgUrl: string, mode: string) => {
     try {
-      const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
-      if (result === 'SUCCESS') {
+      console.log(imgUrl, '::::This is url');
+      const result = WallpaperModule.setAsWallpaper(imgUrl, mode);
+      console.log(result, 'result');
+      if (result === true) {
         Toast.show('Wallpaper set successfully..!', Toast.LONG);
       }
     } catch (error) {
@@ -175,7 +178,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             gap: 15,
             marginTop: '5%',
           }}>
-          {/* {wallpaper === true && (
+          {wallpaper === true && (
             <View
               onTouchEnd={() => {
                 setModalForWallpaper(!modalForWallpaper);
@@ -189,7 +192,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 style={[style.icon, {height: 24, width: 24}]}
               />
             </View>
-          )} */}
+          )}
           <View
             onTouchEnd={
               isSharing === false
@@ -271,7 +274,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         type={'none'}
         modelVisible={modalVisible}
       />
-      {/* <DropDownModel
+      <DropDownModel
         customModelchild={
           <>
             <Pressable
@@ -298,7 +301,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         setModelVisible={setModalForWallpaper}
         type={'none'}
         modelVisible={modalForWallpaper}
-      /> */}
+      />
     </>
   );
 };
