@@ -4,14 +4,7 @@ import {BASE_URL} from '@env';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
@@ -213,8 +206,11 @@ export const LoginScreen = ({
   } else {
     return (
       <ScreenWrapper>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: '5%',
+          }}>
           <View style={commonStyle.commonContentView}>
             {/* Header:------------------------------------------------------------------------ */}
             <View key={'LoginFormHeader'} style={style.headerView}>
@@ -388,7 +384,7 @@ export const LoginScreen = ({
               </Text> */}
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
 
         {/* Language Model.................................................................. */}
         <DropDownModel

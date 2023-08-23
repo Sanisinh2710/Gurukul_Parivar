@@ -89,6 +89,7 @@ export const AdressInfo = React.memo(
       menuList?: any;
       customProps?: object;
       required: boolean;
+      wantPlaceholderAsLabelOnModal?: boolean;
     }[] = [
       {
         name: 'country_id',
@@ -97,6 +98,7 @@ export const AdressInfo = React.memo(
         type: 'select',
         menuList: countries,
         required: true,
+        wantPlaceholderAsLabelOnModal: true,
       },
       {
         name: 'address',
@@ -325,6 +327,9 @@ export const AdressInfo = React.memo(
                                 error={errors?.address_details?.[mainindex]?.[
                                   item.name
                                 ]?.message?.toString()}
+                                wantPlaceholderAsLabelOnModal={
+                                  item.wantPlaceholderAsLabelOnModal
+                                }
                               />
                             );
                           }}

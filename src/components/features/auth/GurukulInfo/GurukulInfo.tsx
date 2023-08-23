@@ -223,6 +223,9 @@ export const GurukulInfo = React.memo(
               '12',
             ],
             required: true,
+            customProps: {
+              wantSearchBar: false,
+            },
           },
           {
             name: 'standard_to',
@@ -244,6 +247,9 @@ export const GurukulInfo = React.memo(
               '12',
             ],
             required: true,
+            customProps: {
+              wantSearchBar: false,
+            },
           },
         ],
       },

@@ -63,6 +63,7 @@ export const PrimaryButton = React.memo(
           <Pressable
             android_ripple={{
               color: COLORS.primaryRippleColor,
+              foreground: true,
             }}
             style={[
               styles.pressableButtonstyle,

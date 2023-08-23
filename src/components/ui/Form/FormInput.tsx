@@ -37,6 +37,7 @@ export type FormInputProps = {
   defaultPhoneCountryCode?: any;
   editable?: boolean;
   required?: boolean;
+  wantPlaceholderAsLabelOnModal?: boolean;
 };
 
 export const FormInput = React.memo(
@@ -58,6 +59,7 @@ export const FormInput = React.memo(
     rightTextOnPress,
     required,
     defaultPhoneCountryCode,
+    wantPlaceholderAsLabelOnModal,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
 
@@ -117,6 +119,8 @@ export const FormInput = React.memo(
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
             customIcon={icon}
+            wantPlaceholderAsLabelOnModal={wantPlaceholderAsLabelOnModal}
+            {...customProps}
           />
         );
         break;
@@ -133,6 +137,8 @@ export const FormInput = React.memo(
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
             customIcon={icon}
+            wantPlaceholderAsLabelOnModal={wantPlaceholderAsLabelOnModal}
+            {...customProps}
           />
         );
         break;

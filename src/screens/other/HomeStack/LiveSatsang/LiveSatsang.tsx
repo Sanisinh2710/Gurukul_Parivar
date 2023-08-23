@@ -10,7 +10,6 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -31,17 +30,18 @@ export const LiveSatsang = ({
 
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
+
   const onStateChange = React.useCallback((state: string) => {
     if (state === 'ended') {
       setPlaying(false);
       Alert.alert('video has finished playing!');
     }
   }, []);
+
   React.useMemo(async () => {
     setLoader(true);
     try {
       const res = await DailySatsangApi(selectedDate);
-      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
@@ -55,8 +55,6 @@ export const LiveSatsang = ({
       console.log(error);
     }
   }, [selectedDate]);
-
-  console.log(Data);
 
   return (
     <ScreenWrapper>

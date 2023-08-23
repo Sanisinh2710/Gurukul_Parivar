@@ -114,6 +114,10 @@ export const PersonalInfo = React.memo(
         type: 'select',
         menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+'],
         required: true,
+        customProps: {
+          wantPlaceholderAsLabelOnModal: true,
+          wantSearchBar: false,
+        },
       },
     ];
 
