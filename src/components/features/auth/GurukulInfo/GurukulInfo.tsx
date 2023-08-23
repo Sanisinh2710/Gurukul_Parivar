@@ -170,6 +170,9 @@ export const GurukulInfo = React.memo(
         placeholder: t('uploadPhoto.DropdownLable'),
         type: 'select',
         menuList: branches,
+        customProps: {
+          wantPlaceholderAsLabelOnModal: true,
+        },
         // rightText: t('gurukulInfo.AddGurukul'),
         rightTextOnPress: () => {
           append({
