@@ -10,7 +10,6 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -31,13 +30,14 @@ export const LiveSatsang = ({
 
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
+
   const onStateChange = React.useCallback((state: string) => {
-    console.log(state, 'STATE');
     if (state === 'ended') {
       setPlaying(false);
       Alert.alert('video has finished playing!');
     }
   }, []);
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -48,6 +48,8 @@ export const LiveSatsang = ({
           setData(res.data.live_satasang);
           setLoader(false);
         }, 1000);
+      } else {
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);

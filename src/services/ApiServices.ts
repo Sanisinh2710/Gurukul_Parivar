@@ -11,6 +11,7 @@ import {
   DELETE_USER_ENDPOINT,
   EDUCATION_INFO_GET_ENDPOINT,
   EDUCATION_INFO_POST_ENDPOINT,
+  EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   GURUKUL_CONNECT_GET_ENDPOINT,
@@ -18,6 +19,7 @@ import {
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
+  RESET_PASSWORD_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
   SAINT_NAME_GET_ENDPOINT,
   SLIDER_GET_ENDPOINT,
@@ -80,11 +82,20 @@ const apiRequest = async (
   }
 };
 
-export const LoginByEmailApi = async (primary_email: string) => {
+export const LoginApi = async (data: any) => {
+  return await apiRequest(LOGIN_POST_ENDPOINT, 'post', data, {}, false);
+};
+
+export const RegisterApi = async (
+  primary_email: string,
+  type?: 'email' | 'forgot',
+) => {
   return await apiRequest(
-    LOGIN_POST_ENDPOINT,
+    EMAIL_POST_ENDPOINT,
     'post',
-    {email: primary_email},
+    type === 'forgot'
+      ? {email: primary_email, isForgetPassword: true}
+      : {email: primary_email},
     {},
     false,
   );
@@ -100,6 +111,18 @@ export const VerifyOTPApi = async (email: string, otp: string) => {
     },
     {},
     false,
+  );
+};
+
+export const SetPasswordApi = async (password: string) => {
+  return await apiRequest(
+    RESET_PASSWORD_ENDPOINT,
+    'post',
+    {
+      password: password,
+    },
+    undefined,
+    true,
   );
 };
 

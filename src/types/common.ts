@@ -12,7 +12,19 @@ export type Theme = {
 
 export type LoginFormValidationSchemaType = {
   [key: string]: string;
+  email: string;
+  password: string;
+};
+
+export type EmailValidationSchemaType = {
+  [key: string]: string;
   primary_email: string;
+};
+
+export type ResetPasswordValidationSchemaType = {
+  [key: string]: string;
+  password: string;
+  confirm_password: string;
 };
 
 export type CompleteProfileFormValidationSchemaType = {
@@ -87,6 +99,7 @@ export type EduBusinessInfoValidationSchemaType = {
 export type SupportedFormInputTypes =
   | 'phone'
   | 'number'
+  | 'password'
   | 'text'
   | 'select'
   | 'photo'

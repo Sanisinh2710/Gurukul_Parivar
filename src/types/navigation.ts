@@ -34,18 +34,33 @@ export type RootBottomTabParamList = {
 };
 
 export type RootAuthStackParamList = {
-  MobileLogin: undefined;
-  MobileLoginOTP: {primary_email: string} | undefined;
-  LoginSuccess: {type: 'Login' | 'Profile'} | undefined;
+  Login: undefined;
+  Register: undefined;
+
+  OTP: {primary_email: string; reset_pass?: boolean} | undefined;
+  Success: {type: 'Login' | 'Profile' | 'Pass'} | undefined;
+
   ProfileSignup: undefined;
+  ForgotPassword: undefined;
+  ResetPassword:
+    | {
+        reset_pass?: boolean | undefined;
+      }
+    | undefined;
 };
+
+export type LoginScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootAuthStackParamList, 'Login'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
 export type LoginOtpScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<RootAuthStackParamList, 'MobileLoginOTP'>,
+  NativeStackScreenProps<RootAuthStackParamList, 'OTP'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 
 export type LoginSuccessStackScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<RootAuthStackParamList, 'LoginSuccess'>,
+  NativeStackScreenProps<RootAuthStackParamList, 'Success'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 export type ProfileSignupProps = NativeStackScreenProps<
@@ -61,4 +76,13 @@ export type ProfileSignupEditProps = NativeStackScreenProps<
 export type EditProfileProps = NativeStackScreenProps<
   RootStackParamList,
   'editProfile'
+>;
+
+export type ForgotPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ForgotPassword'
+>;
+export type ResetPasswordProps = NativeStackScreenProps<
+  RootAuthStackParamList,
+  'ResetPassword'
 >;

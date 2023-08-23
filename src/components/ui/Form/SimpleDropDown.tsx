@@ -18,6 +18,8 @@ type SimpleDropdownProps = {
   };
   dropDownList: Array<string> | Array<object>;
   customIcon?: any;
+  wantPlaceholderAsLabelOnModal?: boolean;
+  wantSearchBar?: boolean;
 };
 
 export const SimpleDropDown = React.memo(
@@ -32,6 +34,8 @@ export const SimpleDropDown = React.memo(
     state,
     dropDownList,
     customIcon,
+    wantPlaceholderAsLabelOnModal,
+    wantSearchBar,
   }: SimpleDropdownProps): React.JSX.Element => {
     const style = FormInputStyle(value);
 
@@ -95,12 +99,12 @@ export const SimpleDropDown = React.memo(
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
           inputList={dropDownList}
-          wantSearchBar={true}
+          wantSearchBar={wantSearchBar ?? true}
           type={type}
           selectedItem={value}
           setSelectedItem={onChange}
           modalHeight={'90%'}
-          label={label}
+          label={wantPlaceholderAsLabelOnModal ? placeholder : label}
         />
       </>
     );

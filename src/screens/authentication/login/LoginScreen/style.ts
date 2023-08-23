@@ -41,6 +41,7 @@ export const LoginScreenstyle = () => {
     },
     formInputsView: {
       marginTop: '10%',
+      gap: 15,
     },
     mobilenumText: {
       ...CustomFonts.body.large14,
@@ -57,6 +58,12 @@ export const LoginScreenstyle = () => {
     },
     footerRedText: {
       color: theme.primary,
+    },
+    FooterInputs: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 15,
+      justifyContent: 'space-between',
     },
   });
 };

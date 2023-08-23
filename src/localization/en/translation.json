@@ -2,6 +2,7 @@
   "translation": {
     "common": {
       "Signin": "Sign in",
+      "Signup": "Sign up",
       "Search": "Search",
       "Reset": "Reset",
       "EmptyError": "This Field is required",
@@ -37,16 +38,29 @@
       "FT1": "Terms of Service",
       "FT2": "Privacy Policy",
       "SelectCountryLabel": "Select Country Code",
-      "SelectLangLabel": "Select Language"
+      "SelectLangLabel": "Select Language",
+      "PleaseEnterEmailPass": "Please enter your email and password",
+      "EmailLBL": "Email",
+      "EnterYourEmailPlaceholder": "Enter your email address",
+      "RegisterHeaderSubtitle": "Please enter your email address",
+      "PasswordLBL": "Password",
+      "EnterYourPassPlaceholder": "Enter your password",
+      "RememberMe": "Remember Me",
+      "DontHaveAc": "Don’t have an account?",
+      "AlreadyHaveAc": "Already have an account?",
+      "PassErr": "A password should be of eight characters, and should consist one letter,one number and special character"
     },
     "loginSuccess": {
       "LoginSuccess": "Login Successful!",
       "ProfileSuccess": "Profile Completed!",
+      "ResetSuccess": "Success! Password Reset",
+      "ResetSuccessSubtitle": "Congratulations! You've successfully reset \n your password. Your account is now more \n secure than ever.",
       "SuccessSubtitle": "Welcome to a world of spirituality and serenity.",
       "SuccessSubtitle2": "Begin your journey now. 🌟",
       "ProfileSuccessSubtitle2": "Start your journey now. 🌟",
       "LoginSuccessBTN": "Let’s Complete your Profile",
-      "ProfileSuccessBTN": "Let’s Start Your Journey"
+      "ProfileSuccessBTN": "Let’s Start Your Journey",
+      "ResetSuccessBTN": "Back to Login"
     },
     "uploadPhoto": {
       "HederText": "Complete your profile",
@@ -65,7 +79,8 @@
       "OtpContainerText": "An OTP has been sent to mobile number",
       "OtpNotRecieve": "Didn't recieve code?",
       "OtpResend": "Resend",
-      "Verify&Login": "Verify & Login"
+      "Verify&Login": "Verify & Login",
+      "SendOtp": "Send OTP"
     },
     "personalInfo": {
       "personalInfoHeader": "Personal info",
@@ -116,7 +131,7 @@
       "Occupation2": "I run a business",
       "OccupationType": "Occupation Type",
       "OccuTypePlaceHolder": "Select occupation type",
-      "SKills": "SKills",
+      "SKills": "Skills",
       "SKillsPlaceHolder": "Select your skills",
       "Other": "Others (Leave Comment)",
       "OtherPlaceHolder": "Leave your comments here..."
@@ -225,7 +240,6 @@
       "Title": "Congratulations",
       "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
     },
-
     "Donation": {
       "Heading": "Donation",
       "Quote": "In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",
@@ -239,6 +253,25 @@
     "NoData": {
       "Title": "Oops, We're Blanking Out!",
       "Content": "Looks like our data elves are on a break.\n We'll conjure up some information soon."
+    },
+    "ForgotPassword": {
+      "ForgotPassword": "Forgot Password?",
+      "ForgotPasswordSubTitle": "Reclaim Your Access with a Few Simple Steps"
+    },
+    "ResetPassword": {
+      "NewPassword": "Set a New Password",
+      "NewPasswordSubTitle": "Must be at least 8 characters",
+      "PasswordLbl": "Password",
+      "PasswordLblPlaceholder": "Enter your password",
+      "ConfirmPasswordLbl": "Confirm Password",
+      "ConfirmPasswordPlaceholder": "Re-enter your password",
+      "ResetPasswordSubmitText": "Reset Password",
+      "ResetPasswordSubmitText2": "Set Password",
+      "PassNotSameErr": "Both password must be same.!"
+    },
+    "SuccessResetPassword": {
+      "SuccessResetPasswordTitle": "Success! Password Reset",
+      "SuccessResetPasswordSubTitle": "Congratulations! You've successfully reset your password. Your account is now more secure than ever."
     }
   }
 }

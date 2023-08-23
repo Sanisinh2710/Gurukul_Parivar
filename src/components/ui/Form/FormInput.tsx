@@ -37,6 +37,7 @@ export type FormInputProps = {
   defaultPhoneCountryCode?: any;
   editable?: boolean;
   required?: boolean;
+  wantPlaceholderAsLabelOnModal?: boolean;
 };
 
 export const FormInput = React.memo(
@@ -58,10 +59,13 @@ export const FormInput = React.memo(
     rightTextOnPress,
     required,
     defaultPhoneCountryCode,
+    wantPlaceholderAsLabelOnModal,
   }: FormInputProps): React.JSX.Element => {
     const theme = useAppSelector(state => state.theme.theme);
 
     const style = FormInputStyle(value);
+
+    const [passVisible, setPassVisible] = React.useState(false);
 
     let fieldblock;
 
@@ -115,6 +119,8 @@ export const FormInput = React.memo(
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
             customIcon={icon}
+            wantPlaceholderAsLabelOnModal={wantPlaceholderAsLabelOnModal}
+            {...customProps}
           />
         );
         break;
@@ -131,6 +137,8 @@ export const FormInput = React.memo(
             setFocused={setFocused}
             dropDownList={menuList ? [...menuList] : []}
             customIcon={icon}
+            wantPlaceholderAsLabelOnModal={wantPlaceholderAsLabelOnModal}
+            {...customProps}
           />
         );
         break;
@@ -237,6 +245,24 @@ export const FormInput = React.memo(
         );
         break;
 
+      case 'password':
+        fieldblock = (
+          <TextInput
+            editable={editable ?? true}
+            secureTextEntry={passVisible ? false : true}
+            onFocus={() => setFocused(true)}
+            value={value}
+            placeholder={placeholder}
+            placeholderTextColor={theme.textColor}
+            style={style.formTextInput}
+            onBlur={onBlur}
+            onChangeText={newvalue => {
+              onChange(newvalue);
+            }}
+          />
+        );
+        break;
+
       default:
         fieldblock = (
           <TextInput
@@ -260,7 +286,7 @@ export const FormInput = React.memo(
           Keyboard.dismiss();
           setFocused(false);
         }}>
-        <>
+        <View>
           {type !== 'photo' && type !== 'radio' ? (
             <>
               <View
@@ -312,15 +338,39 @@ export const FormInput = React.memo(
                       gap: 3,
                     },
                 ]}>
-                {icon &&
-                type !== 'select' &&
-                type !== 'date' &&
-                type !== 'dob' ? (
+                {type === 'password' ? (
+                  <View style={{width: '90%'}}>{fieldblock}</View>
+                ) : icon &&
+                  type !== 'select' &&
+                  type !== 'date' &&
+                  type !== 'dob' ? (
                   <View style={{width: '90%'}}>{fieldblock}</View>
                 ) : (
                   fieldblock
                 )}
-                {icon &&
+                {type === 'password' ? (
+                  <View
+                    style={{
+                      height: '40%',
+                      width: '10%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onTouchEnd={() => setPassVisible(!passVisible)}>
+                    <Image
+                      source={
+                        passVisible ? AllIcons.OpenEye : AllIcons.ClosedEye
+                      }
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        resizeMode: 'contain',
+                        tintColor: 'rgba(172, 43, 49, 0.5)',
+                      }}
+                    />
+                  </View>
+                ) : (
+                  icon &&
                   type !== 'select' &&
                   type !== 'date' &&
                   type !== 'dob' && (
@@ -340,7 +390,8 @@ export const FormInput = React.memo(
                         }}
                       />
                     </View>
-                  )}
+                  )
+                )}
               </View>
               {Array.isArray(value) && type === 'multi-select' && (
                 <View
@@ -407,7 +458,7 @@ export const FormInput = React.memo(
             fieldblock
           )}
           {error && <Text style={style.errorText}>{error}</Text>}
-        </>
+        </View>
       </TouchableWithoutFeedback>
     );
   },

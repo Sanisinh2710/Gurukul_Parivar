@@ -158,8 +158,8 @@ export const DailyDarshan = ({
                 borderRadius: 12,
               }}>
               <SimpleDropDown
-                placeholder="Select Gurukul Branch"
-                label="Gurukul"
+                label={t('uploadPhoto.DropdownTitle')}
+                placeholder={t('uploadPhoto.DropdownLable')}
                 dropDownList={GurukulList}
                 type={'simple'}
                 value={changeValue}
@@ -172,6 +172,7 @@ export const DailyDarshan = ({
                 ): void {
                   throw new Error('Function not implemented.');
                 }}
+                wantPlaceholderAsLabelOnModal={true}
               />
             </View>
           </View>
@@ -191,7 +192,7 @@ export const DailyDarshan = ({
         />
 
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'70%'} />
         ) : (
           <View
             style={{
@@ -214,28 +215,29 @@ export const DailyDarshan = ({
                 }}
                 renderItem={({item, index}) => {
                   return (
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      style={style.imageContainer}
-                      onPress={() => {
-                        navigation.navigate('dailyDarshanDetail', {
-                          totalImages: DarshanImages.length,
-                          data: DarshanImages,
-                          image: item,
-                          currentImageIndex: index,
-                          date: selectedDate.toLocaleDateString(
-                            'en-in',
-                            options,
-                          ),
-                        });
-                      }}>
-                      <Image
-                        source={{
-                          uri: `${BASE_URL}${item}`,
-                        }}
-                        style={style.images}
-                      />
-                    </TouchableOpacity>
+                    <>
+                      <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={style.imageContainer}
+                        onPress={() => {
+                          navigation.navigate('dailyDarshanDetail', {
+                            totalImages: DarshanImages.length,
+                            data: DarshanImages,
+                            currentImageIndex: index,
+                            date: selectedDate.toLocaleDateString(
+                              'en-in',
+                              options,
+                            ),
+                          });
+                        }}>
+                        <Image
+                          source={{
+                            uri: `${BASE_URL}${item}`,
+                          }}
+                          style={style.images}
+                        />
+                      </TouchableOpacity>
+                    </>
                   );
                 }}
               />
