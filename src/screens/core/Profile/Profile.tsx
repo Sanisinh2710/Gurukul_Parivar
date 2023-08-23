@@ -87,13 +87,13 @@ export const ProfileScreen = ({
       }
       const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
 
-      if (response.resType == 'SUCCESS') {
+      if (response.resType === 'SUCCESS') {
         const updatedReponse = await PersonalInfoGetDetailsApi();
-        if (response.resType == 'SUCCESS') {
+        if (response.resType === 'SUCCESS') {
           const personalInfo = updatedReponse.data.personal_details;
           personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
           const updateResult = setUserData(personalInfo);
-          if (updateResult == 'SUCCESS')
+          if (updateResult === 'SUCCESS')
             Toast.show('Profile Image Updated Successfully', Toast.LONG);
         }
       } else {

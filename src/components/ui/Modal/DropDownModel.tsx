@@ -288,7 +288,9 @@ export const DropDownModel = React.memo(
                                 (isString(item) &&
                                   type === 'multi-select' &&
                                   selectedItem.includes(item))) &&
-                                type !== 'radio' && {color: 'red'},
+                                type !== 'radio' && {
+                                  color: COLORS.primaryColor,
+                                },
 
                               ((isObject(item) && selectedItem === item?.id) ||
                                 (isObject(item) &&
@@ -297,7 +299,9 @@ export const DropDownModel = React.memo(
                                 (isObject(item) &&
                                   type === 'multi-select' &&
                                   selectedItem.includes(item?.id))) &&
-                                type !== 'radio' && {color: 'red'},
+                                type !== 'radio' && {
+                                  color: COLORS.primaryColor,
+                                },
                             ]}>
                             {isString(item) ? item : item?.name}
                           </Text>

@@ -10,7 +10,7 @@ export const styles = () => {
     imageContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderWidth: 0.25,
+      borderWidth: 0.4,
       borderColor: 'rgba(172, 43, 49,0.3)',
       backgroundColor: 'rgba(255, 255, 255, 0.5)',
       marginTop: 10,
@@ -51,7 +51,7 @@ export const styles = () => {
       borderWidth: 0.25,
       borderColor: 'rgba(172, 43, 49,0.3)',
       backgroundColor: 'rgba(255, 255, 255, 0.5)',
-      borderRadius: 8,
+      borderRadius: 2,
     },
     listView: {
       borderColor: 'rgba(23, 23, 23,0.1)',

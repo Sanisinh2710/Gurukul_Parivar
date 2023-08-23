@@ -10,7 +10,6 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -41,7 +40,6 @@ export const LiveSatsang = ({
     setLoader(true);
     try {
       const res = await DailySatsangApi(selectedDate);
-      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {

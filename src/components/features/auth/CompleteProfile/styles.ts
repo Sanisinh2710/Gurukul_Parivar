@@ -90,8 +90,6 @@ export const styles = () => {
       width: '100%',
       marginTop: 50,
       alignSelf: 'center',
-      position: 'absolute',
-      bottom: 100,
     },
     contentView: {
       marginTop: 10,
