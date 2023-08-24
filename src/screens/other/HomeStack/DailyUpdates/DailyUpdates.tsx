@@ -6,7 +6,12 @@ import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
-import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {DailyUpdatesApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
@@ -94,44 +99,58 @@ export const DailyUpdates = ({
         {loader ? (
           <Loader screenHeight={'95%'} />
         ) : (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: '30%',
-            }}
-            data={Data}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    navigation.navigate('dailyUpdateDetail', {
-                      title: item.title,
-                      data: Data[index],
-                    });
-                  }}>
-                  <View style={style.updateContainer}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '20%',
+          <>
+            {Data.length > 0 ? (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: '30%',
+                }}
+                data={Data}
+                renderItem={({item, index}) => {
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        navigation.navigate('dailyUpdateDetail', {
+                          title: item.title,
+                          data: Data[index],
+                        });
                       }}>
-                      <View style={style.imageContainer}>
-                        <Image source={AllImages.AppLogo} style={style.image} />
+                      <View style={style.updateContainer}>
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '20%',
+                          }}>
+                          <View style={style.imageContainer}>
+                            <Image
+                              source={AllImages.AppLogo}
+                              style={style.image}
+                            />
+                          </View>
+                        </View>
+                        <View style={{width: '80%'}}>
+                          <View style={style.textContainer}>
+                            <Text style={style.title}>{item.title}</Text>
+                            <Text style={style.time}>{item.created_at}</Text>
+                          </View>
+                        </View>
                       </View>
-                    </View>
-                    <View style={{width: '80%'}}>
-                      <View style={style.textContainer}>
-                        <Text style={style.title}>{item.title}</Text>
-                        <Text style={style.time}>{item.created_at}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  height: '90%',
+                }}>
+                <NoData />
+              </View>
+            )}
+          </>
         )}
       </View>
     </ScreenWrapper>

@@ -4,7 +4,14 @@ import {BASE_URL} from '@env';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
@@ -142,13 +149,9 @@ export const LoginScreen = ({
 
   const onSubmit = React.useCallback(
     async (data: LoginFormValidationSchemaType) => {
-      // data.countryCode = countryCodeSelect.split('(')[0].toString();
-
       setIsApiloading(true);
-      // data.countryCode = countryCodeSelect || '+91(IN)';
-      // data.mobileNumber = data.mobileNumber.toString();
 
-      // Do something with mobile number and than navigate to OTP Screen;
+      // Do something with email and than navigate to OTP Screen;
       const response = await LoginApi(data);
 
       setIsApiloading(false);
@@ -207,161 +210,164 @@ export const LoginScreen = ({
     return (
       <ScreenWrapper>
         <ScrollView
+          keyboardDismissMode="on-drag"
+          automaticallyAdjustKeyboardInsets={true}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: '5%',
           }}>
-          <View style={commonStyle.commonContentView}>
-            {/* Header:------------------------------------------------------------------------ */}
-            <View key={'LoginFormHeader'} style={style.headerView}>
-              <View style={style.imgLogoView}>
-                <Image source={AllImages.AppLogo} style={style.imgLogo} />
+          <KeyboardAvoidingView behavior="position">
+            <View style={commonStyle.commonContentView}>
+              {/* Header:------------------------------------------------------------------------ */}
+              <View key={'LoginFormHeader'} style={style.headerView}>
+                <View style={style.imgLogoView}>
+                  <Image source={AllImages.AppLogo} style={style.imgLogo} />
+                </View>
+                <View style={style.welcomeTitleView}>
+                  <Text style={style.welcomeTitle1Text}>
+                    {t('loginScreen.WelcomeTitle1')}
+                  </Text>
+                  <Text style={style.welcomeTitle2Text}>
+                    {t('loginScreen.WelcomeTitle2')}
+                  </Text>
+                  <Text style={style.welcomeSubtitleText}>
+                    {t('loginScreen.PleaseEnterEmailPass')}
+                  </Text>
+                </View>
               </View>
-              <View style={style.welcomeTitleView}>
-                <Text style={style.welcomeTitle1Text}>
-                  {t('loginScreen.WelcomeTitle1')}
-                </Text>
-                <Text style={style.welcomeTitle2Text}>
-                  {t('loginScreen.WelcomeTitle2')}
-                </Text>
-                <Text style={style.welcomeSubtitleText}>
-                  {t('loginScreen.PleaseEnterEmailPass')}
-                </Text>
+
+              {/* FormInputs:------------------------------------------------------------------------ */}
+              <View key={'LoginFormInputs'} style={style.formInputsView}>
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({field: {onBlur, onChange, value}}) => {
+                    return (
+                      <FormInput
+                        type={'email'}
+                        name={'email'}
+                        label={t('loginScreen.EmailLBL')}
+                        placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
+                        value={value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        editable={true}
+                        error={errors['email']?.message?.toString()}
+                      />
+                    );
+                  }}
+                />
+
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({field: {onBlur, onChange, value}}) => {
+                    return (
+                      <FormInput
+                        type={'password'}
+                        name={'password'}
+                        label={t('loginScreen.PasswordLBL')}
+                        placeholder={t('loginScreen.EnterYourPassPlaceholder')}
+                        value={value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        editable={true}
+                        error={errors['password']?.message?.toString()}
+                      />
+                    );
+                  }}
+                />
               </View>
-            </View>
-
-            {/* FormInputs:------------------------------------------------------------------------ */}
-            <View key={'LoginFormInputs'} style={style.formInputsView}>
-              <Controller
-                control={control}
-                name="email"
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      type={'email'}
-                      name={'email'}
-                      label={t('loginScreen.EmailLBL')}
-                      placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      editable={true}
-                      error={errors['email']?.message?.toString()}
-                    />
-                  );
-                }}
-              />
-
-              <Controller
-                control={control}
-                name="password"
-                render={({field: {onBlur, onChange, value}}) => {
-                  return (
-                    <FormInput
-                      type={'password'}
-                      name={'password'}
-                      label={t('loginScreen.PasswordLBL')}
-                      placeholder={t('loginScreen.EnterYourPassPlaceholder')}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      editable={true}
-                      error={errors['password']?.message?.toString()}
-                    />
-                  );
-                }}
-              />
-            </View>
-            <View style={style.FooterInputs}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 5,
-                }}>
+              <View style={style.FooterInputs}>
                 <View
-                  onTouchEnd={() => {
-                    setRememberMe(!remeberMe);
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 5,
                   }}>
-                  {remeberMe ? (
-                    <View
-                      style={{
-                        width: 16,
-                        height: 16,
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={AllIcons.CheckBoxOutline}
+                  <View
+                    onTouchEnd={() => {
+                      setRememberMe(!remeberMe);
+                    }}>
+                    {remeberMe ? (
+                      <View
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
+                          width: 16,
+                          height: 16,
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={AllIcons.CheckBoxOutline}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                    ) : (
+                      <View
+                        style={{
+                          width: 16,
+                          height: 16,
+                          borderRadius: 4,
+                          borderColor: COLORS.primaryColor,
+                          borderWidth: 1,
                         }}
                       />
-                    </View>
-                  ) : (
-                    <View
-                      style={{
-                        width: 16,
-                        height: 16,
-                        borderRadius: 4,
-                        borderColor: COLORS.primaryColor,
-                        borderWidth: 1,
-                      }}
-                    />
-                  )}
-                </View>
+                    )}
+                  </View>
 
+                  <Text
+                    style={{
+                      ...CustomFonts.body.regular14,
+                      color: 'rgba(63, 63, 63, 1)',
+                    }}>
+                    {t('loginScreen.RememberMe')}
+                  </Text>
+                </View>
                 <Text
+                  onPress={() => {
+                    // Redirect to forgetOtp screen:----------
+                    navigation.navigate('ForgotPassword');
+                  }}
                   style={{
                     ...CustomFonts.body.regular14,
-                    color: 'rgba(63, 63, 63, 1)',
+                    color: COLORS.primaryColor,
                   }}>
-                  {t('loginScreen.RememberMe')}
+                  {t('ForgotPassword.ForgotPassword')}
                 </Text>
               </View>
-              <Text
-                onPress={() => {
-                  // Redirect to forgetOtp screen:----------
-                  navigation.navigate('ForgotPassword');
-                }}
-                style={{
-                  ...CustomFonts.body.regular14,
-                  color: COLORS.primaryColor,
-                }}>
-                {t('ForgotPassword.ForgotPassword')}
-              </Text>
-            </View>
 
-            {/* LoginFormFooter:------------------------------------------------------------------------ */}
-            <View key={'LoginFormFooter'} style={style.footerView}>
-              <PrimaryButton
-                title={t('common.Signin')}
-                customWidget={
-                  isApiLoading ? (
-                    <>
-                      <ActivityIndicator
-                        size={25}
-                        color={COLORS.darkModetextColor}
-                      />
-                    </>
-                  ) : undefined
-                }
-                onPress={handleSubmit(onSubmit)}
-                disabled={disabled}
-              />
-              <Text style={[style.footerText, {alignSelf: 'center'}]}>
-                {t('loginScreen.DontHaveAc')}{' '}
-                <Text
-                  style={[style.footerRedText]}
-                  onPress={() => {
-                    navigation.navigate('Register');
-                  }}>
-                  {t('common.Signup').toLocaleLowerCase()}
+              {/* LoginFormFooter:------------------------------------------------------------------------ */}
+              <View key={'LoginFormFooter'} style={style.footerView}>
+                <PrimaryButton
+                  title={t('common.Signin')}
+                  customWidget={
+                    isApiLoading ? (
+                      <>
+                        <ActivityIndicator
+                          size={25}
+                          color={COLORS.darkModetextColor}
+                        />
+                      </>
+                    ) : undefined
+                  }
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={disabled}
+                />
+                <Text style={[style.footerText, {alignSelf: 'center'}]}>
+                  {t('loginScreen.DontHaveAc')}{' '}
+                  <Text
+                    style={[style.footerRedText]}
+                    onPress={() => {
+                      navigation.navigate('Register');
+                    }}>
+                    {t('common.Signup').toLocaleLowerCase()}
+                  </Text>
                 </Text>
-              </Text>
 
-              {/* <Text style={style.footerText}>
+                {/* <Text style={style.footerText}>
                 {t('loginScreen.FooterText1')}{' '}
                 <Text
                   style={style.footerRedText}
@@ -382,8 +388,9 @@ export const LoginScreen = ({
                   })
                   .join(' ')}
               </Text> */}
+              </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </ScrollView>
 
         {/* Language Model.................................................................. */}

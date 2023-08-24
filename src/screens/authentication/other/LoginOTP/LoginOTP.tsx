@@ -38,7 +38,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
-  const [resendEnabled, setResendEnabled] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [isApiLoading, setIsApiloading] = React.useState(false);
   const [isApiResendLoading, setIsApiResendloading] = React.useState(false);
@@ -111,14 +110,24 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       return () => {
         BackgroundTimer.stopBackgroundTimer();
       };
-    } else {
-      setResendEnabled(false);
     }
   }, [countdown]);
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     setIsApiResendloading(true);
-    setResendEnabled(true);
+
+    const response = await RegisterApi(
+      primary_email ?? '',
+      reset_pass ? 'forgot' : 'email',
+    );
+    setIsApiResendloading(false);
+
+    if (response.resType === 'SUCCESS') {
+      Toast.show('A new OTP has been sent to your mail..!', 2);
+      setCountdown(staticSeconds);
+    } else {
+      Toast.show(response.message, 2);
+    }
   };
 
   const formatTime = (timeInSeconds: number) => {
@@ -128,23 +137,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
       .toString()
       .padStart(2, '0')}`;
   };
-
-  React.useMemo(async () => {
-    if (resendEnabled) {
-      const response = await RegisterApi(
-        primary_email ?? '',
-        reset_pass ? 'forgot' : 'email',
-      );
-      setIsApiResendloading(false);
-
-      if (response.resType === 'SUCCESS') {
-        Toast.show('A new OTP has been sent to your mail..!', 2);
-        setCountdown(staticSeconds);
-      } else {
-        Toast.show(response.message, 2);
-      }
-    }
-  }, [resendEnabled]);
 
   return (
     <ScreenWrapper>
@@ -204,16 +196,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
               <Text style={style.smallText}>
                 {t('otpScreen.OtpNotRecieve')}{' '}
               </Text>
-
-              {/* {isApiResendLoading ? (
-                <ActivityIndicator color={COLORS.primaryColor} size={20} />
-              ) : (
-                <Pressable onPress={handleResendOTP}>
-                  <Text style={style.otpResend}>
-                    {t('otpScreen.OtpResend')}
-                  </Text>
-                </Pressable>
-              )} */}
 
               {countdown > 0 ? (
                 <Text style={style.otpResend}>{formatTime(countdown)}</Text>
