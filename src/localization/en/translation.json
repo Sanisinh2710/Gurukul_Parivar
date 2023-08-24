@@ -298,7 +298,8 @@
       "HSCYear":"Please select your HSc year",
       "SelectSaint":"Please select the name of the saint",
       "Haribhakta":"Please select the name of the Haribhakta",
-      "Relation":"Please select your relation with the saint"
+      "Relation":"Please select your relation with the saint",
+      "RadioOption":"Please choose any one option from above"
     }
   }
 }

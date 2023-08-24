@@ -176,7 +176,10 @@ export const GurukulFormValidationSchema =
             .string()
             .trim()
             .required(t('FieldRequiredError.GurukulBranch')),
-          attend: yup.string().trim().required(t('common.EmptyError')),
+          attend: yup
+            .string()
+            .trim()
+            .required(t('FieldRequiredError.RadioOption')),
           standard_from: yup
             .string()
             .trim()
@@ -206,13 +209,13 @@ export const GurukulFormValidationSchema =
           ssc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('hsc_year')], t('common.SelectValidYear'))
-            .required(t('FieldRequiredError.SSCYear')),
+            .required(t('FieldRequiredError.SSCYear'))
+            .notOneOf([yup.ref('hsc_year')], t('common.SelectValidYear')),
           hsc_year: yup
             .string()
             .trim()
-            .notOneOf([yup.ref('ssc_year')], t('common.SelectValidYear'))
             .required(t('FieldRequiredError.HSCYear'))
+            .notOneOf([yup.ref('ssc_year')], t('common.SelectValidYear'))
             .test({
               name: 'hsc_year',
               skipAbsent: true,
@@ -254,7 +257,7 @@ export const GurukulFormValidationSchema =
                   value?.trim() === undefined)
               ) {
                 return ctx.createError({
-                  message: t('common.EmptyError'),
+                  message: t('FieldRequiredError.RadioOption'),
                 });
               }
               return true;
@@ -271,7 +274,7 @@ export const GurukulFormValidationSchema =
                   value?.trim() === undefined)
               ) {
                 return ctx.createError({
-                  message: t('common.EmptyError'),
+                  message: t('FieldRequiredError.SelectSaint'),
                 });
               }
               return true;
