@@ -22,6 +22,7 @@ import {storage} from '../../../../storage';
 import {LoginOtpScreenProps} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
+import BackgroundTimer from 'react-native-background-timer';
 
 const staticSeconds = 120;
 
@@ -34,7 +35,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
-  // const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
+  const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [isApiLoading, setIsApiloading] = React.useState(false);
@@ -132,31 +133,31 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
     }
   }, [num]);
 
-  // React.useEffect(() => {
-  //   if (countdown > 0) {
-  //     const interval = setInterval(() => {
-  //       setCountdown(prevCountdown => prevCountdown - 1);
-  //     }, 1000);
-  //     return () => {
-  //       clearInterval(interval);
-  //     };
-  //   } else {
-  //     setResendEnabled(false);
-  //   }
-  // }, [countdown]);
+  React.useEffect(() => {
+    if (countdown > 0) {
+      BackgroundTimer.runBackgroundTimer(() => {
+        setCountdown(prevCountdown => prevCountdown - 1);
+      }, 1000);
+      return () => {
+        BackgroundTimer.stopBackgroundTimer();
+      };
+    } else {
+      setResendEnabled(false);
+    }
+  }, [countdown]);
 
   const handleResendOTP = () => {
     setIsApiResendloading(true);
     setResendEnabled(true);
   };
 
-  // const formatTime = (timeInSeconds: number) => {
-  //   const minutes = Math.floor(timeInSeconds / 60);
-  //   const seconds = timeInSeconds % 60;
-  //   return `${minutes.toString().padStart(2, '0')}:${seconds
-  //     .toString()
-  //     .padStart(2, '0')}`;
-  // };
+  const formatTime = (timeInSeconds: number) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   React.useMemo(async () => {
     if (resendEnabled) {
@@ -231,17 +232,17 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                 {t('otpScreen.OtpNotRecieve')}{' '}
               </Text>
 
-              {isApiResendLoading ? (
+              {/* {isApiResendLoading ? (
                 <ActivityIndicator color={COLORS.primaryColor} size={20} />
               ) : (
                 <Pressable onPress={handleResendOTP}>
-                  <Text style={style.otpResend}>
+                  {/* <Text style={style.otpResend}>
                     {t('otpScreen.OtpResend')}
-                  </Text>
+                  </Text> 
+                  <Text style={style.otpResend}>{formatTime(countdown)}</Text>
                 </Pressable>
-              )}
+              )} */}
 
-              {/* 
               {countdown > 0 ? (
                 <Text style={style.otpResend}>{formatTime(countdown)}</Text>
               ) : isApiResendLoading ? (
@@ -252,7 +253,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                     {t('otpScreen.OtpResend')}
                   </Text>
                 </Pressable>
-              )} */}
+              )}
             </View>
           </View>
         </View>
