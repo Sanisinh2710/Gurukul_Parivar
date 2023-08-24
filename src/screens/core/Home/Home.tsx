@@ -88,6 +88,7 @@ export const HomeScreen = ({
     switch (val) {
       case 'darshan':
         navigation.navigate('dailyDarshan');
+
         break;
       case 'quotes':
         navigation.navigate('dailyQuotes');

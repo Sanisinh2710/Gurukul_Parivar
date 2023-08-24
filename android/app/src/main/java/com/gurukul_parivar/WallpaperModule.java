@@ -38,7 +38,6 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
 
     @ReactMethod
     public boolean setAsWallpaper(String fileURL, String mode) {
-        Log.d("WallpaperModule", "File URL: " + fileURL);
         try{
             if(mode.equals("LOCK")){
                 setLockScreen(fileURL);
