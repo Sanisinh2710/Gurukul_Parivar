@@ -38,6 +38,7 @@ export const HomeScreen = ({
 
   React.useMemo(async () => {
     setLoader(true);
+
     try {
       const res = await SliderGetApi();
 

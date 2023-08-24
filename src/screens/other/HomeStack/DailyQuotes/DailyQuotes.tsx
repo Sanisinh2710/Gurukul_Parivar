@@ -33,7 +33,7 @@ export const DailyQuotes = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
-  const [changeValue, setChangeValue] = React.useState(1);
+  const [changeValue, setChangeValue] = React.useState();
   const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
     [],
   );

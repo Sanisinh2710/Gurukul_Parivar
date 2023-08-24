@@ -39,7 +39,7 @@ export const DailyDarshan = ({
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
-  const [changeValue, setChangeValue] = React.useState(1);
+  const [changeValue, setChangeValue] = React.useState();
   const {t} = useTranslation();
 
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));

@@ -3,13 +3,16 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   Text,
   View,
 } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 import Toast from 'react-native-simple-toast';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   OtpComponent,
@@ -34,7 +37,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
-  // const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
+  const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
   const [resendEnabled, setResendEnabled] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
   const [isApiLoading, setIsApiloading] = React.useState(false);
@@ -77,38 +80,6 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
           } else {
             Toast.show(resType, 2);
           }
-
-          // if (resType === 'SUCCESS') {
-          //   const isProfileSignupDone = isProfilingDone();
-          //   setIsApiloading(false);
-          //   if (isProfileSignupDone === 'SUCCESS') {
-          //     const backenduserresponse = await PersonalInfoGetDetailsApi();
-          //     if (backenduserresponse.resType === 'SUCCESS') {
-          //       if (
-          //         backenduserresponse.data.personal_details !== null &&
-          //         backenduserresponse.data.personal_details !== undefined &&
-          //         backenduserresponse.data.personal_details !== ''
-          //       ) {
-          //         let finalData = JSON.parse(
-          //           JSON.stringify(backenduserresponse.data.personal_details),
-          //         );
-          //         finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
-          //         const setuserdataresponse = setUserData(finalData);
-          //         if (setuserdataresponse === 'SUCCESS') {
-          //           navigation.replace('BottomNavBar');
-          //         }
-          //       }
-          //     } else {
-          //       setIsApiloading(false);
-          //       Toast.show(backenduserresponse.message, 2);
-          //     }
-          //   } else {
-          //     navigation.replace('Success', {type: 'Login'});
-          //   }
-          // } else {
-          //   setIsApiloading(false);
-          //   Toast.show(resType, 2);
-          // }
         } else {
           setIsApiloading(false);
           Toast.show(response.message, 2);
@@ -132,40 +103,43 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
     }
   }, [num]);
 
-  // React.useEffect(() => {
-  //   if (countdown > 0) {
-  //     const interval = setInterval(() => {
-  //       setCountdown(prevCountdown => prevCountdown - 1);
-  //     }, 1000);
-  //     return () => {
-  //       clearInterval(interval);
-  //     };
-  //   } else {
-  //     setResendEnabled(false);
-  //   }
-  // }, [countdown]);
+  React.useEffect(() => {
+    if (countdown > 0) {
+      BackgroundTimer.runBackgroundTimer(() => {
+        setCountdown(prevCountdown => prevCountdown - 1);
+      }, 1000);
+      return () => {
+        BackgroundTimer.stopBackgroundTimer();
+      };
+    } else {
+      setResendEnabled(false);
+    }
+  }, [countdown]);
 
   const handleResendOTP = () => {
     setIsApiResendloading(true);
     setResendEnabled(true);
   };
 
-  // const formatTime = (timeInSeconds: number) => {
-  //   const minutes = Math.floor(timeInSeconds / 60);
-  //   const seconds = timeInSeconds % 60;
-  //   return `${minutes.toString().padStart(2, '0')}:${seconds
-  //     .toString()
-  //     .padStart(2, '0')}`;
-  // };
+  const formatTime = (timeInSeconds: number) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   React.useMemo(async () => {
     if (resendEnabled) {
-      const response = await RegisterApi(primary_email ?? '');
+      const response = await RegisterApi(
+        primary_email ?? '',
+        reset_pass ? 'forgot' : 'email',
+      );
       setIsApiResendloading(false);
 
       if (response.resType === 'SUCCESS') {
         Toast.show('A new OTP has been sent to your mail..!', 2);
-        // setCountdown(staticSeconds);
+        setCountdown(staticSeconds);
       } else {
         Toast.show(response.message, 2);
       }
@@ -188,7 +162,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             <Text style={style.headerSubText}>{t('otpScreen.OtpSubtext')}</Text>
           </View>
           <View style={style.otpContainer}>
-            {/* <Text style={style.otpContainerHeader}>
+            <Text style={style.otpContainerHeader}>
               {t('otpScreen.OtpContainerText')}
             </Text>
             <View style={style.phoneEditContainer}>
@@ -200,7 +174,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                 onTouchEnd={() => navigation.goBack()}>
                 <Image source={AllIcons.OTPEdit} style={style.editImageStyle} />
               </View>
-            </View> */}
+            </View>
 
             <OtpComponent num={num} setNum={setNum} />
             {/* <OtpInput /> */}
@@ -231,7 +205,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                 {t('otpScreen.OtpNotRecieve')}{' '}
               </Text>
 
-              {isApiResendLoading ? (
+              {/* {isApiResendLoading ? (
                 <ActivityIndicator color={COLORS.primaryColor} size={20} />
               ) : (
                 <Pressable onPress={handleResendOTP}>
@@ -239,9 +213,8 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                     {t('otpScreen.OtpResend')}
                   </Text>
                 </Pressable>
-              )}
+              )} */}
 
-              {/* 
               {countdown > 0 ? (
                 <Text style={style.otpResend}>{formatTime(countdown)}</Text>
               ) : isApiResendLoading ? (
@@ -252,7 +225,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
                     {t('otpScreen.OtpResend')}
                   </Text>
                 </Pressable>
-              )} */}
+              )}
             </View>
           </View>
         </View>
