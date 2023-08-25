@@ -188,7 +188,7 @@ export const HomeScreen = ({
                   activeOpacity={0.5}
                   onPress={() => handlePress(item.id)}>
                   <LinearGradient
-                    colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
+                    colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 1)']}
                     locations={[0, 1]}
                     style={{flex: 1, borderRadius: 12}}>
                     <Text style={style.textOverImage}>{item.name}</Text>
