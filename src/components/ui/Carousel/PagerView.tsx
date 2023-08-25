@@ -1,9 +1,9 @@
-import React, {useMemo} from 'react';
+import React from 'react';
+
+import {BASE_URL} from '@env';
 import {Image, View} from 'react-native';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
-import {AllImages} from '../../../../assets/images';
-import {BASE_URL} from '@env';
 
 type PagerViewProps = {
   currentPage: number;
@@ -14,7 +14,7 @@ export const PagerView = ({
   currentPage,
   images,
 }: PagerViewProps): React.JSX.Element => {
-  const image = useMemo(() => {
+  const image = React.useMemo(() => {
     return images[currentPage];
   }, [currentPage]);
 

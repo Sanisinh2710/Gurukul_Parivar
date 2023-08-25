@@ -44,6 +44,8 @@ export const DailyQuotes = ({
 
   const [itemIndex, setItemIndex] = React.useState(0);
 
+  const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
+
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
@@ -122,6 +124,16 @@ export const DailyQuotes = ({
     const clip = Clipboard.setString(item);
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
+
+  React.useEffect(() => {
+    if (DailyQuotes) {
+      setImgLoad([
+        ...DailyQuotes?.map(item => {
+          return true;
+        }),
+      ]);
+    }
+  }, [DailyQuotes]);
 
   return (
     <ScreenWrapper>
@@ -207,21 +219,32 @@ export const DailyQuotes = ({
                       }}
                       itemWidth={Dimensions.get('window').width * 0.8}
                       data={DailyQuotes}
-                      renderItem={({item}) => (
+                      renderItem={({item, index}) => (
                         <View
-                          style={{
-                            height: '100%',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 20,
-                            backgroundColor: COLORS.primaryRippleColor,
-                          }}>
+                          style={[
+                            {
+                              height: '100%',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 20,
+                            },
+                            imgLoad[index] && {
+                              backgroundColor: COLORS.primaryRippleColor,
+                            },
+                          ]}>
                           <View style={{flex: 1, width: '100%'}}>
                             <Image
                               source={{
                                 uri: `${BASE_URL}${item.image}`,
                               }}
                               style={style.image}
+                              onLoad={() => {
+                                let newLoadState = JSON.parse(
+                                  JSON.stringify(imgLoad),
+                                );
+                                newLoadState[index] = false;
+                                setImgLoad(newLoadState);
+                              }}
                             />
                           </View>
                           <View>

@@ -47,12 +47,14 @@ export const DailyDarshanDetail = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View
-          style={{
-            height: '80%',
-            marginTop: '5%',
-            borderRadius: 8,
-            backgroundColor: COLORS.primaryRippleColor,
-          }}>
+          style={[
+            {
+              height: '80%',
+              marginTop: '5%',
+              borderRadius: 8,
+              backgroundColor: COLORS.primaryRippleColor,
+            },
+          ]}>
           <Image
             source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
