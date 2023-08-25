@@ -3,7 +3,14 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -38,6 +45,7 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
+  const [loa, setLoa] = React.useState<boolean>(true);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [changeValue, setChangeValue] = React.useState(1);
   const {t} = useTranslation();
@@ -116,6 +124,10 @@ export const DailyDarshan = ({
   React.useEffect(() => {
     Image_Data();
   }, [Data, BranchName]);
+
+  const handleImageLoad = () => {
+    setLoa(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -230,10 +242,12 @@ export const DailyDarshan = ({
                             ),
                           });
                         }}>
+                        {loa && <ActivityIndicator size={30} />}
                         <Image
                           source={{
                             uri: `${BASE_URL}${item}`,
                           }}
+                          onLoad={handleImageLoad}
                           style={style.images}
                         />
                       </TouchableOpacity>

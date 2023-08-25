@@ -46,6 +46,7 @@ export const LiveSatsang = ({
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
           setData(res.data.live_satasang);
+
           setLoader(false);
         }, 1000);
       } else {
@@ -122,7 +123,7 @@ export const LiveSatsang = ({
             <>
               <FlatList
                 data={Data}
-                contentContainerStyle={{paddingBottom: '30%'}}
+                contentContainerStyle={{paddingBottom: '50%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
                   <View style={{marginVertical: '3%', gap: 15}}>
@@ -177,9 +178,11 @@ export const LiveSatsang = ({
                           setVideoLoad(true);
                         }}
                         videoId={
-                          item.url.toString().includes('=')
-                            ? item.url.split('=')[1]
-                            : item.url.split('/')[3]
+                          item.url.toString().includes('youtu.be')
+                            ? item.url
+                                .split('/')[3]
+                                .slice(0, item.url.split('/')[3].indexOf('?'))
+                            : item.url.split('=')[1]
                         }
                         onChangeState={onStateChange}
                         webViewProps={{
