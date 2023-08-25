@@ -15,7 +15,7 @@ import {
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
-import {d, daysArray, options2} from '../../../../utils';
+import {COLORS, d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
@@ -127,10 +127,24 @@ export const CalendarScreen = ({
                   marginTop: '50%',
                 },
               ]}>
-              <Image
-                source={{uri: `${BASE_URL}${Data[0].image}`}}
-                style={{height: 264, width: 345}}
-              />
+              <View
+                style={{
+                  height: 264,
+                  width: 345,
+                  backgroundColor: COLORS.primaryRippleColor,
+                  borderRadius: 12,
+                }}>
+                <Image
+                  source={{uri: `${BASE_URL}${Data[0].image}`}}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 12,
+
+                    resizeMode: 'cover',
+                  }}
+                />
+              </View>
             </View>
             <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>

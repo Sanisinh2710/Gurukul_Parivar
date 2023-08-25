@@ -4,7 +4,14 @@ import {BASE_URL} from '@env';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Platform, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Platform,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
@@ -45,11 +52,13 @@ export const DailyQuotes = ({
   const [itemIndex, setItemIndex] = React.useState(0);
 
   const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
+      setChangeValue(response.data.branches?.[0]?.id);
     } else {
       Toast.show(response.message, 2);
     }
@@ -135,6 +144,31 @@ export const DailyQuotes = ({
     }
   }, [DailyQuotes]);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const response = await GurukulBranchGetApi();
+      if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
+        setGurukulList(response.data.branches);
+        setChangeValue(response.data.branches?.[0]?.id);
+      } else {
+        Toast.show(response.message, 2);
+      }
+
+      const res = await DailyQuotesApi(selectedDate);
+
+      if (res.resType === 'SUCCESS' && res.data.length > 0) {
+        setData(res.data);
+      } else {
+        setData([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -209,6 +243,13 @@ export const DailyQuotes = ({
                       marginTop: '3%',
                     }}>
                     <Carousel
+                      refreshControl={
+                        <RefreshControl
+                          colors={[COLORS.primaryColor, COLORS.green]}
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                        />
+                      }
                       sliderWidth={screenWidth}
                       slideStyle={{
                         height: Dimensions.get('window').height * 0.6,
@@ -220,43 +261,45 @@ export const DailyQuotes = ({
                       itemWidth={Dimensions.get('window').width * 0.8}
                       data={DailyQuotes}
                       renderItem={({item, index}) => (
-                        <View
-                          style={[
-                            {
-                              height: '100%',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              borderRadius: 20,
-                            },
-                            imgLoad[index] && {
-                              backgroundColor: COLORS.primaryRippleColor,
-                            },
-                          ]}>
-                          <View style={{flex: 1, width: '100%'}}>
-                            <Image
-                              source={{
-                                uri: `${BASE_URL}${item.image}`,
-                              }}
-                              style={style.image}
-                              onLoad={() => {
-                                let newLoadState = JSON.parse(
-                                  JSON.stringify(imgLoad),
-                                );
-                                newLoadState[index] = false;
-                                setImgLoad(newLoadState);
-                              }}
-                            />
+                        <>
+                          <View
+                            style={[
+                              {
+                                height: '100%',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 20,
+                              },
+                              imgLoad[index] && {
+                                backgroundColor: COLORS.primaryRippleColor,
+                              },
+                            ]}>
+                            <View style={{flex: 1, width: '100%'}}>
+                              <Image
+                                source={{
+                                  uri: `${BASE_URL}${item.image}`,
+                                }}
+                                style={style.image}
+                                onLoad={() => {
+                                  let newLoadState = JSON.parse(
+                                    JSON.stringify(imgLoad),
+                                  );
+                                  newLoadState[index] = false;
+                                  setImgLoad(newLoadState);
+                                }}
+                              />
+                            </View>
+                            <View>
+                              <Text
+                                style={style.quote}
+                                selectable={true}
+                                onLongPress={() => handleClipBoard(item.quote)}
+                                selectionColor={'red'}>
+                                {item.quote}
+                              </Text>
+                            </View>
                           </View>
-                          <View>
-                            <Text
-                              style={style.quote}
-                              selectable={true}
-                              onLongPress={() => handleClipBoard(item.quote)}
-                              selectionColor={'red'}>
-                              {item.quote}
-                            </Text>
-                          </View>
-                        </View>
+                        </>
                       )}
                     />
                     <ShareDownload
