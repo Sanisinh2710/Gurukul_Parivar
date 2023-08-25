@@ -4,7 +4,7 @@ import {BASE_URL} from '@env';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, View} from 'react-native';
+import {Dimensions, Image, Platform, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
@@ -33,7 +33,7 @@ export const DailyQuotes = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
-  const [changeValue, setChangeValue] = React.useState(1);
+  const [changeValue, setChangeValue] = React.useState();
   const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
     [],
   );
@@ -43,6 +43,8 @@ export const DailyQuotes = ({
   );
 
   const [itemIndex, setItemIndex] = React.useState(0);
+
+  const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
 
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
@@ -122,6 +124,16 @@ export const DailyQuotes = ({
     const clip = Clipboard.setString(item);
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
+
+  React.useEffect(() => {
+    if (DailyQuotes) {
+      setImgLoad([
+        ...DailyQuotes?.map(item => {
+          return true;
+        }),
+      ]);
+    }
+  }, [DailyQuotes]);
 
   return (
     <ScreenWrapper>
@@ -207,20 +219,32 @@ export const DailyQuotes = ({
                       }}
                       itemWidth={Dimensions.get('window').width * 0.8}
                       data={DailyQuotes}
-                      renderItem={({item}) => (
+                      renderItem={({item, index}) => (
                         <View
-                          style={{
-                            height: '100%',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 20,
-                          }}>
+                          style={[
+                            {
+                              height: '100%',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 20,
+                            },
+                            imgLoad[index] && {
+                              backgroundColor: COLORS.primaryRippleColor,
+                            },
+                          ]}>
                           <View style={{flex: 1, width: '100%'}}>
                             <Image
                               source={{
                                 uri: `${BASE_URL}${item.image}`,
                               }}
                               style={style.image}
+                              onLoad={() => {
+                                let newLoadState = JSON.parse(
+                                  JSON.stringify(imgLoad),
+                                );
+                                newLoadState[index] = false;
+                                setImgLoad(newLoadState);
+                              }}
                             />
                           </View>
                           <View>
@@ -236,7 +260,7 @@ export const DailyQuotes = ({
                       )}
                     />
                     <ShareDownload
-                      wallpaper={false}
+                      wallpaper={Platform.OS === 'android' ? false : false}
                       imgURL={DailyQuotes?.[itemIndex]?.image}
                     />
                   </View>

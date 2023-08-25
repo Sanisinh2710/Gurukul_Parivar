@@ -45,9 +45,8 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const [loa, setLoa] = React.useState<boolean>(true);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
-  const [changeValue, setChangeValue] = React.useState(1);
+  const [changeValue, setChangeValue] = React.useState();
   const {t} = useTranslation();
 
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
@@ -61,6 +60,7 @@ export const DailyDarshan = ({
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
+      setChangeValue(response.data.branches[0].id);
     } else {
       Toast.show(response.message, 2);
     }
@@ -125,10 +125,6 @@ export const DailyDarshan = ({
     Image_Data();
   }, [Data, BranchName]);
 
-  const handleImageLoad = () => {
-    setLoa(false);
-  };
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -176,14 +172,8 @@ export const DailyDarshan = ({
                 type={'simple'}
                 value={changeValue}
                 onChange={setChangeValue}
-                onBlur={function (...event: any[]): void {
-                  throw new Error('Function not implemented.');
-                }}
-                setFocused={function (
-                  value: React.SetStateAction<boolean>,
-                ): void {
-                  throw new Error('Function not implemented.');
-                }}
+                onBlur={() => {}}
+                setFocused={() => {}}
                 wantPlaceholderAsLabelOnModal={true}
               />
             </View>
@@ -230,7 +220,13 @@ export const DailyDarshan = ({
                     <>
                       <TouchableOpacity
                         activeOpacity={0.8}
-                        style={style.imageContainer}
+                        style={[
+                          style.imageContainer,
+                          {
+                            backgroundColor: COLORS.primaryRippleColor,
+                            borderRadius: 8,
+                          },
+                        ]}
                         onPress={() => {
                           navigation.navigate('dailyDarshanDetail', {
                             totalImages: DarshanImages.length,
@@ -242,12 +238,10 @@ export const DailyDarshan = ({
                             ),
                           });
                         }}>
-                        {loa && <ActivityIndicator size={30} />}
                         <Image
                           source={{
                             uri: `${BASE_URL}${item}`,
                           }}
-                          onLoad={handleImageLoad}
                           style={style.images}
                         />
                       </TouchableOpacity>

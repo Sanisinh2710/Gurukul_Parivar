@@ -14,7 +14,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {options} from '../../../../utils';
+import {COLORS, options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdateDetail = ({
@@ -49,7 +49,14 @@ export const DailyUpdateDetail = ({
               {new Date(Data.date).toLocaleString('en-US', options)}
             </Text>
           </View>
-          <View style={style.imageContainer}>
+          <View
+            style={[
+              style.imageContainer,
+              {
+                backgroundColor: COLORS.primaryRippleColor,
+                borderRadius: 12,
+              },
+            ]}>
             <Image
               source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
@@ -85,13 +92,26 @@ export const DailyUpdateDetail = ({
                       })
                     }>
                     {item && (
-                      <Image
-                        source={{
-                          uri: `${BASE_URL}/${item}`,
-                        }}
-                        key={index}
-                        style={{height: 105, width: 110, borderRadius: 8}}
-                      />
+                      <View
+                        style={{
+                          height: 105,
+                          width: 110,
+                          borderRadius: 8,
+                          backgroundColor: COLORS.primaryRippleColor,
+                        }}>
+                        <Image
+                          source={{
+                            uri: `${BASE_URL}/${item}`,
+                          }}
+                          key={index}
+                          style={{
+                            height: 105,
+                            width: 110,
+                            borderRadius: 8,
+                            resizeMode: 'cover',
+                          }}
+                        />
+                      </View>
                     )}
                   </TouchableOpacity>
                 </>

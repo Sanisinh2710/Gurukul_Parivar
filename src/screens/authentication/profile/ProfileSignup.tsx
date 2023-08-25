@@ -16,23 +16,20 @@ import {
   ScreenWrapper,
 } from '../../../components';
 import {
-  AddressInfoGetApi,
   AddressInfoPostApi,
-  EducationInfoGetApi,
+  CallBackButtonAxiosGetForWizardFormSignup,
   EducationInfoPostApi,
-  GurukulConnectGetApi,
   GurukulConnectPostApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
-  getAuthToken,
   setUserData,
   setUserProfilingDone,
 } from '../../../services';
 import {ProfileSignupProps} from '../../../types';
 import {
   COLORS,
-  CustomBackendDateSplitAndFormat,
   CustomLocalDateSplitAndFormat,
+  IntialValuesForFormdataAuth,
   isString,
 } from '../../../utils';
 
@@ -49,254 +46,17 @@ export const ProfileSignup = ({
 
   const [isParentLoading, setIsParentLoading] = React.useState(false);
 
-  const [formData, setFormData] = React.useState<{[key: string]: any}>({
-    completeProfile: {
-      profile: '',
-      branch_id: null,
-    },
-    personalInfo: {
-      gender: '',
-      full_name: '',
-      father_name: '',
-      dob: '',
-      blood_group: '',
-      emailInfo: [
-        {email: getAuthToken().loginData.primary_email, secondary: false},
-      ],
-      mobilenumInfo: [
-        {
-          mobilenum: '',
-          secondary: false,
-          whatsappNum: false,
-          countryCode: '',
-        },
-      ],
-    },
-    address_details: [
-      {
-        country_id: '',
-        address: '',
-        pincode: '',
-        city: '',
-        address_type: '',
-        is_preferred_communication: true,
-      },
-    ],
-    edu_businessInfo: {
-      education: '',
-      occupation: '',
-      occupation_type: '',
-      skills: [],
-      other: '',
-    },
-    gurukulInfo: {
-      exGurukulStudent: 'No',
-      gurukulData: [
-        {
-          branch_id: '',
-          attend: '',
-          standard_from: '',
-          standard_to: '',
-          ssc_year: '',
-          hsc_year: '',
-          known_saint: '',
-          known_haribhakta: '',
-          RelativeOfSaint: 'No',
-          FromFamily: '',
-          saint_from_family: '',
-          relation: '',
-        },
-      ],
-    },
-  });
+  const [formData, setFormData] = React.useState<{[key: string]: any}>(
+    IntialValuesForFormdataAuth,
+  );
 
   React.useMemo(async () => {
-    const CallBackButtonAxiosGet = async () => {
-      if (formStep === 1) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const response = await PersonalInfoGetDetailsApi();
-        if (response.resType === 'SUCCESS') {
-          if (
-            response.data !== null &&
-            response.data !== undefined &&
-            response.data !== ''
-          ) {
-            if (response.data.personal_details) {
-              const profileData = {
-                profile: response.data.personal_details.profile
-                  ? `${BASE_URL}${response.data.personal_details.profile}`
-                  : newFormData.completeProfile.profile,
-                branch_id:
-                  response.data.personal_details.branch_id ??
-                  newFormData.completeProfile.branch_id,
-              };
-              newFormData.completeProfile =
-                profileData ?? newFormData.completeProfile;
-              setFormData(newFormData);
-            }
-          }
-        }
-      }
-      if (formStep === 2) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const response = await PersonalInfoGetDetailsApi();
-        if (response.resType === 'SUCCESS') {
-          if (
-            response.data.personal_details !== null &&
-            response.data.personal_details !== undefined &&
-            response.data.personal_details !== ''
-          ) {
-            const backendData: any = response.data.personal_details;
-
-            Object.keys(backendData).map((key, index) => {
-              if (key === 'dob') {
-                const newDob = CustomBackendDateSplitAndFormat(
-                  backendData[key],
-                  '-',
-                  '/',
-                  'dd/mm/yyyy',
-                );
-
-                newFormData.personalInfo.dob = newDob;
-              } else if (key === 'gender') {
-                const newgender =
-                  backendData[key][0] +
-                  backendData[key].slice(1).toLocaleLowerCase();
-                newFormData.personalInfo.gender =
-                  newgender ?? newFormData.personalInfo.gender;
-              } else if (key === 'primary_contact') {
-                newFormData.personalInfo.mobilenumInfo[0].mobilenum =
-                  backendData[key].toString() ??
-                  newFormData.personalInfo.mobilenumInfo[0].mobilenum;
-              } else if (key === 'primary_contact_cc') {
-                newFormData.personalInfo.mobilenumInfo[0].countryCode =
-                  backendData[key] ??
-                  newFormData.personalInfo.mobilenumInfo[0].countryCode;
-              } else if (key === 'is_primary_contact_wp') {
-                newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
-                  backendData[key] ??
-                  newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
-              } else if (key === 'secondary_contact') {
-                return;
-              } else if (key === 'secondary_contact_cc') {
-                return;
-              } else if (key === 'is_secondary_contact_wp') {
-                return;
-              } else if (key === 'primary_email') {
-                newFormData.personalInfo.emailInfo[0].email =
-                  backendData[key] ??
-                  newFormData.personalInfo.emailInfo[0].email;
-              } else if (key === 'secondary_email') {
-                return;
-              } else {
-                newFormData.personalInfo[key] =
-                  backendData[key] ?? newFormData.personalInfo[key];
-              }
-            });
-
-            if (newFormData.personalInfo.mobilenumInfo.length <= 1) {
-              if (
-                backendData['secondary_contact'] &&
-                backendData['secondary_contact_cc'] &&
-                backendData['is_secondary_contact_wp']
-              ) {
-                const newJSON: any = {};
-                newJSON.mobilenum = backendData['secondary_contact'];
-                newJSON.countryCode = backendData['secondary_contact_cc'];
-                newJSON.whatsappNum = backendData['is_secondary_contact_wp'];
-                newJSON.secondary = true;
-
-                newFormData.personalInfo.mobilenumInfo.push(newJSON);
-              }
-            } else {
-              if (newFormData.personalInfo.mobilenumInfo[1].mobilenum) {
-                newFormData.personalInfo.mobilenumInfo[1].secondary = true;
-              }
-            }
-
-            if (newFormData.personalInfo.emailInfo.length <= 1) {
-              if (backendData['secondary_email']) {
-                const newJSON: any = {};
-                newJSON.email = backendData['secondary_email'];
-                newJSON.secondary = true;
-
-                newFormData.personalInfo.emailInfo.push(newJSON);
-              }
-            } else {
-              if (newFormData.personalInfo.emailInfo[1].email) {
-                newFormData.personalInfo.emailInfo[1].secondary = true;
-              }
-            }
-
-            setFormData(newFormData);
-          }
-        }
-      }
-      if (formStep === 3) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const fetchData = await AddressInfoGetApi();
-        if (fetchData.resType === 'SUCCESS') {
-          if (
-            fetchData.data.address_details !== null &&
-            fetchData.data.address_details !== undefined &&
-            fetchData.data.address_details !== ''
-          ) {
-            newFormData.address_details =
-              fetchData.data.address_details.length >= 1
-                ? fetchData.data.address_details
-                : newFormData.address_details;
-            setFormData(newFormData);
-          }
-        } else {
-          Toast.show(fetchData.message, Toast.SHORT);
-        }
-      }
-      if (formStep === 4) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const fetchData = await EducationInfoGetApi();
-
-        if (fetchData.resType === 'SUCCESS') {
-          if (
-            fetchData.data.education_details !== undefined &&
-            fetchData.data.education_details !== null &&
-            fetchData.data.education_details !== ''
-          ) {
-            newFormData.edu_businessInfo = fetchData.data.education_details;
-            setFormData(newFormData);
-          }
-        }
-      }
-      if (formStep === 5) {
-        let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
-
-        const fetchData = await GurukulConnectGetApi();
-
-        if (fetchData.resType === 'SUCCESS') {
-          if (
-            fetchData.data.gurukul_connect_details !== undefined &&
-            fetchData.data.gurukul_connect_details !== null &&
-            fetchData.data.gurukul_connect_details !== ''
-          ) {
-            newFormData.gurukulInfo.exGurukulStudent = 'Yes';
-
-            newFormData.gurukulInfo.gurukulData[0] =
-              fetchData.data.gurukul_connect_details;
-
-            if (fetchData.data.gurukul_connect_details.saint_from_family) {
-              newFormData.gurukulInfo.gurukulData[0].RelativeOfSaint = 'Yes';
-            }
-
-            setFormData(newFormData);
-          }
-        }
-      }
-    };
-
-    await CallBackButtonAxiosGet();
+    await CallBackButtonAxiosGetForWizardFormSignup(
+      formStep,
+      formData,
+      setFormData,
+      Toast,
+    );
   }, [formStep]);
 
   const submitButton = async (
@@ -436,6 +196,8 @@ export const ProfileSignup = ({
               (item: any) => item.secondary === true,
             )?.whatsappNum;
         }
+
+        console.log(toSubmitPersonalInfoData, 'final submit response');
 
         const response = await PersonalInfoSaveDetailsApi(
           toSubmitPersonalInfoData,
@@ -793,7 +555,7 @@ export const ProfileSignup = ({
                 item => {
                   let newItem: any = {};
 
-                  newItem.mobilenum = item.mobilenum || '';
+                  newItem.mobilenum = item.mobilenum ?? '';
                   newItem.countryCode = item.countryCode;
                   newItem.secondary = item.secondary;
                   newItem.whatsappNum = item.whatsappNum;

@@ -52,7 +52,7 @@ export const PersonalInfo = React.memo(
         ...initialValues?.mobilenumInfo?.map(item => {
           return item.whatsappNum;
         }),
-      ] || [true],
+      ] || [false],
     );
 
     const [isArraySet, setIsArrayset] = React.useState(false);
@@ -112,7 +112,7 @@ export const PersonalInfo = React.memo(
         lable: t('personalInfo.BloodGroup'),
         placeholder: t('personalInfo.BloodGroupDropDown'),
         type: 'select',
-        menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+'],
+        menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+', 'AB+', 'AB-'],
         required: true,
         customProps: {
           wantPlaceholderAsLabelOnModal: true,
@@ -199,7 +199,9 @@ export const PersonalInfo = React.memo(
       if (isArraySet) {
         Object.keys(initialValues).map((key, index) => {
           if (key === 'mobilenumInfo') {
-            const mobileArr = initialValues.mobilenumInfo;
+            const mobileArr = JSON.parse(
+              JSON.stringify(initialValues.mobilenumInfo),
+            );
             mobileArr.map((item, index) => {
               mobileupdate(index, item);
             });
@@ -243,6 +245,7 @@ export const PersonalInfo = React.memo(
             }) || [],
           emailInfo: data.emailInfo,
         };
+
         onSubmitEvent(
           formSubmitData,
           rightButtonProps ? rightButtonProps.case : 'next',

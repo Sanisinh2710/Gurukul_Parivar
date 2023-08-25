@@ -7,6 +7,7 @@ import {
   NativeModules,
   PermissionsAndroid,
   Platform,
+  Pressable,
   Text,
   View,
 } from 'react-native';
@@ -102,6 +103,10 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
+  const callback = res => {
+    console.log('Response: ', res);
+  };
+
   const downloadImage = () => {
     // Main function to download the image
 
@@ -150,13 +155,13 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       useNativeDriver: false,
     }).start();
   }, [modalVisible]);
-  const handleWallpaperMode = async (mode: string) => {
-    await setWallPaper(imgURL ? imgURL : 'wallpaperImage', `${mode}`);
-  };
 
   const setWallPaper = async (imgUrl: string, mode: string) => {
+    setModalForWallpaper(false);
     try {
+      console.log(imgUrl, '::::This is url');
       const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
+      console.log(result, 'result');
       if (result === 'SUCCESS') {
         Toast.show('Wallpaper set successfully..!', Toast.LONG);
       }
@@ -175,7 +180,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             gap: 15,
             marginTop: '5%',
           }}>
-          {/* {wallpaper === true && (
+          {wallpaper === true && (
             <View
               onTouchEnd={() => {
                 setModalForWallpaper(!modalForWallpaper);
@@ -189,7 +194,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 style={[style.icon, {height: 24, width: 24}]}
               />
             </View>
-          )} */}
+          )}
           <View
             onTouchEnd={
               isSharing === false
@@ -271,24 +276,24 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         type={'none'}
         modelVisible={modalVisible}
       />
-      {/* <DropDownModel
+      <DropDownModel
         customModelchild={
           <>
             <Pressable
               onPress={() => {
-                handleWallpaperMode('HOME');
+                // await setWallPaper(imgURL ?? '', 'HOME');
               }}>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>
             </Pressable>
             <Pressable
-              onPress={() => {
-                handleWallpaperMode('LOCK');
+              onPress={async () => {
+                // await setWallPaper(imgURL ?? '', 'LOCK');
               }}>
               <Text style={style.wallpaperText}>Set as a Lock screen</Text>
             </Pressable>
             <Pressable
-              onPress={() => {
-                handleWallpaperMode('BOTH');
+              onPress={async () => {
+                // await setWallPaper(imgURL ?? '', 'BOTH');
               }}>
               <Text style={style.wallpaperText}>Both</Text>
             </Pressable>
@@ -298,7 +303,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         setModelVisible={setModalForWallpaper}
         type={'none'}
         modelVisible={modalForWallpaper}
-      /> */}
+      />
     </>
   );
 };

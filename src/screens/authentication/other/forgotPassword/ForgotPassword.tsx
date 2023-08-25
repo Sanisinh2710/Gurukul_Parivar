@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {yupResolver} from '@hookform/resolvers/yup';
 import React from 'react';
+
+import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -66,10 +66,17 @@ export const ForgotPassword = ({
     setIsApiloading(false);
 
     if (response.resType === 'SUCCESS') {
-      navigation.navigate('OTP', {
-        primary_email: data.primary_email,
-        reset_pass: true,
-      });
+      Toast.show('An OTP has been sent to your mail..!', Toast.SHORT);
+      const timer = setTimeout(() => {
+        navigation.navigate('OTP', {
+          primary_email: data.primary_email,
+          reset_pass: true,
+        });
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
     } else {
       Toast.show(response.message, 2);
     }

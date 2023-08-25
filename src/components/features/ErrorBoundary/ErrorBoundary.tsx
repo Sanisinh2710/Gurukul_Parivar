@@ -1,6 +1,8 @@
 import React, {ErrorInfo, ReactNode} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {NoData} from '../../ui';
+import {ErrorFunc} from './ErrorFunc';
 interface Props {
   children: ReactNode;
 }
@@ -28,14 +30,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
       // You can render any custom fallback UI
       return (
         <View style={styles.container}>
-          <NoData
-            title="Oops..! An error occurred..!"
-            content={
-              'Our team has taken a note of this issue.' +
-              '\n' +
-              'Please restart your app again to continue..!'
-            }
-          />
+          <ErrorFunc />
         </View>
       );
     }
