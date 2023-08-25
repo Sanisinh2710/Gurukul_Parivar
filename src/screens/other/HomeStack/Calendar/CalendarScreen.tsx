@@ -122,7 +122,6 @@ export const CalendarScreen = ({
               style={[
                 {marginTop: '15%', alignSelf: 'center'},
                 todayEvent.filter(
-                  // event => event.date === d.toISOString().substring(0, 10),
                   event => event.date === d.toISOString().substring(0, 10),
                 ).length === 0 && {
                   marginTop: '50%',

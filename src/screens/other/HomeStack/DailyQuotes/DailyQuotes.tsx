@@ -4,7 +4,7 @@ import {BASE_URL} from '@env';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, View} from 'react-native';
+import {Dimensions, Image, Platform, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
@@ -214,6 +214,7 @@ export const DailyQuotes = ({
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 20,
+                            backgroundColor: COLORS.primaryRippleColor,
                           }}>
                           <View style={{flex: 1, width: '100%'}}>
                             <Image
@@ -236,7 +237,7 @@ export const DailyQuotes = ({
                       )}
                     />
                     <ShareDownload
-                      wallpaper={false}
+                      wallpaper={Platform.OS === 'android' ? false : false}
                       imgURL={DailyQuotes?.[itemIndex]?.image}
                     />
                   </View>

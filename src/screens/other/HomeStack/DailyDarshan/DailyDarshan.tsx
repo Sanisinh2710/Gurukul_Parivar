@@ -218,7 +218,13 @@ export const DailyDarshan = ({
                     <>
                       <TouchableOpacity
                         activeOpacity={0.8}
-                        style={style.imageContainer}
+                        style={[
+                          style.imageContainer,
+                          {
+                            backgroundColor: COLORS.primaryRippleColor,
+                            borderRadius: 8,
+                          },
+                        ]}
                         onPress={() => {
                           navigation.navigate('dailyDarshanDetail', {
                             totalImages: DarshanImages.length,
