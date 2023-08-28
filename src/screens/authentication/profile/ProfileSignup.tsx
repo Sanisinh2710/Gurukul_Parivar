@@ -197,8 +197,6 @@ export const ProfileSignup = ({
             )?.whatsappNum;
         }
 
-        console.log(toSubmitPersonalInfoData, 'final submit response');
-
         const response = await PersonalInfoSaveDetailsApi(
           toSubmitPersonalInfoData,
         );

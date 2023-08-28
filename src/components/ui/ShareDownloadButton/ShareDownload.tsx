@@ -7,7 +7,6 @@ import {
   NativeModules,
   PermissionsAndroid,
   Platform,
-  Pressable,
   Text,
   View,
 } from 'react-native';
@@ -35,10 +34,10 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-  const [modalForWallpaper, setModalForWallpaper] =
-    React.useState<boolean>(false);
 
   const [isSharing, setIsSharing] = React.useState(false);
+
+  const [isDownloading, setIsdownloading] = React.useState(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
   const onShare = async () => {
@@ -77,7 +76,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
-  const REMOTE_IMAGE_PATH = imgURL;
+  const REMOTE_IMAGE_PATH = React.useMemo(() => {
+    return imgURL;
+  }, [imgURL]);
   const checkPermission = async () => {
     if (Platform.OS === 'ios') {
       downloadImage();
@@ -103,7 +104,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     // Main function to download the image
 
     // To add the time suffix in filename
@@ -132,10 +133,8 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         description: 'Image',
       },
     };
-    image_URL &&
-      config(options)
-        .fetch('GET', image_URL)
-        .then(res => {});
+
+    const response = await config(options).fetch('GET', image_URL);
   };
 
   const getExtention = (filename: string) => {
@@ -152,17 +151,33 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
 
-  const setWallPaper = async (imgUrl: string, mode: string) => {
-    setModalForWallpaper(false);
+  const settingWallPap = async () => {
+    return new Promise(resolve => {
+      setTimeout(async () => {
+        const result = await WallpaperModule.setAsWallpaper(REMOTE_IMAGE_PATH);
+        resolve(result);
+      }, 1500);
+    });
+  };
+
+  const setWallPaper = async () => {
+    setIsdownloading(true);
+    let resultFetched: boolean = false;
     try {
-      console.log(imgUrl, '::::This is url');
-      const result = await WallpaperModule.setAsWallpaper(imgUrl, mode);
-      console.log(result, 'result');
+      const doenLoadResp = await downloadImage();
+      const result = await settingWallPap();
+      resultFetched = true;
+
       if (result === 'SUCCESS') {
         Toast.show('Wallpaper set successfully..!', Toast.LONG);
       }
     } catch (error) {
       console.log(error, 'wallpaper error');
+    }
+    if (resultFetched) {
+      setTimeout(() => {
+        setIsdownloading(false);
+      }, 1500);
     }
   };
 
@@ -178,17 +193,24 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
-              onTouchEnd={() => {
-                setModalForWallpaper(!modalForWallpaper);
-              }}
+              onTouchEnd={isDownloading ? () => {} : setWallPaper}
               style={[
                 style.iconContainer,
                 {backgroundColor: 'rgba(98, 177, 158, 1)'},
               ]}>
-              <Image
-                source={AllIcons.SetWallPaper}
-                style={[style.icon, {height: 24, width: 24}]}
-              />
+              <>
+                {isDownloading ? (
+                  <ActivityIndicator
+                    size={25}
+                    color={COLORS.darkModetextColor}
+                  />
+                ) : (
+                  <Image
+                    source={AllIcons.SetWallPaper}
+                    style={[style.icon, {height: 24, width: 24}]}
+                  />
+                )}
+              </>
             </View>
           )}
           <View
@@ -271,34 +293,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         setModelVisible={setModalVisible}
         type={'none'}
         modelVisible={modalVisible}
-      />
-      <DropDownModel
-        customModelchild={
-          <>
-            <Pressable
-              onPress={async () => {
-                await setWallPaper(imgURL ?? '', 'HOME');
-              }}>
-              <Text style={style.wallpaperText}>Set as a Home screen</Text>
-            </Pressable>
-            <Pressable
-              onPress={async () => {
-                await setWallPaper(imgURL ?? '', 'LOCK');
-              }}>
-              <Text style={style.wallpaperText}>Set as a Lock screen</Text>
-            </Pressable>
-            <Pressable
-              onPress={async () => {
-                await setWallPaper(imgURL ?? '', 'BOTH');
-              }}>
-              <Text style={style.wallpaperText}>Both</Text>
-            </Pressable>
-          </>
-        }
-        modalHeight="30%"
-        setModelVisible={setModalForWallpaper}
-        type={'none'}
-        modelVisible={modalForWallpaper}
       />
     </>
   );

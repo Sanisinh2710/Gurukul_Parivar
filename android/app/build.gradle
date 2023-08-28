@@ -114,7 +114,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-share')
-
+//    implementation 'com.github.ChickenHook:RestrictionBypass:2.2'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

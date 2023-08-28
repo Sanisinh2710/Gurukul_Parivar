@@ -206,8 +206,6 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
-  console.log(finalPayload, 'finalpayload');
-
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
@@ -307,8 +305,6 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
     let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
     const response = await PersonalInfoGetDetailsApi();
-
-    console.log(response.data.personal_details, 'get data from backend');
 
     if (response.resType === 'SUCCESS') {
       if (
