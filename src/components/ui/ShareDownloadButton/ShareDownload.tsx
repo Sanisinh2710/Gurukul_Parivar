@@ -40,11 +40,16 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const [isDownloading, setIsdownloading] = React.useState(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
+
+  const REMOTE_IMAGE_PATH = React.useMemo(() => {
+    return imgURL;
+  }, [imgURL]);
+
   const onShare = async () => {
     setIsSharing(true);
     try {
       const response = await RNFS.downloadFile({
-        fromUrl: imgURL!,
+        fromUrl: REMOTE_IMAGE_PATH!,
         toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
       });
 
@@ -76,9 +81,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
-  const REMOTE_IMAGE_PATH = React.useMemo(() => {
-    return imgURL;
-  }, [imgURL]);
   const checkPermission = async () => {
     if (Platform.OS === 'ios') {
       downloadImage();
