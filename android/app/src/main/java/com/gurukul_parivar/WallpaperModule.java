@@ -1,23 +1,46 @@
 package com.gurukul_parivar;
 
+import static android.provider.MediaStore.Images.Media.getBitmap;
+
 import android.app.WallpaperManager;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 
 public class WallpaperModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     WallpaperModule ( ReactApplicationContext context ) {
@@ -32,28 +55,58 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     }
 
     @ReactMethod
-    public Promise setAsWallpaper ( String fileURL ,final Promise promise ) {
+    public Promise setAsWallpaper ( String fileURL , String mode , final Promise promise ) {
         try {
-            URL url = new URL ( fileURL );
-            HttpURLConnection connection = ( HttpURLConnection ) url.openConnection ( );
-            connection.setDoInput ( true );
-            connection.connect ( );
-            InputStream input = connection.getInputStream ( );
-            Bitmap bitmap = BitmapFactory.decodeStream ( input );
+            RequestOptions requestOptions = new RequestOptions ();
+            requestOptions.override(1080, 1920) // Set your desired width and height here
+                    .format( DecodeFormat.PREFER_RGB_565) // Adjust format for better memory usage
+                    .fitCenter () // Scale image while keeping aspect ratio
+                    .transform ( new CutOffLogo () )
+                    .diskCacheStrategy( DiskCacheStrategy.RESOURCE);
+            Glide.with ( getReactApplicationContext () ).asBitmap ().load ( fileURL ).apply (requestOptions).into ( new SimpleTarget<Bitmap> ( ) {
+                @Override
+                public void onResourceReady ( @NonNull Bitmap resource , @Nullable Transition<? super Bitmap> transition ) {
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream (  );
+                        resource.compress ( Bitmap.CompressFormat.JPEG, 80, outputStream );
 
-            try {
-                if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
-                    setOnLockScreenWallPaper ( bitmap );
-                }
-                else
-                {
-                    setOnHomeScreenWallPaper ( bitmap );
-                }
-            } catch ( Exception e ) {
-                promise.reject ( "ERROR" , "Error setting wallpaper" , e );
-            }
+                        byte[] compressedData = outputStream.toByteArray();
+                        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(compressedData, 0, compressedData.length);
 
-            promise.resolve ( "SUCCESS" );
+                        if ( mode.equals ( "HOME" ) ) {
+                            try {
+                                setOnHomeScreenWallPaper ( compressedBitmap );
+//                                var path = MediaStore.Images.Media.insertImage ( getReactApplicationContext ().getContentResolver (), compressedBitmap,"wallpaper.jpg",null );
+//                                Intent intent = new Intent ( WallpaperManager.getInstance ( getReactApplicationContext () ).getCropAndSetWallpaperIntent ( Uri.parse ( path ) ) );
+//                                intent.putExtra("android.wallpaper.extra.SCREEN_TO_SET", WallpaperManager.FLAG_SYSTEM);
+//                                getCurrentActivity ().startActivity ( intent );
+                            } catch ( Exception e ) {
+                                promise.reject ( "ERROR" , "Error setting Home wallpaper" , e );
+                            }
+                        }
+                        if ( mode.equals ( "LOCK" ) ) {
+                            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                                try {
+                                    setOnLockScreenWallPaper ( compressedBitmap );
+                                } catch ( Exception e ) {
+                                    promise.reject ( "ERROR" , "Error setting LOCK wallpaper" , e );
+                                }
+                            }
+                        }
+                        if ( mode.equals ( "BOTH" ) ) {
+                            try {
+                                setOnHomeScreenWallPaper ( compressedBitmap );
+                                setOnLockScreenWallPaper ( compressedBitmap );
+                            } catch ( Exception e ) {
+                                promise.reject ( "ERROR" , "Error setting BOTH wallpaper" , e );
+                            }
+                        }
+                    } catch ( Exception e ) {
+                        promise.reject ( "ERROR" , "Error setting wallpaper" , e );
+                    }
+                    promise.resolve ( "SUCCESS" );
+                }
+            } );
         } catch ( Exception e ) {
             promise.reject ( "ERROR" , "Error setting wallpaper" , e );
         }
@@ -63,7 +116,14 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     public void setOnHomeScreenWallPaper ( Bitmap bitmap ) throws Exception {
         try {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
-            wallpaperManager.setBitmap ( bitmap );
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                var wallpaper = getCroppedBitmap ( bitmap, wallpaperManager );
+                wallpaperManager.setBitmap ( wallpaper, null,true, WallpaperManager.FLAG_SYSTEM );
+            }
+            else
+            {
+                wallpaperManager.setBitmap ( bitmap );
+            }
         } catch ( Exception e ) {
             throw e;
         }
@@ -73,11 +133,33 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
         try {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                var wallpaper = getCroppedBitmap ( bitmap, wallpaperManager );
+                wallpaperManager.setBitmap ( wallpaper, null , true, WallpaperManager.FLAG_LOCK );
+            }
+            else
+            {
                 wallpaperManager.setBitmap ( bitmap );
             }
         } catch ( Exception e ) {
             throw e;
         }
+    }
+
+    public Bitmap getCroppedBitmap(Bitmap bitmap, WallpaperManager wallpaperManager){
+        DisplayMetrics metrics = new DisplayMetrics();
+        Display display = getCurrentActivity ().getWindowManager ().getDefaultDisplay ();
+        display.getMetrics(metrics);
+        final int screenWidth  = metrics.widthPixels;
+        final int screenHeight = metrics.heightPixels;
+
+        wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight);
+
+        final float width = wallpaperManager.getDesiredMinimumWidth()+100;
+        final float height = wallpaperManager.getDesiredMinimumHeight();
+
+        Bitmap wallpaper = Bitmap.createScaledBitmap(bitmap, (int)width, (int)height, true);
+
+        return  wallpaper;
     }
 
     @Override
@@ -93,5 +175,32 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     @Override
     public void onHostDestroy ( ) {
         Log.d ( "Host destroy" , "Destroy" );
+    }
+}
+
+
+
+class CutOffLogo extends BitmapTransformation {
+
+    @Override
+    protected Bitmap transform (
+            @NotNull BitmapPool pool ,
+            @NotNull Bitmap toTransform ,
+            int outWidth ,
+            int outHeight
+    ) {
+
+        return Bitmap.createBitmap (
+                toTransform ,
+                0 ,
+                0 ,
+                toTransform.getWidth ( ) ,
+                toTransform.getHeight ( ) - 20   // number of pixels
+        );
+    }
+
+    @Override
+    public void updateDiskCacheKey ( @NonNull MessageDigest messageDigest ) {
+
     }
 }

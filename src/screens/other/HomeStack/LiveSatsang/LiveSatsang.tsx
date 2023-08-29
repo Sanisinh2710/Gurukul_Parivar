@@ -154,7 +154,7 @@ export const LiveSatsang = ({
                     onRefresh={onRefresh}
                   />
                 }
-                contentContainerStyle={{paddingBottom: '30%'}}
+                contentContainerStyle={{paddingBottom: '50%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
                   <View style={{marginVertical: '3%', gap: 15}}>
@@ -194,7 +194,6 @@ export const LiveSatsang = ({
                             right: 0,
                             flex: 1,
                             height: 200,
-                            // backgroundColor: 'blue',
                           }}>
                           <ActivityIndicator
                             size={30}
@@ -209,9 +208,11 @@ export const LiveSatsang = ({
                           setVideoLoad(true);
                         }}
                         videoId={
-                          item.url.toString().includes('=')
-                            ? item.url.split('=')[1]
-                            : item.url.split('/')[3]
+                          item.url.toString().includes('youtu.be')
+                            ? item.url
+                                .split('/')[3]
+                                .slice(0, item.url.split('/')[3].indexOf('?'))
+                            : item.url.split('=')[1]
                         }
                         onChangeState={onStateChange}
                         webViewProps={{

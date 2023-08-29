@@ -21,7 +21,6 @@ import {
   ChangeLanguage,
   DailyDarshan,
   DailyDarshanDetail,
-  DailyProgram,
   DailyProgramDetail,
   DailyQuiz,
   DailyQuizDetail,
@@ -159,7 +158,7 @@ export const Routes = (): React.JSX.Element => {
             />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
-            <NativeStack.Screen name="program" component={DailyProgram} />
+            <NativeStack.Screen name="program" component={CommingSoon} />
             <NativeStack.Screen
               name="programDetail"
               component={DailyProgramDetail}
