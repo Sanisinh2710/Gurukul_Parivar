@@ -2,7 +2,14 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Alert, FlatList, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -31,6 +38,8 @@ export const LiveSatsang = ({
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const onStateChange = React.useCallback((state: string) => {
     if (state === 'ended') {
       setPlaying(false);
@@ -56,6 +65,22 @@ export const LiveSatsang = ({
       console.log(error);
     }
   }, [selectedDate]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await DailySatsangApi(selectedDate);
+
+      if (res.resType === 'SUCCESS') {
+        setData(res.data.live_satasang);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -87,7 +112,7 @@ export const LiveSatsang = ({
             {t('common.YouTubeLiveKatha')}
           </Text>
 
-          {loader ? (
+          {loader || refreshing ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={['A', 'B', 'C', 'D']}
@@ -97,7 +122,7 @@ export const LiveSatsang = ({
                   <View key={item + index}>
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
-                      visible={!loader}
+                      visible={refreshing ? !refreshing : !loader}
                       style={{
                         height: 30,
                         width: '50%',
@@ -107,7 +132,7 @@ export const LiveSatsang = ({
                     />
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
-                      visible={!loader}
+                      visible={refreshing ? !refreshing : !loader}
                       style={{
                         height: 200,
                         width: '100%',
@@ -123,7 +148,14 @@ export const LiveSatsang = ({
             <>
               <FlatList
                 data={Data}
-                contentContainerStyle={{paddingBottom: '50%'}}
+                refreshControl={
+                  <RefreshControl
+                    colors={[COLORS.primaryColor, COLORS.green]}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                contentContainerStyle={{paddingBottom: '30%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
                   <View style={{marginVertical: '3%', gap: 15}}>

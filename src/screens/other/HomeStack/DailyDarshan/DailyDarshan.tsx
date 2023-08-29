@@ -4,9 +4,9 @@ import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
@@ -56,11 +56,15 @@ export const DailyDarshan = ({
   const [BranchName, setBranchName] = React.useState();
   const [DarshanImages, setDarshanImages] = React.useState([]);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const style = styles();
+
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
       setGurukulList(response.data.branches);
-      setChangeValue(response.data.branches[0].id);
+      setChangeValue(response.data.branches?.[0]?.id);
     } else {
       Toast.show(response.message, 2);
     }
@@ -72,8 +76,6 @@ export const DailyDarshan = ({
       setBranchName(name);
     }
   }, [changeValue, GurukulList]);
-
-  const style = styles();
 
   React.useMemo(async () => {
     setLoader(true);
@@ -91,6 +93,7 @@ export const DailyDarshan = ({
       console.log(error);
     }
   }, [selectedItem, selectedDate, BranchName]);
+
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(selectedDate.getDate() - 1);
@@ -124,6 +127,33 @@ export const DailyDarshan = ({
   React.useEffect(() => {
     Image_Data();
   }, [Data, BranchName]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const response = await GurukulBranchGetApi();
+      if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
+        setGurukulList(response.data.branches);
+        setChangeValue(response.data.branches?.[0]?.id);
+      } else {
+        Toast.show(response.message, 2);
+      }
+
+      const res = await DailyDarshanApi(
+        selectedDate,
+        TimeArray(t).find(item => item.name === selectedItem)?.id ?? 'both',
+      );
+
+      if (res.resType === 'SUCCESS') {
+        setData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -204,6 +234,13 @@ export const DailyDarshan = ({
             {Data.find(item => item.branch === BranchName) !== undefined &&
             DarshanImages.length > 0 ? (
               <FlatList
+                refreshControl={
+                  <RefreshControl
+                    colors={[COLORS.primaryColor, COLORS.green]}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
                 showsVerticalScrollIndicator={false}
                 data={DarshanImages}
                 numColumns={2}

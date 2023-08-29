@@ -280,20 +280,21 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         customModelchild={
           <>
             <Pressable
-              onPress={() => {
-                // await setWallPaper(imgURL ?? '', 'HOME');
+              onPress={async () => {
+                await setWallPaper(imgURL ?? '', 'HOME');
+                setModalForWallpaper(false);
               }}>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>
             </Pressable>
             <Pressable
               onPress={async () => {
-                // await setWallPaper(imgURL ?? '', 'LOCK');
+                await setWallPaper(imgURL ?? '', 'LOCK');
               }}>
               <Text style={style.wallpaperText}>Set as a Lock screen</Text>
             </Pressable>
             <Pressable
               onPress={async () => {
-                // await setWallPaper(imgURL ?? '', 'BOTH');
+                await setWallPaper(imgURL ?? '', 'BOTH');
               }}>
               <Text style={style.wallpaperText}>Both</Text>
             </Pressable>

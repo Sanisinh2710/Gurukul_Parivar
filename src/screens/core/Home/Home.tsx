@@ -9,6 +9,7 @@ import {
   BackHandler,
   ImageBackground,
   Platform,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -35,6 +36,8 @@ export const HomeScreen = ({
 
   const style = styles();
   const TouchX = React.useRef<any>();
+
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useMemo(async () => {
     setLoader(true);
@@ -127,6 +130,22 @@ export const HomeScreen = ({
     return () => clearTimeout(timer);
   }, [currentPage, dashboardImages]);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        setDashboardImages(res.data.images);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -161,6 +180,13 @@ export const HomeScreen = ({
         }}
       />
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: '30%',

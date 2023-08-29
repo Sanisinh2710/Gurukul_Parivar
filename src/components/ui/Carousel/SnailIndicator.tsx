@@ -19,7 +19,7 @@ export const Snail = ({
       temp.push(i);
     }
     setSnailNumList(temp);
-  }, []);
+  }, [snailLength]);
 
   return (
     <View style={style().snailMainView}>

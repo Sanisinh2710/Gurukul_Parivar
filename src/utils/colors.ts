@@ -15,6 +15,7 @@ export const COLORS = {
   black: '#000000',
   leftArrowBg: '#E6E1DE',
   unfilledProgressbar: 'rgba(229, 229, 229, 1)',
+  green: 'green',
 
   darkModeStatusBarcolor: '#171717',
   lightModeStatusBarColor: '#F4EFEB',
