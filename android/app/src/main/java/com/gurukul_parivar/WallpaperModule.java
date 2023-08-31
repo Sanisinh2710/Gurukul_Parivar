@@ -9,6 +9,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -20,6 +23,7 @@ import java.net.URL;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 
 public class WallpaperModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     WallpaperModule(ReactApplicationContext context) {
@@ -35,35 +39,77 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     }
 
     @ReactMethod
-    public void setAsWallpaper(String fileURL, String mode, final Promise promise) {
-        Log.d("GOGO", "Function Called");
+    public Promise setAsWallpaper ( String fileURL , String mode , final Promise promise ) {
         try {
-            URL url = new URL(fileURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            String imageUrl = fileURL; // or R.drawable.image_resource
+            Glide.with(getReactApplicationContext())
+                    .asBitmap()
+                    .load(imageUrl)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            WallpaperManager wallpaperManager = WallpaperManager.getInstance(getReactApplicationContext());
+                            try {
+                                if ( mode.equals ( "HOME" ) ) {
+                                    try {
+                                        setOnHomeScreenWallPaper ( resource );
+                                    } catch ( Exception e ) {
+                                        promise.reject ( "ERROR" , "Error setting Home wallpaper" , e );
+                                    }
+                                }
+                                if ( mode.equals ( "LOCK" ) ) {
+                                    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                                        try {
+                                            setOnLockScreenWallPaper ( resource );
+                                        } catch ( Exception e ) {
+                                            promise.reject ( "ERROR" , "Error setting LOCK wallpaper" , e );
+                                        }
+                                    }
+                                }
+                                if ( mode.equals ( "BOTH" ) ) {
+                                    try {
+                                        setOnHomeScreenWallPaper ( resource );
+                                        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                                            setOnLockScreenWallPaper ( resource );
+                                        }
+                                    } catch ( Exception e ) {
+                                        promise.reject ( "ERROR" , "Error setting BOTH wallpaper" , e );
+                                    }
+                                }
 
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(getReactApplicationContext());
-            if (mode.equals("HOME")) {
-                wallpaperManager.setBitmap(bitmap);// For Home screen
-            }
-            if (mode.equals("LOCK")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);// For Lock screen
-                }
-            }
-            if (mode.equals("BOTH")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    wallpaperManager.setBitmap(bitmap, null, true,
-                            WallpaperManager.FLAG_LOCK | WallpaperManager.FLAG_SYSTEM);// For Lock screen
-                }
-            }
+                            } catch ( Exception e ) {
+                                promise.reject ( "ERROR" , "Error setting wallpaper" , e );
+                            }
+                        }
+                    });
+            promise.resolve ( "SUCCESS" );
+        } catch ( Exception e ) {
+            promise.reject ( "ERROR" , "Error setting wallpaper" , e );
+        }
+        return promise;
+    }
 
-            promise.resolve("SUCCESS");
-        } catch (IOException e) {
-            promise.reject("ERROR", "Error setting wallpaper", e);
+    public void setOnHomeScreenWallPaper ( Bitmap bitmap ) throws Exception {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
+            wallpaperManager.setBitmap ( bitmap );
+        } catch ( Exception e ) {
+            throw e;
+        }
+    }
+
+    public void setOnLockScreenWallPaper ( Bitmap bitmap ) throws Exception {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                wallpaperManager.setBitmap ( bitmap, null , true, WallpaperManager.FLAG_LOCK );
+            }
+            else
+            {
+                throw new Exception ( "Could not set wallpaper on this device..!" );
+            }
+        } catch ( Exception e ) {
+            throw e;
         }
     }
 

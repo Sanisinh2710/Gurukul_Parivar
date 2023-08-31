@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {Image, View} from 'react-native';
+import {ActivityIndicator, Image, View} from 'react-native';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
 import {AllImages} from '../../../../assets/images';
