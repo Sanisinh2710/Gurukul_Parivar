@@ -2,7 +2,7 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Image, View} from 'react-native';
+import {Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -11,6 +11,7 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
+import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyDarshanDetail = ({
@@ -45,13 +46,24 @@ export const DailyDarshanDetail = ({
         headerTitle={route.params.date}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View style={{height: '80%', marginTop: '5%'}}>
+        <View
+          style={[
+            {
+              height: '80%',
+              marginTop: '5%',
+              borderRadius: 8,
+              backgroundColor: COLORS.primaryRippleColor,
+            },
+          ]}>
           <Image
             source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
           />
         </View>
-        <ShareDownload wallpaper={true} imgURL={wallpaper && wallpaper} />
+        <ShareDownload
+          wallpaper={Platform.OS === 'android' ? true : false}
+          imgURL={wallpaper && wallpaper}
+        />
       </View>
       <CustomNavigate
         text={`${pagination}/${TotalImages}`}

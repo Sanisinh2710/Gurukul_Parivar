@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {style} from './styles';
 
@@ -11,15 +11,15 @@ export const Snail = ({
   snailLength,
   activeTabIndex,
 }: SnailProps): React.JSX.Element => {
-  const [snailNumList, setSnailNumList] = useState<number[]>([]);
+  const [snailNumList, setSnailNumList] = React.useState<number[]>([]);
 
-  useMemo(() => {
+  React.useMemo(() => {
     let temp: number[] = [];
     for (let i = 1; i <= snailLength; i++) {
       temp.push(i);
     }
     setSnailNumList(temp);
-  }, []);
+  }, [snailLength]);
 
   return (
     <View style={style().snailMainView}>

@@ -1,7 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {Text, TextInput, View} from 'react-native';
+import {ScrollView, Text, TextInput, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -47,116 +47,116 @@ export const DonationScreen = ({
         }}
         headerTitle={t('Donation.Heading')}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <View>
-          <Text style={{color: COLORS.primaryColor}}>
-            {t('Donation.Quote')}
-          </Text>
-        </View>
-        {/* select box */}
-        <View style={{height: '8%', marginBottom: '16%'}}>
-          <View
-            style={{
-              marginTop: '5%',
-            }}>
+      <ScrollView>
+        <View style={[commonstyle.commonContentView, {flex: 1}]}>
+          <View>
+            <Text style={{color: COLORS.primaryColor}}>
+              {t('Donation.Quote')}
+            </Text>
+          </View>
+          {/* select box */}
+          <View style={{height: '8%', marginBottom: '16%'}}>
+            <View
+              style={{
+                marginTop: '5%',
+              }}>
+              <Text
+                style={{
+                  ...CustomFonts.body.large14,
+                  color: COLORS.lightModetextColor,
+                  fontSize: 15,
+                }}>
+                {t('uploadPhoto.DropdownTitle')}
+              </Text>
+              <View style={style.dropdownStyle}>
+                <SimpleDropDown
+                  placeholder="Select Gurukul Branch"
+                  label="Gurukul"
+                  dropDownList={GurukulList}
+                  type={'simple'}
+                  value={changeValue}
+                  onChange={setChangeValue}
+                  onBlur={function (...event: any[]): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  setFocused={function (
+                    value: React.SetStateAction<boolean>,
+                  ): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+          {/* amount text box */}
+          <View style={{marginBottom: '5%'}}>
             <Text
               style={{
                 ...CustomFonts.body.large14,
                 color: COLORS.lightModetextColor,
                 fontSize: 15,
               }}>
-              {t('uploadPhoto.DropdownTitle')}
+              Amount
             </Text>
-            <View style={style.dropdownStyle}>
-              <SimpleDropDown
-                placeholder="Select Gurukul Branch"
-                label="Gurukul"
-                dropDownList={GurukulList}
-                type={'simple'}
-                value={changeValue}
-                onChange={setChangeValue}
-                onBlur={function (...event: any[]): void {
-                  throw new Error('Function not implemented.');
-                }}
-                setFocused={function (
-                  value: React.SetStateAction<boolean>,
-                ): void {
-                  throw new Error('Function not implemented.');
-                }}
-              />
-            </View>
-          </View>
-        </View>
-        {/* amount text box */}
-        <View style={{marginBottom: '5%'}}>
-          <Text
-            style={{
-              ...CustomFonts.body.large14,
-              color: COLORS.lightModetextColor,
-              fontSize: 15,
-            }}>
-            Amount
-          </Text>
-          <View
-            style={[
-              style.dropdownStyle,
-              {display: 'flex', flexDirection: 'row'},
-            ]}>
-            <View style={{flexDirection: 'row', gap: 8, paddingLeft: 8}}>
-              <Text
-                style={{
-                  color: COLORS.primaryColor,
-                  fontSize: 16,
-                  textAlign: 'center',
-                  alignSelf: 'center',
-                }}>
-                {'\u20B9'}
-              </Text>
-              <Text
-                style={{
-                  color: COLORS.primaryColor,
-                  fontSize: 16,
-                  borderRightWidth: 1,
-                  height: 25,
-                  borderRightColor: COLORS.primaryLightBorderColor,
-                  textAlign: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-            </View>
+            <View
+              style={[
+                style.dropdownStyle,
+                {display: 'flex', flexDirection: 'row'},
+              ]}>
+              <View style={{flexDirection: 'row', gap: 8, paddingLeft: 8}}>
+                <Text
+                  style={{
+                    color: COLORS.primaryColor,
+                    fontSize: 16,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  {'\u20B9'}
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.primaryColor,
+                    fontSize: 16,
+                    borderRightWidth: 1,
+                    height: 25,
+                    borderRightColor: COLORS.primaryLightBorderColor,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}
+                />
+              </View>
 
-            <TextInput
-              keyboardType="number-pad"
-              onChangeText={val => {
-                val === '' && setselectedItem('');
-              }}
-              style={[{width: '90%', marginLeft: 6}]}
-              placeholder="Enter donation">
-              {selectedItem.slice(1)}
-            </TextInput>
+              <TextInput
+                keyboardType="number-pad"
+                onChangeText={val => {
+                  val === '' && setselectedItem('');
+                }}
+                style={[{width: '90%', marginLeft: 6}]}
+                placeholder="Enter donation">
+                {selectedItem.slice(1)}
+              </TextInput>
+            </View>
           </View>
-        </View>
-        {/* radio label */}
-        <RadioLable
-          wantFullSpace={false}
-          customStyle={{
-            borderRadius: 60,
-            height: 40,
-            borderWidth: 0,
-          }}
-          value={selectedItem}
-          onChange={setselectedItem}
-          list={[
-            {name: '\u20B9100'},
-            {name: '\u20B9500'},
-            {name: '\u20B91000'},
-            {name: '\u20B92500'},
-          ]}
-          showHeading={false}
-        />
-        {/* text box */}
-        <View>
-          <View style={{marginTop: '5%', marginBottom: '40%'}}>
+          {/* radio label */}
+          <RadioLable
+            wantFullSpace={false}
+            customStyle={{
+              borderRadius: 60,
+              height: 40,
+              borderWidth: 0,
+            }}
+            value={selectedItem}
+            onChange={setselectedItem}
+            list={[
+              {name: '\u20B9100'},
+              {name: '\u20B9500'},
+              {name: '\u20B91000'},
+              {name: '\u20B92500'},
+            ]}
+            showHeading={false}
+          />
+          {/* text box */}
+          <View style={{marginTop: '5%', marginBottom: '33%'}}>
             <Text
               style={{
                 ...CustomFonts.body.large14,
@@ -167,26 +167,28 @@ export const DonationScreen = ({
             </Text>
             <View>
               <TextInput
-                style={style.dropdownStyle}
+                multiline
+                numberOfLines={3}
+                style={style.dropdownStyle2}
                 placeholder="Enter donation"></TextInput>
             </View>
           </View>
-        </View>
-        <PrimaryButton
-          title="Next"
-          onPress={() => navigation.navigate('PaymentMethod')}
-        />
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          <Text style={{color: 'black'}}>
-            By proceeding you agree with our{' '}
-            <Text
-              style={{color: COLORS.primaryColor}}
-              onPress={() => console.log('object')}>
-              Terms & Condition for Donation
+          <PrimaryButton
+            title="Next"
+            onPress={() => navigation.navigate('PaymentMethod')}
+          />
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{color: 'black'}}>
+              By proceeding you agree with our{' '}
+              <Text
+                style={{color: COLORS.primaryColor}}
+                onPress={() => console.log('object')}>
+                Terms & Condition for Donation
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 };

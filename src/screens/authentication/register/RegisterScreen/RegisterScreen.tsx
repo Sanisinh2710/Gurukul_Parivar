@@ -8,9 +8,8 @@ import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
-  KeyboardAvoidingView,
   Linking,
-  Platform,
+  ScrollView,
   Text,
   View,
 } from 'react-native';
@@ -63,21 +62,24 @@ export const RegisterScreen = ({
 
   const onSubmit = React.useCallback(
     async (data: EmailValidationSchemaType) => {
-      // data.countryCode = countryCodeSelect.split('(')[0].toString();
-
       setIsApiloading(true);
-      // data.countryCode = countryCodeSelect || '+91(IN)';
-      // data.mobileNumber = data.mobileNumber.toString();
 
-      // Do something with mobile number and than navigate to OTP Screen;
+      // Do something with email and than navigate to OTP Screen;
       const response = await RegisterApi(data.primary_email);
 
       setIsApiloading(false);
 
       if (response.resType === 'SUCCESS') {
-        navigation.navigate('OTP', {
-          primary_email: data.primary_email,
-        });
+        Toast.show('An OTP has been sent to your mail..!', Toast.SHORT);
+        const timer = setTimeout(() => {
+          navigation.navigate('OTP', {
+            primary_email: data.primary_email,
+          });
+        }, 1000);
+
+        return () => {
+          clearTimeout(timer);
+        };
       } else {
         Toast.show(response.message, 2);
       }
@@ -87,8 +89,11 @@ export const RegisterScreen = ({
 
   return (
     <ScreenWrapper>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'android' ? 'position' : 'padding'}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: '5%',
+        }}>
         <View style={commonStyle.commonContentView}>
           {/* Header:------------------------------------------------------------------------ */}
           <View key={'LoginFormHeader'} style={style.headerView}>
@@ -183,7 +188,7 @@ export const RegisterScreen = ({
             </Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     </ScreenWrapper>
   );
 };

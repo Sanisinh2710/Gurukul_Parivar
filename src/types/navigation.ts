@@ -20,12 +20,14 @@ export type RootStackParamList = {
   editProfile: undefined;
   status: undefined;
   program: undefined;
+  programDetail: {title: string; description: string} | undefined;
   dailyQuiz: undefined;
   dailyQuizDetail: undefined;
   donation: undefined;
   QuizResult: {marks: number};
   ProfileEdit: {formStep: number} | undefined;
   PaymentMethod: undefined;
+  GurukulEvents: undefined;
 };
 
 export type RootBottomTabParamList = {
@@ -86,4 +88,14 @@ export type ForgotPasswordProps = NativeStackScreenProps<
 export type ResetPasswordProps = NativeStackScreenProps<
   RootAuthStackParamList,
   'ResetPassword'
+>;
+
+export type DailyProgramProps = NativeStackScreenProps<
+  RootStackParamList,
+  'program'
+>;
+
+export type DailyProgramDetailProps = NativeStackScreenProps<
+  RootStackParamList,
+  'programDetail'
 >;

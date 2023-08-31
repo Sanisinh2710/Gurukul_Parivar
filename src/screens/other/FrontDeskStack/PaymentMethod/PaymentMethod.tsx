@@ -4,16 +4,20 @@ import {useTranslation} from 'react-i18next';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
+import {
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {COLORS} from '../../../../utils';
+import {COLORS, Payment} from '../../../../utils';
 import {styles} from './styles';
 
 export const PaymentMethod = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
-  const [language, setLanguage] = React.useState('');
+  const [PaymentMethod, setPaymentMethod] = React.useState('');
 
   const commonstyle = CommonStyle();
 
@@ -30,122 +34,61 @@ export const PaymentMethod = ({
         headerTitle={'Select Payment Method'}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <TouchableOpacity
-          onPress={() => {
-            setLanguage('a');
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-              padding: 14,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.3)',
-              backgroundColor: 'white',
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              <Image source={AllIcons.Card} style={{height: 24, width: 24}} />
-
-              <Text style={{fontSize: 16, color: 'black'}}>Credit/Debit</Text>
-            </View>
-            <View
-            //   style={
-
-            //       ? style.selectedStyles
-            //       : style.unselectedStyles
-            //   }
-            >
-              {
+        <View style={{marginTop: '5%'}}>
+          {Payment.map(item => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  setPaymentMethod(item.title);
+                }}>
                 <View
                   style={{
-                    height: 15,
-                    width: 15,
-                    borderRadius: 60,
-                    backgroundColor: COLORS.primaryColor,
-                  }}></View>
-              }
-            </View>
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: 20,
+                    padding: 14,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: 'rgba(172, 43, 49, 0.3)',
+                    backgroundColor: 'white',
+                  }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Image
+                      source={item.icon}
+                      style={{marginRight: 10, height: 24, width: 24}}
+                    />
+                    <Text style={{fontSize: 16, color: 'black'}}>
+                      {item.title}
+                    </Text>
+                  </View>
+                  <View
+                    style={
+                      item.title === PaymentMethod
+                        ? style.selectedStyles
+                        : style.unselectedStyles
+                    }>
+                    {item.title === PaymentMethod && (
+                      <View
+                        style={{
+                          height: 15,
+                          width: 15,
+                          borderRadius: 60,
+                          backgroundColor: COLORS.primaryColor,
+                        }}></View>
+                    )}
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+          <View style={{}}>
+            <PrimaryButton
+              title="Proceed Payment"
+              onPress={() => console.log('Payment done')}
+            />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setLanguage('a');
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-              padding: 14,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.3)',
-              backgroundColor: 'white',
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              <Image source={AllIcons.Bank} style={{height: 24, width: 24}} />
-              <Text style={{fontSize: 16, color: 'black'}}>Net Banking</Text>
-            </View>
-            <View
-            //   style={
-            //     Languages.hn === language
-            //       ? style.selectedStyles
-            //       : style.unselectedStyles
-            //   }
-            >
-              {
-                <View
-                  style={{
-                    height: 15,
-                    width: 15,
-                    borderRadius: 60,
-                    backgroundColor: COLORS.primaryColor,
-                  }}></View>
-              }
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setLanguage('a');
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 20,
-              padding: 14,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: 'rgba(172, 43, 49, 0.3)',
-              backgroundColor: 'white',
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              <Image source={AllIcons.Money} style={{height: 24, width: 24}} />
-
-              <Text style={{fontSize: 16, color: 'black'}}>UPI</Text>
-            </View>
-            <View
-            //   style={
-            //     Languages.gu === language
-            //       ? style.selectedStyles
-            //       : style.unselectedStyles
-            //   }
-            >
-              {
-                <View
-                  style={{
-                    height: 15,
-                    width: 15,
-                    borderRadius: 60,
-                    backgroundColor: COLORS.primaryColor,
-                  }}></View>
-              }
-            </View>
-          </View>
-        </TouchableOpacity>
+        </View>
       </View>
     </ScreenWrapper>
   );

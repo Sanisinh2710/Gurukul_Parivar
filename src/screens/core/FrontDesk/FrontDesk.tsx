@@ -43,6 +43,9 @@ export const FrontDeskScreen = ({
         navigation.navigate('donation');
         break;
 
+      case 'event':
+        navigation.navigate('GurukulEvents');
+
       default:
         break;
     }

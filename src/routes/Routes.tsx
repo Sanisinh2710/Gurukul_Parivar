@@ -21,6 +21,7 @@ import {
   ChangeLanguage,
   DailyDarshan,
   DailyDarshanDetail,
+  DailyProgramDetail,
   DailyQuiz,
   DailyQuizDetail,
   DailyQuotes,
@@ -30,6 +31,7 @@ import {
   EditProfile,
   ForgotPassword,
   FrontDeskScreen,
+  GurukulEvents,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
@@ -161,12 +163,20 @@ export const Routes = (): React.JSX.Element => {
             <NativeStack.Screen name="donation" component={DonationScreen} />
             <NativeStack.Screen name="program" component={CommingSoon} />
             <NativeStack.Screen
+              name="programDetail"
+              component={DailyProgramDetail}
+            />
+            <NativeStack.Screen
               name="ProfileEdit"
               component={ProfileSignupWithEdit}
             />
             <NativeStack.Screen
               name="PaymentMethod"
               component={PaymentMethod}
+            />
+            <NativeStack.Screen
+              name="GurukulEvents"
+              component={GurukulEvents}
             />
           </NativeStack.Navigator>
         </NavigationContainer>

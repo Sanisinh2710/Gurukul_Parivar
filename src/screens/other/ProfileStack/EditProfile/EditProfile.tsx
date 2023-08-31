@@ -37,22 +37,32 @@ export const EditProfile = ({navigation}: EditProfileProps) => {
                     });
                   }}
                   style={{
-                    height: 60,
-                    width: 'auto',
-                    borderWidth: 0.25,
-                    backgroundColor: 'white',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    borderColor: 'rgba(172, 43, 49, 0.3)',
-                    borderRadius: 5,
+                    flex: 1,
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
                     marginBottom: '5%',
-                    paddingLeft: '5%',
+                    borderRadius: 8,
+                    borderWidth: 0.4,
+                    borderColor: 'rgba(172, 43, 49, 0.3)',
+                    overflow: 'hidden',
                   }}>
-                  <View style={{justifyContent: 'center'}}>
-                    <Text style={style.title}>{item.title}</Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <Image source={item.icon} style={{height: 24, width: 24}} />
+                  <View
+                    style={{
+                      height: 60,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingLeft: '5%',
+                    }}>
+                    <View style={{justifyContent: 'center'}}>
+                      <Text style={style.title}>{item.title}</Text>
+                    </View>
+                    <View style={{justifyContent: 'center'}}>
+                      <Image
+                        source={item.icon}
+                        style={{height: 24, width: 24}}
+                      />
+                    </View>
                   </View>
                 </View>
               </>

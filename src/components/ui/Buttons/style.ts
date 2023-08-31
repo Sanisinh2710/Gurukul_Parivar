@@ -5,12 +5,14 @@ export const ButtonStyles = () => {
   return StyleSheet.create({
     container: {
       overflow: 'hidden',
+      borderRadius: 12,
     },
     pressableButtonstyle: {
       borderRadius: 12,
       height: 60,
       justifyContent: 'center',
       alignItems: 'center',
+      overflow: 'hidden',
     },
     titleText: {
       ...CustomFonts.body.large14,

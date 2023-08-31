@@ -1,5 +1,6 @@
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
+import {getAuthToken} from '../services';
 import {Theme} from '../types';
 import {COLORS} from './colors';
 export const LightTheme: Theme = {
@@ -296,6 +297,11 @@ export const Languages: {[key: string]: string} = {
   gu: 'Gujarati',
   hn: 'Hindi',
 };
+export const Payment = [
+  {title: 'Credit/Debit', icon: AllIcons.Card},
+  {title: 'Net Banking', icon: AllIcons.Bank},
+  {title: 'UPI', icon: AllIcons.Money},
+];
 
 // export const GuruKulList = [
 //   'Ahmedabad Gurukul: Memnagar',
@@ -526,4 +532,84 @@ export const OccupationList = [
   'Doctor',
   'Private Job',
   'Other',
+];
+
+export const IntialValuesForFormdataAuth = {
+  completeProfile: {
+    profile: '',
+    branch_id: null,
+  },
+  personalInfo: {
+    gender: '',
+    full_name: '',
+    father_name: '',
+    dob: '',
+    blood_group: '',
+    emailInfo: [
+      {email: getAuthToken().loginData.primary_email, secondary: false},
+    ],
+    mobilenumInfo: [
+      {
+        mobilenum: '',
+        secondary: false,
+        whatsappNum: false,
+        countryCode: '',
+      },
+    ],
+  },
+  address_details: [
+    {
+      country_id: '',
+      address: '',
+      pincode: '',
+      city: '',
+      address_type: '',
+      is_preferred_communication: true,
+    },
+  ],
+  edu_businessInfo: {
+    education: '',
+    occupation: '',
+    occupation_type: '',
+    skills: [],
+    other: '',
+  },
+  gurukulInfo: {
+    exGurukulStudent: 'No',
+    gurukulData: [
+      {
+        branch_id: '',
+        attend: '',
+        standard_from: '',
+        standard_to: '',
+        ssc_year: '',
+        hsc_year: '',
+        known_saint: '',
+        known_haribhakta: '',
+        RelativeOfSaint: 'No',
+        FromFamily: '',
+        saint_from_family: '',
+        relation: '',
+      },
+    ],
+  },
+};
+export const GurukulEventsList = [
+  {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
+  {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},
+  {
+    date: '24',
+    title: 'Cultural Diversity Day',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
+  {
+    date: '21',
+    title: 'Shrimad Bhagwat Katha',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
+  {
+    date: '19',
+    title: 'Annual Talent Show',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
 ];

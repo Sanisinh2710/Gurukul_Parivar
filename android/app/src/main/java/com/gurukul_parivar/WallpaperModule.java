@@ -1,168 +1,206 @@
 package com.gurukul_parivar;
 
-import android.app.WallpaperManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import static android.provider.MediaStore.Images.Media.getBitmap;
 
+import android.app.WallpaperManager;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
-import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.Display;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.security.MessageDigest;
 
 public class WallpaperModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
-    WallpaperModule(ReactApplicationContext context) {
-        super(context);
-
-        context.addLifecycleEventListener(this);
+    WallpaperModule ( ReactApplicationContext context ) {
+        super ( context );
+        context.addLifecycleEventListener ( this );
     }
 
     @NonNull
     @Override
-    public String getName() {
+    public String getName ( ) {
         return "WallpaperModule";
     }
 
     @ReactMethod
-    public boolean setAsWallpaper(String fileURL, String mode) {
-        try{
-            if(mode.equals("LOCK")){
-                setLockScreen(fileURL);
-            }else if(mode.equals("HOME")){
-                Toast.makeText(this.getReactApplicationContext(),mode,Toast.LENGTH_LONG).show();
-
-                setHomeScreen(fileURL);
-            }
-            else{
-//                setWallpaperImage(fileURL);
-            }
-        }catch (Exception e){
-            Log.e("test", "setAsWallpaper: "+e.getMessage());
-        }
-        return true;
-
-    }
-
-    private void setLockScreen(String url) {
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-try {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    public Promise setAsWallpaper ( String fileURL , String mode , final Promise promise ) {
         try {
-            WallpaperManager.getInstance(getReactApplicationContext()).setStream(drawableStream(url), null, true, WallpaperManager.FLAG_LOCK);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-catch (Exception e){
+            RequestOptions requestOptions = new RequestOptions ();
+            requestOptions.override(1080, 1920) // Set your desired width and height here
+                    .format( DecodeFormat.PREFER_RGB_565) // Adjust format for better memory usage
+                    .fitCenter () // Scale image while keeping aspect ratio
+                    .transform ( new CutOffLogo () )
+                    .diskCacheStrategy( DiskCacheStrategy.RESOURCE);
+            Glide.with ( getReactApplicationContext () ).asBitmap ().load ( fileURL ).apply (requestOptions).into ( new SimpleTarget<Bitmap> ( ) {
+                @Override
+                public void onResourceReady ( @NonNull Bitmap resource , @Nullable Transition<? super Bitmap> transition ) {
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream (  );
+                        resource.compress ( Bitmap.CompressFormat.JPEG, 80, outputStream );
 
-}
-    }
-    private void setHomeScreen(String url) {
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    WallpaperManager.getInstance(getReactApplicationContext()).setStream(drawableStream(url), null, true, WallpaperManager.FLAG_SYSTEM);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        byte[] compressedData = outputStream.toByteArray();
+                        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(compressedData, 0, compressedData.length);
+
+                        if ( mode.equals ( "HOME" ) ) {
+                            try {
+                                setOnHomeScreenWallPaper ( compressedBitmap );
+//                                var path = MediaStore.Images.Media.insertImage ( getReactApplicationContext ().getContentResolver (), compressedBitmap,"wallpaper.jpg",null );
+//                                Intent intent = new Intent ( WallpaperManager.getInstance ( getReactApplicationContext () ).getCropAndSetWallpaperIntent ( Uri.parse ( path ) ) );
+//                                intent.putExtra("android.wallpaper.extra.SCREEN_TO_SET", WallpaperManager.FLAG_SYSTEM);
+//                                getCurrentActivity ().startActivity ( intent );
+                            } catch ( Exception e ) {
+                                promise.reject ( "ERROR" , "Error setting Home wallpaper" , e );
+                            }
+                        }
+                        if ( mode.equals ( "LOCK" ) ) {
+                            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                                try {
+                                    setOnLockScreenWallPaper ( compressedBitmap );
+                                } catch ( Exception e ) {
+                                    promise.reject ( "ERROR" , "Error setting LOCK wallpaper" , e );
+                                }
+                            }
+                        }
+                        if ( mode.equals ( "BOTH" ) ) {
+                            try {
+                                setOnHomeScreenWallPaper ( compressedBitmap );
+                                setOnLockScreenWallPaper ( compressedBitmap );
+                            } catch ( Exception e ) {
+                                promise.reject ( "ERROR" , "Error setting BOTH wallpaper" , e );
+                            }
+                        }
+                    } catch ( Exception e ) {
+                        promise.reject ( "ERROR" , "Error setting wallpaper" , e );
+                    }
+                    promise.resolve ( "SUCCESS" );
                 }
+            } );
+        } catch ( Exception e ) {
+            promise.reject ( "ERROR" , "Error setting wallpaper" , e );
+        }
+        return promise;
+    }
+
+    public void setOnHomeScreenWallPaper ( Bitmap bitmap ) throws Exception {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                var wallpaper = getCroppedBitmap ( bitmap, wallpaperManager );
+                wallpaperManager.setBitmap ( wallpaper, null,true, WallpaperManager.FLAG_SYSTEM );
             }
-        }
-        catch (Exception e){
-
-        }
-    }
-    private void setWallpaperImage(String url) {
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        try {
-            final WallpaperManager wallpaperManager = WallpaperManager.getInstance(getReactApplicationContext());
-            try {
-                wallpaperManager.setBitmap(drawableFromUrl(url));
-            } catch (IOException e) {
-                e.printStackTrace();
+            else
+            {
+                wallpaperManager.setBitmap ( bitmap );
             }
-        }
-        catch (Exception e){
-
+        } catch ( Exception e ) {
+            throw e;
         }
     }
 
-
-
-    public static Bitmap drawableFromUrl(String url) throws IOException {
-        Bitmap x = null;
-        InputStream input = null;
-
+    public void setOnLockScreenWallPaper ( Bitmap bitmap ) throws Exception {
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-
-            connection.connect();
-            input = connection.getInputStream();
-            x = BitmapFactory.decodeStream(input);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance ( getReactApplicationContext ( ) );
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                var wallpaper = getCroppedBitmap ( bitmap, wallpaperManager );
+                wallpaperManager.setBitmap ( wallpaper, null , true, WallpaperManager.FLAG_LOCK );
+            }
+            else
+            {
+                wallpaperManager.setBitmap ( bitmap );
+            }
+        } catch ( Exception e ) {
+            throw e;
         }
-        return x;
     }
 
-    public static InputStream drawableStream(String url) throws IOException {
-        InputStream input = null;
+    public Bitmap getCroppedBitmap(Bitmap bitmap, WallpaperManager wallpaperManager){
+        DisplayMetrics metrics = new DisplayMetrics();
+        Display display = getCurrentActivity ().getWindowManager ().getDefaultDisplay ();
+        display.getMetrics(metrics);
+        final int screenWidth  = metrics.widthPixels;
+        final int screenHeight = metrics.heightPixels;
 
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        wallpaperManager.suggestDesiredDimensions(screenWidth, screenHeight);
 
-            connection.connect();
-            input = connection.getInputStream();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return input;
-    }
-    @Override
-    public void onHostResume() {
-        Log.d("Host Resume", "Resume");
-    }
+        final float width = wallpaperManager.getDesiredMinimumWidth()+100;
+        final float height = wallpaperManager.getDesiredMinimumHeight();
 
-    @Override
-    public void onHostPause() {
-        Log.d("Host Pause", "Pause");
+        Bitmap wallpaper = Bitmap.createScaledBitmap(bitmap, (int)width, (int)height, true);
+
+        return  wallpaper;
     }
 
     @Override
-    public void onHostDestroy() {
-        Log.d("Host destroy", "Destroy");
+    public void onHostResume ( ) {
+        Log.d ( "Host Resume" , "Resume" );
+    }
+
+    @Override
+    public void onHostPause ( ) {
+        Log.d ( "Host Pause" , "Pause" );
+    }
+
+    @Override
+    public void onHostDestroy ( ) {
+        Log.d ( "Host destroy" , "Destroy" );
+    }
+}
+
+
+
+class CutOffLogo extends BitmapTransformation {
+
+    @Override
+    protected Bitmap transform (
+            @NotNull BitmapPool pool ,
+            @NotNull Bitmap toTransform ,
+            int outWidth ,
+            int outHeight
+    ) {
+
+        return Bitmap.createBitmap (
+                toTransform ,
+                0 ,
+                0 ,
+                toTransform.getWidth ( ) ,
+                toTransform.getHeight ( ) - 20   // number of pixels
+        );
+    }
+
+    @Override
+    public void updateDiskCacheKey ( @NonNull MessageDigest messageDigest ) {
+
     }
 }

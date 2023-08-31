@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 import {useTranslation} from 'react-i18next';
 import * as yup from 'yup';
 import {

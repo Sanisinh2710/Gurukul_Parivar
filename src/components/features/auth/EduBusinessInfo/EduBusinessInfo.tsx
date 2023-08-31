@@ -50,6 +50,7 @@ export const EduBusinessInfo = React.memo(
       menuList?: any;
       customProps?: object;
       required: boolean;
+      wantPlaceholderAsLabelOnModal?: boolean;
     }[] = [
       {
         name: 'education',
@@ -65,6 +66,10 @@ export const EduBusinessInfo = React.memo(
           'Ph.d.',
         ],
         required: true,
+        customProps: {
+          wantPlaceholderAsLabelOnModal: true,
+          wantSearchBar: false,
+        },
       },
       {
         name: 'occupation',
@@ -85,6 +90,7 @@ export const EduBusinessInfo = React.memo(
         type: 'select',
         menuList: OccupationList,
         required: true,
+        wantPlaceholderAsLabelOnModal: true,
       },
       {
         name: 'skills',
@@ -93,6 +99,7 @@ export const EduBusinessInfo = React.memo(
         type: 'multi-select',
         menuList: skillsList,
         required: true,
+        wantPlaceholderAsLabelOnModal: true,
       },
       {
         name: 'other',
@@ -183,6 +190,9 @@ export const EduBusinessInfo = React.memo(
                           customProps={item.customProps}
                           required={item.required}
                           error={errors[item.name]?.message?.toString()}
+                          wantPlaceholderAsLabelOnModal={
+                            item.wantPlaceholderAsLabelOnModal
+                          }
                         />
                       );
                     }}
