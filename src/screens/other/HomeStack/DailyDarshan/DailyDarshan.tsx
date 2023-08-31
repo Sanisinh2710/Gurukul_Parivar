@@ -34,14 +34,13 @@ const TimeArray = (t: any) => [
 export const DailyDarshan = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const commonStyle = CommonStyle();
+  const {t} = useTranslation();
+  const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [changeValue, setChangeValue] = React.useState(1);
-  const {t} = useTranslation();
-
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
   const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
     [],
@@ -148,15 +147,7 @@ export const DailyDarshan = ({
               {t('uploadPhoto.DropdownTitle')}
             </Text>
 
-            <View
-              style={{
-                marginTop: '2%',
-                backgroundColor: 'rgba(172,43,49,0.05)',
-                paddingHorizontal: '2%',
-                borderWidth: 1,
-                borderColor: 'rgba(172, 43, 49, 0.1)',
-                borderRadius: 12,
-              }}>
+            <View style={style.dropdownStyle}>
               <SimpleDropDown
                 placeholder="Select Gurukul Branch"
                 label="Gurukul"

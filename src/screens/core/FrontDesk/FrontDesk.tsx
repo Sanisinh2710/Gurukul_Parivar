@@ -11,18 +11,17 @@ import {RootStackParamList} from '../../../types';
 import {AllImages} from '../../../../assets/images';
 import {FrontDesk} from '../../../utils';
 import {styles} from './styles';
+import {SliderGetApi} from '../../../services';
 
 export const FrontDeskScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const theme = useAppSelector(state => state.theme.theme);
 
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [dashboardImages, setDashboardImages] = React.useState([
-    AllImages.Rectangle,
-    AllImages.Rectangle3,
-    AllImages.Rectangle2,
-  ]);
+  const [currentPage, setCurrentPage] = React.useState<number>(0);
+  const [dashboardImages, setDashboardImages] = React.useState([]);
+  const [loader, setLoader] = React.useState<boolean>(false);
+
   const style = styles();
   const TouchX = React.useRef<any>();
 
@@ -48,6 +47,34 @@ export const FrontDeskScreen = ({
         break;
     }
   };
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        setDashboardImages(res.data.images);
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  const handlePageChange = () => {
+    if (currentPage < dashboardImages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setCurrentPage(0);
+    }
+  };
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      handlePageChange();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [currentPage, dashboardImages]);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -64,27 +91,11 @@ export const FrontDeskScreen = ({
         }}
       />
       <View style={commonStyle.commonContentView}>
-        <View
-          onTouchStart={e => {
-            TouchX.current = e.nativeEvent.pageX;
-          }}
-          onTouchEnd={e => {
-            if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < dashboardImages.length - 1) {
-                setCurrentPage(currentPage + 1);
-              }
-            }
-            if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (
-                currentPage > 0 &&
-                currentPage <= dashboardImages.length - 1
-              ) {
-                setCurrentPage(currentPage - 1);
-              }
-            }
-          }}>
-          <PagerView currentPage={currentPage} images={dashboardImages} />
-        </View>
+        {dashboardImages.length > 0 && (
+          <View>
+            <PagerView currentPage={currentPage} images={dashboardImages} />
+          </View>
+        )}
 
         <View style={{marginTop: 24, paddingBottom: 550}}>
           <FlatList

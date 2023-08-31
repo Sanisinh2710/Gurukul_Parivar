@@ -68,5 +68,13 @@ export const styles = () => {
       marginBottom: 15,
       textAlign: 'center',
     },
+    dropdownStyle: {
+      marginTop: '2%',
+      backgroundColor: 'rgba(172,43,49,0.05)',
+      paddingHorizontal: '2%',
+      borderWidth: 1,
+      borderColor: 'rgba(172, 43, 49, 0.1)',
+      borderRadius: 12,
+    },
   });
 };

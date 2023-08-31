@@ -46,4 +46,7 @@ export const AllIcons = {
   ClosedEye: require('../icons/ClosedEye.png'),
   OpenEye: require('../icons/OpenEye.png'),
   CheckBoxOutline: require('../icons/CheckBoxOutline.png'),
+  Card: require('../icons/Card.png'),
+  Bank: require('../icons/Bank.png'),
+  Money: require('../icons/Money.png'),
 };

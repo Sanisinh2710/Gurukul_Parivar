@@ -4,11 +4,9 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Pressable, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import * as Progress from 'react-native-progress';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
-  DropDownModel,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
@@ -21,7 +19,6 @@ export const DailyQuizDetail = ({
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
   const [answer, setAnswer] = React.useState<Array<Object>>([]);
-  const [modelVisible, setModelVisible] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = React.useState<number[]>([]);
   const [correctAnswer, setCorrectAnswer] = React.useState<Array<number>>([]);
   const commonstyle = CommonStyle();
@@ -174,57 +171,10 @@ export const DailyQuizDetail = ({
           <PrimaryButton
             title={t('DailyQuiz.SubmitBtn')}
             onPress={() => {
-              setModelVisible(!modelVisible);
+              navigation.navigate('QuizResult', {marks: Marks});
             }}
           />
         </View>
-        <DropDownModel
-          modelVisible={modelVisible}
-          setModelVisible={setModelVisible}
-          type={'phone'}
-          modalHeight={'40%'}
-          customModelchild={
-            <View style={{alignItems: 'center', marginTop: '5%'}}>
-              <Progress.Circle
-                size={90}
-                indeterminate={false}
-                animated={true}
-                progress={Marks / 100}
-                color={
-                  Marks >= 51 ? 'rgba(0, 166, 88, 1)' : 'rgba(255, 48, 48, 1)'
-                }
-                borderWidth={0}
-                unfilledColor={'rgba(230, 230, 230, 1)'}
-                thickness={12}
-                showsText={true}
-                fill={'none'}
-                textStyle={style.progressText}
-                formatText={() => <Text>{Marks}</Text>}
-              />
-              <View style={{marginTop: '5%'}}>
-                <Text
-                  style={{
-                    ...CustomFonts.header.medium20,
-                    fontSize: 22,
-                    color: 'black',
-                    textAlign: 'center',
-                  }}>
-                  {t('ResultModel.Title')}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: '2%',
-                    ...CustomFonts.body.medium12,
-                    fontSize: 17,
-                    color: 'rgba(23,23,23,0.5)',
-                    textAlign: 'center',
-                  }}>
-                  {t('ResultModel.Content')}
-                </Text>
-              </View>
-            </View>
-          }
-        />
       </View>
     </ScreenWrapper>
   );

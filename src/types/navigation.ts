@@ -25,6 +25,7 @@ export type RootStackParamList = {
   donation: undefined;
   QuizResult: {marks: number};
   ProfileEdit: {formStep: number} | undefined;
+  PaymentMethod: undefined;
 };
 
 export type RootBottomTabParamList = {

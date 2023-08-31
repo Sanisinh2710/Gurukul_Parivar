@@ -29,11 +29,13 @@ import {
   DonationScreen,
   EditProfile,
   ForgotPassword,
+  FrontDeskScreen,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
   LoginScreen,
   LoginSuccess,
+  PaymentMethod,
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
@@ -162,6 +164,10 @@ export const Routes = (): React.JSX.Element => {
               name="ProfileEdit"
               component={ProfileSignupWithEdit}
             />
+            <NativeStack.Screen
+              name="PaymentMethod"
+              component={PaymentMethod}
+            />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
@@ -184,7 +190,8 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
       }}>
       <BottomTab.Screen name="Home" component={HomeScreen} />
-      <BottomTab.Screen name="FrontDesk" component={CommingSoon} />
+      <BottomTab.Screen name="FrontDesk" component={FrontDeskScreen} />
+      {/* <BottomTab.Screen name="FrontDesk" component={CommingSoon} /> */}
       <BottomTab.Screen name="Profile" component={ProfileScreen} />
     </BottomTab.Navigator>
   );

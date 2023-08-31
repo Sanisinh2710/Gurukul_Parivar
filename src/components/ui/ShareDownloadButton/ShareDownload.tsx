@@ -230,11 +230,13 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       <DropDownModel
         customModelchild={
           <>
-            <LottieView
-              style={{height: '80%', alignSelf: 'center'}}
-              progress={animationProgress.current}
-              source={require('../../../../assets/animation/downloadDone.json')}
-            />
+            <View>
+              <LottieView
+                style={{height: '80%', alignSelf: 'center'}}
+                progress={animationProgress.current}
+                source={require('../../../../assets/animation/downloadDone.json')}
+              />
+            </View>
             <View
               style={{
                 alignItems: 'center',

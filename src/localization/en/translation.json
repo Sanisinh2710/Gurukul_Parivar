@@ -234,11 +234,14 @@
     "DailyQuiz": {
       "Heading": "Daily Quiz",
       "NxtBtn": "Next",
-      "SubmitBtn": "Submit"
+      "SubmitBtn": "Submit",
+      "Result":"Quiz Result"
     },
     "ResultModel": {
       "Title": "Congratulations",
-      "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
+      "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!",
+      "BtnText":"Discover My Standing"
+
     },
     "Donation": {
       "Heading": "Donation",
