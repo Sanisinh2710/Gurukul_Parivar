@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -53,6 +51,4 @@ public class MainActivity extends ReactActivity {
         // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         // getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
-
-
 }

@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -172,136 +173,154 @@ export const DailyDarshan = ({
         }}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <View style={{height: '8%', marginBottom: '16%'}}>
-          <View
-            style={{
-              marginTop: '5%',
-            }}>
-            <Text
-              style={{
-                ...CustomFonts.body.large14,
-                color: COLORS.lightModetextColor,
-                fontSize: 15,
-              }}>
-              {t('uploadPhoto.DropdownTitle')}
-            </Text>
-
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            height:
+              Data.find(item => item.branch === BranchName) !== undefined &&
+              DarshanImages.length > 0
+                ? 'auto'
+                : '100%',
+          }}
+          nestedScrollEnabled={true}
+          refreshControl={
+            <RefreshControl
+              colors={[COLORS.primaryColor, COLORS.green]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }>
+          <View style={{height: '8%', marginBottom: '16%'}}>
             <View
               style={{
-                marginTop: '2%',
-                backgroundColor: 'rgba(172,43,49,0.05)',
-                paddingHorizontal: '2%',
-                borderWidth: 1,
-                borderColor: 'rgba(172, 43, 49, 0.1)',
-                borderRadius: 12,
+                marginTop: '5%',
               }}>
-              <SimpleDropDown
-                label={t('uploadPhoto.DropdownTitle')}
-                placeholder={t('uploadPhoto.DropdownLable')}
-                dropDownList={GurukulList}
-                type={'simple'}
-                value={changeValue}
-                onChange={setChangeValue}
-                onBlur={() => {}}
-                setFocused={() => {}}
-                wantPlaceholderAsLabelOnModal={true}
-              />
-            </View>
-          </View>
-        </View>
+              <Text
+                style={{
+                  ...CustomFonts.body.large14,
+                  color: COLORS.lightModetextColor,
+                  fontSize: 15,
+                }}>
+                {t('uploadPhoto.DropdownTitle')}
+              </Text>
 
-        <RadioLable
-          wantFullSpace={false}
-          customStyle={{
-            borderRadius: 60,
-            height: 40,
-            borderWidth: 0,
-          }}
-          value={selectedItem}
-          onChange={setselectedItem}
-          list={TimeArray(t)}
-          showHeading={false}
-        />
-
-        {loader ? (
-          <Loader screenHeight={'70%'} />
-        ) : (
-          <View
-            style={{
-              height: '76%',
-              paddingTop: '3%',
-            }}>
-            {Data.find(item => item.branch === BranchName) !== undefined &&
-            DarshanImages.length > 0 ? (
-              <FlatList
-                refreshControl={
-                  <RefreshControl
-                    colors={[COLORS.primaryColor, COLORS.green]}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                showsVerticalScrollIndicator={false}
-                data={DarshanImages}
-                numColumns={2}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                }}
-                contentContainerStyle={{
-                  gap: 15,
-                  marginTop: '3%',
-                  paddingBottom: '10%',
-                }}
-                renderItem={({item, index}) => {
-                  return (
-                    <>
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={[
-                          style.imageContainer,
-                          {
-                            backgroundColor: COLORS.primaryRippleColor,
-                            borderRadius: 8,
-                          },
-                        ]}
-                        onPress={() => {
-                          navigation.navigate('dailyDarshanDetail', {
-                            totalImages: DarshanImages.length,
-                            data: DarshanImages,
-                            currentImageIndex: index,
-                            date: selectedDate.toLocaleDateString(
-                              'en-in',
-                              options,
-                            ),
-                          });
-                        }}>
-                        <Image
-                          source={{
-                            uri: `${BASE_URL}${item}`,
-                          }}
-                          style={style.images}
-                        />
-                      </TouchableOpacity>
-                    </>
-                  );
-                }}
-              />
-            ) : (
               <View
                 style={{
-                  height: '80%',
+                  marginTop: '2%',
+                  backgroundColor: 'rgba(172,43,49,0.05)',
+                  paddingHorizontal: '2%',
+                  borderWidth: 1,
+                  borderColor: 'rgba(172, 43, 49, 0.1)',
+                  borderRadius: 12,
                 }}>
-                <NoData />
+                <SimpleDropDown
+                  label={t('uploadPhoto.DropdownTitle')}
+                  placeholder={t('uploadPhoto.DropdownLable')}
+                  dropDownList={GurukulList}
+                  type={'simple'}
+                  value={changeValue}
+                  onChange={setChangeValue}
+                  onBlur={function (...event: any[]): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  setFocused={function (
+                    value: React.SetStateAction<boolean>,
+                  ): void {
+                    throw new Error('Function not implemented.');
+                  }}
+                  wantPlaceholderAsLabelOnModal={true}
+                />
               </View>
-            )}
+            </View>
           </View>
-        )}
+
+          <RadioLable
+            wantFullSpace={false}
+            customStyle={{
+              borderRadius: 60,
+              height: 40,
+              borderWidth: 0,
+            }}
+            value={selectedItem}
+            onChange={setselectedItem}
+            list={TimeArray(t)}
+            showHeading={false}
+          />
+
+          {loader ? (
+            <Loader screenHeight={'70%'} />
+          ) : (
+            <View
+              style={{
+                height: '76%',
+                paddingTop: '3%',
+              }}>
+              {Data.find(item => item.branch === BranchName) !== undefined &&
+              DarshanImages.length > 0 ? (
+                <FlatList
+                  scrollEnabled={false}
+                  showsVerticalScrollIndicator={false}
+                  data={DarshanImages}
+                  numColumns={2}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                  }}
+                  contentContainerStyle={{
+                    gap: 15,
+                    marginTop: '3%',
+                    paddingBottom: '10%',
+                  }}
+                  renderItem={({item, index}) => {
+                    return (
+                      <>
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[
+                            style.imageContainer,
+                            {
+                              backgroundColor: COLORS.primaryRippleColor,
+                              borderRadius: 8,
+                            },
+                          ]}
+                          onPress={() => {
+                            navigation.navigate('dailyDarshanDetail', {
+                              totalImages: DarshanImages.length,
+                              data: DarshanImages,
+                              currentImageIndex: index,
+                              date: selectedDate.toLocaleDateString(
+                                'en-in',
+                                options,
+                              ),
+                            });
+                          }}>
+                          <Image
+                            source={{
+                              uri: `${BASE_URL}${item}`,
+                            }}
+                            style={style.images}
+                          />
+                        </TouchableOpacity>
+                      </>
+                    );
+                  }}
+                />
+              ) : (
+                <View
+                  style={{
+                    height: '80%',
+                  }}>
+                  <NoData />
+                </View>
+              )}
+            </View>
+          )}
+        </ScrollView>
       </View>
+
       <View>
         <Calendar
           setCalendarVisible={setCalendarVisible}
           calendarVisible={calendarVisible}
-          // saveParentDate={saveDate}
           selectedParentDate={selectedDate}
           setSelectedParentDate={setSelectedDate}
         />

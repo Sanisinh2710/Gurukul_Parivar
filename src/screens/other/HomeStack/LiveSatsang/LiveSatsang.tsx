@@ -55,7 +55,6 @@ export const LiveSatsang = ({
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
           setData(res.data.live_satasang);
-
           setLoader(false);
         }, 1000);
       } else {
@@ -155,7 +154,7 @@ export const LiveSatsang = ({
                     onRefresh={onRefresh}
                   />
                 }
-                contentContainerStyle={{paddingBottom: '30%'}}
+                contentContainerStyle={{paddingBottom: '50%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
                   <View style={{marginVertical: '3%', gap: 15}}>
@@ -195,7 +194,6 @@ export const LiveSatsang = ({
                             right: 0,
                             flex: 1,
                             height: 200,
-                            // backgroundColor: 'blue',
                           }}>
                           <ActivityIndicator
                             size={30}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ImageBackground, ScrollView} from 'react-native';
+import {ImageBackground} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AllImages} from '../../../../assets/images';
 import {CommonStyle} from '../../../../assets/styles';

@@ -51,7 +51,7 @@ export const styles = () => {
       borderWidth: 0.4,
       borderColor: 'rgba(172, 43, 49,0.3)',
       backgroundColor: 'rgba(255, 255, 255, 0.5)',
-      borderRadius: 2,
+      borderRadius: 8,
     },
     listView: {
       borderColor: 'rgba(23, 23, 23,0.1)',

@@ -171,14 +171,15 @@ export const CompleteYourProfile = React.memo(
                   }}
                 />
               </View>
-              {/* Submit button.................................. */}
-              <View style={[style.NextBtn]}>
-                <PrimaryButton
-                  title={t('uploadPhoto.NextBtn')}
-                  onPress={handleSubmit(onSubmit)}
-                />
-              </View>
             </ScrollView>
+
+            {/* Submit button.................................. */}
+            <View style={[style.NextBtn]}>
+              <PrimaryButton
+                title={t('uploadPhoto.NextBtn')}
+                onPress={handleSubmit(onSubmit)}
+              />
+            </View>
           </View>
         )}
       </>
