@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {CustomFonts} from '../../../utils/fonts';
+import {COLORS} from '../../../utils';
 
 export const style = (currentPage?: number) => {
   return StyleSheet.create({
@@ -33,14 +33,14 @@ export const style = (currentPage?: number) => {
     pagerViewImageView: {
       justifyContent: 'center',
       alignItems: 'center',
-      // backgroundColor: 'yellow',
       borderRightColor: 'black',
-      width: 335,
+      width: '100%',
       height: 164,
     },
     pagerViewImage: {
       borderRadius: 12,
       marginTop: 24,
+      backgroundColor: COLORS.primaryRippleColor,
       width: Dimensions.get('window').width * 0.86,
       height: '100%',
       resizeMode: 'cover',

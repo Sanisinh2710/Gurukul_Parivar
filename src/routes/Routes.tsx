@@ -21,6 +21,7 @@ import {
   ChangeLanguage,
   DailyDarshan,
   DailyDarshanDetail,
+  DailyProgramDetail,
   DailyQuiz,
   DailyQuizDetail,
   DailyQuotes,
@@ -28,6 +29,7 @@ import {
   DailyUpdates,
   DonationScreen,
   EditProfile,
+  ForgotPassword,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
@@ -37,6 +39,8 @@ import {
   ProfileSignup,
   ProfileSignupWithEdit,
   QuizResult,
+  RegisterScreen,
+  ResetPassword,
   Status,
 } from '../screens';
 import {isSignedIn} from '../services';
@@ -68,16 +72,22 @@ export const AuthStackNavigator = ({
   } else {
     return (
       <AuthStack.Navigator
-        initialRouteName="MobileLogin"
+        initialRouteName="Login"
         screenOptions={{
           orientation: 'portrait',
           animation: 'none',
           headerShown: false,
         }}>
-        <AuthStack.Screen name="MobileLogin" component={LoginScreen} />
-        <AuthStack.Screen name="MobileLoginOTP" component={LoginOTP} />
-        <AuthStack.Screen name="LoginSuccess" component={LoginSuccess} />
+        <AuthStack.Screen name="Login" component={LoginScreen} />
+
+        <AuthStack.Screen name="Register" component={RegisterScreen} />
+
+        <AuthStack.Screen name="OTP" component={LoginOTP} />
+        <AuthStack.Screen name="Success" component={LoginSuccess} />
+
         <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
+        <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <AuthStack.Screen name="ResetPassword" component={ResetPassword} />
       </AuthStack.Navigator>
     );
   }
@@ -149,6 +159,10 @@ export const Routes = (): React.JSX.Element => {
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
             <NativeStack.Screen name="program" component={CommingSoon} />
+            <NativeStack.Screen
+              name="programDetail"
+              component={DailyProgramDetail}
+            />
             <NativeStack.Screen
               name="ProfileEdit"
               component={ProfileSignupWithEdit}

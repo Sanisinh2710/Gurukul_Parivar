@@ -9,12 +9,13 @@ export const COLORS = {
   primaryInputBorderColor: 'rgba(172, 43, 49, 0.2)',
 
   sunray: '#DBB159',
-  lightsunray: 'rgba(219, 177, 89, 0.2)',
+  lightsunray: '#F2E6D1',
   white: '#FFFFFF',
   headingColor: '#171717',
   black: '#000000',
   leftArrowBg: '#E6E1DE',
   unfilledProgressbar: 'rgba(229, 229, 229, 1)',
+  green: 'green',
 
   darkModeStatusBarcolor: '#171717',
   lightModeStatusBarColor: '#F4EFEB',
@@ -30,4 +31,6 @@ export const COLORS = {
 
   darkModeIconColor: '#FFFFFF',
   lightModeIconColor: '#171717',
+
+  resetSubtitleColor: 'rgba(63, 63, 63, 1)',
 };

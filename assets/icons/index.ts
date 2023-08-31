@@ -7,6 +7,7 @@ export const AllIcons = {
   Profile: require('../icons/Profile.png'),
   ProfileOutline: require('../icons/Profile-Outline.png'),
   Avtar: require('../icons/Avtar.png'),
+  DummyAvtar: require('../icons/DummyAvtar.png'),
   Calendar: require('../icons/Calendar.png'),
   CategoryOutline: require('../icons/Category-o.png'),
   ChartQuiz: require('../icons/ChartQuiz.png'),
@@ -42,4 +43,7 @@ export const AllIcons = {
   ArrowSimpleLeft: require('../icons/ArrowSimpleLeft.png'),
   OTPEdit: require('../icons/OTPEdit.png'),
   Camera: require('../icons/Camera.png'),
+  ClosedEye: require('../icons/ClosedEye.png'),
+  OpenEye: require('../icons/OpenEye.png'),
+  CheckBoxOutline: require('../icons/CheckBoxOutline.png'),
 };

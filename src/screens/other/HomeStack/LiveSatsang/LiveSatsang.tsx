@@ -2,7 +2,14 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, Alert, FlatList, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -10,7 +17,6 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
@@ -31,13 +37,16 @@ export const LiveSatsang = ({
 
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const onStateChange = React.useCallback((state: string) => {
-    console.log(state, 'STATE');
     if (state === 'ended') {
       setPlaying(false);
       Alert.alert('video has finished playing!');
     }
   }, []);
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -48,11 +57,29 @@ export const LiveSatsang = ({
           setData(res.data.live_satasang);
           setLoader(false);
         }, 1000);
+      } else {
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);
     }
   }, [selectedDate]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await DailySatsangApi(selectedDate);
+
+      if (res.resType === 'SUCCESS') {
+        setData(res.data.live_satasang);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -84,7 +111,7 @@ export const LiveSatsang = ({
             {t('common.YouTubeLiveKatha')}
           </Text>
 
-          {loader ? (
+          {loader || refreshing ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={['A', 'B', 'C', 'D']}
@@ -94,7 +121,7 @@ export const LiveSatsang = ({
                   <View key={item + index}>
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
-                      visible={!loader}
+                      visible={refreshing ? !refreshing : !loader}
                       style={{
                         height: 30,
                         width: '50%',
@@ -104,7 +131,7 @@ export const LiveSatsang = ({
                     />
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
-                      visible={!loader}
+                      visible={refreshing ? !refreshing : !loader}
                       style={{
                         height: 200,
                         width: '100%',
@@ -120,7 +147,14 @@ export const LiveSatsang = ({
             <>
               <FlatList
                 data={Data}
-                contentContainerStyle={{paddingBottom: '30%'}}
+                refreshControl={
+                  <RefreshControl
+                    colors={[COLORS.primaryColor, COLORS.green]}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                contentContainerStyle={{paddingBottom: '50%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
                   <View style={{marginVertical: '3%', gap: 15}}>
@@ -160,7 +194,6 @@ export const LiveSatsang = ({
                             right: 0,
                             flex: 1,
                             height: 200,
-                            // backgroundColor: 'blue',
                           }}>
                           <ActivityIndicator
                             size={30}
@@ -175,9 +208,11 @@ export const LiveSatsang = ({
                           setVideoLoad(true);
                         }}
                         videoId={
-                          item.url.toString().includes('=')
-                            ? item.url.split('=')[1]
-                            : item.url.split('/')[3]
+                          item.url.toString().includes('youtu.be')
+                            ? item.url
+                                .split('/')[3]
+                                .slice(0, item.url.split('/')[3].indexOf('?'))
+                            : item.url.split('=')[1]
                         }
                         onChangeState={onStateChange}
                         webViewProps={{

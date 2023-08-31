@@ -78,8 +78,8 @@ android {
         applicationId "com.gurukul_parivar"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.0.1"
+        versionCode 5
+        versionName "1.1.0"
     }
     signingConfigs {
         release{
@@ -114,7 +114,9 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-share')
-
+//    implementation 'com.github.ChickenHook:RestrictionBypass:2.2'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

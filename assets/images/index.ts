@@ -26,4 +26,5 @@ export const AllImages = {
   LiveSatsang: require('../images/LiveSatsang.png'),
   NoData: require('../images/NoData.png'),
   CommingSoon: require('../images/CommingSoon.png'),
+  Reset: require('../images/Reset.png'),
 };

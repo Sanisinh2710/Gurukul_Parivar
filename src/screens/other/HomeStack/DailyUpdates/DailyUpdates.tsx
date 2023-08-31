@@ -1,15 +1,28 @@
 import React from 'react';
 
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
-import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
-import {DailyUpdatesApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
+import { useTranslation } from 'react-i18next';
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { AllImages } from '../../../../../assets/images';
+import { CommonStyle } from '../../../../../assets/styles';
+import {
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
+import { DailyUpdatesApi } from '../../../../services';
+import { RootStackParamList } from '../../../../types';
+import { COLORS } from '../../../../utils';
+import { styles } from './styles';
 
 export const DailyUpdates = ({
   navigation,
@@ -19,6 +32,8 @@ export const DailyUpdates = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const commonStyle = CommonStyle();
   const {t} = useTranslation();
+
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useMemo(async () => {
     setLoader(true);
@@ -80,6 +95,62 @@ export const DailyUpdates = ({
     }
   }, []);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await DailyUpdatesApi();
+
+      if (res.resType === 'SUCCESS') {
+        const data = res.data.daily_updates.map(
+          (data: {
+            description: any;
+            images: any;
+            title: any;
+            created_at: string | number | Date;
+            date: any;
+          }) => {
+            data.description = data.description;
+            data.images = data.images;
+            data.title = data.title;
+            data.date = data.created_at;
+            if (
+              new Date(data.created_at).toLocaleDateString() ===
+              new Date().toLocaleDateString()
+            ) {
+              let time = new Date(data.created_at)
+                .toLocaleTimeString()
+                .substring(0, 5);
+              let day = new Date(data.created_at)
+                .toLocaleTimeString()
+                .substring(9, 12);
+
+              data.created_at = `${time}` + ' ' + `${day}`;
+            } else if (
+              new Date(data.created_at).getDate() ===
+              new Date().getDate() - 1
+            ) {
+              data.created_at = 'Yesterday';
+            } else {
+              data.created_at = new Date(data.created_at)
+                .toUTCString()
+                .slice(5, 11)
+                .concat(',');
+            }
+
+            return data;
+          },
+        );
+
+        setData(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -92,46 +163,67 @@ export const DailyUpdates = ({
       />
       <View style={commonStyle.commonContentView}>
         {loader ? (
-          <Loader />
+          <Loader screenHeight={'95%'} />
         ) : (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: '35%',
-            }}
-            data={Data}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    navigation.navigate('dailyUpdateDetail', {
-                      title: item.title,
-                      data: Data[index],
-                    });
-                  }}>
-                  <View style={style.updateContainer}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '20%',
+          <>
+            {Data.length > 0 ? (
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    colors={[COLORS.primaryColor, COLORS.green]}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: '30%',
+                }}
+                data={Data}
+                renderItem={({item, index}) => {
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        navigation.navigate('dailyUpdateDetail', {
+                          title: item.title,
+                          data: Data[index],
+                        });
                       }}>
-                      <View style={style.imageContainer}>
-                        <Image source={AllImages.AppLogo} style={style.image} />
+                      <View style={style.updateContainer}>
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '20%',
+                          }}>
+                          <View style={style.imageContainer}>
+                            <Image
+                              source={AllImages.AppLogo}
+                              style={style.image}
+                            />
+                          </View>
+                        </View>
+                        <View style={{width: '80%'}}>
+                          <View style={style.textContainer}>
+                            <Text style={style.title}>{item.title}</Text>
+                            <Text style={style.time}>{item.created_at}</Text>
+                          </View>
+                        </View>
                       </View>
-                    </View>
-                    <View style={{width: '80%'}}>
-                      <View style={style.textContainer}>
-                        <Text style={style.title}>{item.title}</Text>
-                        <Text style={style.time}>{item.created_at}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  height: '90%',
+                }}>
+                <NoData />
+              </View>
+            )}
+          </>
         )}
       </View>
     </ScreenWrapper>

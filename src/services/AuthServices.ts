@@ -76,7 +76,7 @@ export const removeAuthToken = () => {
   return resType;
 };
 
-export const isProfilingDone = (mobileNum: any) => {
+export const isProfilingDone = () => {
   let resType: 'SUCCESS' | 'ERROR';
 
   try {
@@ -161,6 +161,38 @@ export const getUserData = () => {
 
   try {
     const udata = storage.getString('currentUser');
+    if (udata) {
+      userdata = JSON.parse(udata);
+      resType = 'SUCCESS';
+    } else {
+      resType = 'ERROR';
+    }
+  } catch (error) {
+    resType = 'ERROR';
+  }
+  return {resType, userdata};
+};
+
+export const setAuthCredentialsForAutoFill = (userdata: any) => {
+  let resType: 'SUCCESS' | 'ERROR';
+
+  try {
+    storage.set('autofillCredentials', JSON.stringify(userdata));
+
+    resType = 'SUCCESS';
+  } catch (error) {
+    resType = 'ERROR';
+  }
+
+  return resType;
+};
+
+export const getAuthCredentialsForAutoFill = () => {
+  let resType: 'SUCCESS' | 'ERROR';
+  let userdata: any = {};
+
+  try {
+    const udata = storage.getString('autofillCredentials');
     if (udata) {
       userdata = JSON.parse(udata);
       resType = 'SUCCESS';

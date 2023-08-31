@@ -1,5 +1,6 @@
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
+import {getAuthToken} from '../services';
 import {Theme} from '../types';
 import {COLORS} from './colors';
 export const LightTheme: Theme = {
@@ -45,7 +46,8 @@ export const GurukulTheme: {[key: string]: Theme} = {
 export const nameRegex = /^[a-zA-Z\s]*$/;
 export const phoneRegex = /^[6-9]\d{9}$/;
 export const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-export const passwordRegex = /^[A-Z]{1}[a-zA-Z]+[@$.]{1}[a-zA-Z\d]+$/;
+export const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 export const countries = [
   {country: 'Afghanistan', code: '93', iso: 'AF'},
@@ -670,3 +672,64 @@ export const OccupationList = [
   'Private Job',
   'Other',
 ];
+
+export const IntialValuesForFormdataAuth = {
+  completeProfile: {
+    profile: '',
+    branch_id: null,
+  },
+  personalInfo: {
+    gender: '',
+    full_name: '',
+    father_name: '',
+    dob: '',
+    blood_group: '',
+    emailInfo: [
+      {email: getAuthToken().loginData.primary_email, secondary: false},
+    ],
+    mobilenumInfo: [
+      {
+        mobilenum: '',
+        secondary: false,
+        whatsappNum: false,
+        countryCode: '',
+      },
+    ],
+  },
+  address_details: [
+    {
+      country_id: '',
+      address: '',
+      pincode: '',
+      city: '',
+      address_type: '',
+      is_preferred_communication: true,
+    },
+  ],
+  edu_businessInfo: {
+    education: '',
+    occupation: '',
+    occupation_type: '',
+    skills: [],
+    other: '',
+  },
+  gurukulInfo: {
+    exGurukulStudent: 'No',
+    gurukulData: [
+      {
+        branch_id: '',
+        attend: '',
+        standard_from: '',
+        standard_to: '',
+        ssc_year: '',
+        hsc_year: '',
+        known_saint: '',
+        known_haribhakta: '',
+        RelativeOfSaint: 'No',
+        FromFamily: '',
+        saint_from_family: '',
+        relation: '',
+      },
+    ],
+  },
+};

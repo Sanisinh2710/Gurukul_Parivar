@@ -170,6 +170,9 @@ export const GurukulInfo = React.memo(
         placeholder: t('uploadPhoto.DropdownLable'),
         type: 'select',
         menuList: branches,
+        customProps: {
+          wantPlaceholderAsLabelOnModal: true,
+        },
         // rightText: t('gurukulInfo.AddGurukul'),
         rightTextOnPress: () => {
           append({
@@ -223,6 +226,9 @@ export const GurukulInfo = React.memo(
               '12',
             ],
             required: true,
+            customProps: {
+              wantSearchBar: false,
+            },
           },
           {
             name: 'standard_to',
@@ -244,6 +250,9 @@ export const GurukulInfo = React.memo(
               '12',
             ],
             required: true,
+            customProps: {
+              wantSearchBar: false,
+            },
           },
         ],
       },

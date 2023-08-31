@@ -23,6 +23,7 @@ import {
   RoundedIcon,
   ScreenHeader,
   ScreenWrapper,
+  SecondaryButton,
 } from '../../../components';
 import {
   DeleteMydataApi,
@@ -165,7 +166,6 @@ export const ProfileScreen = ({
         break;
     }
   };
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -195,9 +195,9 @@ export const ProfileScreen = ({
             <View style={{height: 64, width: 64}}>
               <Image
                 source={
-                  profileImage.uri != ''
+                  profileImage.uri != '' && !profileImage.uri.includes('null')
                     ? {uri: profileImage.uri}
-                    : AllIcons.ProfileUser
+                    : AllIcons.DummyAvtar
                 }
                 style={{height: '100%', width: '100%', borderRadius: 50}}
               />
@@ -310,11 +310,12 @@ export const ProfileScreen = ({
                 </Text>
               </View>
               <View style={style.modalbtnView}>
-                <PrimaryButton
+                <SecondaryButton
                   onPress={() => {
                     setModelVisible(!modelVisible);
                   }}
-                  buttonColor="rgba(172, 43, 49, 0.05)"
+                  buttonColor="rgba(172, 43, 49, 0.02)"
+                  borderColor="rgba(172,43,49,0.3)"
                   buttonStyle={style.modalbtn}
                   titleColor="black"
                   title={t('LogoutModel.CancelBtn')}
