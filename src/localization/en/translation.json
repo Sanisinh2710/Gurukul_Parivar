@@ -176,6 +176,7 @@
     "frontDesk": {
       "Heading": "Front Desk",
       "Form": "Go Form",
+      "Connect": "Gurukul Connect",
       "Speech": "Special Speech",
       "Darshan": "Gurukul Darshan",
       "Event": "Gurukul Events",
@@ -253,8 +254,8 @@
     "NoData": {
       "Title": "Oops, We're Blanking Out!",
       "Content": "Looks like our data elves are on a break.\n We'll conjure up some information soon.",
-      "ErrorTitle":"Oops, An error occurred!",
-      "ErrorContent":"Our team has taken a note of this issue.\nPlease restart your app again to continue."
+      "ErrorTitle": "Oops, An error occurred!",
+      "ErrorContent": "Our team has taken a note of this issue.\nPlease restart your app again to continue."
     },
     "ForgotPassword": {
       "ForgotPassword": "Forgot Password?",
@@ -275,33 +276,33 @@
       "SuccessResetPasswordTitle": "Success! Password Reset",
       "SuccessResetPasswordSubTitle": "Congratulations! You've successfully reset your password. Your account is now more secure than ever."
     },
-    "FieldRequiredError":{
-      "Email":"Please enter your email address",
-      "Password":"Please enter password",
-      "ConfirmPassword":"Please re-enter your password",
-      "GurukulBranch":"Please select gurukul branch",
-      "Gender":"Please choose your gender",
-      "FullName":"Please enter your full name",
-      "FatherName":"Please enter your father's name",
-      "DOB":"Please choose your date of birth",
-      "BloodGroup":"Please select your blood group",
-      "MobileNumber":"Please enter your mobile number",
-      "Country":"Please select your country",
-      "Address":"Please enter your address",
-      "Pincode":"Please enter your pincode",
-      "City":"Please enter your city or village",
-      "TypeOfAddress":"Please choose your address type",
-      "EducationLevel":"Please select your education level",
-      "Occupation":"Please choose your occupation",
-      "OccupationType":"Please select your occupation type",
-      "Skills":"Please select your skills",
-      "Standard":"Please choose a standard",
-      "SSCYear":"Please select your SSC year",
-      "HSCYear":"Please select your HSc year",
-      "SelectSaint":"Please select the name of the saint",
-      "Haribhakta":"Please select the name of the Haribhakta",
-      "Relation":"Please select your relation with the saint",
-      "RadioOption":"Please choose any one option from above"
+    "FieldRequiredError": {
+      "Email": "Please enter your email address",
+      "Password": "Please enter password",
+      "ConfirmPassword": "Please re-enter your password",
+      "GurukulBranch": "Please select gurukul branch",
+      "Gender": "Please choose your gender",
+      "FullName": "Please enter your full name",
+      "FatherName": "Please enter your father's name",
+      "DOB": "Please choose your date of birth",
+      "BloodGroup": "Please select your blood group",
+      "MobileNumber": "Please enter your mobile number",
+      "Country": "Please select your country",
+      "Address": "Please enter your address",
+      "Pincode": "Please enter your pincode",
+      "City": "Please enter your city or village",
+      "TypeOfAddress": "Please choose your address type",
+      "EducationLevel": "Please select your education level",
+      "Occupation": "Please choose your occupation",
+      "OccupationType": "Please select your occupation type",
+      "Skills": "Please select your skills",
+      "Standard": "Please choose a standard",
+      "SSCYear": "Please select your SSC year",
+      "HSCYear": "Please select your HSc year",
+      "SelectSaint": "Please select the name of the saint",
+      "Haribhakta": "Please select the name of the Haribhakta",
+      "Relation": "Please select your relation with the saint",
+      "RadioOption": "Please choose any one option from above"
     }
   }
 }

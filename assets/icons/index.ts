@@ -33,6 +33,7 @@ export const AllIcons = {
   Cancel: require('../icons/Cancel.png'),
   RoundCross: require('../icons/RoundCross.png'),
   Download: require('../icons/Download.png'),
+  DownloadSong: require('../icons/DownloadSong.png'),
   Share: require('../icons/Share.png'),
   Search: require('../icons/Search.png'),
   SetWallPaper: require('../icons/SetWallpaper.png'),
@@ -46,4 +47,9 @@ export const AllIcons = {
   ClosedEye: require('../icons/ClosedEye.png'),
   OpenEye: require('../icons/OpenEye.png'),
   CheckBoxOutline: require('../icons/CheckBoxOutline.png'),
+  PlaySong: require('../icons/Play.png'),
+  PauseSong: require('../icons/Pause.png'),
+  TrackPlay: require('../icons/TrackPlay.png'),
+  TrackPause: require('../icons/TrackPause.png'),
+  ForwardControl: require('../icons/ForwardControl.png'),
 };

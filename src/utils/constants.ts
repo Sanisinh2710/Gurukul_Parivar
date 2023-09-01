@@ -1,8 +1,8 @@
-import {AllIcons} from '../../assets/icons';
-import {AllImages} from '../../assets/images';
-import {getAuthToken} from '../services';
-import {Theme} from '../types';
-import {COLORS} from './colors';
+import { AllIcons } from '../../assets/icons';
+import { AllImages } from '../../assets/images';
+import { getAuthToken } from '../services';
+import { Theme } from '../types';
+import { COLORS } from './colors';
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
@@ -329,8 +329,8 @@ export const FrontDesk = (t: any) => {
     },
     {
       image: AllIcons.Chat,
-      title: t('frontDesk.Speech'),
-      id: 'speech',
+      title: t('frontDesk.Connect'),
+      id: 'connect',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
 
@@ -733,3 +733,20 @@ export const IntialValuesForFormdataAuth = {
     ],
   },
 };
+
+export const SongList = [
+  {
+    id: '1',
+    url: require('../../assets/music/MaanMeriJaan.mp3'),
+    title: 'Maan Meri Ja',
+    artist: 'King',
+    duration: 160,
+  },
+  {
+    id: '2',
+    url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
+    title: 'Yaar Ka Sataya Hua Hai',
+    artist: 'B Praak',
+    duration: 160,
+  },
+];
