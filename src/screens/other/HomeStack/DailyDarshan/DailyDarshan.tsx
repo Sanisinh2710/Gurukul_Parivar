@@ -172,25 +172,25 @@ export const DailyDarshan = ({
           },
         }}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            height:
-              Data.find(item => item.branch === BranchName) !== undefined &&
-              DarshanImages.length > 0
-                ? 'auto'
-                : '100%',
-          }}
-          nestedScrollEnabled={true}
-          refreshControl={
-            <RefreshControl
-              colors={[COLORS.primaryColor, COLORS.green]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
-          <View style={{height: '8%', marginBottom: '16%'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          height:
+            Data.find(item => item.branch === BranchName) !== undefined &&
+            DarshanImages.length > 0
+              ? 'auto'
+              : '100%',
+        }}
+        nestedScrollEnabled={true}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={[commonStyle.commonContentView, {flex: 1}]}>
+          <View style={{height: 60, marginBottom: '16%'}}>
             <View
               style={{
                 marginTop: '5%',
@@ -248,7 +248,14 @@ export const DailyDarshan = ({
           />
 
           {loader ? (
-            <Loader screenHeight={'70%'} />
+            <Loader
+              screenHeight={
+                Data.find(item => item.branch === BranchName) !== undefined &&
+                DarshanImages.length > 0
+                  ? '100%'
+                  : '70%'
+              }
+            />
           ) : (
             <View
               style={{
@@ -268,7 +275,7 @@ export const DailyDarshan = ({
                   contentContainerStyle={{
                     gap: 15,
                     marginTop: '3%',
-                    paddingBottom: '10%',
+                    paddingBottom: '20%',
                   }}
                   renderItem={({item, index}) => {
                     return (
@@ -314,8 +321,8 @@ export const DailyDarshan = ({
               )}
             </View>
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
 
       <View>
         <Calendar

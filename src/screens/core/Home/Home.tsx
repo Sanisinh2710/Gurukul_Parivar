@@ -34,10 +34,12 @@ export const HomeScreen = ({
   const [dashboardImages, setDashboardImages] = React.useState([]);
   const [loader, setLoader] = React.useState<boolean>(false);
 
-  const style = styles();
-  const TouchX = React.useRef<any>();
-
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const {t} = useTranslation();
+
+  const style = styles();
+  const commonStyle = CommonStyle();
 
   React.useMemo(async () => {
     setLoader(true);
@@ -57,9 +59,6 @@ export const HomeScreen = ({
   const userData = React.useMemo(() => {
     return getUserData();
   }, []);
-
-  const {t} = useTranslation();
-  const commonStyle = CommonStyle();
 
   const onBackPress = () => {
     Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
@@ -113,22 +112,6 @@ export const HomeScreen = ({
         break;
     }
   };
-
-  const handlePageChange = () => {
-    if (currentPage < dashboardImages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    } else {
-      setCurrentPage(0);
-    }
-  };
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      handlePageChange();
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [currentPage, dashboardImages]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -191,12 +174,14 @@ export const HomeScreen = ({
         contentContainerStyle={{
           paddingBottom: '30%',
         }}>
-        <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-          {dashboardImages.length > 0 && (
-            <View>
-              <PagerView currentPage={currentPage} images={dashboardImages} />
-            </View>
-          )}
+        {dashboardImages.length > 0 && (
+          <PagerView
+            images={dashboardImages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
+        <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
