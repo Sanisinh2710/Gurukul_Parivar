@@ -31,13 +31,14 @@ export const PaymentMethod = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Select Payment Method'}
+        headerTitle={t('Payment.Heading')}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <View style={{marginTop: '5%'}}>
-          {Payment.map(item => {
+        <View style={{marginTop: '5%', flex: 1}}>
+          {Payment.map((item, index) => {
             return (
               <TouchableOpacity
+                key={index}
                 activeOpacity={0.6}
                 onPress={() => {
                   setPaymentMethod(item.title);
@@ -82,9 +83,10 @@ export const PaymentMethod = ({
               </TouchableOpacity>
             );
           })}
-          <View style={{}}>
+          <View style={{marginTop: 'auto', marginBottom: '8%'}}>
             <PrimaryButton
-              title="Proceed Payment"
+              disabled={PaymentMethod === ''}
+              title={t('Payment.Proceed')}
               onPress={() => console.log('Payment done')}
             />
           </View>

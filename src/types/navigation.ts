@@ -22,7 +22,7 @@ export type RootStackParamList = {
   program: undefined;
   programDetail: {title: string; description: string} | undefined;
   dailyQuiz: undefined;
-  dailyQuizDetail: undefined;
+  dailyQuizDetail: {id: number};
   donation: undefined;
   QuizResult: {marks: number};
   ProfileEdit: {formStep: number} | undefined;

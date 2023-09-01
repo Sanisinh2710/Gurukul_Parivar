@@ -42,13 +42,13 @@ const TimeArray = (t: any) => [
 export const DailyDarshan = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const commonStyle = CommonStyle();
-  const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
+  const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [changeValue, setChangeValue] = React.useState();
+  const {t} = useTranslation();
 
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
   const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
@@ -172,25 +172,25 @@ export const DailyDarshan = ({
           },
         }}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            height:
-              Data.find(item => item.branch === BranchName) !== undefined &&
-              DarshanImages.length > 0
-                ? 'auto'
-                : '100%',
-          }}
-          nestedScrollEnabled={true}
-          refreshControl={
-            <RefreshControl
-              colors={[COLORS.primaryColor, COLORS.green]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
-          <View style={{height: '8%', marginBottom: '16%'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          height:
+            Data.find(item => item.branch === BranchName) !== undefined &&
+            DarshanImages.length > 0
+              ? 'auto'
+              : '100%',
+        }}
+        nestedScrollEnabled={true}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={[commonStyle.commonContentView, {flex: 1}]}>
+          <View style={{height: 60, marginBottom: '16%'}}>
             <View
               style={{
                 marginTop: '5%',
@@ -248,7 +248,14 @@ export const DailyDarshan = ({
           />
 
           {loader ? (
-            <Loader screenHeight={'70%'} />
+            <Loader
+              screenHeight={
+                Data.find(item => item.branch === BranchName) !== undefined &&
+                DarshanImages.length > 0
+                  ? '100%'
+                  : '70%'
+              }
+            />
           ) : (
             <View
               style={{
@@ -314,8 +321,8 @@ export const DailyDarshan = ({
               )}
             </View>
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
 
       <View>
         <Calendar

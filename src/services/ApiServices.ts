@@ -5,6 +5,9 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_QUIZ_ANSWER_POST_ENDPOINT,
+  DAILY_QUIZ_GET_ENDPOINT,
+  DAILY_QUIZ_STATUS_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
@@ -666,4 +669,18 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
       }
     }
   }
+};
+
+export const DailyQuizGetApi = async (id: number | undefined) => {
+  if (id !== undefined) {
+    return apiRequest(`${DAILY_QUIZ_GET_ENDPOINT}${id}`, 'get');
+  } else {
+    return apiRequest(DAILY_QUIZ_GET_ENDPOINT, 'get');
+  }
+};
+export const DailyQuizAnswerPostApi = async (data: any) => {
+  return apiRequest(DAILY_QUIZ_ANSWER_POST_ENDPOINT, 'post', data);
+};
+export const DailyQuizStatusApi = async () => {
+  return apiRequest(DAILY_QUIZ_STATUS_GET_ENDPOINT, 'get');
 };

@@ -478,6 +478,20 @@ export const ApiDateFormat: Intl.DateTimeFormatOptions = {
 };
 
 export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const monthsArray = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 export const QuizStatus = [
   {date: '01,Jul 2023', percent: 75},

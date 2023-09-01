@@ -42,8 +42,9 @@ export const ChangeLanguage = ({
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <>
-          {Object.entries(Languages).map(item => (
+          {Object.entries(Languages).map((item, index) => (
             <TouchableOpacity
+              key={index}
               activeOpacity={0.6}
               onPress={() => {
                 setLanguage(item[1]);

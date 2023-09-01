@@ -9,21 +9,35 @@ import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {CustomFonts, QuizStatus} from '../../../../utils';
 import {styles} from './styles';
+import {DailyQuizStatusApi} from '../../../../services';
 
 export const Status = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
-
+  const [loader, setLoader] = React.useState<boolean>(false);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const commonstyle = CommonStyle();
 
   const handleProgress = (progress: number) => {
     if (progress > 0) {
-      console.log(progress);
-
       return <Text>{`${Math.round((1 / progress) * 5)}%`}</Text>;
     }
   };
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await DailyQuizStatusApi();
+
+      if (res.resType === 'SUCCESS') {
+        setData(res.data);
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -33,18 +47,14 @@ export const Status = ({
           navigation.goBack();
         }}
         headerTitle={'Status'}
-        headerRight={{
-          icon: AllIcons.ChartQuiz,
-          onPress: () => {},
-        }}
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={QuizStatus}
+          data={Data}
           renderItem={({item, index}) => (
             <>
-              {console.log(item.percent)}
+              {console.log(item)}
               <TouchableOpacity onPress={() => {}}>
                 <View style={style.container}>
                   <View style={{marginLeft: 20, justifyContent: 'center'}}>
@@ -54,7 +64,7 @@ export const Status = ({
                         fontSize: 16,
                         color: 'black',
                       }}>
-                      {item.date}
+                      {item.created_at}
                     </Text>
                   </View>
                   <View>
@@ -62,9 +72,9 @@ export const Status = ({
                       size={40}
                       indeterminate={false}
                       animated={true}
-                      progress={item.percent && item.percent}
+                      progress={item.score / 10}
                       color={
-                        item.percent >= 51
+                        item.score * 10 >= 51
                           ? 'rgba(0, 166, 88, 1)'
                           : 'rgba(255, 48, 48, 1)'
                       }
@@ -74,9 +84,13 @@ export const Status = ({
                       showsText={true}
                       fill={'none'}
                       textStyle={style.progressText}
-                      formatText={(progress: number) =>
-                        handleProgress(progress)
-                      }
+                      formatText={(progress: number) => {
+                        if (progress > 0) {
+                          return (
+                            <Text>{`${Math.round((1 / progress) * 5)}%`}</Text>
+                          );
+                        }
+                      }}
                     />
                   </View>
                 </View>

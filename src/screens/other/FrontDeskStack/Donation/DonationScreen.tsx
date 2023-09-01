@@ -96,7 +96,7 @@ export const DonationScreen = ({
                 color: COLORS.lightModetextColor,
                 fontSize: 15,
               }}>
-              Amount
+              {t('Donation.Amount')}
             </Text>
             <View
               style={[
@@ -132,7 +132,7 @@ export const DonationScreen = ({
                   val === '' && setselectedItem('');
                 }}
                 style={[{width: '90%', marginLeft: 6}]}
-                placeholder="Enter donation">
+                placeholder={t('Donation.Placeholder')}>
                 {selectedItem.slice(1)}
               </TextInput>
             </View>
@@ -163,18 +163,18 @@ export const DonationScreen = ({
                 color: COLORS.lightModetextColor,
                 fontSize: 15,
               }}>
-              Other Note by Donar
+              {t('Donation.OtherNote')}
             </Text>
             <View>
               <TextInput
                 multiline
                 numberOfLines={3}
                 style={style.dropdownStyle2}
-                placeholder="Enter donation"></TextInput>
+                placeholder={t('Donation.Placeholder')}></TextInput>
             </View>
           </View>
           <PrimaryButton
-            title="Next"
+            title={t('common.Next')}
             onPress={() => navigation.navigate('PaymentMethod')}
           />
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>

@@ -84,6 +84,7 @@ export const styles = () => {
     },
     date: {
       ...CustomFonts.header.medium20,
+      fontSize: 24,
       color: 'white',
     },
     day: {

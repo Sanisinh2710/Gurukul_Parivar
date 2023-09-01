@@ -180,7 +180,8 @@
       "Darshan": "Gurukul Darshan",
       "Event": "Gurukul Events",
       "Quiz": "Daily Quiz",
-      "Donation": "Donation"
+      "Donation": "Donation",
+      "Terms":"By proceeding you agree with our Terms & Condition for Donation"
     },
     "myProfile": {
       "Heading": "My Profile",
@@ -248,10 +249,12 @@
       "Quote": "In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",
       "Branch": "Donate to Gurukul Branch",
       "Amount": "Amount",
-      "OtherNote": "Other Note by Donar"
+      "OtherNote": "Other Note by Donar",
+      "Placeholder":"Enter Donation"
     },
     "Payment": {
-      "Heading": "Select Payment Method"
+      "Heading": "Select Payment Method",
+      "Proceed":"Proceed Payment"
     },
     "NoData": {
       "Title": "Oops, We're Blanking Out!",
