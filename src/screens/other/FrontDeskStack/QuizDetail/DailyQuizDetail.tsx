@@ -14,7 +14,11 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
-import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '../../../../services';
+import {
+  DailyQuizAnswerPostApi,
+  DailyQuizGetApi,
+  DailyQuizStatusApi,
+} from '../../../../services';
 export const DailyQuizDetail = ({
   route,
   navigation,
@@ -23,7 +27,7 @@ export const DailyQuizDetail = ({
   const Quizid = route.params.id;
   const [answer, setAnswer] = React.useState<Array<Object>>([]);
   const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
-  const [correctAnswer, setCorrectAnswer] = React.useState<Array<number>>([]);
+
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const commonstyle = CommonStyle();
@@ -42,40 +46,23 @@ export const DailyQuizDetail = ({
       console.log(error);
     }
   }, []);
+
   const handleSubmit = async () => {
     let finalData = {
       quiz_id: Quizid,
       answer_log: answer,
     };
 
-    console.log(finalData);
     const response = await DailyQuizAnswerPostApi(finalData);
-    console.log(response.data);
     if (response.resType === 'SUCCESS') {
-      const Marks = Math.floor((response.data.result / Quiz.length) * 100);
+      const Marks = Math.floor((response.data.result / Data.length) * 100);
       navigation.navigate('QuizResult', {marks: Marks});
     }
   };
-  const handleAnswer = (
-    options: string,
-    index: number,
-    opIndex: number,
-    correctIndex: number,
-    questionId: number,
-  ) => {
-    const newSelectedOptions = [...selectedOptions];
+  const handleAnswer = (options: string, index: number, questionId: number) => {
+    const newSelectedOptions = JSON.parse(JSON.stringify(selectedOptions));
     newSelectedOptions[index] = options;
     setSelectedOptions(newSelectedOptions);
-
-    // const isCorrect = opIndex === correctIndex;
-
-    // if (isCorrect && correctAnswer.indexOf(Questionnumber) === -1) {
-    //   setCorrectAnswer([...correctAnswer, Questionnumber]);
-    // } else {
-    //   const correct = [...correctAnswer];
-    //   correct.splice(Questionnumber, 1);
-    //   setCorrectAnswer(correct);
-    // }
 
     if (answer.length === 0) {
       setAnswer([{question_id: questionId, option: options}]);
@@ -90,18 +77,17 @@ export const DailyQuizDetail = ({
         newData.push({question_id: questionId, option: options});
       }
 
-      const newdata = newData.map((data: any) => {
+      const newData1 = newData.map((data: any) => {
         if (data.question_id === questionId) {
           data.option = options;
         }
         return data;
       });
 
-      setAnswer(newData);
+      setAnswer(newData1);
     }
   };
-  console.log(answer, 'Answer State');
-  console.log(selectedOptions, 'Selected State');
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -113,7 +99,9 @@ export const DailyQuizDetail = ({
         headerTitle={'સંત જીવન નુ નામુ'}
         headerRight={{
           icon: AllIcons.ChartQuiz,
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate('status');
+          },
         }}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
@@ -167,13 +155,7 @@ export const DailyQuizDetail = ({
                       <Pressable
                         key={opIndex}
                         onPress={() => {
-                          handleAnswer(
-                            options,
-                            index,
-                            opIndex,
-                            item.correctIndex,
-                            item.id,
-                          );
+                          handleAnswer(options, index, item.id);
                         }}
                         style={{
                           width: '40%',
@@ -205,6 +187,7 @@ export const DailyQuizDetail = ({
         <View style={{paddingBottom: '5%', marginTop: '5%'}}>
           <PrimaryButton
             title={t('DailyQuiz.SubmitBtn')}
+            disabled={answer.length === Data.length ? false : true}
             onPress={
               async () => await handleSubmit()
               // navigation.navigate('QuizResult', {marks: Marks});

@@ -37,7 +37,6 @@ export const Status = ({
       console.log(error);
     }
   }, []);
-  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -54,8 +53,13 @@ export const Status = ({
           data={Data}
           renderItem={({item, index}) => (
             <>
-              {console.log(item)}
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('QuizHistory', {
+                    date: item.created_at,
+                    id: item.quiz_id,
+                  });
+                }}>
                 <View style={style.container}>
                   <View style={{marginLeft: 20, justifyContent: 'center'}}>
                     <Text

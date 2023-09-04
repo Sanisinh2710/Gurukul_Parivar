@@ -41,6 +41,7 @@ import {
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
+  QuizHistory,
   QuizResult,
   RegisterScreen,
   ResetPassword,
@@ -178,6 +179,7 @@ export const Routes = (): React.JSX.Element => {
               name="GurukulEvents"
               component={GurukulEvents}
             />
+            <NativeStack.Screen name="QuizHistory" component={QuizHistory} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

@@ -87,7 +87,7 @@ export const PaymentMethod = ({
             <PrimaryButton
               disabled={PaymentMethod === ''}
               title={t('Payment.Proceed')}
-              onPress={() => console.log('Payment done')}
+              onPress={() => {}}
             />
           </View>
         </View>

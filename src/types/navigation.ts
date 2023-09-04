@@ -28,6 +28,7 @@ export type RootStackParamList = {
   ProfileEdit: {formStep: number} | undefined;
   PaymentMethod: undefined;
   GurukulEvents: undefined;
+  QuizHistory: {date: string; id: number};
 };
 
 export type RootBottomTabParamList = {

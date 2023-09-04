@@ -180,9 +180,7 @@ export const DonationScreen = ({
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
             <Text style={{color: 'black'}}>
               By proceeding you agree with our{' '}
-              <Text
-                style={{color: COLORS.primaryColor}}
-                onPress={() => console.log('object')}>
+              <Text style={{color: COLORS.primaryColor}} onPress={() => {}}>
                 Terms & Condition for Donation
               </Text>
             </Text>

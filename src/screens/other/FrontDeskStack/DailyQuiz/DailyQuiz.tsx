@@ -34,7 +34,6 @@ export const DailyQuiz = ({
       const res = await DailyQuizGetApi(undefined);
 
       if (res.resType === 'SUCCESS') {
-        console.log(res.data);
         setData(res.data);
         setLoader(false);
       }
@@ -42,7 +41,6 @@ export const DailyQuiz = ({
       console.log(error);
     }
   }, []);
-  console.log(Data, 'hi');
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -54,15 +52,19 @@ export const DailyQuiz = ({
         headerTitle={t('DailyQuiz.Heading')}
         headerRight={{
           icon: AllIcons.ChartQuiz,
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate('status');
+          },
         }}
       />
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
-            {loader ? (
-              <Loader />
-            ) : Data.length > 0 ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{flex: 1}}>
+          {loader ? (
+            <Loader />
+          ) : Data.length > 0 ? (
+            <>
               <Image
                 source={{uri: `${BASE_URL}${Data[0].image}`}}
                 style={{
@@ -70,18 +72,18 @@ export const DailyQuiz = ({
                   width: '100%',
                 }}
               />
-            ) : (
-              <NoData />
-            )}
-          </View>
-          <View style={{marginTop: 20, paddingBottom: 10}}>
-            <PrimaryButton
-              onPress={() => {
-                navigation.navigate('dailyQuizDetail', {id: Data[0].id});
-              }}
-              title={t('DailyQuiz.NxtBtn')}
-            />
-          </View>
+              <View style={{marginTop: 20, paddingBottom: 10}}>
+                <PrimaryButton
+                  onPress={() => {
+                    navigation.replace('dailyQuizDetail', {id: Data[0].id});
+                  }}
+                  title={t('DailyQuiz.NxtBtn')}
+                />
+              </View>
+            </>
+          ) : (
+            <NoData />
+          )}
         </ScrollView>
       </View>
     </ScreenWrapper>

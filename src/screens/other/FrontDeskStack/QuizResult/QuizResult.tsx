@@ -22,6 +22,7 @@ export const QuizResult = ({
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
   const Marks = route.params.marks;
+  console.log(Marks);
 
   return (
     <ScreenWrapper>
