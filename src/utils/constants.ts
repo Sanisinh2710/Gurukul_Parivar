@@ -1,8 +1,8 @@
-import { AllIcons } from '../../assets/icons';
-import { AllImages } from '../../assets/images';
-import { getAuthToken } from '../services';
-import { Theme } from '../types';
-import { COLORS } from './colors';
+import {AllIcons} from '../../assets/icons';
+import {AllImages} from '../../assets/images';
+import {getAuthToken} from '../services';
+import {Theme} from '../types';
+import {COLORS} from './colors';
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
@@ -737,16 +737,16 @@ export const IntialValuesForFormdataAuth = {
 export const SongList = [
   {
     id: '1',
-    url: require('../../assets/music/MaanMeriJaan.mp3'),
+    url: 'https://gurukul-dev.taskgrids.com/storage/GurukulAudio/6Pg8Myj4.mp3',
     title: 'Maan Meri Ja',
     artist: 'King',
-    duration: 160,
+    // duration: 27,
   },
   {
     id: '2',
     url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
     title: 'Yaar Ka Sataya Hua Hai',
     artist: 'B Praak',
-    duration: 160,
+    // duration: 267,
   },
 ];
