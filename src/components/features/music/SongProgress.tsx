@@ -6,12 +6,6 @@ import TrackPlayer, {useProgress} from 'react-native-track-player';
 import {COLORS, CustomFonts} from '../../../utils';
 
 const format = (time: number) => {
-  // let minutes = Math.trunc(time / 60)
-  //   .toString()
-  //   .padStart(2, '0');
-  // let second = (Math.trunc(time) % 60).toString().padStart(2, '0');
-  // return `${minutes}:${second}`;
-
   return new Date(time * 1000).toISOString().substring(15, 19);
 };
 

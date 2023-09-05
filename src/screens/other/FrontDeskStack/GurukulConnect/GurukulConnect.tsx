@@ -1,17 +1,9 @@
 import React from 'react';
 
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {
-  AppState,
-  BackHandler,
-  FlatList,
-  Image,
-  Platform,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, Text, View} from 'react-native';
 import TrackPlayer, {
   Event,
   State,
@@ -28,7 +20,6 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {addTracks, setupPlayer} from '../../../../services';
-import {storage} from '../../../../storage';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, SongList} from '../../../../utils';
 import {styles} from './styles';
@@ -62,7 +53,6 @@ export const GurukulConnect = ({
   const commonStyle = CommonStyle();
   const style = styles();
   const {t} = useTranslation();
-  const [songControl, setSongControl] = React.useState<SongControl>();
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
 
   const [activeTrack, setActiveTrack] = React.useState<Track>();
@@ -147,54 +137,19 @@ export const GurukulConnect = ({
     },
   );
 
-  const onBackPress = React.useCallback(() => {
-    if (activeTrack) {
-      storage.set('currMusic', JSON.stringify({...activeTrack}));
-      navigation.goBack();
-    }
-
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
-    return true;
-  }, [activeTrack]);
-
-  const onBlurScreen = React.useCallback(() => {
-    if (activeTrack) {
-      storage.set('currMusic', JSON.stringify({...activeTrack}));
-    }
-
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
-    return true;
-  }, [activeTrack]);
-
-  const ExitCallBack = React.useCallback(() => {
-    // Add Event Listener for hardwareBackPress
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    const blurListner = AppState.addEventListener('blur', onBlurScreen);
-
-    return () => {
-      // Once the Screen gets blur Remove Event Listener
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      blurListner.remove();
-    };
-  }, [activeTrack]);
-
-  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
-
   const trackPlaying = React.useMemo(() => {
     return playbackState === State.Playing ? true : false;
   }, [playbackState]);
 
   if (!isPlayerReady) {
-    return <Loader screenHeight={'90%'} />;
+    return <Loader screenHeight={'100%'} />;
   } else {
     return (
       <ScreenWrapper>
         <ScreenHeader
           showLeft={true}
           headerTitleAlign={'left'}
-          leftOnPress={onBackPress}
+          leftOnPress={() => navigation.goBack()}
           headerTitle={t('frontDesk.Connect')}
           headerRight={{
             icon: AllIcons.Filter,
@@ -213,7 +168,7 @@ export const GurukulConnect = ({
                     style.songContainer,
                     {
                       borderColor:
-                        item.id == songControl?.songId
+                        item.id == activeTrack?.id
                           ? 'rgba(172, 43, 49, 1)'
                           : 'rgba(172, 43, 49, 0.3)',
                     },
