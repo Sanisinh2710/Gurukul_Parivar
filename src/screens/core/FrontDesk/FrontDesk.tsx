@@ -87,15 +87,20 @@ export const FrontDeskScreen = ({
               </View>
             }
             headerRight={{
-              icon: AllIcons.Notification,
+              icon: AllIcons.NotificationOutline,
               onPress: () => {},
             }}
           />
-          <PagerView
-            images={dashboardImages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <View
+            style={{
+              marginBottom: '2%',
+            }}>
+            <PagerView
+              images={dashboardImages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </View>
           <View style={[{flex: 1}]}>
             <FlatList
               showsVerticalScrollIndicator={false}

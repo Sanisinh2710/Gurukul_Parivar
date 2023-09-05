@@ -1,10 +1,10 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {Dimensions, Image, ScrollView, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Loader,
@@ -13,10 +13,9 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import {DailyQuizGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
-import {DailyQuizGetApi} from '../../../../services';
-import {BASE_URL} from '@env';
 
 export const DailyQuiz = ({
   navigation,
@@ -58,7 +57,7 @@ export const DailyQuiz = ({
         }}
       />
       {loader ? (
-        <Loader screenHeight={'100%'} />
+        <Loader screenHeight={'90%'} />
       ) : Data.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}

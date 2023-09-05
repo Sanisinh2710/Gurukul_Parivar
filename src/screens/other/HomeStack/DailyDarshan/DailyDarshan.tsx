@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
+import {BASE_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -13,8 +13,8 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { AllIcons } from '../../../../../assets/icons';
-import { CommonStyle } from '../../../../../assets/styles';
+import {AllIcons} from '../../../../../assets/icons';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
@@ -29,9 +29,9 @@ import {
   DailyDarshanApi,
   GurukulBranchGetApi,
 } from '../../../../services/ApiServices';
-import { RootStackParamList } from '../../../../types';
-import { COLORS, CustomFonts, d, options } from '../../../../utils';
-import { styles } from './styles';
+import {RootStackParamList} from '../../../../types';
+import {COLORS, CustomFonts, d, options} from '../../../../utils';
+import {styles} from './styles';
 
 const TimeArray = (t: any) => [
   {name: t('DailyDarshan.All'), id: 'both'},
@@ -172,25 +172,7 @@ export const DailyDarshan = ({
           },
         }}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          height:
-            Data.find(item => item.branch === BranchName) !== undefined &&
-            DarshanImages.length > 0
-              ? 'auto'
-              : '100%',
-        }}
-        nestedScrollEnabled={true}
-        refreshControl={
-          <RefreshControl
-            colors={[COLORS.primaryColor, COLORS.green]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
-        <View style={[commonStyle.commonContentView, {flex: 1}]}>
-          <View style={{height: 60, marginBottom: '16%'}}>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
