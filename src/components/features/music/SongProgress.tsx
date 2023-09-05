@@ -2,16 +2,22 @@ import React from 'react';
 
 import {Slider} from '@miblanchard/react-native-slider';
 import {StyleSheet, Text, View} from 'react-native';
-import TrackPlayer, {useProgress} from 'react-native-track-player';
+import TrackPlayer from 'react-native-track-player';
 import {CustomFonts} from '../../../utils';
 
 const format = (time: number) => {
   return new Date(time * 1000).toISOString().substring(15, 19);
 };
 
-export const SongProgress = (): React.JSX.Element => {
-  const {position, duration} = useProgress();
+type SongProgressProps = {
+  position: number;
+  duration: number;
+};
 
+export const SongProgress = ({
+  position,
+  duration,
+}: SongProgressProps): React.JSX.Element => {
   const [progress, setProgress] = React.useState(position);
 
   React.useEffect(() => {
