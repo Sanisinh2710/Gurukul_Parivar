@@ -236,7 +236,9 @@
       "Heading": "Daily Quiz",
       "NxtBtn": "Next",
       "SubmitBtn": "Submit",
-      "Result":"Quiz Result"
+      "Result":"Quiz Result",
+      "hasAttendTitle":"You have completed today's quiz!",
+      "hasAttendContent":"Come back tomorrow for new challenges and opportunities"
     },
     "ResultModel": {
       "Title": "Congratulations",

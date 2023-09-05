@@ -89,8 +89,8 @@ export const FrontDeskScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.Notification,
-          onPress: () => {},
+          icon: AllIcons.NotificationOutline,
+          onPress: () => navigation.navigate('dailyUpdates'),
         }}
       />
       <View style={commonStyle.commonContentView}>

@@ -59,7 +59,7 @@ export const QuizResult = ({
               showsText={true}
               fill={'none'}
               textStyle={style.progressText}
-              formatText={() => <Text>{Marks}</Text>}
+              formatText={() => <Text>{Math.floor(Marks)}</Text>}
             />
             <View style={{marginTop: '5%'}}>
               <Text

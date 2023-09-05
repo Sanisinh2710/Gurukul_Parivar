@@ -2,7 +2,7 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, ScrollView, View} from 'react-native';
+import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -60,27 +60,34 @@ export const DailyQuiz = ({
       {loader ? (
         <Loader screenHeight={'100%'} />
       ) : Data.length > 0 ? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: '10%'}}>
-          <View style={[commonstyle.commonContentView, {flex: 1}]}>
-            <Image
-              source={{uri: `${BASE_URL}${Data[0].image}`}}
-              style={{
-                height: Dimensions.get('window').height * 0.9,
-                width: '100%',
-              }}
-            />
-            <View style={{marginTop: 20, paddingBottom: 10}}>
-              <PrimaryButton
-                onPress={() => {
-                  navigation.replace('dailyQuizDetail', {id: Data[0].id});
+        Data[0].hasAttend === false ? (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingBottom: '10%'}}>
+            <View style={[commonstyle.commonContentView, {flex: 1}]}>
+              <Image
+                source={{uri: `${BASE_URL}${Data[0].image}`}}
+                style={{
+                  height: Dimensions.get('window').height * 0.9,
+                  width: '100%',
                 }}
-                title={t('DailyQuiz.NxtBtn')}
               />
+              <View style={{marginTop: 20, paddingBottom: 10}}>
+                <PrimaryButton
+                  onPress={() => {
+                    navigation.replace('dailyQuizDetail', {id: Data[0].id});
+                  }}
+                  title={t('DailyQuiz.NxtBtn')}
+                />
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        ) : (
+          <NoData
+            title={t('DailyQuiz.hasAttendTitle')}
+            content={t('DailyQuiz.hasAttendContent')}
+          />
+        )
       ) : (
         <NoData />
       )}

@@ -235,7 +235,9 @@
       "Heading": "દૈનિક ક્વિઝ",
       "NxtBtn": "આગામી",
       "SubmitBtn": "સબમિટ",
-      "Result":"ક્વિઝ પરિણામ"
+      "Result":"ક્વિઝ પરિણામ",
+      "hasAttendTitle":"તમે આજની પરીક્ષા પૂર્ણ કરી છે!",
+      "hasAttendContent":"નવા પડકારો અને તકો માટે આવતીકાલે પાછા આવો"
     },
     "ResultModel": {
       "Title": "અભિનંદન",
