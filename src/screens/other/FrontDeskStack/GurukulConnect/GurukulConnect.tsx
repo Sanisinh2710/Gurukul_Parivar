@@ -84,7 +84,7 @@ export const GurukulConnect = ({
       if (currTrack !== null) {
         let playingTrack1 = await TrackPlayer.getTrack(currTrack);
 
-        if (playingTrack1 !== null) {
+        if (playingTrack1) {
           setActiveTrack(playingTrack1);
         }
       }

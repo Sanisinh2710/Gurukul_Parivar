@@ -2,6 +2,7 @@ package com.gurukul_parivar;
 
 import static android.provider.MediaStore.Images.Media.getBitmap;
 
+import android.annotation.SuppressLint;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -54,16 +55,17 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
         return "WallpaperModule";
     }
 
+    @SuppressLint("CheckResult")
     @ReactMethod
-    public Promise setAsWallpaper ( String fileURL , String mode , final Promise promise ) {
+    public Promise setAsWallpaper ( String remoteURL , String mode , final Promise promise ) {
         try {
             RequestOptions requestOptions = new RequestOptions ();
             requestOptions.override(1080, 1920) // Set your desired width and height here
                     .format( DecodeFormat.PREFER_RGB_565) // Adjust format for better memory usage
                     .fitCenter () // Scale image while keeping aspect ratio
-                    .transform ( new CutOffLogo () )
+//                    .transform ( new CutOffLogo () )
                     .diskCacheStrategy( DiskCacheStrategy.RESOURCE);
-            Glide.with ( getReactApplicationContext () ).asBitmap ().load ( fileURL ).apply (requestOptions).into ( new SimpleTarget<Bitmap> ( ) {
+            Glide.with ( getReactApplicationContext () ).asBitmap ().load ( remoteURL ).apply (requestOptions).into ( new SimpleTarget<Bitmap> ( ) {
                 @Override
                 public void onResourceReady ( @NonNull Bitmap resource , @Nullable Transition<? super Bitmap> transition ) {
                     try {
@@ -76,10 +78,6 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
                         if ( mode.equals ( "HOME" ) ) {
                             try {
                                 setOnHomeScreenWallPaper ( compressedBitmap );
-//                                var path = MediaStore.Images.Media.insertImage ( getReactApplicationContext ().getContentResolver (), compressedBitmap,"wallpaper.jpg",null );
-//                                Intent intent = new Intent ( WallpaperManager.getInstance ( getReactApplicationContext () ).getCropAndSetWallpaperIntent ( Uri.parse ( path ) ) );
-//                                intent.putExtra("android.wallpaper.extra.SCREEN_TO_SET", WallpaperManager.FLAG_SYSTEM);
-//                                getCurrentActivity ().startActivity ( intent );
                             } catch ( Exception e ) {
                                 promise.reject ( "ERROR" , "Error setting Home wallpaper" , e );
                             }
@@ -157,9 +155,7 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
         final float width = wallpaperManager.getDesiredMinimumWidth()+100;
         final float height = wallpaperManager.getDesiredMinimumHeight();
 
-        Bitmap wallpaper = Bitmap.createScaledBitmap(bitmap, (int)width, (int)height, true);
-
-        return  wallpaper;
+        return Bitmap.createScaledBitmap(bitmap, (int)width, (int)height, true);
     }
 
     @Override
@@ -180,27 +176,27 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
 
 
 
-class CutOffLogo extends BitmapTransformation {
-
-    @Override
-    protected Bitmap transform (
-            @NotNull BitmapPool pool ,
-            @NotNull Bitmap toTransform ,
-            int outWidth ,
-            int outHeight
-    ) {
-
-        return Bitmap.createBitmap (
-                toTransform ,
-                0 ,
-                0 ,
-                toTransform.getWidth ( ) ,
-                toTransform.getHeight ( ) - 20   // number of pixels
-        );
-    }
-
-    @Override
-    public void updateDiskCacheKey ( @NonNull MessageDigest messageDigest ) {
-
-    }
-}
+//class CutOffLogo extends BitmapTransformation {
+//
+//    @Override
+//    protected Bitmap transform (
+//            @NotNull BitmapPool pool ,
+//            @NotNull Bitmap toTransform ,
+//            int outWidth ,
+//            int outHeight
+//    ) {
+//
+//        return Bitmap.createBitmap (
+//                toTransform ,
+//                0 ,
+//                0 ,
+//                toTransform.getWidth ( ) ,
+//                toTransform.getHeight ( ) - 20   // number of pixels
+//        );
+//    }
+//
+//    @Override
+//    public void updateDiskCacheKey ( @NonNull MessageDigest messageDigest ) {
+//
+//    }
+//}
