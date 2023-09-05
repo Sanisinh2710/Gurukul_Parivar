@@ -58,7 +58,7 @@ export const DailyQuiz = ({
         }}
       />
       {loader ? (
-        <Loader screenHeight={'100%'} />
+        <Loader screenHeight={'90%'} />
       ) : Data.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}

@@ -75,7 +75,7 @@ export const DailyUpdateDetail = ({
                 gap: 10,
                 marginTop: 10,
               }}
-              data={Data.images}
+              data={Data.thumbnail}
               renderItem={({item, index}) => (
                 <>
                   <TouchableOpacity

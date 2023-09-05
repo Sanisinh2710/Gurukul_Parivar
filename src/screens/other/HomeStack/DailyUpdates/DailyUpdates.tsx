@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -11,18 +11,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AllImages } from '../../../../../assets/images';
-import { CommonStyle } from '../../../../../assets/styles';
+import {AllImages} from '../../../../../assets/images';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import { DailyUpdatesApi } from '../../../../services';
-import { RootStackParamList } from '../../../../types';
-import { COLORS } from '../../../../utils';
-import { styles } from './styles';
+import {DailyUpdatesApi} from '../../../../services';
+import {RootStackParamList} from '../../../../types';
+import {COLORS} from '../../../../utils';
+import {styles} from './styles';
 
 export const DailyUpdates = ({
   navigation,
@@ -46,12 +46,14 @@ export const DailyUpdates = ({
             (data: {
               description: any;
               images: any;
+              thumbnail: any;
               title: any;
               created_at: string | number | Date;
               date: any;
             }) => {
               data.description = data.description;
               data.images = data.images;
+              data.thumbnail = data.thumbnail;
               data.title = data.title;
               data.date = data.created_at;
               if (
@@ -100,18 +102,22 @@ export const DailyUpdates = ({
 
     try {
       const res = await DailyUpdatesApi();
+      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         const data = res.data.daily_updates.map(
           (data: {
             description: any;
             images: any;
+            thumbnail: any;
             title: any;
             created_at: string | number | Date;
             date: any;
           }) => {
             data.description = data.description;
             data.images = data.images;
+            data.thumbnail = data.thumbnail;
+
             data.title = data.title;
             data.date = data.created_at;
             if (
