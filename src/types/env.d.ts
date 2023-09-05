@@ -26,4 +26,8 @@ declare module '@env' {
   export const DELETE_USER_ENDPOINT: string;
   export const NEWLOGIN_POST_ENDPOINT: string;
   export const RESET_PASSWORD_ENDPOINT: string;
+  export const DAILY_QUIZ_GET_ENDPOINT: string;
+  export const DAILY_QUIZ_ANSWER_POST_ENDPOINT: string;
+  export const DAILY_QUIZ_STATUS_GET_ENDPOINT: string;
+  export const DAILY_QUIZ_HISTORY_GET_ENDPOINT: string;
 }

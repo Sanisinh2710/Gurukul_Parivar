@@ -32,14 +32,17 @@ import {
   ForgotPassword,
   FrontDeskScreen,
   GurukulConnect,
+  GurukulEvents,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
   LoginScreen,
   LoginSuccess,
+  PaymentMethod,
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
+  QuizHistory,
   QuizResult,
   RegisterScreen,
   ResetPassword,
@@ -173,6 +176,15 @@ export const Routes = (): React.JSX.Element => {
               name="ProfileEdit"
               component={ProfileSignupWithEdit}
             />
+            <NativeStack.Screen
+              name="PaymentMethod"
+              component={PaymentMethod}
+            />
+            <NativeStack.Screen
+              name="GurukulEvents"
+              component={GurukulEvents}
+            />
+            <NativeStack.Screen name="QuizHistory" component={QuizHistory} />
           </NativeStack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

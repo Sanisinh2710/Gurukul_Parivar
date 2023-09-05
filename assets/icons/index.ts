@@ -52,4 +52,7 @@ export const AllIcons = {
   TrackPlay: require('../icons/TrackPlay.png'),
   TrackPause: require('../icons/TrackPause.png'),
   ForwardControl: require('../icons/ForwardControl.png'),
+  Card: require('../icons/Card.png'),
+  Bank: require('../icons/Bank.png'),
+  Money: require('../icons/Money.png'),
 };

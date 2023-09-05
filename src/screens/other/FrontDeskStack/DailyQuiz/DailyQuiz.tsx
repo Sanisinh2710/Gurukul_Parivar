@@ -7,21 +7,40 @@ import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  Loader,
+  NoData,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
+import {DailyQuizGetApi} from '../../../../services';
+import {BASE_URL} from '@env';
 
 export const DailyQuiz = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
+  const [loader, setLoader] = React.useState<boolean>(false);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
+
   const {t, i18n} = useTranslation();
   const style = styles();
-
   const commonstyle = CommonStyle();
 
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const res = await DailyQuizGetApi(undefined);
+
+      if (res.resType === 'SUCCESS') {
+        setData(res.data);
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -33,30 +52,38 @@ export const DailyQuiz = ({
         headerTitle={t('DailyQuiz.Heading')}
         headerRight={{
           icon: AllIcons.ChartQuiz,
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate('status');
+          },
         }}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
+      {loader ? (
+        <Loader screenHeight={'100%'} />
+      ) : Data.length > 0 ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: '10%'}}>
+          <View style={[commonstyle.commonContentView, {flex: 1}]}>
             <Image
-              source={AllImages.Rectangle68}
+              source={{uri: `${BASE_URL}${Data[0].image}`}}
               style={{
                 height: Dimensions.get('window').height * 0.9,
                 width: '100%',
               }}
             />
-          </View>
-          <View style={{marginTop: 20, paddingBottom: 10}}>
-            <PrimaryButton
-              onPress={() => {
-                navigation.navigate('dailyQuizDetail');
-              }}
-              title={t('DailyQuiz.NxtBtn')}
-            />
+            <View style={{marginTop: 20, paddingBottom: 10}}>
+              <PrimaryButton
+                onPress={() => {
+                  navigation.replace('dailyQuizDetail', {id: Data[0].id});
+                }}
+                title={t('DailyQuiz.NxtBtn')}
+              />
+            </View>
           </View>
         </ScrollView>
-      </View>
+      ) : (
+        <NoData />
+      )}
     </ScreenWrapper>
   );
 };

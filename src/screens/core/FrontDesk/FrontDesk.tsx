@@ -65,11 +65,13 @@ export const FrontDeskScreen = ({
         navigation.navigate('donation');
         break;
 
+      case 'event':
+        navigation.navigate('GurukulEvents');
+
       default:
         break;
     }
   };
-
   return (
     <>
       {loader ? (
@@ -94,38 +96,44 @@ export const FrontDeskScreen = ({
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
-          <View style={commonStyle.commonContentView}>
-            <View style={{marginTop: 24, paddingBottom: 550}}>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                data={FrontDesk(t)}
-                renderItem={({item, index}) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() => {
-                        handlePress(item.id);
-                      }}>
-                      <View style={style.flatListContainer}>
-                        <View
-                          style={[
-                            style.imageContainer,
-                            {backgroundColor: item.imageBG},
-                          ]}>
-                          <Image
-                            source={item.image}
-                            style={{height: 24, width: 24}}
-                          />
-                        </View>
-                        <View
-                          style={{justifyContent: 'center', marginLeft: '2%'}}>
-                          <Text style={style.listTitle}>{item.title} </Text>
-                        </View>
+          <View style={[{flex: 1}]}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={[
+                {
+                  marginTop: '5%',
+                  paddingBottom: '30%',
+                },
+                commonStyle.commonContentView,
+              ]}
+              data={FrontDesk(t)}
+              renderItem={({item, index}) => {
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      handlePress(item.id);
+                    }}>
+                    <View style={style.flatListContainer}>
+                      <View
+                        style={[
+                          style.imageContainer,
+                          {backgroundColor: item.imageBG},
+                        ]}>
+                        <Image
+                          source={item.image}
+                          style={{height: 24, width: 24}}
+                        />
                       </View>
-                    </TouchableOpacity>
-                  );
-                }}
-              />
-            </View>
+                      <View
+                        style={{justifyContent: 'center', marginLeft: '2%'}}>
+                        <Text style={style.listTitle}>{item.title} </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
           </View>
         </ScreenWrapper>
       )}
