@@ -184,6 +184,7 @@ export const GurukulConnect = ({
         'currMusic',
         JSON.stringify({track: activeTrack, position: trackPosition}),
       );
+
       setTimeout(() => {
         navigation.goBack();
       }, 800);
