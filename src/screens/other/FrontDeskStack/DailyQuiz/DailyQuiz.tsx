@@ -7,6 +7,7 @@ import {AllIcons} from '../../../../../assets/icons';
 import {AllImages} from '../../../../../assets/images';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  DropDownModel,
   Loader,
   NoData,
   PrimaryButton,
@@ -17,6 +18,7 @@ import {RootStackParamList} from '../../../../types';
 import {styles} from './styles';
 import {DailyQuizGetApi} from '../../../../services';
 import {BASE_URL} from '@env';
+import {CustomFonts} from '../../../../utils';
 
 export const DailyQuiz = ({
   navigation,
@@ -41,6 +43,7 @@ export const DailyQuiz = ({
       console.log(error);
     }
   }, []);
+  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -65,13 +68,36 @@ export const DailyQuiz = ({
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: '10%'}}>
             <View style={[commonstyle.commonContentView, {flex: 1}]}>
-              <Image
-                source={{uri: `${BASE_URL}${Data[0].image}`}}
+              <View
                 style={{
-                  height: Dimensions.get('window').height * 0.9,
+                  height: Dimensions.get('window').height * 0.5,
                   width: '100%',
-                }}
-              />
+                }}>
+                <Image
+                  source={AllImages.Rectangle68}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    resizeMode: 'contain',
+                  }}
+                />
+              </View>
+              {Data[0].description && (
+                <View style={{marginTop: 20}}>
+                  <Text
+                    style={{
+                      ...CustomFonts.header.small18,
+                      fontSize: 20,
+                      color: 'black',
+                    }}>
+                    Description
+                  </Text>
+                  <Text style={{color: 'black', fontSize: 18}}>
+                    {Data[0].description}
+                  </Text>
+                </View>
+              )}
+
               <View style={{marginTop: 20, paddingBottom: 10}}>
                 <PrimaryButton
                   onPress={() => {

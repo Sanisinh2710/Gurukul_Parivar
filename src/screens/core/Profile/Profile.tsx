@@ -50,6 +50,7 @@ export const ProfileScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [modelVisible, setModelVisible] = React.useState(false);
+  const [viewPhotoModel, setPhotoModel] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
   const {t, i18n} = useTranslation();
@@ -371,10 +372,48 @@ export const ProfileScreen = ({
                 }}>
                 <Text style={style.pictureUpdateText}>Take Photo</Text>
               </Pressable>
+              <Pressable
+                onPress={() => {
+                  setPhotoModel(!viewPhotoModel);
+                }}>
+                <Text style={style.pictureUpdateText}>View Photo</Text>
+              </Pressable>
             </View>
           }
           type={'none'}
           modalHeight={'30%'}
+        />
+        <DropDownModel
+          viewPhoto={true}
+          modelVisible={viewPhotoModel}
+          setModelVisible={setPhotoModel}
+          customModelchild={
+            <View
+              style={{
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  height: 250,
+                  width: 250,
+                }}>
+                <Image
+                  source={
+                    profileImage.uri != '' && !profileImage.uri.includes('null')
+                      ? {uri: profileImage.uri}
+                      : AllIcons.DummyAvtar
+                  }
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 150,
+                  }}
+                />
+              </View>
+            </View>
+          }
+          type={'simple'}
+          modalHeight={'40%'}
         />
       </ScrollView>
     </ScreenWrapper>

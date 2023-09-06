@@ -15,11 +15,7 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
-import {
-  DailyQuizAnswerPostApi,
-  DailyQuizGetApi,
-  DailyQuizStatusApi,
-} from '../../../../services';
+import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '../../../../services';
 export const DailyQuizDetail = ({
   route,
   navigation,
@@ -87,7 +83,7 @@ export const DailyQuizDetail = ({
       setAnswer(newData1);
     }
   };
-
+  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader

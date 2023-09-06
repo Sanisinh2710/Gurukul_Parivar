@@ -56,9 +56,7 @@ export const DailyDarshan = ({
   );
   const [BranchName, setBranchName] = React.useState();
   const [DarshanImages, setDarshanImages] = React.useState([]);
-
   const [refreshing, setRefreshing] = React.useState(false);
-
   const style = styles();
 
   React.useMemo(async () => {

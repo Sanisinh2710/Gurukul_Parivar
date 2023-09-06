@@ -41,7 +41,6 @@ export const Status = ({
       console.log(error);
     }
   }, []);
-  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -61,7 +60,6 @@ export const Status = ({
             data={Data}
             renderItem={({item, index}) => {
               let marks = item.score / 100;
-              console.log(marks, 'MARKS');
               return (
                 <>
                   <TouchableOpacity
