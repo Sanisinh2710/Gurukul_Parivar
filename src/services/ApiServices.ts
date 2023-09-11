@@ -318,7 +318,7 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
       ) {
         const backendData: any = response.data.personal_details;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],
@@ -498,7 +498,7 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
         newFormData.completeProfile =
           profileData ?? newFormData.completeProfile;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],

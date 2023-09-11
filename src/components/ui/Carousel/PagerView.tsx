@@ -50,7 +50,7 @@ export const PagerView = React.memo(
           horizontal={true}
           data={images}
           contentContainerStyle={{
-            paddingBottom: '5%',
+            paddingBottom: '3%',
           }}
           showsHorizontalScrollIndicator={false}
           pagingEnabled={true}

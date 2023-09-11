@@ -7,11 +7,15 @@ import {SongProgress} from './SongProgress';
 type MusicPlayerProps = {
   playbackState: State;
   activeTrack: Track;
+  position: number;
+  duration: number;
 };
 
 export const MusicPlayer = ({
   playbackState,
   activeTrack,
+  position,
+  duration,
 }: MusicPlayerProps): React.JSX.Element => {
   const [track, setTrack] = React.useState<Track>(activeTrack);
 
@@ -24,7 +28,7 @@ export const MusicPlayer = ({
   return (
     <>
       <SongInfo track={track} />
-      <SongProgress />
+      <SongProgress position={position} duration={duration} />
       <ControlCentre playbackState={playbackState} />
     </>
   );

@@ -2,16 +2,22 @@ import React from 'react';
 
 import {Slider} from '@miblanchard/react-native-slider';
 import {StyleSheet, Text, View} from 'react-native';
-import TrackPlayer, {useProgress} from 'react-native-track-player';
-import {COLORS, CustomFonts} from '../../../utils';
+import TrackPlayer from 'react-native-track-player';
+import {CustomFonts} from '../../../utils';
 
 const format = (time: number) => {
   return new Date(time * 1000).toISOString().substring(15, 19);
 };
 
-export const SongProgress = (): React.JSX.Element => {
-  const {position, duration} = useProgress();
+type SongProgressProps = {
+  position: number;
+  duration: number;
+};
 
+export const SongProgress = ({
+  position,
+  duration,
+}: SongProgressProps): React.JSX.Element => {
   const [progress, setProgress] = React.useState(position);
 
   React.useEffect(() => {
@@ -40,14 +46,14 @@ export const SongProgress = (): React.JSX.Element => {
             minimumTrackTintColor="#DBB159"
             maximumTrackTintColor="#78788029"
             thumbStyle={{
-              backgroundColor: COLORS.primaryColor,
+              backgroundColor: '#FFFFFF',
               shadowColor: '#70eaff',
-              elevation: 5,
-              height: 20,
-              width: 20,
+              elevation: 10,
+              height: 25,
+              width: 25,
               borderRadius: 28,
             }}
-            trackClickable={false}
+            trackClickable={true}
             value={progress}
             minimumValue={0}
             maximumValue={duration}

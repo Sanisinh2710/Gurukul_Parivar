@@ -49,7 +49,6 @@ export const styles = () => {
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 10,
     },
 
     gridItem: {height: '100%', width: '100%'},

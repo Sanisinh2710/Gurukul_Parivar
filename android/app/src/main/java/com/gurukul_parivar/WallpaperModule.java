@@ -345,4 +345,3 @@ class CutOffLogo extends BitmapTransformation {
 
     }
 }
-

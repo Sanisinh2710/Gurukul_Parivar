@@ -1,14 +1,23 @@
 import React from 'react';
 
-import {useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, View} from 'react-native';
+import {
+  AppState,
+  BackHandler,
+  FlatList,
+  Image,
+  Platform,
+  Text,
+  View,
+} from 'react-native';
 import TrackPlayer, {
   Event,
   State,
   Track,
   usePlaybackState,
+  useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
 import {AllIcons} from '../../../../../assets/icons';
@@ -20,6 +29,7 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {addTracks, setupPlayer} from '../../../../services';
+import {storage} from '../../../../storage';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, SongList} from '../../../../utils';
 import {styles} from './styles';
@@ -61,6 +71,8 @@ export const GurukulConnect = ({
 
   const playbackState = usePlaybackState();
 
+  const {position, duration} = useProgress();
+
   const setup = async () => {
     let isSetup = await setupPlayer();
 
@@ -78,55 +90,76 @@ export const GurukulConnect = ({
   }, []);
 
   React.useMemo(async () => {
-    if (screenFocused) {
-      const currTrack = await TrackPlayer.getCurrentTrack();
+    if (screenFocused && isPlayerReady) {
+      const trackFromStore = storage.getString('currMusic');
 
-      if (currTrack !== null) {
-        let playingTrack1 = await TrackPlayer.getTrack(currTrack);
+      if (trackFromStore) {
+        const trackData: {track: Track; position: number} =
+          JSON.parse(trackFromStore);
 
-        if (playingTrack1 !== null) {
-          setActiveTrack(playingTrack1);
-        }
+        const currentTrackPosition = await TrackPlayer.getPosition();
+
+        await TrackPlayer.skip(
+          SongList.findIndex(item => item.id === trackData.track?.id),
+          playbackState === State.Playing || playbackState === State.Paused
+            ? currentTrackPosition
+            : trackData.position,
+        );
+        setActiveTrack(trackData.track);
       }
     }
-  }, [screenFocused]);
+  }, [screenFocused, isPlayerReady]);
 
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
     async event => {
       switch (event.type) {
         case Event.PlaybackTrackChanged:
-          const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
+          if (
+            playbackState !== State.Buffering &&
+            playbackState !== State.Connecting &&
+            playbackState !== State.Ready &&
+            playbackState !== 'idle'
+          ) {
+            const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
 
-          const currentTrackDuration = await TrackPlayer.getDuration();
+            const currentTrackDuration = await TrackPlayer.getDuration();
 
-          await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
-            title: playingTrack?.title,
-            artist: playingTrack?.artist,
-            duration: currentTrackDuration,
-          });
+            await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
+              title: playingTrack?.title,
+              artist: playingTrack?.artist,
+              duration: currentTrackDuration,
+            });
 
-          if (playingTrack !== null) {
-            setActiveTrack(playingTrack);
+            if (playingTrack !== null) {
+              setActiveTrack(playingTrack);
+            }
           }
           break;
 
         case Event.PlaybackState:
-          const currTrack = await TrackPlayer.getCurrentTrack();
+          if (
+            (playbackState === State.Playing ||
+              playbackState === State.Paused ||
+              playbackState === State.Stopped) &&
+            playbackState !== 'idle'
+          ) {
+            const currTrack = await TrackPlayer.getCurrentTrack();
 
-          if (currTrack !== null) {
-            const playingTrack1 = await TrackPlayer.getTrack(currTrack);
+            if (currTrack !== null) {
+              const playingTrack1 = await TrackPlayer.getTrack(currTrack);
 
-            const currentTrackDuration1 = await TrackPlayer.getDuration();
+              const currentTrackDuration1 = await TrackPlayer.getDuration();
 
-            await TrackPlayer.updateMetadataForTrack(currTrack, {
-              title: playingTrack1?.title,
-              artist: playingTrack1?.artist,
-              duration: currentTrackDuration1,
-            });
+              await TrackPlayer.updateMetadataForTrack(currTrack, {
+                title: playingTrack1?.title,
+                artist: playingTrack1?.artist,
+                duration: currentTrackDuration1,
+              });
 
-            if (playingTrack1 !== null) {
-              setActiveTrack(playingTrack1);
+              if (playingTrack1 !== null) {
+                setActiveTrack(playingTrack1);
+              }
             }
           }
           break;
@@ -140,6 +173,54 @@ export const GurukulConnect = ({
   const trackPlaying = React.useMemo(() => {
     return playbackState === State.Playing ? true : false;
   }, [playbackState]);
+
+  const trackPosition = React.useMemo(() => {
+    return position;
+  }, [position]);
+
+  const onBackPress = React.useCallback(() => {
+    if (activeTrack) {
+      storage.set(
+        'currMusic',
+        JSON.stringify({track: activeTrack, position: trackPosition}),
+      );
+
+      setTimeout(() => {
+        navigation.goBack();
+      }, 800);
+    }
+
+    // Return true to stop default back navigaton
+    // Return false to keep default back navigaton
+    return true;
+  }, [activeTrack, trackPosition]);
+
+  const onBlurScreen = React.useCallback(() => {
+    if (activeTrack) {
+      storage.set(
+        'currMusic',
+        JSON.stringify({track: activeTrack, position: trackPosition}),
+      );
+    }
+
+    // Return true to stop default back navigaton
+    // Return false to keep default back navigaton
+    return true;
+  }, [activeTrack, trackPosition]);
+
+  const ExitCallBack = React.useCallback(() => {
+    // Add Event Listener for hardwareBackPress
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    const blurListner = AppState.addEventListener('blur', onBlurScreen);
+
+    return () => {
+      // Once the Screen gets blur Remove Event Listener
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      blurListner.remove();
+    };
+  }, [activeTrack, trackPosition]);
+
+  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
   if (!isPlayerReady) {
     return <Loader screenHeight={'100%'} />;
@@ -223,6 +304,8 @@ export const GurukulConnect = ({
               <MusicPlayer
                 playbackState={playbackState}
                 activeTrack={activeTrack}
+                position={position}
+                duration={duration}
               />
             </View>
           )}
