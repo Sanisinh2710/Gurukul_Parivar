@@ -33,9 +33,9 @@ export const FrontDeskScreen = ({
       // case 'goform':
       //   navigation.navigate('dailyDarshan');
       //   break;
-      // case 'speech':
-      //   navigation.navigate('dailyQuotes');
-      //   break;
+      case 'connect':
+        navigation.navigate('gurkulConnect');
+        break;
 
       case 'quiz':
         navigation.navigate('dailyQuiz');

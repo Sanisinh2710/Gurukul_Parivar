@@ -46,4 +46,11 @@ export const AllIcons = {
   ClosedEye: require('../icons/ClosedEye.png'),
   OpenEye: require('../icons/OpenEye.png'),
   CheckBoxOutline: require('../icons/CheckBoxOutline.png'),
+  DownloadSong : require('../icons/DownloadSong.png'),
+  ForwardControl : require('../icons/ForwardControl.png'),
+  PauseSong: require('../icons/Pause.png'),
+  PlaySong: require('../icons/Play.png'),
+  TrackPlay : require('../icons/TrackPlay.png'),
+  TrackPause : require('../icons/TrackPause.png'),
+  AlbumRightArrow  :require('../icons/AlbumRightArrow.png'),
 };

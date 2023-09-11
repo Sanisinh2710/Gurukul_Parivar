@@ -176,11 +176,11 @@
     "frontDesk": {
       "Heading": "Front Desk",
       "Form": "Go Form",
-      "Speech": "Special Speech",
+      "Connect": "Gurukul Connect",
       "Darshan": "Gurukul Darshan",
       "Event": "Gurukul Events",
       "Quiz": "Daily Quiz",
-      "Donation": "Donation"
+      "Donation": "Donation",
     },
     "myProfile": {
       "Heading": "My Profile",

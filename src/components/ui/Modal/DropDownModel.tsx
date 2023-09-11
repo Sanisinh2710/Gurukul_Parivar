@@ -245,10 +245,12 @@ export const DropDownModel = React.memo(
                                 }
                               }
                             }
+                           if(type != "multi-select") {
                             const timer = setTimeout(() => {
                               setModelVisible(false);
                             }, 200);
                             return () => clearTimeout(timer);
+                          }
                           }}
                           style={[
                             style.modelMenuView,

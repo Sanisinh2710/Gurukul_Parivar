@@ -30,6 +30,8 @@ import {
   DonationScreen,
   EditProfile,
   ForgotPassword,
+  FrontDeskScreen,
+  GurukulConnect,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
@@ -156,6 +158,7 @@ export const Routes = (): React.JSX.Element => {
               name="dailyQuizDetail"
               component={DailyQuizDetail}
             />
+            <NativeStack.Screen name="gurkulConnect" component={GurukulConnect} />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
             <NativeStack.Screen name="program" component={CommingSoon} />
@@ -189,7 +192,7 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
       }}>
       <BottomTab.Screen name="Home" component={HomeScreen} />
-      <BottomTab.Screen name="FrontDesk" component={CommingSoon} />
+      <BottomTab.Screen name="FrontDesk" component={FrontDeskScreen} />
       <BottomTab.Screen name="Profile" component={ProfileScreen} />
     </BottomTab.Navigator>
   );

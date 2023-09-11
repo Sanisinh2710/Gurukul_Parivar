@@ -329,8 +329,8 @@ export const FrontDesk = (t: any) => {
     },
     {
       image: AllIcons.Chat,
-      title: t('frontDesk.Speech'),
-      id: 'speech',
+      title: t('frontDesk.Connect'),
+      id: 'connect',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
 
@@ -733,3 +733,23 @@ export const IntialValuesForFormdataAuth = {
     ],
   },
 };
+
+
+export const SongList = [
+ {
+    id: '122',
+    url: require('../../assets/music/NaaReady.mp3'),
+    title: 'Naa Ready',
+    description: 'Thalapathy Vijay, Anirudh Ravichander',
+    is_multiple : false,
+    // duration: 160,
+  },
+  {
+    id: '222',
+    url: require('../../assets/music/YoonShabnamiSaawariya.mp3'),
+    title: 'Yoon Shabnami Saawariya',
+    description: 'Monty Sharma',
+    is_multiple : false,
+    // duration: 160,
+  }
+]
