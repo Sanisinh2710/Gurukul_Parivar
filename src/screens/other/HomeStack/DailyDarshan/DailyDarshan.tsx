@@ -32,7 +32,6 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
 import {styles} from './styles';
-import {Item} from 'react-navigation-header-buttons';
 
 const TimeArray = (t: any) => [
   {name: t('DailyDarshan.All'), id: 'both'},
