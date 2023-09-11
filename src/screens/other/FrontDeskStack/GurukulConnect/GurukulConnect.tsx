@@ -117,8 +117,8 @@ export const GurukulConnect = ({
             Songs.push(newItem);
           });
 
-          setAllSongs(Songs);
           await addTracks(Songs);
+          setAllSongs(Songs);
         }
       } catch (error) {
         console.log(error);
@@ -149,8 +149,8 @@ export const GurukulConnect = ({
 
             Songs.push(newItem);
           });
-          setAllSongs(Songs);
           await resetAndAddTracks(Songs);
+          setAllSongs(Songs);
         }
       } catch (error) {
         console.log(error);
