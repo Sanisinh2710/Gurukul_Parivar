@@ -19,6 +19,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
@@ -30,8 +32,10 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const [dashboardImages, setDashboardImages] = React.useState([]);
+  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
+
+  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -41,6 +45,8 @@ export const HomeScreen = ({
   const style = styles();
   const commonStyle = CommonStyle();
 
+  const dispatch = useAppDispatch();
+
   React.useMemo(async () => {
     setLoader(true);
 
@@ -48,7 +54,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        setDashboardImages(res.data.images);
+        dispatch(SET_IMAGES({images: res.data.images}));
         setLoader(false);
       }
     } catch (error) {
@@ -120,7 +126,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        setDashboardImages(res.data.images);
+        dispatch(SET_IMAGES({images: res.data.images}));
       }
     } catch (error) {
       console.log(error);
@@ -163,6 +169,7 @@ export const HomeScreen = ({
         }}
       />
       <ScrollView
+        overScrollMode="always"
         refreshControl={
           <RefreshControl
             colors={[COLORS.primaryColor, COLORS.green]}
@@ -175,11 +182,7 @@ export const HomeScreen = ({
           paddingBottom: '30%',
         }}>
         {dashboardImages.length > 0 && (
-          <PagerView
-            images={dashboardImages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <PagerView images={dashboardImages} currentPage={currentPage} />
         )}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>

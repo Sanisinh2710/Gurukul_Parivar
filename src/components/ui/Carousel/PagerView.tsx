@@ -2,24 +2,23 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {Dimensions, FlatList, Image, View} from 'react-native';
+import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
+import {useAppDispatch} from '../../../redux/hooks';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
 
 type PagerViewProps = {
   currentPage: number;
-  setCurrentPage: any;
   images: any[];
 };
 
 export const PagerView = React.memo(
-  ({
-    currentPage,
-    setCurrentPage,
-    images,
-  }: PagerViewProps): React.JSX.Element => {
+  ({currentPage, images}: PagerViewProps): React.JSX.Element => {
     const {width, height} = Dimensions.get('window');
 
     const scrollRef = React.useRef<FlatList>(null);
+
+    const dispatch = useAppDispatch();
 
     const handlePageChange = () => {
       if (currentPage < images.length - 1) {
@@ -56,7 +55,7 @@ export const PagerView = React.memo(
           pagingEnabled={true}
           onScroll={e => {
             const x = e.nativeEvent.contentOffset.x;
-            setCurrentPage(parseInt((x / width).toFixed(0)));
+            dispatch(CHANGE_PAGE({nextPage: parseInt((x / width).toFixed(0))}));
           }}
           renderItem={({item, index}) => {
             return (

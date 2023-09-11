@@ -121,7 +121,7 @@ export const DropDownModel = React.memo(
       <Modal
         transparent
         visible={modelVisible}
-        animationType="slide"
+        animationType="fade"
         onDismiss={() => {
           setModelVisible(false);
         }}>

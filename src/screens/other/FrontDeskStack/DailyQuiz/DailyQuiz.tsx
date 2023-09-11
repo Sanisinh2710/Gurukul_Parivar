@@ -60,6 +60,7 @@ export const DailyQuiz = ({
         <Loader screenHeight={'90%'} />
       ) : Data.length > 0 ? (
         <ScrollView
+          overScrollMode="always"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: '10%'}}>
           <View style={[commonstyle.commonContentView, {flex: 1}]}>

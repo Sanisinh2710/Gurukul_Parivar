@@ -287,6 +287,7 @@ export const PersonalInfo = React.memo(
           <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
+            overScrollMode="always"
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
@@ -296,6 +297,7 @@ export const PersonalInfo = React.memo(
             }}>
             <>
               <FlatList
+                overScrollMode="always"
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{gap: 15}}

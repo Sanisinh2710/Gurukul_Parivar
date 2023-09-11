@@ -174,6 +174,7 @@ export const DailyDarshan = ({
       />
 
       <ScrollView
+        overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           height:

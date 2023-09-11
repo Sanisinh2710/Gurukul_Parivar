@@ -375,6 +375,7 @@ export const GurukulInfo = React.memo(
           <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
+            overScrollMode="always"
             contentContainerStyle={style.scrollViewContainer}
             showsVerticalScrollIndicator={false}>
             <RadioLable
@@ -402,6 +403,7 @@ export const GurukulInfo = React.memo(
                         </View>
                       )}
                       <FlatList
+                        overScrollMode="always"
                         scrollEnabled={false}
                         key={mainItem.id}
                         contentContainerStyle={style.flatListContainer}

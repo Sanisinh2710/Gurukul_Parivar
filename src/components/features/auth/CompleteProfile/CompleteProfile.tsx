@@ -99,7 +99,7 @@ export const CompleteYourProfile = React.memo(
           <Loader screenHeight={'90%'} />
         ) : (
           <View style={style.mainView}>
-            <ScrollView>
+            <ScrollView overScrollMode="always">
               <View style={style.FirstSubtitleView}>
                 <Text style={style.FirstSubtitle}>
                   {t('uploadPhoto.FirstSubtitle')}

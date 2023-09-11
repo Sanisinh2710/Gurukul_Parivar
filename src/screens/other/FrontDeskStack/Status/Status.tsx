@@ -3,13 +3,12 @@ import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {CustomFonts, QuizStatus} from '../../../../utils';
-import {styles} from './styles';
 import {DailyQuizStatusApi} from '../../../../services';
+import {RootStackParamList} from '../../../../types';
+import {CustomFonts} from '../../../../utils';
+import {styles} from './styles';
 
 export const Status = ({
   navigation,
@@ -49,6 +48,7 @@ export const Status = ({
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
+          overScrollMode="always"
           showsVerticalScrollIndicator={false}
           data={Data}
           renderItem={({item, index}) => (

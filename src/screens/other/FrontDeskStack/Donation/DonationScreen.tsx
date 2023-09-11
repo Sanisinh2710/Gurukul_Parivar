@@ -57,7 +57,9 @@ export const DonationScreen = ({
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          overScrollMode="always"
+          showsVerticalScrollIndicator={false}>
           <View style={[commonstyle.commonContentView, {flex: 1}]}>
             <View>
               <Text style={{color: COLORS.primaryColor}}>

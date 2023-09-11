@@ -242,6 +242,7 @@ export const GurukulConnect = ({
           <View>
             <FlatList
               data={SongList}
+              overScrollMode="always"
               renderItem={({item, index}) => (
                 <View
                   key={index}

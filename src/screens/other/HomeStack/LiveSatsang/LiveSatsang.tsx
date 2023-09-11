@@ -22,12 +22,12 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {DailySatsangApi} from '../../../../services';
-import {RootAuthStackParamList} from '../../../../types';
+import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+}: NativeStackScreenProps<RootStackParamList>) => {
   const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
@@ -121,6 +121,7 @@ export const LiveSatsang = ({
 
           {loader || refreshing ? (
             <FlatList
+              overScrollMode="always"
               showsVerticalScrollIndicator={false}
               data={['A', 'B', 'C', 'D']}
               contentContainerStyle={{gap: 10}}
@@ -155,6 +156,7 @@ export const LiveSatsang = ({
             <>
               <FlatList
                 data={Data}
+                overScrollMode="always"
                 refreshControl={
                   <RefreshControl
                     colors={[COLORS.primaryColor, COLORS.green]}

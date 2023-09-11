@@ -70,6 +70,11 @@ export type GurukulFormValidationSchemaType = {
 
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
+export type InitialSliderPageType = {
+  currentPage: number;
+  images: Array<string>;
+};
+
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
   full_name: string;
