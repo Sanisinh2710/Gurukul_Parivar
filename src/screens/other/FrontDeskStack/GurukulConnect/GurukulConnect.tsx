@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {BASE_URL} from '@env';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
@@ -28,10 +29,15 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {addTracks, setupPlayer} from '../../../../services';
+import {
+  GurkulAudioGetApi,
+  addTracks,
+  resetAndAddTracks,
+  setupPlayer,
+} from '../../../../services';
 import {storage} from '../../../../storage';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, SongList} from '../../../../utils';
+import {RootStackParamList, SongType} from '../../../../types';
+import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export type SongControl = {
@@ -73,15 +79,84 @@ export const GurukulConnect = ({
 
   const {position, duration} = useProgress();
 
+  const [loader, setLoader] = React.useState(false);
+
+  const [allSongs, setAllSongs] = React.useState<Array<SongType>>([]);
+
   const setup = async () => {
+    setLoader(true);
     let isSetup = await setupPlayer();
 
     const queue = await TrackPlayer.getQueue();
 
     if (isSetup && queue.length <= 0) {
-      await addTracks();
-    }
+      try {
+        const res = await GurkulAudioGetApi();
 
+        if (res.resType === 'SUCCESS') {
+          let Songs: Array<SongType> = [];
+
+          const apiData: Array<any> = JSON.parse(
+            JSON.stringify(res.data.gurukul_audios),
+          );
+
+          apiData.map((wholeitem, mainindex) => {
+            let newItem: SongType = {
+              id: '',
+              url: '',
+              title: '',
+              artist: '',
+              description: '',
+            };
+            newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+            newItem.id = wholeitem['id'] ?? '';
+            newItem.title = wholeitem['title'] ?? '';
+            newItem.description = wholeitem['description'] ?? '';
+            newItem.artist = wholeitem['artist'] ?? '';
+
+            Songs.push(newItem);
+          });
+
+          setAllSongs(Songs);
+          await addTracks(Songs);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (isSetup && queue.length > 0) {
+      try {
+        const res = await GurkulAudioGetApi();
+
+        if (res.resType === 'SUCCESS') {
+          let Songs: Array<SongType> = [];
+
+          const apiData: Array<any> = JSON.parse(JSON.stringify(res.data));
+
+          apiData.map((wholeitem, mainindex) => {
+            let newItem: SongType = {
+              id: '',
+              url: '',
+              title: '',
+              artist: '',
+              description: '',
+            };
+            newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+            newItem.id = wholeitem['id'] ?? '';
+            newItem.title = wholeitem['title'] ?? '';
+            newItem.description = wholeitem['description'] ?? '';
+            newItem.artist = wholeitem['artist'] ?? '';
+
+            Songs.push(newItem);
+          });
+          setAllSongs(Songs);
+          await resetAndAddTracks(Songs);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setLoader(false);
     setIsPlayerReady(isSetup);
   };
 
@@ -100,7 +175,7 @@ export const GurukulConnect = ({
         const currentTrackPosition = await TrackPlayer.getPosition();
 
         await TrackPlayer.skip(
-          SongList.findIndex(item => item.id === trackData.track?.id),
+          allSongs.findIndex(item => item.id === trackData.track?.id),
           playbackState === State.Playing || playbackState === State.Paused
             ? currentTrackPosition
             : trackData.position,
@@ -222,7 +297,11 @@ export const GurukulConnect = ({
 
   Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
+  console.log(allSongs, 'all songs atste');
+
   if (!isPlayerReady) {
+    return <Loader screenHeight={'100%'} />;
+  } else if (loader) {
     return <Loader screenHeight={'100%'} />;
   } else {
     return (
@@ -240,63 +319,65 @@ export const GurukulConnect = ({
         <View style={[commonStyle.commonContentView, {flex: 1, marginTop: 25}]}>
           <Text style={{color: '#000'}}>Search</Text>
           <View>
-            <FlatList
-              data={SongList}
-              overScrollMode="always"
-              renderItem={({item, index}) => (
-                <View
-                  key={index}
-                  style={[
-                    style.songContainer,
-                    {
-                      borderColor:
-                        item.id == activeTrack?.id
-                          ? 'rgba(172, 43, 49, 1)'
-                          : 'rgba(172, 43, 49, 0.3)',
-                    },
-                  ]}>
-                  <View>
-                    <Text style={style.songTitle}>
-                      {item.id}
-                      {'. '}
-                      {item.title}
-                    </Text>
-                    <Text style={style.songArtist}>{item.artist}</Text>
-                  </View>
-                  <View style={{flexDirection: 'row', gap: 6}}>
-                    <View style={{height: 24, width: 24}}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                          tintColor: COLORS.primaryColor,
-                        }}
-                        source={AllIcons.DownloadSong}
-                      />
+            {allSongs.length > 0 && (
+              <FlatList
+                data={allSongs}
+                overScrollMode="always"
+                renderItem={({item, index}) => (
+                  <View
+                    key={index}
+                    style={[
+                      style.songContainer,
+                      {
+                        borderColor:
+                          item.id == activeTrack?.id
+                            ? 'rgba(172, 43, 49, 1)'
+                            : 'rgba(172, 43, 49, 0.3)',
+                      },
+                    ]}>
+                    <View>
+                      <Text style={style.songTitle}>
+                        {item.id}
+                        {'. '}
+                        {item.title}
+                      </Text>
+                      <Text style={style.songArtist}>{item.artist}</Text>
                     </View>
-                    <View
-                      onTouchEnd={() => {
-                        handleControl(index);
-                      }}
-                      style={{height: 24, width: 24}}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
+                    <View style={{flexDirection: 'row', gap: 6}}>
+                      <View style={{height: 24, width: 24}}>
+                        <Image
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                            tintColor: COLORS.primaryColor,
+                          }}
+                          source={AllIcons.DownloadSong}
+                        />
+                      </View>
+                      <View
+                        onTouchEnd={() => {
+                          handleControl(index);
                         }}
-                        source={
-                          item.id == activeTrack?.id && trackPlaying
-                            ? AllIcons.PauseSong
-                            : AllIcons.PlaySong
-                        }
-                      />
+                        style={{height: 24, width: 24}}>
+                        <Image
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                          }}
+                          source={
+                            item.id == activeTrack?.id && trackPlaying
+                              ? AllIcons.PauseSong
+                              : AllIcons.PlaySong
+                          }
+                        />
+                      </View>
                     </View>
                   </View>
-                </View>
-              )}
-            />
+                )}
+              />
+            )}
           </View>
         </View>
         <>

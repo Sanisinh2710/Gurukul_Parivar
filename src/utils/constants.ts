@@ -615,14 +615,12 @@ export const SongList = [
     url: 'https://gurukul-dev.taskgrids.com/storage/GurukulAudio/6Pg8Myj4.mp3',
     title: 'Maan Meri Ja',
     artist: 'King',
-    // duration: 27,
   },
   {
     id: '2',
     url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
     title: 'Yaar Ka Sataya Hua Hai',
     artist: 'B Praak',
-    // duration: 267,
   },
 ];
 export const GurukulEventsList = [

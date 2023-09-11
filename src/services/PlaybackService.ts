@@ -4,7 +4,7 @@ import TrackPlayer, {
   Event,
   RepeatMode,
 } from 'react-native-track-player';
-import {SongList} from '../utils';
+import {SongType} from '../types';
 
 export async function setupPlayer() {
   let isSetup = false;
@@ -40,8 +40,16 @@ export async function setupPlayer() {
   }
 }
 
-export async function addTracks() {
-  await TrackPlayer.add(SongList);
+export async function addTracks(songs: Array<SongType>) {
+  console.log(songs, 'to be added');
+  await TrackPlayer.add(songs);
+  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+}
+
+export async function resetAndAddTracks(songs: Array<SongType>) {
+  console.log(songs, 'to be added');
+  await TrackPlayer.reset();
+  await TrackPlayer.add(songs);
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
