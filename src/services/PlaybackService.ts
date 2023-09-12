@@ -41,24 +41,13 @@ export async function setupPlayer() {
 }
 
 export async function addTracks(songs: Array<SongType>) {
-  console.log(songs, 'to be added');
   await TrackPlayer.add(songs);
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
 export async function resetAndAddTracks(songs: Array<SongType>) {
-  const queue = await TrackPlayer.getQueue();
-
-  let newSongs: Array<SongType> = [];
-
-  queue.map((queueItem, index) => {
-    newSongs.push(songs.find(item => item.id != queueItem?.id)!);
-  });
-
-  console.log(newSongs, 'to be added');
-
-  // await TrackPlayer.reset();
-  await TrackPlayer.add(newSongs);
+  await TrackPlayer.reset();
+  await TrackPlayer.add(songs);
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 

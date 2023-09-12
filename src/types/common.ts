@@ -1,3 +1,5 @@
+import {Track} from 'react-native-track-player';
+
 export type Theme = {
   isDark: boolean;
   primary: string;
@@ -74,6 +76,8 @@ export type InitialSliderPageType = {
   currentPage: number;
   images: Array<string>;
 };
+
+export type InitialSongsType = {allSongs: Array<SongType> | Array<Track> | any};
 
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
