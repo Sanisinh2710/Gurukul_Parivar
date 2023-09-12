@@ -1,5 +1,3 @@
-import {Track} from 'react-native-track-player';
-
 export type Theme = {
   isDark: boolean;
   primary: string;
@@ -72,13 +70,6 @@ export type GurukulFormValidationSchemaType = {
 
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
-export type InitialSliderPageType = {
-  currentPage: number;
-  images: Array<string>;
-};
-
-export type InitialSongsType = {allSongs: Array<SongType> | Array<Track> | any};
-
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
   full_name: string;
@@ -118,12 +109,3 @@ export type SupportedFormInputTypes =
   | 'textarea'
   | 'email'
   | 'multi-select';
-
-export type SongType = {
-  [key: string]: any;
-  id: string | number;
-  url: string;
-  title: string;
-  artist?: string;
-  description?: string;
-};

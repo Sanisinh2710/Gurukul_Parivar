@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactInstance, ReactNode} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
@@ -11,17 +11,25 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {CustomBottomTabBar, CustomStatusBar, Loader} from '../components';
 import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {
+  ForgotPassword,
+  FrontDeskScreen,
+  HomeScreen,
+  LoginOTP,
+  LoginScreen,
+  LoginSuccess,
+  ProfileScreen,
+  ProfileSignup,
+  RegisterScreen,
+  ResetPassword,
+} from '../screens';
 import {isSignedIn} from '../services';
 import {
   RootAuthStackParamList,
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
-import {
-  NativeAuthStackRouteList,
-  NativeBottomRouteList,
-  NativeStackRouteList,
-} from './routes';
+import {NativeStackRoute} from './routes';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -51,45 +59,19 @@ export const AuthStackNavigator = ({
           animation: 'none',
           headerShown: false,
         }}>
-        {NativeAuthStackRouteList.map((item, index) => {
-          return (
-            <AuthStack.Screen
-              key={item.name}
-              name={item.name}
-              component={item.component}
-            />
-          );
-        })}
+        <AuthStack.Screen name="Login" component={LoginScreen} />
+
+        <AuthStack.Screen name="Register" component={RegisterScreen} />
+
+        <AuthStack.Screen name="OTP" component={LoginOTP} />
+        <AuthStack.Screen name="Success" component={LoginSuccess} />
+
+        <AuthStack.Screen name="ProfileSignup" component={ProfileSignup} />
+        <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <AuthStack.Screen name="ResetPassword" component={ResetPassword} />
       </AuthStack.Navigator>
     );
   }
-};
-
-const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();
-
-export const BottomTabNavigator = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-  return (
-    <BottomTab.Navigator
-      initialRouteName="Home"
-      tabBar={props => <CustomBottomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: theme.primary,
-        tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
-      }}>
-      {NativeBottomRouteList.map((item, index) => {
-        return (
-          <BottomTab.Screen
-            key={item.name}
-            name={item.name}
-            component={item.component}
-          />
-        );
-      })}
-    </BottomTab.Navigator>
-  );
 };
 
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
@@ -125,12 +107,12 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {NativeStackRouteList.map((item, index) => {
+            {NativeStackRoute.map((route, index) => {
               return (
                 <NativeStack.Screen
-                  key={item.name}
-                  name={item.name}
-                  component={item.component}
+                  key={index}
+                  name={route.name}
+                  component={route.component}
                 />
               );
             })}
@@ -138,5 +120,27 @@ export const Routes = (): React.JSX.Element => {
         </NavigationContainer>
       </SafeAreaProvider>
     </SafeAreaProvider>
+  );
+};
+
+const BottomTab = createBottomTabNavigator<RootBottomTabParamList>();
+export const BottomTabNavigator = () => {
+  const theme = useAppSelector(state => state.theme.theme);
+  return (
+    <BottomTab.Navigator
+      initialRouteName="Home"
+      detachInactiveScreens={true}
+      tabBar={props => <CustomBottomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: 'rgba(0,0,0,0.9)',
+      }}>
+      <BottomTab.Screen name="Home" component={HomeScreen} />
+      <BottomTab.Screen name="FrontDesk" component={FrontDeskScreen} />
+      {/* <BottomTab.Screen name="FrontDesk" component={CommingSoon} /> */}
+      <BottomTab.Screen name="Profile" component={ProfileScreen} />
+    </BottomTab.Navigator>
   );
 };

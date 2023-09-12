@@ -1,6 +1,5 @@
 import {combineReducers} from 'redux';
 
-import ImageSliderReducer from './ducks/imageSliderslice';
 import ThemeReducer from './ducks/themeslice';
 
 import {PersistConfig, persistReducer} from 'redux-persist';
@@ -14,5 +13,4 @@ const themePersistConfig: PersistConfig<InitialThemeType> = {
 
 export const rootReducer = combineReducers({
   theme: persistReducer(themePersistConfig, ThemeReducer),
-  sliderPage: ImageSliderReducer,
 });

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts} from '../../../utils';
+import {useAppSelector} from '../../../redux/hooks';
 // import { CustomFonts } from '../../../utils';
 
 export const styles = () => {
@@ -49,6 +49,7 @@ export const styles = () => {
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginTop: 14,
     },
 
     gridItem: {height: '100%', width: '100%'},

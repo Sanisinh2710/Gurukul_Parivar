@@ -273,7 +273,6 @@ export const DailyProgram = ({
       />
       <View style={commonStyle.commonContentView}>
         <FlatList
-          overScrollMode="always"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             gap: 15,

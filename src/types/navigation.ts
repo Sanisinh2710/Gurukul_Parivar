@@ -25,7 +25,6 @@ export type RootStackParamList = {
   dailyQuizDetail: {id: number};
   donation: undefined;
   QuizResult: {marks: number};
-  GurukulConnect: undefined;
   ProfileEdit: {formStep: number} | undefined;
   PaymentMethod: undefined;
   GurukulEvents: undefined;

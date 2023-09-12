@@ -39,7 +39,6 @@ export const DailyUpdateDetail = ({
       />
       <View style={commonstyle.commonContentView}>
         <ScrollView
-          overScrollMode="always"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: '115%',

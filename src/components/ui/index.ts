@@ -6,7 +6,6 @@ export * from './CommingSoon';
 export * from './CustomNavigate';
 export * from './Form';
 export * from './Header';
-export * from './ImageZoomer';
 export * from './Loader';
 export * from './Modal';
 export * from './NoData';

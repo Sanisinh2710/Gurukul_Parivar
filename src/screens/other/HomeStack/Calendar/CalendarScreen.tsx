@@ -7,7 +7,6 @@ import {Image, ScrollView, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -15,7 +14,7 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
+import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
 import {COLORS, d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
@@ -30,9 +29,6 @@ export const CalendarScreen = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [todayEvent, setEvents] = React.useState<{[key: string]: any}[]>([]);
-
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
 
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
@@ -94,14 +90,10 @@ export const CalendarScreen = ({
               event => event.date === d.toISOString().substring(0, 10),
             ).length > 0 && (
               <>
-                <View
-                  style={{
-                    marginTop: '4%',
-                    marginBottom: '3%',
-                  }}>
+                <View>
                   <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
                 </View>
-                <ScrollView overScrollMode="always" style={{height: '28%'}}>
+                <ScrollView style={{height: '28%'}}>
                   {todayEvent
                     .filter(
                       event => event.date === d.toISOString().substring(0, 10),
@@ -136,9 +128,6 @@ export const CalendarScreen = ({
                 },
               ]}>
               <View
-                onTouchEnd={() => {
-                  setZoomModalVisiable(true);
-                }}
                 style={{
                   height: 264,
                   width: 345,
@@ -158,11 +147,6 @@ export const CalendarScreen = ({
               </View>
             </View>
             <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
-            <ImageZoomer
-              images={[{url: `${BASE_URL}${Data[0].image}`}]}
-              zoomModalVisible={zoomImageModalVisible}
-              setZoomModalVisiable={setZoomModalVisiable}
-            />
           </View>
         ) : (
           <View

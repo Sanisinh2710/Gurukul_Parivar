@@ -14,7 +14,6 @@ import {
   EditProfile,
   ForgotPassword,
   FrontDeskScreen,
-  GurukulConnect,
   GurukulEvents,
   HomeScreen,
   LiveSatsang,
@@ -31,159 +30,33 @@ import {
   ResetPassword,
   Status,
 } from '../screens';
-import {
-  RootAuthStackParamList,
-  RootBottomTabParamList,
-  RootStackParamList,
-} from '../types';
+import {RootStackParamList} from '../types';
 import {AuthStackNavigator, BottomTabNavigator} from './Routes';
 
-export const NativeStackRouteList: Array<{
+export const NativeStackRoute: {
   name: keyof RootStackParamList;
-  component: (...event: any) => React.JSX.Element;
-}> = [
-  {
-    name: 'Auth',
-    component: AuthStackNavigator,
-  },
-  {
-    name: 'BottomNavBar',
-    component: BottomTabNavigator,
-  },
-  // {
-  //   name: 'GurukulConnect',
-  //   component: GurukulConnect,
-  // },
-  {
-    name: 'GurukulEvents',
-    component: GurukulEvents,
-  },
-  {
-    name: 'PaymentMethod',
-    component: PaymentMethod,
-  },
-  {
-    name: 'ProfileEdit',
-    component: ProfileSignupWithEdit,
-  },
-  {
-    name: 'QuizHistory',
-    component: QuizHistory,
-  },
-  {
-    name: 'QuizResult',
-    component: QuizResult,
-  },
-  {
-    name: 'calendar',
-    component: CalendarScreen,
-  },
-  {
-    name: 'changeLanguage',
-    component: ChangeLanguage,
-  },
-  {
-    name: 'dailyDarshan',
-    component: DailyDarshan,
-  },
-  {
-    name: 'dailyDarshanDetail',
-    component: DailyDarshanDetail,
-  },
-  {
-    name: 'dailyQuiz',
-    component: DailyQuiz,
-  },
-  {
-    name: 'dailyQuizDetail',
-    component: DailyQuizDetail,
-  },
-  {
-    name: 'dailyQuotes',
-    component: DailyQuotes,
-  },
-  {
-    name: 'dailyUpdateDetail',
-    component: DailyUpdateDetail,
-  },
-  {
-    name: 'dailyUpdates',
-    component: DailyUpdates,
-  },
-  {
-    name: 'donation',
-    component: DonationScreen,
-  },
-  {
-    name: 'editProfile',
-    component: EditProfile,
-  },
-  {
-    name: 'liveSatsang',
-    component: LiveSatsang,
-  },
-  {
-    name: 'program',
-    component: CommingSoon,
-  },
-  {
-    name: 'programDetail',
-    component: DailyProgramDetail,
-  },
-  {
-    name: 'status',
-    component: Status,
-  },
-];
-
-export const NativeAuthStackRouteList: Array<{
-  name: keyof RootAuthStackParamList;
-  component: (...event: any) => React.JSX.Element;
-}> = [
-  {
-    name: 'Login',
-    component: LoginScreen,
-  },
-  {
-    name: 'Register',
-    component: RegisterScreen,
-  },
-  {
-    name: 'ForgotPassword',
-    component: ForgotPassword,
-  },
-  {
-    name: 'OTP',
-    component: LoginOTP,
-  },
-  {
-    name: 'ProfileSignup',
-    component: ProfileSignup,
-  },
-  {
-    name: 'ResetPassword',
-    component: ResetPassword,
-  },
-  {
-    name: 'Success',
-    component: LoginSuccess,
-  },
-];
-
-export const NativeBottomRouteList: Array<{
-  name: keyof RootBottomTabParamList;
-  component: (...event: any) => React.JSX.Element;
-}> = [
-  {
-    name: 'Home',
-    component: HomeScreen,
-  },
-  {
-    name: 'FrontDesk',
-    component: FrontDeskScreen,
-  },
-  {
-    name: 'Profile',
-    component: ProfileScreen,
-  },
+  component: any;
+}[] = [
+  {name: 'Auth', component: AuthStackNavigator},
+  {name: 'BottomNavBar', component: BottomTabNavigator},
+  {name: 'dailyDarshan', component: DailyDarshan},
+  {name: 'dailyDarshanDetail', component: DailyDarshanDetail},
+  {name: 'dailyUpdates', component: DailyUpdates},
+  {name: 'dailyUpdateDetail', component: DailyUpdateDetail},
+  {name: 'dailyQuotes', component: DailyQuotes},
+  {name: 'calendar', component: CalendarScreen},
+  {name: 'liveSatsang', component: LiveSatsang},
+  {name: 'changeLanguage', component: ChangeLanguage},
+  {name: 'editProfile', component: EditProfile},
+  {name: 'status', component: Status},
+  {name: 'dailyQuiz', component: DailyQuiz},
+  {name: 'dailyQuizDetail', component: DailyQuizDetail},
+  {name: 'QuizResult', component: QuizResult},
+  {name: 'donation', component: DonationScreen},
+  {name: 'program', component: CommingSoon},
+  {name: 'programDetail', component: DailyProgramDetail},
+  {name: 'ProfileEdit', component: ProfileSignupWithEdit},
+  {name: 'PaymentMethod', component: PaymentMethod},
+  {name: 'GurukulEvents', component: GurukulEvents},
+  {name: 'QuizHistory', component: QuizHistory},
 ];

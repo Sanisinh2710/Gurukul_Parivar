@@ -231,7 +231,6 @@ export const AdressInfo = React.memo(
           <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
-            overScrollMode="always"
             contentContainerStyle={style.scrollViewContainer}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
@@ -297,7 +296,6 @@ export const AdressInfo = React.memo(
                     </View>
                   )}
                   <FlatList
-                    overScrollMode="always"
                     scrollEnabled={false}
                     key={mainItem.id}
                     contentContainerStyle={[

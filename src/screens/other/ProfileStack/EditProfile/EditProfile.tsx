@@ -26,7 +26,6 @@ export const EditProfile = ({navigation}: EditProfileProps) => {
       />
       <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
         <FlatList
-          overScrollMode="always"
           data={MyProfileData(t)}
           renderItem={({item, index}) => {
             return (

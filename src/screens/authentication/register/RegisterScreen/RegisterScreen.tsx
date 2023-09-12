@@ -90,7 +90,6 @@ export const RegisterScreen = ({
   return (
     <ScreenWrapper>
       <ScrollView
-        overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: '5%',
