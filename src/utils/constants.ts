@@ -1,8 +1,43 @@
+import {ReactElement} from 'react';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
+import {AuthStackNavigator, BottomTabNavigator} from '../routes';
 import {getAuthToken} from '../services';
-import {Theme} from '../types';
+import {
+  CalendarScreen,
+  ChangeLanguage,
+  DailyDarshan,
+  DailyDarshanDetail,
+  DailyProgramDetail,
+  DailyQuiz,
+  DailyQuizDetail,
+  DailyQuotes,
+  DailyUpdateDetail,
+  DailyUpdates,
+  DonationScreen,
+  EditProfile,
+  ForgotPassword,
+  FrontDeskScreen,
+  GurukulEvents,
+  HomeScreen,
+  LiveSatsang,
+  LoginOTP,
+  LoginScreen,
+  LoginSuccess,
+  PaymentMethod,
+  ProfileScreen,
+  ProfileSignup,
+  ProfileSignupWithEdit,
+  QuizHistory,
+  QuizResult,
+  RegisterScreen,
+  ResetPassword,
+  Status,
+} from '../screens';
+
+import {RootStackParamList, Theme} from '../types';
 import {COLORS} from './colors';
+import {CommingSoon} from '../components';
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
@@ -395,7 +430,7 @@ export const HomeGrid = (t: any) => {
     },
   ];
 };
-export const EditProfile = (t: any, i18n: any) => {
+export const EditProfileList = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,
@@ -626,4 +661,31 @@ export const GurukulEventsList = [
     title: 'Annual Talent Show',
     content: 'Time: 10:00 AM - 4:00 PM',
   },
+];
+export const NativeStackRoute: {
+  name: keyof RootStackParamList;
+  component: any;
+}[] = [
+  {name: 'Auth', component: AuthStackNavigator},
+  {name: 'BottomNavBar', component: BottomTabNavigator},
+  {name: 'dailyDarshan', component: DailyDarshan},
+  {name: 'dailyDarshanDetail', component: DailyDarshanDetail},
+  {name: 'dailyUpdates', component: DailyUpdates},
+  {name: 'dailyUpdateDetail', component: DailyUpdateDetail},
+  {name: 'dailyQuotes', component: DailyQuotes},
+  {name: 'calendar', component: CalendarScreen},
+  {name: 'liveSatsang', component: LiveSatsang},
+  {name: 'changeLanguage', component: ChangeLanguage},
+  {name: 'editProfile', component: EditProfile},
+  {name: 'status', component: Status},
+  {name: 'dailyQuiz', component: DailyQuiz},
+  {name: 'dailyQuizDetail', component: DailyQuizDetail},
+  {name: 'QuizResult', component: QuizResult},
+  {name: 'donation', component: DonationScreen},
+  {name: 'program', component: CommingSoon},
+  {name: 'programDetail', component: DailyProgramDetail},
+  {name: 'ProfileEdit', component: ProfileSignupWithEdit},
+  {name: 'PaymentMethod', component: PaymentMethod},
+  {name: 'GurukulEvents', component: GurukulEvents},
+  {name: 'QuizHistory', component: QuizHistory},
 ];

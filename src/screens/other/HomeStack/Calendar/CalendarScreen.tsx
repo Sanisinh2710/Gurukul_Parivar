@@ -14,13 +14,13 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
-import {RootAuthStackParamList} from '../../../../types';
+import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
 import {COLORS, d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
   navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+}: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();

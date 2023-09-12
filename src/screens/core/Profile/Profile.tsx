@@ -37,9 +37,9 @@ import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {
   COLORS,
   CustomBackendDateSplitAndFormat,
-  EditProfile,
   captureImage,
   chooseFile,
+  EditProfileList,
 } from '../../../utils';
 import {styles} from './styles';
 
@@ -56,7 +56,7 @@ export const ProfileScreen = ({
   const {t, i18n} = useTranslation();
 
   const ProfileList = React.useMemo(() => {
-    return EditProfile(t, i18n);
+    return EditProfileList(t, i18n);
   }, [t, i18n]);
 
   const userData = React.useMemo(() => {

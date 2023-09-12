@@ -15,11 +15,26 @@ export const GurukulEvents = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
   const {t} = useTranslation();
-  const [searchvalue, setSearch] = React.useState('');
+  const [searchListData, setSearchListData] =
+    React.useState<Array<{[key: string]: any}>>(GurukulEventsList);
 
   const style = styles();
 
   const commonstyle = CommonStyle();
+  const searchEvent = (val: string) => {
+    if (val) {
+      setSearchListData(
+        GurukulEventsList.filter(item => {
+          return (
+            item.title.toLowerCase().includes(val.toLowerCase()) ||
+            item.date.includes(val)
+          );
+        }),
+      );
+    } else {
+      setSearchListData(GurukulEventsList);
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -42,17 +57,17 @@ export const GurukulEvents = ({
               <Image source={AllIcons.Search} style={style.iconStyle} />
             </View>
             <TextInput
-              value={searchvalue}
+              // value={searchvalue}
               placeholder={t('common.Search')}
               placeholderTextColor={COLORS.lightModetextColor}
               style={[style.formTextInput, {width: '80%'}]}
               onChangeText={val => {
-                setSearch(val);
+                searchEvent(val.trim());
               }}
             />
           </View>
 
-          {GurukulEventsList.map((item, index) => {
+          {searchListData.map((item, index) => {
             return (
               <View key={index} style={style.textBoxContainer}>
                 <View style={style.dateContainer}>
