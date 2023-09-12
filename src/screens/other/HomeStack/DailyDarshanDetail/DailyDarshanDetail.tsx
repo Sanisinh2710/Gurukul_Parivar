@@ -6,6 +6,7 @@ import {Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
+  ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
   ShareDownload,
@@ -32,6 +33,9 @@ export const DailyDarshanDetail = ({
   const currentImageUri = Data[pagination - 1];
   console.log(currentImageUri, 'uri');
 
+  const [zoomImageModalVisible, setZoomModalVisiable] =
+    React.useState<boolean>(false);
+
   React.useEffect(() => {
     setWallpaper(`${BASE_URL}${currentImageUri}`);
   }, [currentImageUri]);
@@ -48,6 +52,9 @@ export const DailyDarshanDetail = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View
+          onTouchEnd={() => {
+            setZoomModalVisiable(true);
+          }}
           style={[
             {
               height: '80%',
@@ -71,6 +78,8 @@ export const DailyDarshanDetail = ({
         handleNextPress={() => {
           if (pagination < TotalImages) {
             setPagination(pagination + 1);
+          } else {
+            setPagination(1);
           }
         }}
         handlePrevPress={() => {
@@ -78,6 +87,11 @@ export const DailyDarshanDetail = ({
             setPagination(pagination - 1);
           }
         }}
+      />
+      <ImageZoomer
+        images={[{url: `${BASE_URL}${currentImageUri}`}]}
+        zoomModalVisible={zoomImageModalVisible}
+        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

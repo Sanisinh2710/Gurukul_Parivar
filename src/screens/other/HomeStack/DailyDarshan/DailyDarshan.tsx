@@ -170,7 +170,9 @@ export const DailyDarshan = ({
           },
         }}
       />
+
       <ScrollView
+        overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           height:
@@ -273,7 +275,7 @@ export const DailyDarshan = ({
                   contentContainerStyle={{
                     gap: 15,
                     marginTop: '3%',
-                    paddingBottom: '10%',
+                    paddingBottom: '30%',
                   }}
                   renderItem={({item, index}) => {
                     return (

@@ -12,10 +12,10 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, CustomFonts, Quiz} from '../../../../utils';
-import {styles} from './styles';
 import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '../../../../services';
+import {RootStackParamList} from '../../../../types';
+import {COLORS, CustomFonts} from '../../../../utils';
+import {styles} from './styles';
 export const DailyQuizDetail = ({
   route,
   navigation,
@@ -106,6 +106,7 @@ export const DailyQuizDetail = ({
         <View style={[commonstyle.commonContentView, {flex: 1}]}>
           <FlatList
             data={Data}
+            overScrollMode="always"
             renderItem={({item, index}) => (
               <>
                 <View>

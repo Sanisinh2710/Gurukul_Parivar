@@ -11,7 +11,7 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {CustomFonts, QuizStatus} from '../../../../utils';
+import {CustomFonts} from '../../../../utils';
 import {styles} from './styles';
 import {DailyQuizStatusApi} from '../../../../services';
 

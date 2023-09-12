@@ -148,6 +148,7 @@ export const ResetPassword = ({
           {/* FormInputs:------------------------------------------------------------------------ */}
 
           <FlatList
+            overScrollMode="always"
             data={ResetPasswordInputList}
             renderItem={({item, index}) => (
               <View key={index} style={style.formInputsView}>

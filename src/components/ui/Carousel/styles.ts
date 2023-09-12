@@ -1,10 +1,10 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../utils';
 
 export const style = (currentPage?: number) => {
   return StyleSheet.create({
     snailMainView: {
-      marginTop: '5%',
+      marginTop: '4%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -23,25 +23,23 @@ export const style = (currentPage?: number) => {
       height: 8,
       marginHorizontal: 3,
     },
-
     pagerViewMainView: {
       justifyContent: 'center',
       alignItems: 'center',
-      // backgroundColor: 'blue',
-      // marginBottom: '5%',
     },
     pagerViewImageView: {
       justifyContent: 'center',
       alignItems: 'center',
       borderRightColor: 'black',
       width: '100%',
+      paddingHorizontal: 28,
       height: 164,
     },
     pagerViewImage: {
       borderRadius: 12,
       marginTop: 24,
       backgroundColor: COLORS.primaryRippleColor,
-      width: Dimensions.get('window').width * 0.86,
+      width: '100%',
       height: '100%',
       resizeMode: 'cover',
     },

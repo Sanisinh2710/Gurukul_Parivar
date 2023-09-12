@@ -369,8 +369,8 @@ export const FrontDesk = (t: any) => {
     },
     {
       image: AllIcons.Chat,
-      title: t('frontDesk.Speech'),
-      id: 'speech',
+      title: t('frontDesk.Connect'),
+      id: 'connect',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
 
@@ -643,6 +643,21 @@ export const IntialValuesForFormdataAuth = {
     ],
   },
 };
+
+export const SongList = [
+  {
+    id: '1',
+    url: 'https://gurukul-dev.taskgrids.com/storage/GurukulAudio/6Pg8Myj4.mp3',
+    title: 'Maan Meri Ja',
+    artist: 'King',
+  },
+  {
+    id: '2',
+    url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
+    title: 'Yaar Ka Sataya Hua Hai',
+    artist: 'B Praak',
+  },
+];
 export const GurukulEventsList = [
   {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
   {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},

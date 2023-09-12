@@ -186,6 +186,7 @@ export const ProfileScreen = ({
       />
 
       <ScrollView
+        overScrollMode="always"
         contentContainerStyle={[
           commonStyle.commonContentView,
           {paddingBottom: '25%'},

@@ -47,6 +47,14 @@ export const LiveSatsang = ({
     }
   }, []);
 
+  const youtube_parser = (url: string) => {
+    var rx =
+      /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+
+    let r = url.match(rx);
+    return r?.[1];
+  };
+
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -113,6 +121,7 @@ export const LiveSatsang = ({
 
           {loader || refreshing ? (
             <FlatList
+              overScrollMode="always"
               showsVerticalScrollIndicator={false}
               data={['A', 'B', 'C', 'D']}
               contentContainerStyle={{gap: 10}}
@@ -147,6 +156,7 @@ export const LiveSatsang = ({
             <>
               <FlatList
                 data={Data}
+                overScrollMode="always"
                 refreshControl={
                   <RefreshControl
                     colors={[COLORS.primaryColor, COLORS.green]}
@@ -207,13 +217,7 @@ export const LiveSatsang = ({
                         onReady={() => {
                           setVideoLoad(true);
                         }}
-                        videoId={
-                          item.url.toString().includes('youtu.be')
-                            ? item.url
-                                .split('/')[3]
-                                .slice(0, item.url.split('/')[3].indexOf('?'))
-                            : item.url.split('=')[1]
-                        }
+                        videoId={youtube_parser(item.url)}
                         onChangeState={onStateChange}
                         webViewProps={{
                           containerStyle: {borderRadius: 15},

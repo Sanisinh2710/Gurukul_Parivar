@@ -2,17 +2,16 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
+import * as Progress from 'react-native-progress';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
-import {styles} from './styles';
-import * as Progress from 'react-native-progress';
+import {RootStackParamList} from '../../../../types';
 import {CustomFonts} from '../../../../utils';
+import {styles} from './styles';
 
 export const QuizResult = ({
   route,
@@ -36,6 +35,7 @@ export const QuizResult = ({
 
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         <ScrollView
+          overScrollMode="always"
           contentContainerStyle={{
             flex: 1,
             justifyContent: 'center',

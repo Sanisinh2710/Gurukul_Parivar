@@ -70,6 +70,11 @@ export type GurukulFormValidationSchemaType = {
 
 export type InitialThemeType = {theme: Theme; themeMode: string};
 
+export type InitialSliderPageType = {
+  currentPage: number;
+  images: Array<string>;
+};
+
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;
   full_name: string;
@@ -109,3 +114,12 @@ export type SupportedFormInputTypes =
   | 'textarea'
   | 'email'
   | 'multi-select';
+
+export type SongType = {
+  [key: string]: any;
+  id: string | number;
+  url: string;
+  title: string;
+  artist?: string;
+  description?: string;
+};
