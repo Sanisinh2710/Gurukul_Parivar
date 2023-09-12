@@ -31,6 +31,7 @@ import {
   MusicPlayer,
   ScreenHeader,
   ScreenWrapper,
+  SearchBar,
 } from '../../../../components';
 import {
   GurkulAudioGetApi,
@@ -43,12 +44,18 @@ import {RootStackParamList, SongType} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
-async function handleControl(item: any) {
+async function handleControl(wantToPlayItemId: any) {
   try {
+    const allTracks = await TrackPlayer.getQueue();
+    const skipToIndex = allTracks.findIndex(
+      item => item?.id === wantToPlayItemId,
+    );
+
     const trackStatus = await TrackPlayer.getState();
     const track = await TrackPlayer.getCurrentTrack();
-    if (item != track) {
-      await TrackPlayer.skip(item);
+
+    if (skipToIndex != track) {
+      await TrackPlayer.skip(skipToIndex);
       await TrackPlayer.play();
     } else if (trackStatus == State.Playing) {
       await TrackPlayer.pause();
@@ -75,6 +82,12 @@ export const GurukulConnect = ({
   const [wantNewSong, setWantNewSongs] = React.useState<boolean>(false);
 
   const [allSongs, setAllSongs] = React.useState<Array<SongType | Track>>([]);
+
+  const [searchData, setSearchData] = React.useState<Array<SongType | Track>>(
+    [],
+  );
+
+  const [isSearching, setIsSearching] = React.useState<boolean>(false);
 
   const screenFocused = useIsFocused();
 
@@ -112,20 +125,23 @@ export const GurukulConnect = ({
             newItem.title = wholeitem['title'] ?? '';
             newItem.description = wholeitem['description'] ?? '';
             newItem.artist = wholeitem['artist'] ?? '';
+            newItem.is_multiple = wholeitem['is_multiple'] ?? false;
 
             Songs.push(newItem);
           });
 
-          await addTracks(Songs);
+          await addTracks([
+            ...Songs.filter(item => item.is_multiple === false),
+          ]);
+          setAllSongs(Songs);
+          setSearchData(Songs);
+
           // dispatch(ADD_SONGS({songs: Songs}));
         }
       } catch (error) {
         console.log(error);
       }
     }
-    const songs = await TrackPlayer.getQueue();
-
-    setAllSongs(songs);
     setLoader(false);
     setIsPlayerReady(isSetup);
   };
@@ -237,6 +253,8 @@ export const GurukulConnect = ({
       setTimeout(() => {
         navigation.goBack();
       }, 1000);
+    } else {
+      navigation.goBack();
     }
 
     // Return true to stop default back navigaton
@@ -310,13 +328,17 @@ export const GurukulConnect = ({
       const songs = await TrackPlayer.getQueue();
 
       setAllSongs(songs);
+      const playingTrack = await TrackPlayer.getTrack(0);
+      if (playingTrack !== null) {
+        setActiveTrack(playingTrack);
+      }
     }
     setWantNewSongs(false);
   };
 
   if (!isPlayerReady) {
     return <Loader screenHeight={'100%'} />;
-  } else if (loader) {
+  } else if (loader || isSearching) {
     return <Loader screenHeight={'100%'} />;
   } else {
     return (
@@ -331,52 +353,100 @@ export const GurukulConnect = ({
             onPress: () => {},
           }}
         />
-        <View
-          style={[commonStyle.commonContentView, {flex: 1, marginTop: '3%'}]}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            overScrollMode="always"
-            contentContainerStyle={{
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          overScrollMode="always"
+          contentContainerStyle={[
+            commonStyle.commonContentView,
+            {
               paddingBottom: '20%',
-            }}
-            nestedScrollEnabled={true}
-            refreshControl={
-              <RefreshControl
-                colors={[COLORS.primaryColor, COLORS.green]}
-                refreshing={wantNewSong}
-                onRefresh={onRefresh}
-              />
-            }>
-            <Text style={{color: '#000'}}>Search</Text>
-            <View>
-              {allSongs.length > 0 && (
-                <FlatList
-                  data={allSongs}
-                  overScrollMode="always"
-                  scrollEnabled={false}
-                  contentContainerStyle={{
-                    paddingBottom: '40%',
-                  }}
-                  renderItem={({item, index}) => (
-                    <View
-                      key={index}
-                      style={[
-                        style.songContainer,
-                        {
-                          borderColor:
-                            item.id == activeTrack?.id
-                              ? 'rgba(172, 43, 49, 1)'
-                              : 'rgba(172, 43, 49, 0.3)',
-                        },
-                      ]}>
-                      <View>
-                        <Text style={style.songTitle}>
-                          {item.id}
-                          {'. '}
-                          {item.title}
-                        </Text>
-                        <Text style={style.songArtist}>{item.artist}</Text>
+              marginTop: '3%',
+            },
+          ]}
+          nestedScrollEnabled={true}
+          refreshControl={
+            <RefreshControl
+              colors={[COLORS.primaryColor, COLORS.green]}
+              refreshing={wantNewSong}
+              onRefresh={onRefresh}
+            />
+          }>
+          <SearchBar
+            setSearchData={setSearchData}
+            dataForSearch={[...allSongs]}
+            placeholder={t('common.SearchSpeech')}
+            setIsSearching={setIsSearching}
+          />
+          <View>
+            {allSongs.length > 0 && (
+              <FlatList
+                data={searchData}
+                overScrollMode="always"
+                scrollEnabled={false}
+                contentContainerStyle={{
+                  paddingBottom: activeTrack ? '40%' : 0,
+                }}
+                renderItem={({item, index}) => (
+                  <View
+                    key={index}
+                    style={[
+                      style.songContainer,
+                      {
+                        borderColor:
+                          item?.id == activeTrack?.id
+                            ? 'rgba(172, 43, 49, 1)'
+                            : 'rgba(172, 43, 49, 0.3)',
+                      },
+                    ]}>
+                    <View>
+                      <Text style={style.songTitle}>
+                        {item?.id}
+                        {'. '}
+                        {item?.title}
+                      </Text>
+                      <Text style={style.songArtist}>{item?.description}</Text>
+                    </View>
+                    {item.is_multiple === true ? (
+                      <View
+                        onTouchEnd={() => {}}
+                        style={{
+                          flexDirection: 'row',
+                        }}>
+                        <View style={{height: 15, width: 15}}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              resizeMode: 'contain',
+                              tintColor: COLORS.primaryColor,
+                              transform: [
+                                {
+                                  rotate: '270deg',
+                                },
+                              ],
+                            }}
+                            source={AllIcons.ChevronArrowDown}
+                          />
+                        </View>
+                        <View style={{height: 15, width: 15, marginLeft: -3}}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              resizeMode: 'contain',
+                              tintColor: COLORS.primaryColor,
+                              transform: [
+                                {
+                                  rotate: '270deg',
+                                },
+                              ],
+                            }}
+                            source={AllIcons.ChevronArrowDown}
+                          />
+                        </View>
                       </View>
+                    ) : (
                       <View style={{flexDirection: 'row', gap: 6}}>
                         <View style={{height: 24, width: 24}}>
                           <Image
@@ -391,7 +461,7 @@ export const GurukulConnect = ({
                         </View>
                         <View
                           onTouchEnd={() => {
-                            handleControl(index);
+                            handleControl(item?.id);
                           }}
                           style={{height: 24, width: 24}}>
                           {item.id == activeTrack?.id &&
@@ -408,7 +478,7 @@ export const GurukulConnect = ({
                                 resizeMode: 'contain',
                               }}
                               source={
-                                item.id == activeTrack?.id &&
+                                item?.id == activeTrack?.id &&
                                 trackPlaying === 'PLAYING'
                                   ? AllIcons.PauseSong
                                   : AllIcons.PlaySong
@@ -417,13 +487,13 @@ export const GurukulConnect = ({
                           )}
                         </View>
                       </View>
-                    </View>
-                  )}
-                />
-              )}
-            </View>
-          </ScrollView>
-        </View>
+                    )}
+                  </View>
+                )}
+              />
+            )}
+          </View>
+        </ScrollView>
         <>
           {activeTrack && (
             <View style={style.trackControlContainer}>

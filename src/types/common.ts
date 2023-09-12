@@ -126,4 +126,5 @@ export type SongType = {
   title: string;
   artist?: string;
   description?: string;
+  is_multiple?: boolean;
 };

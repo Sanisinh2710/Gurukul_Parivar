@@ -40,7 +40,7 @@ export const PagerView = React.memo(
       }, 2000);
 
       return () => clearTimeout(timer);
-    }, [currentPage, images]);
+    }, [currentPage]);
 
     return (
       <View style={style().pagerViewMainView}>
@@ -59,14 +59,14 @@ export const PagerView = React.memo(
           }}
           renderItem={({item, index}) => {
             return (
-              <>
-                <View style={[style().pagerViewImageView, {width: width}]}>
-                  <Image
-                    source={{uri: `${BASE_URL}${images[currentPage]}`}}
-                    style={style().pagerViewImage}
-                  />
-                </View>
-              </>
+              <View
+                key={index}
+                style={[style().pagerViewImageView, {width: width}]}>
+                <Image
+                  source={{uri: `${BASE_URL}${images[currentPage]}`}}
+                  style={style().pagerViewImage}
+                />
+              </View>
             );
           }}
         />
