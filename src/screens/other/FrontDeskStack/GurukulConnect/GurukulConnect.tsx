@@ -89,6 +89,8 @@ export const GurukulConnect = ({
 
     const queue = await TrackPlayer.getQueue();
 
+    console.log(isSetup, queue.length, 'check data');
+
     if (isSetup && queue.length <= 0) {
       try {
         const res = await GurkulAudioGetApi();
@@ -131,7 +133,11 @@ export const GurukulConnect = ({
         if (res.resType === 'SUCCESS') {
           let Songs: Array<SongType> = [];
 
-          const apiData: Array<any> = JSON.parse(JSON.stringify(res.data));
+          const apiData: Array<any> = JSON.parse(
+            JSON.stringify(res.data.gurukul_audios),
+          );
+
+          console.log(apiData, 'api songs');
 
           apiData.map((wholeitem, mainindex) => {
             let newItem: SongType = {
@@ -296,8 +302,6 @@ export const GurukulConnect = ({
   }, [activeTrack, trackPosition]);
 
   Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
-
-  console.log(allSongs, 'all songs atste');
 
   if (!isPlayerReady) {
     return <Loader screenHeight={'100%'} />;

@@ -47,9 +47,18 @@ export async function addTracks(songs: Array<SongType>) {
 }
 
 export async function resetAndAddTracks(songs: Array<SongType>) {
-  console.log(songs, 'to be added');
-  await TrackPlayer.reset();
-  await TrackPlayer.add(songs);
+  const queue = await TrackPlayer.getQueue();
+
+  let newSongs: Array<SongType> = [];
+
+  queue.map((queueItem, index) => {
+    newSongs.push(songs.find(item => item.id != queueItem?.id)!);
+  });
+
+  console.log(newSongs, 'to be added');
+
+  // await TrackPlayer.reset();
+  await TrackPlayer.add(newSongs);
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
