@@ -10,6 +10,13 @@ export const DailyProgramDetail = ({
   const title = route.params?.title;
   const description = route.params?.description;
 
+  const styledHTMLData = description?.replaceAll(
+    '<strong>', // Replace this with the actual HTML element you want to style
+    `<strong style="color: rgb(172,42,43)">`,
+  );
+
+  console.log(styledHTMLData);
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -21,11 +28,13 @@ export const DailyProgramDetail = ({
         headerTitle={title}
       />
       <WebView
+        scalesPageToFit={false}
         style={{
           backgroundColor: 'transparent',
+          margin: 20,
         }}
         source={{
-          html: `${description}`,
+          html: `${styledHTMLData}`,
         }}
       />
     </ScreenWrapper>

@@ -307,21 +307,6 @@ export const Payment = [
   {title: 'UPI', icon: AllIcons.Money},
 ];
 
-// export const GuruKulList = [
-//   'Ahmedabad Gurukul: Memnagar',
-//   'Ahmedabad Gurukul: Nikol',
-//   'Ahmedabad Gurukul: Santigram',
-//   'America Gurukul',
-//   'Atlanta Gurukul',
-//   'Austin',
-//   'Bangalore Gurukul',
-//   'Bhavnagar Gurukul',
-//   'Bhayavadar Gurukul',
-//   'Bidar Gurukul',
-//   'Boise',
-//   'Boston',
-// ];
-
 export const AllCountryCodes = [
   ...countries.map(item => {
     return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
@@ -330,12 +315,12 @@ export const AllCountryCodes = [
 
 export const FrontDesk = (t: any) => {
   return [
-    {
-      image: AllIcons.Paper,
-      title: t('frontDesk.Form'),
-      id: 'goform',
-      imageBG: 'rgba(172, 168, 123, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Paper,
+    //   title: t('frontDesk.Form'),
+    //   id: 'goform',
+    //   imageBG: 'rgba(172, 168, 123, 0.1)',
+    // },
     {
       image: AllIcons.Chat,
       title: t('frontDesk.Speech'),
@@ -349,18 +334,18 @@ export const FrontDesk = (t: any) => {
       id: 'event',
       imageBG: 'rgba(174, 73, 141, 0.1)',
     },
-    {
-      image: AllIcons.Star,
-      title: t('frontDesk.Quiz'),
-      id: 'quiz',
-      imageBG: 'rgba(60, 42, 152, 0.1)',
-    },
-    {
-      image: AllIcons.Donation,
-      title: t('frontDesk.Donation'),
-      id: 'donation',
-      imageBG: 'rgba(0, 166, 88, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Star,
+    //   title: t('frontDesk.Quiz'),
+    //   id: 'quiz',
+    //   imageBG: 'rgba(60, 42, 152, 0.1)',
+    // },
+    // {
+    //   image: AllIcons.Donation,
+    //   title: t('frontDesk.Donation'),
+    //   id: 'donation',
+    //   imageBG: 'rgba(0, 166, 88, 0.1)',
+    // },
   ];
 };
 export const HomeGrid = (t: any) => {

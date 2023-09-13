@@ -5,6 +5,7 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_PROGRAM_GET_ENDPOINT,
   DAILY_QUIZ_ANSWER_POST_ENDPOINT,
   DAILY_QUIZ_GET_ENDPOINT,
   DAILY_QUIZ_HISTORY_GET_ENDPOINT,
@@ -687,4 +688,7 @@ export const DailyQuizStatusApi = async () => {
 };
 export const DailyQuizHistoryGetApi = async (id: number) => {
   return apiRequest(`${DAILY_QUIZ_HISTORY_GET_ENDPOINT}${id}`, 'get');
+};
+export const DailyProgramGetApi = async () => {
+  return apiRequest(DAILY_PROGRAM_GET_ENDPOINT, 'get');
 };

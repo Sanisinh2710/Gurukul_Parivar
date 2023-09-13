@@ -30,4 +30,5 @@ declare module '@env' {
   export const DAILY_QUIZ_ANSWER_POST_ENDPOINT: string;
   export const DAILY_QUIZ_STATUS_GET_ENDPOINT: string;
   export const DAILY_QUIZ_HISTORY_GET_ENDPOINT: string;
+  export const DAILY_PROGRAM_GET_ENDPOINT: string;
 }
