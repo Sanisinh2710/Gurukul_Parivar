@@ -27,6 +27,7 @@ import TrackPlayer, {
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  DropDownModel,
   Loader,
   MusicPlayer,
   ScreenHeader,
@@ -39,13 +40,15 @@ import {
 } from '../../../../redux/ducks/musicSlice';
 import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
 import {
+  GurkulAudioCategoriesGetApi,
   GurkulAudioGetApi,
+  GurkulAudioGetFromCategoriesGetApi,
   addTracks,
   resetAndAddTracks,
   setupPlayer,
 } from '../../../../services';
 import {RootStackParamList, SongType} from '../../../../types';
-import {COLORS} from '../../../../utils';
+import {COLORS, CustomFonts} from '../../../../utils';
 import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
@@ -91,6 +94,10 @@ export const GurukulConnect = ({
   const [searchData, setSearchData] = React.useState<Array<SongType | Track>>([
     ...allSongs,
   ]);
+
+  const [modal, setModal] = React.useState(false);
+  const [categoryList, setCategoryList] = React.useState<Array<any>>([]);
+  const [selectedItem, setSelectedItem] = React.useState<Array<any>>([]);
 
   const dispatch = useAppDispatch();
 
@@ -189,6 +196,12 @@ export const GurukulConnect = ({
         console.log(error);
       }
     }
+    const response = await GurkulAudioCategoriesGetApi();
+
+    if (response.resType === 'SUCCESS') {
+      setCategoryList(response.data.categories);
+    }
+
     setLoader(false);
     setIsPlayerReady(isSetup);
   };
@@ -196,6 +209,20 @@ export const GurukulConnect = ({
   React.useMemo(async () => {
     await setup();
   }, []);
+
+  React.useMemo(async () => {
+    if (selectedItem.length > 0) {
+      setLoader(true);
+
+      const response = await GurkulAudioGetFromCategoriesGetApi(selectedItem);
+
+      if (response.resType === 'SUCCESS') {
+        console.log(response.data.gurukul_audios, 'response fetched success');
+      }
+
+      setLoader(false);
+    }
+  }, [selectedItem]);
 
   // React.useMemo(async () => {
   //   if (screenFocused && isPlayerReady) {
@@ -438,7 +465,9 @@ export const GurukulConnect = ({
           headerTitle={t('frontDesk.Connect')}
           headerRight={{
             icon: AllIcons.Filter,
-            onPress: () => {},
+            onPress: () => {
+              setModal(true);
+            },
           }}
         />
 
@@ -466,6 +495,66 @@ export const GurukulConnect = ({
             placeholder={t('common.SearchSpeech')}
             setIsSearching={setIsSearching}
           />
+
+          {Array.isArray(selectedItem) && selectedItem.length > 0 && (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 8,
+                flexWrap: 'wrap',
+                marginVertical: '1.5%',
+              }}>
+              {selectedItem.map((mainitem, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: COLORS.primaryLightColor,
+                      paddingLeft: 16,
+                      paddingRight: 10,
+                      height: 35,
+                      alignItems: 'center',
+                      borderRadius: 60,
+                      gap: 10,
+                    }}>
+                    <Text
+                      style={{
+                        ...CustomFonts.body.large14,
+                        fontSize: 16,
+                        color: COLORS.black,
+                      }}>
+                      {categoryList.find(item => item.id === mainitem)?.name}
+                    </Text>
+                    <View
+                      onTouchEnd={() => {
+                        let newValues: string[] = JSON.parse(
+                          JSON.stringify(selectedItem),
+                        );
+                        newValues.splice(index, 1);
+                        setSelectedItem(newValues);
+                      }}
+                      style={{
+                        width: 14,
+                        height: 14,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Image
+                        source={AllIcons.RoundCross}
+                        style={{
+                          flex: 1,
+                          tintColor: COLORS.primaryColor,
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+
           <View>
             {allSongs.length > 0 && (
               <FlatList
@@ -594,6 +683,18 @@ export const GurukulConnect = ({
             </View>
           )}
         </>
+        <DropDownModel
+          modelVisible={modal}
+          setModelVisible={setModal}
+          modalHeight="70%"
+          type="multi-select"
+          inputList={categoryList}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          wantResetButton={true}
+          label="G-connect Categories"
+          wantApplyButton={true}
+        />
       </ScreenWrapper>
     );
   }

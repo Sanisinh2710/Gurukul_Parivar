@@ -295,6 +295,14 @@ export const GurkulAudioCategoriesGetApi = async () => {
   return await apiRequest(GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT, 'get');
 };
 
+export const GurkulAudioGetFromCategoriesGetApi = async (
+  payload: Array<any>,
+) => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get', {
+    category_ids: [...payload],
+  });
+};
+
 export const GurkulMultipleAudioGetApi = async (id: number) => {
   return await apiRequest(
     `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
