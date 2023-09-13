@@ -17,6 +17,9 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
+  GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT,
+  GURUKUL_AUDIO_GET_ENDPOINT,
+  GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   GURUKUL_CONNECT_GET_ENDPOINT,
   GURUKUL_CONNECT_POST_ENDPOINT,
@@ -170,6 +173,10 @@ export const DailySatsangApi = async (date: Date) => {
   return await apiRequest(DAILY_SATSANG_GET_ENDPOINT, 'get', {
     date: newDate,
   });
+};
+
+export const GurkulAudioApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
 };
 
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
@@ -687,4 +694,15 @@ export const DailyQuizStatusApi = async () => {
 };
 export const DailyQuizHistoryGetApi = async (id: number) => {
   return apiRequest(`${DAILY_QUIZ_HISTORY_GET_ENDPOINT}${id}`, 'get');
+};
+
+export const GurkulAudioCategoriesGetApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT, 'get');
+};
+
+export const GurkulMultipleAudioGetApi = async (id: number) => {
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
 };

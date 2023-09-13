@@ -182,7 +182,7 @@
       "Event": "Gurukul Events",
       "Quiz": "Daily Quiz",
       "Donation": "Donation",
-      "Terms":"By proceeding you agree with our Terms & Condition for Donation"
+      "Terms": "By proceeding you agree with our Terms & Condition for Donation"
     },
     "myProfile": {
       "Heading": "My Profile",
@@ -237,13 +237,12 @@
       "Heading": "Daily Quiz",
       "NxtBtn": "Next",
       "SubmitBtn": "Submit",
-      "Result":"Quiz Result"
+      "Result": "Quiz Result"
     },
     "ResultModel": {
       "Title": "Congratulations",
       "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!",
-      "BtnText":"Discover My Standing"
-
+      "BtnText": "Discover My Standing"
     },
     "Donation": {
       "Heading": "Donation",
@@ -251,11 +250,11 @@
       "Branch": "Donate to Gurukul Branch",
       "Amount": "Amount",
       "OtherNote": "Other Note by Donar",
-      "Placeholder":"Enter Donation"
+      "Placeholder": "Enter Donation"
     },
     "Payment": {
       "Heading": "Select Payment Method",
-      "Proceed":"Proceed Payment"
+      "Proceed": "Proceed Payment"
     },
     "NoData": {
       "Title": "Oops, We're Blanking Out!",

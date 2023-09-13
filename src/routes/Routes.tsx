@@ -30,9 +30,9 @@ import {
   DonationScreen,
   EditProfile,
   ForgotPassword,
+  GurukulEvents,
   FrontDeskScreen,
   GurukulConnect,
-  GurukulEvents,
   HomeScreen,
   LiveSatsang,
   LoginOTP,
@@ -164,6 +164,10 @@ export const Routes = (): React.JSX.Element => {
             <NativeStack.Screen
               name="dailyQuizDetail"
               component={DailyQuizDetail}
+            />
+            <NativeStack.Screen
+              name="gurkulConnect"
+              component={GurukulConnect}
             />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />

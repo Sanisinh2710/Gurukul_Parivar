@@ -109,3 +109,11 @@ export type SupportedFormInputTypes =
   | 'textarea'
   | 'email'
   | 'multi-select';
+
+  export type SongControl = {
+    songIndex?: number;
+    status?: boolean;
+    songId?: string;
+    songTitle?: string;
+  };
+  

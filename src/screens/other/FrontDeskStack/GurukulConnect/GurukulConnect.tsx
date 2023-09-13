@@ -1,56 +1,54 @@
 import React from 'react';
-
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useTranslation} from 'react-i18next';
 import {
-  AppState,
-  BackHandler,
   FlatList,
   Image,
-  Platform,
   Text,
+  AppState,
   View,
+  ActivityIndicator,
 } from 'react-native';
+import {
+  DropDownModel,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+  SearchBar,
+  TrackControl,
+} from '../../../../components';
+import {RootStackParamList, SongControl} from '../../../../types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AllIcons} from '../../../../../assets/icons';
+import {CommonStyle} from '../../../../../assets/styles';
+import {useTranslation} from 'react-i18next';
 import TrackPlayer, {
   Event,
   State,
-  Track,
-  usePlaybackState,
-  useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  MusicPlayer,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {addTracks, setupPlayer} from '../../../../services';
-import {storage} from '../../../../storage';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, SongList} from '../../../../utils';
+import {addTracks, setupPlayer} from '../../../../services/PlaybackService';
+import {COLORS, CustomFonts, SongList, downloadSong} from '../../../../utils';
 import {styles} from './styles';
-
-export type SongControl = {
-  status?: boolean;
-  songId: string | number;
-  songTitle: string;
-};
+import {storage} from '../../../../storage';
+import {useIsFocused} from '@react-navigation/native';
+import {
+  GurkulAudioApi,
+  GurkulAudioCategoriesGetApi,
+} from '../../../../services';
+import Toast from 'react-native-simple-toast';
+import {BASE_URL} from '@env';
 
 async function handleControl(item: any) {
   try {
     const trackStatus = await TrackPlayer.getState();
     const track = await TrackPlayer.getCurrentTrack();
     if (item != track) {
-      await TrackPlayer.skip(item);
-      await TrackPlayer.play();
+      TrackPlayer.skip(item);
+      TrackPlayer.play();
     } else if (trackStatus == State.Playing) {
-      await TrackPlayer.pause();
+      TrackPlayer.pause();
     } else {
-      await TrackPlayer.play();
+      TrackPlayer.play();
     }
   } catch (e) {
     console.log(e);
@@ -63,185 +61,227 @@ export const GurukulConnect = ({
   const commonStyle = CommonStyle();
   const style = styles();
   const {t} = useTranslation();
+  const [songControl, setSongControl] = React.useState<SongControl>({
+    songIndex: -1,
+    status: false,
+  });
+  const [songData, setSongData] = React.useState<Array<any>>(SongList);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
+  const [loader, setLoader] = React.useState({
+    status: false,
+    index: -1,
+  });
 
-  const [activeTrack, setActiveTrack] = React.useState<Track>();
-
+  const [categoryList, setCategoryList] = React.useState([]);
+  const [selectedItem, setSelectedItem] = React.useState<string[]>([]);
   const screenFocused = useIsFocused();
 
-  const playbackState = usePlaybackState();
-
-  const {position, duration} = useProgress();
-
   const setup = async () => {
-    let isSetup = await setupPlayer();
+    try {
+      let isSetup = await setupPlayer();
 
-    const queue = await TrackPlayer.getQueue();
+      console.log(isSetup);
 
-    if (isSetup && queue.length <= 0) {
-      await addTracks();
+      const queue = await TrackPlayer.getQueue();
+
+      if (isSetup && queue.length <= 0) {
+        const response = await GurkulAudioApi();
+        const lastElementLocal = SongList.slice(-1);
+        const lastElementResponse = response.data.gurukul_audios.slice(-1);
+        if (
+          response.resType === 'SUCCESS' &&
+          response.data.gurukul_audios.length > 0
+        ) {
+          if (lastElementLocal[0].id != lastElementResponse[0].id) {
+            response.data.gurukul_audios.forEach((audioObj: any) => {
+              SongList.push({
+                id: audioObj.id,
+                title: audioObj.title,
+                url: BASE_URL + audioObj.audio,
+                description: audioObj.description,
+                is_multiple: audioObj.is_multiple,
+              });
+            });
+            await addTracks();
+          } else {
+            await addTracks();
+          }
+        } else {
+          Toast.show(response.message, 2);
+        }
+      }
+      setIsPlayerReady(isSetup);
+    } catch (e) {
+      console.log('Player Setup Error', e);
     }
-
-    setIsPlayerReady(isSetup);
   };
 
   React.useMemo(async () => {
-    await setup();
+    setup();
+
+    const response = await GurkulAudioCategoriesGetApi();
+
+    if (response.resType === 'SUCCESS') {
+      setCategoryList(response.data.categories);
+    }
   }, []);
 
   React.useMemo(async () => {
-    if (screenFocused && isPlayerReady) {
-      const trackFromStore = storage.getString('currMusic');
-
-      if (trackFromStore) {
-        const trackData: {track: Track; position: number} =
-          JSON.parse(trackFromStore);
-
-        const currentTrackPosition = await TrackPlayer.getPosition();
-
-        await TrackPlayer.skip(
-          SongList.findIndex(item => item.id === trackData.track?.id),
-          playbackState === State.Playing || playbackState === State.Paused
-            ? currentTrackPosition
-            : trackData.position,
-        );
-        setActiveTrack(trackData.track);
+    try {
+      if (screenFocused) {
+        const trackStatus = await TrackPlayer.getState();
+        const lastTrackInfo = storage.getString('lastTrack');
+        if (lastTrackInfo != undefined) {
+          const trackInfo = JSON.parse(lastTrackInfo);
+          trackInfo.status = trackStatus == State.Playing ? true : false;
+          setSongControl(trackInfo);
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
-  }, [screenFocused, isPlayerReady]);
+  }, []);
 
   useTrackPlayerEvents(
-    [Event.PlaybackTrackChanged, Event.PlaybackState],
+    [
+      Event.PlaybackTrackChanged,
+      Event.PlaybackState,
+      Event.PlaybackProgressUpdated,
+    ],
     async event => {
-      switch (event.type) {
-        case Event.PlaybackTrackChanged:
-          if (
-            playbackState !== State.Buffering &&
-            playbackState !== State.Connecting &&
-            playbackState !== State.Ready &&
-            playbackState !== 'idle'
-          ) {
-            const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
-
-            const currentTrackDuration = await TrackPlayer.getDuration();
-
-            await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
-              title: playingTrack?.title,
-              artist: playingTrack?.artist,
-              duration: currentTrackDuration,
-            });
-
-            if (playingTrack !== null) {
-              setActiveTrack(playingTrack);
-            }
-          }
-          break;
-
-        case Event.PlaybackState:
-          if (
-            (playbackState === State.Playing ||
-              playbackState === State.Paused ||
-              playbackState === State.Stopped) &&
-            playbackState !== 'idle'
-          ) {
-            const currTrack = await TrackPlayer.getCurrentTrack();
-
-            if (currTrack !== null) {
-              const playingTrack1 = await TrackPlayer.getTrack(currTrack);
-
-              const currentTrackDuration1 = await TrackPlayer.getDuration();
-
-              await TrackPlayer.updateMetadataForTrack(currTrack, {
-                title: playingTrack1?.title,
-                artist: playingTrack1?.artist,
-                duration: currentTrackDuration1,
-              });
-
-              if (playingTrack1 !== null) {
-                setActiveTrack(playingTrack1);
+      try {
+        switch (event.type) {
+          case Event.PlaybackTrackChanged:
+            if (event.nextTrack != null) {
+              const track = await TrackPlayer.getTrack(event.nextTrack);
+              const trackStatus = await TrackPlayer.getState();
+              const cloneControl = {...songControl};
+              if (track != null) {
+                cloneControl.songId = track.id;
+                cloneControl.songTitle = track.title;
+                cloneControl.status =
+                  trackStatus == State.Playing ? true : false;
+                cloneControl.songIndex = event.nextTrack;
+                setSongControl(cloneControl);
               }
             }
-          }
-          break;
+            break;
+          case Event.PlaybackState:
+            setSongControl({
+              ...songControl,
+              status:
+                event.state == State.Playing || event.state == State.Buffering
+                  ? true
+                  : false,
+            });
+            break;
 
-        default:
-          break;
+          default:
+            break;
+        }
+      } catch (e) {
+        console.log(e, 'EVENT');
       }
     },
   );
 
-  const trackPlaying = React.useMemo(() => {
-    return playbackState === State.Playing ? true : false;
-  }, [playbackState]);
-
-  const trackPosition = React.useMemo(() => {
-    return position;
-  }, [position]);
-
-  const onBackPress = React.useCallback(() => {
-    if (activeTrack) {
-      storage.set(
-        'currMusic',
-        JSON.stringify({track: activeTrack, position: trackPosition}),
-      );
-
-      setTimeout(() => {
-        navigation.goBack();
-      }, 800);
-    }
-
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
-    return true;
-  }, [activeTrack, trackPosition]);
-
-  const onBlurScreen = React.useCallback(() => {
-    if (activeTrack) {
-      storage.set(
-        'currMusic',
-        JSON.stringify({track: activeTrack, position: trackPosition}),
-      );
-    }
-
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
-    return true;
-  }, [activeTrack, trackPosition]);
-
-  const ExitCallBack = React.useCallback(() => {
-    // Add Event Listener for hardwareBackPress
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    const blurListner = AppState.addEventListener('blur', onBlurScreen);
-
-    return () => {
-      // Once the Screen gets blur Remove Event Listener
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      blurListner.remove();
-    };
-  }, [activeTrack, trackPosition]);
-
-  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
+  React.useEffect(() => {
+    const listener = AppState.addEventListener('blur', async () => {
+      storage.set('lastTrack', JSON.stringify(songControl));
+      return true;
+    });
+    return () => listener.remove();
+  }, [songControl]);
 
   if (!isPlayerReady) {
-    return <Loader screenHeight={'100%'} />;
-  } else {
-    return (
-      <ScreenWrapper>
-        <ScreenHeader
-          showLeft={true}
-          headerTitleAlign={'left'}
-          leftOnPress={() => navigation.goBack()}
-          headerTitle={t('frontDesk.Connect')}
-          headerRight={{
-            icon: AllIcons.Filter,
-            onPress: () => {},
-          }}
-        />
-        <View style={[commonStyle.commonContentView, {flex: 1, marginTop: 25}]}>
-          <Text style={{color: '#000'}}>Search</Text>
-          <View>
+    return <Loader />;
+  }
+
+  /* JSX Return Start */
+  return (
+    <ScreenWrapper>
+      <ScreenHeader
+        showLeft={true}
+        headerTitleAlign={'left'}
+        leftOnPress={() => {
+          storage.set('lastTrack', JSON.stringify(songControl));
+          navigation.goBack();
+        }}
+        headerTitle={t('frontDesk.Connect')}
+        headerRight={{
+          icon: AllIcons.Filter,
+          onPress: () => {
+            setModal(true);
+          },
+        }}
+      />
+      <View style={[commonStyle.commonContentView, {flex: 1}]}>
+        <SearchBar dataForSearch={SongList} setSearchData={setSongData} />
+
+        {Array.isArray(selectedItem) && selectedItem.length > 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 8,
+              flexWrap: 'wrap',
+              marginVertical: '1.5%',
+            }}>
+            {selectedItem.map((mainitem, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: COLORS.primaryLightColor,
+                    paddingLeft: 16,
+                    paddingRight: 10,
+                    height: 35,
+                    alignItems: 'center',
+                    borderRadius: 60,
+                    gap: 10,
+                  }}>
+                  <Text
+                    style={{
+                      ...CustomFonts.body.large14,
+                      fontSize: 16,
+                      color: COLORS.black,
+                    }}>
+                    {categoryList.find(item => item.id === mainitem)?.name}
+                  </Text>
+                  <View
+                    onTouchEnd={() => {
+                      let newValues: string[] = JSON.parse(
+                        JSON.stringify(selectedItem),
+                      );
+                      newValues.splice(index, 1);
+                      setSelectedItem(newValues);
+                    }}
+                    style={{
+                      width: 14,
+                      height: 14,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Image
+                      source={AllIcons.RoundCross}
+                      style={{
+                        flex: 1,
+                        tintColor: COLORS.primaryColor,
+                        resizeMode: 'contain',
+                      }}
+                    />
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
+
+        <View style={{flex: 1}}>
+          {songData.length > 0 ? (
             <FlatList
-              data={SongList}
+              data={songData}
               renderItem={({item, index}) => (
                 <View
                   key={index}
@@ -249,7 +289,7 @@ export const GurukulConnect = ({
                     style.songContainer,
                     {
                       borderColor:
-                        item.id == activeTrack?.id
+                        index == songControl.songIndex
                           ? 'rgba(172, 43, 49, 1)'
                           : 'rgba(172, 43, 49, 0.3)',
                     },
@@ -258,59 +298,109 @@ export const GurukulConnect = ({
                     <Text style={style.songTitle}>
                       {item.id}
                       {'. '}
+
                       {item.title}
                     </Text>
-                    <Text style={style.songArtist}>{item.artist}</Text>
+                    <Text style={style.songArtist}>{item.description}</Text>
                   </View>
                   <View style={{flexDirection: 'row', gap: 6}}>
-                    <View style={{height: 24, width: 24}}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                          tintColor: COLORS.primaryColor,
-                        }}
-                        source={AllIcons.DownloadSong}
-                      />
-                    </View>
-                    <View
-                      onTouchEnd={() => {
-                        handleControl(index);
-                      }}
-                      style={{height: 24, width: 24}}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                        source={
-                          item.id == activeTrack?.id && trackPlaying
-                            ? AllIcons.PauseSong
-                            : AllIcons.PlaySong
-                        }
-                      />
-                    </View>
+                    {item.is_multiple == false ? (
+                      <>
+                        <View
+                          style={{height: 24, width: 24}}
+                          onTouchEnd={async () => {
+                            setLoader({
+                              status: true,
+                              index: index,
+                            });
+                            const response = await downloadSong(
+                              item.url,
+                              item.title,
+                            );
+                            if (response == 'SUCCESS') {
+                              setLoader({
+                                status: false,
+                                index: index,
+                              });
+                            } else {
+                              setLoader({
+                                status: false,
+                                index: index,
+                              });
+                            }
+                          }}>
+                          {loader.status && loader.index == index ? (
+                            <ActivityIndicator size={20} />
+                          ) : (
+                            <Image
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                resizeMode: 'contain',
+                                tintColor: COLORS.primaryColor,
+                              }}
+                              source={AllIcons.DownloadSong}
+                            />
+                          )}
+                        </View>
+                        <View
+                          onTouchEnd={async () => {
+                            handleControl(index);
+                          }}
+                          style={{height: 24, width: 24}}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              resizeMode: 'contain',
+                            }}
+                            source={
+                              index == songControl.songIndex &&
+                              songControl.status == true
+                                ? AllIcons.PauseSong
+                                : AllIcons.PlaySong
+                            }
+                          />
+                        </View>
+                      </>
+                    ) : (
+                      <View style={{height: 24, width: 24}}>
+                        <Image
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'contain',
+                            tintColor: COLORS.primaryColor,
+                          }}
+                          source={AllIcons.AlbumRightArrow}
+                        />
+                      </View>
+                    )}
                   </View>
                 </View>
               )}
             />
-          </View>
-        </View>
-        <>
-          {activeTrack && (
-            <View style={style.trackControlContainer}>
-              <MusicPlayer
-                playbackState={playbackState}
-                activeTrack={activeTrack}
-                position={position}
-                duration={duration}
-              />
-            </View>
+          ) : (
+            <NoData />
           )}
-        </>
-      </ScreenWrapper>
-    );
-  }
+        </View>
+      </View>
+
+      <TrackControl songControl={songControl} setSongControl={setSongControl} />
+
+      <DropDownModel
+        modelVisible={modal}
+        setModelVisible={setModal}
+        modalHeight="70%"
+        type="multi-select"
+        inputList={categoryList}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+        wantResetButton={true}
+        label="G-connect Categories"
+        wantApplyButton={true}
+      />
+    </ScreenWrapper>
+  );
+  /* JSX Return Start */
 };

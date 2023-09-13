@@ -41,7 +41,7 @@ export const DailyUpdateDetail = ({
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: '115%',
+            paddingBottom: '30%',
           }}>
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
@@ -60,6 +60,7 @@ export const DailyUpdateDetail = ({
             <Image
               source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
+              resizeMode="cover"
             />
           </View>
           <View style={style.titleContainer}>
