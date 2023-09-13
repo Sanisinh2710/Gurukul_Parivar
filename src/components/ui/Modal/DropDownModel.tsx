@@ -165,9 +165,8 @@ export const DropDownModel = React.memo(
                         onPress={() => {
                           if (setSelectedItem && selectedItem) {
                             if (
-                              Array.isArray(
-                                selectedItem && type === 'multi-select',
-                              )
+                              Array.isArray(selectedItem) &&
+                              type === 'multi-select'
                             ) {
                               setSelectedItem([]);
                             } else {

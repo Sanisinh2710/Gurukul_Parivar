@@ -77,7 +77,12 @@ export type InitialSliderPageType = {
   images: Array<string>;
 };
 
-export type InitialSongsType = {allSongs: Array<SongType> | Array<Track> | any};
+export type InitialSongsType = {
+  allSongs: Array<SongType> | Array<Track> | any;
+  activeTrack: Track;
+  activeTrackPosition: number;
+  selectedCategories: Array<string>;
+};
 
 export type PersonalInfoFormValidationSchemaType = {
   gender: string;

@@ -34,12 +34,16 @@ import {
   SearchBar,
 } from '../../../../components';
 import {
+  ADD_UPDATE_SONGS,
+  SET_ACTIVE_TRACKDATA,
+} from '../../../../redux/ducks/musicSlice';
+import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
+import {
   GurkulAudioGetApi,
   addTracks,
   resetAndAddTracks,
   setupPlayer,
 } from '../../../../services';
-import {storage} from '../../../../storage';
 import {RootStackParamList, SongType} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
@@ -75,19 +79,20 @@ export const GurukulConnect = ({
   const {t} = useTranslation();
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
 
-  const [activeTrack, setActiveTrack] = React.useState<Track>();
-
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [wantNewSong, setWantNewSongs] = React.useState<boolean>(false);
 
-  const [allSongs, setAllSongs] = React.useState<Array<SongType | Track>>([]);
-
-  const [searchData, setSearchData] = React.useState<Array<SongType | Track>>(
-    [],
-  );
-
   const [isSearching, setIsSearching] = React.useState<boolean>(false);
+
+  const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
+    useAppSelector(state => state.music);
+
+  const [searchData, setSearchData] = React.useState<Array<SongType | Track>>([
+    ...allSongs,
+  ]);
+
+  const dispatch = useAppDispatch();
 
   const screenFocused = useIsFocused();
 
@@ -101,9 +106,13 @@ export const GurukulConnect = ({
 
     const queue = await TrackPlayer.getQueue();
 
+    console.log(queue.length, 'queue setup time');
+
     if (isSetup && queue.length <= 0) {
       try {
         const res = await GurkulAudioGetApi();
+
+        console.log('audio got from api');
 
         if (res.resType === 'SUCCESS') {
           let Songs: Array<SongType> = [];
@@ -129,14 +138,52 @@ export const GurukulConnect = ({
 
             Songs.push(newItem);
           });
+          console.log('backend data receoivd');
 
           await addTracks([
             ...Songs.filter(item => item.is_multiple === false),
           ]);
-          setAllSongs(Songs);
-          setSearchData(Songs);
+          console.log('came in try track added');
 
-          // dispatch(ADD_SONGS({songs: Songs}));
+          dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+          const playingTrack = await TrackPlayer.getTrack(0);
+          if (playingTrack !== null) {
+            if (activeTrack && activeTrackPosition) {
+              const newQueue = await TrackPlayer.getQueue();
+              await TrackPlayer.skip(
+                newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+                activeTrackPosition,
+              );
+              const currentTrackDuration = await TrackPlayer.getDuration();
+
+              await TrackPlayer.updateMetadataForTrack(
+                newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+                {
+                  title: activeTrack?.title,
+                  artist: activeTrack?.artist,
+                  duration: currentTrackDuration,
+                },
+              );
+              dispatch(
+                SET_ACTIVE_TRACKDATA({
+                  activeTrackDataPayload: {
+                    track: activeTrack,
+                    position: activeTrackPosition,
+                  },
+                }),
+              );
+            } else {
+              dispatch(
+                SET_ACTIVE_TRACKDATA({
+                  activeTrackDataPayload: {
+                    track: playingTrack,
+                  },
+                }),
+              );
+            }
+          }
+
+          console.log('dispatch done');
         }
       } catch (error) {
         console.log(error);
@@ -150,26 +197,51 @@ export const GurukulConnect = ({
     await setup();
   }, []);
 
-  React.useMemo(async () => {
-    if (screenFocused && isPlayerReady) {
-      const trackFromStore = storage.getString('currMusic');
+  // React.useMemo(async () => {
+  //   if (screenFocused && isPlayerReady) {
+  //     const queue = await TrackPlayer.getQueue();
 
-      if (trackFromStore) {
-        const trackData: {track: Track; position: number} =
-          JSON.parse(trackFromStore);
+  //     console.log('queue llength in screen focused', queue.length);
 
-        const currentTrackPosition = await TrackPlayer.getPosition();
+  //     if (
+  //       queue.length > 0 &&
+  //       playbackState !== State.Playing &&
+  //       playbackState !== State.Paused &&
+  //       activeTrack &&
+  //       activeTrackPosition
+  //     ) {
+  //       console.log('came in if');
 
-        await TrackPlayer.skip(
-          allSongs.findIndex((item: any) => item.id === trackData.track?.id),
-          playbackState === State.Playing || playbackState === State.Paused
-            ? currentTrackPosition
-            : trackData.position,
-        );
-        setActiveTrack(trackData.track);
-      }
+  //       await TrackPlayer.skip(
+  //         queue.findIndex((item: any) => item.id === activeTrack?.id),
+  //         activeTrackPosition,
+  //       );
+  //     } else {
+  //       console.log('came in else');
+  //       const playingTrackIndex = await TrackPlayer.getCurrentTrack();
+  //       console.log('came in else', playingTrackIndex);
+
+  //       if (playingTrackIndex !== null) {
+  //         const playingTrack = await TrackPlayer.getTrack(playingTrackIndex);
+  //         if (playingTrack !== null) {
+  //           dispatch(
+  //             SET_ACTIVE_TRACKDATA({
+  //               activeTrackDataPayload: {
+  //                 track: playingTrack,
+  //               },
+  //             }),
+  //           );
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [screenFocused, isPlayerReady]);
+
+  React.useEffect(() => {
+    if (allSongs.length > 0) {
+      setSearchData(allSongs);
     }
-  }, [screenFocused, isPlayerReady]);
+  }, [allSongs]);
 
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
@@ -179,21 +251,26 @@ export const GurukulConnect = ({
           if (
             playbackState !== State.Buffering &&
             playbackState !== State.Connecting &&
-            playbackState !== State.Ready &&
             playbackState !== 'idle'
           ) {
             const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
 
             const currentTrackDuration = await TrackPlayer.getDuration();
 
-            await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
-              title: playingTrack?.title,
-              artist: playingTrack?.artist,
-              duration: currentTrackDuration,
-            });
-
             if (playingTrack !== null) {
-              setActiveTrack(playingTrack);
+              await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
+                title: playingTrack?.title,
+                artist: playingTrack?.artist,
+                duration: currentTrackDuration,
+              });
+
+              dispatch(
+                SET_ACTIVE_TRACKDATA({
+                  activeTrackDataPayload: {
+                    track: playingTrack,
+                  },
+                }),
+              );
             }
           }
           break;
@@ -212,14 +289,22 @@ export const GurukulConnect = ({
 
               const currentTrackDuration1 = await TrackPlayer.getDuration();
 
-              await TrackPlayer.updateMetadataForTrack(currTrack, {
-                title: playingTrack1?.title,
-                artist: playingTrack1?.artist,
-                duration: currentTrackDuration1,
-              });
+              if (playingTrack1 !== null) {
+                await TrackPlayer.updateMetadataForTrack(currTrack, {
+                  title: playingTrack1?.title,
+                  artist: playingTrack1?.artist,
+                  duration: currentTrackDuration1,
+                });
+              }
 
               if (playingTrack1 !== null) {
-                setActiveTrack(playingTrack1);
+                dispatch(
+                  SET_ACTIVE_TRACKDATA({
+                    activeTrackDataPayload: {
+                      track: playingTrack1,
+                    },
+                  }),
+                );
               }
             }
           }
@@ -245,33 +330,29 @@ export const GurukulConnect = ({
 
   const onBackPress = React.useCallback(() => {
     if (activeTrack) {
-      storage.set(
-        'currMusic',
-        JSON.stringify({track: activeTrack, position: trackPosition}),
+      dispatch(
+        SET_ACTIVE_TRACKDATA({
+          activeTrackDataPayload: {track: activeTrack, position: trackPosition},
+        }),
       );
 
-      setTimeout(() => {
-        navigation.goBack();
-      }, 1000);
+      navigation.goBack();
     } else {
       navigation.goBack();
     }
 
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
     return true;
   }, [activeTrack, trackPosition]);
 
   const onBlurScreen = React.useCallback(() => {
     if (activeTrack) {
-      storage.set(
-        'currMusic',
-        JSON.stringify({track: activeTrack, position: trackPosition}),
+      dispatch(
+        SET_ACTIVE_TRACKDATA({
+          activeTrackDataPayload: {track: activeTrack, position: trackPosition},
+        }),
       );
     }
 
-    // Return true to stop default back navigaton
-    // Return false to keep default back navigaton
     return true;
   }, [activeTrack, trackPosition]);
 
@@ -317,28 +398,35 @@ export const GurukulConnect = ({
             newItem.title = wholeitem['title'] ?? '';
             newItem.description = wholeitem['description'] ?? '';
             newItem.artist = wholeitem['artist'] ?? '';
+            newItem.is_multiple = wholeitem['is_multiple'] ?? false;
 
             Songs.push(newItem);
           });
-          await resetAndAddTracks(Songs);
+
+          await resetAndAddTracks([
+            ...Songs.filter(item => item.is_multiple === false),
+          ]);
+
+          dispatch(ADD_UPDATE_SONGS({songs: Songs}));
         }
       } catch (error) {
         console.log(error);
       }
-      const songs = await TrackPlayer.getQueue();
-
-      setAllSongs(songs);
       const playingTrack = await TrackPlayer.getTrack(0);
       if (playingTrack !== null) {
-        setActiveTrack(playingTrack);
+        dispatch(
+          SET_ACTIVE_TRACKDATA({
+            activeTrackDataPayload: {
+              track: playingTrack,
+            },
+          }),
+        );
       }
     }
     setWantNewSongs(false);
   };
 
-  if (!isPlayerReady) {
-    return <Loader screenHeight={'100%'} />;
-  } else if (loader || isSearching) {
+  if (!isPlayerReady || loader || isSearching) {
     return <Loader screenHeight={'100%'} />;
   } else {
     return (
@@ -429,7 +517,7 @@ export const GurukulConnect = ({
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
-                        <View style={{height: 15, width: 15, marginLeft: -3}}>
+                        <View style={{height: 15, width: 15, marginLeft: -7}}>
                           <Image
                             style={{
                               width: '100%',

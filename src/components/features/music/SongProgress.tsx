@@ -18,10 +18,10 @@ export const SongProgress = ({
   position,
   duration,
 }: SongProgressProps): React.JSX.Element => {
-  const [progress, setProgress] = React.useState(position);
+  const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
-    if (position) {
+    if (position >= 0) {
       setProgress(position);
     }
   }, [position]);
@@ -36,7 +36,7 @@ export const SongProgress = ({
           marginVertical: 5,
         }}>
         <View style={{width: '11%', alignItems: 'center'}}>
-          <Text style={style.trackProgressText}>{format(position)}</Text>
+          <Text style={style.trackProgressText}>{format(progress)}</Text>
         </View>
         <View style={{width: '75%'}}>
           <Slider
@@ -57,6 +57,9 @@ export const SongProgress = ({
             value={progress}
             minimumValue={0}
             maximumValue={duration}
+            onValueChange={async value => {
+              setProgress(value[0]);
+            }}
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value[0]);
               setProgress(value[0]);
