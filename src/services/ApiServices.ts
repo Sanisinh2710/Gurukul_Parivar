@@ -175,6 +175,17 @@ export const DailySatsangApi = async (date: Date) => {
   });
 };
 
+export const GurkulAudioApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
+};
+
+export const GurukulMultiPartAudio = async (id: number) => {
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
+};
+
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
   const payloadData = new FormData();
 
@@ -363,7 +374,7 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
       ) {
         const backendData: any = response.data.personal_details;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],
@@ -543,7 +554,7 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
         newFormData.completeProfile =
           profileData ?? newFormData.completeProfile;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],

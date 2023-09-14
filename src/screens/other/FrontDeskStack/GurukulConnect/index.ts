@@ -1,1 +1,1 @@
-export * from  './GurukulConnect';
+export * from './GurukulConnect';

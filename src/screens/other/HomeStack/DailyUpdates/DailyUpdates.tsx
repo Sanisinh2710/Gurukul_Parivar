@@ -46,12 +46,14 @@ export const DailyUpdates = ({
             (data: {
               description: any;
               images: any;
+              thumbnail: any;
               title: any;
               created_at: string | number | Date;
               date: any;
             }) => {
               data.description = data.description;
               data.images = data.images;
+              data.thumbnail = data.thumbnail;
               data.title = data.title;
               data.date = data.created_at;
               if (
@@ -100,18 +102,22 @@ export const DailyUpdates = ({
 
     try {
       const res = await DailyUpdatesApi();
+      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         const data = res.data.daily_updates.map(
           (data: {
             description: any;
             images: any;
+            thumbnail: any;
             title: any;
             created_at: string | number | Date;
             date: any;
           }) => {
             data.description = data.description;
             data.images = data.images;
+            data.thumbnail = data.thumbnail;
+
             data.title = data.title;
             data.date = data.created_at;
             if (

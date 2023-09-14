@@ -192,24 +192,25 @@ export const DailyQuotes = ({
           },
         }}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <ScrollView
-          overScrollMode="always"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            height:
-              Data.find((item: any) => item.branch == BranchName) &&
-              Data.length > 0
-                ? 'auto'
-                : '100%',
-          }}
-          refreshControl={
-            <RefreshControl
-              colors={[COLORS.primaryColor, COLORS.green]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
+      <ScrollView
+        overScrollMode="always"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          // height:
+          //   Data.find((item: any) => item.branch === BranchName) !==
+          //     undefined && Data.length > 0
+          //     ? '100%'
+          //     : '100%',
+          height: '100%',
+        }}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={[commonStyle.commonContentView, {flex: 1}]}>
           <View style={{height: '8%', marginBottom: '16%'}}>
             <View
               style={{
@@ -340,8 +341,8 @@ export const DailyQuotes = ({
               )}
             </>
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
       <View>
         <Calendar
           setCalendarVisible={setCalendarVisible}

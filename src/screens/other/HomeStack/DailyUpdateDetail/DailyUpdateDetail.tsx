@@ -42,7 +42,7 @@ export const DailyUpdateDetail = ({
           overScrollMode="always"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: '115%',
+            paddingBottom: '30%',
           }}>
           <View style={style.titleContainer}>
             <Text style={style.title}>{route.params.title}</Text>
@@ -61,6 +61,7 @@ export const DailyUpdateDetail = ({
             <Image
               source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
+              resizeMode="cover"
             />
           </View>
           <View style={style.titleContainer}>
@@ -76,7 +77,7 @@ export const DailyUpdateDetail = ({
                 gap: 10,
                 marginTop: 10,
               }}
-              data={Data.images}
+              data={Data.thumbnail}
               renderItem={({item, index}) => (
                 <>
                   <TouchableOpacity

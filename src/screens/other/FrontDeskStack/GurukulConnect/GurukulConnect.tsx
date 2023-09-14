@@ -155,7 +155,12 @@ export const GurukulConnect = ({
         if (playingTrack !== null) {
           const newQueue = await TrackPlayer.getQueue();
 
-          if (activeTrack && activeTrackPosition && setupMode !== 'ALBUM') {
+          if (
+            activeTrack &&
+            activeTrackPosition &&
+            setupMode !== 'ALBUM' &&
+            setupMode !== 'FILTERED'
+          ) {
             await TrackPlayer.skip(
               newQueue.findIndex((item: any) => item.id === activeTrack?.id),
               activeTrackPosition,
@@ -425,61 +430,7 @@ export const GurukulConnect = ({
         navigation.goBack();
       }
     } else {
-      if (setupMode === 'ALBUM') {
-        setTimeout(async () => {
-          setLoader(true);
-
-          try {
-            const res =
-              selectedItem.length <= 0
-                ? await GurkulAudioGetApi()
-                : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
-
-            if (res.resType === 'SUCCESS') {
-              let Songs: Array<SongType> = [];
-
-              const apiData: Array<any> = JSON.parse(
-                JSON.stringify(res.data.gurukul_audios),
-              );
-
-              apiData.map((wholeitem, mainindex) => {
-                let newItem: SongType = {
-                  id: '',
-                  url: '',
-                  title: '',
-                  artist: '',
-                  description: '',
-                };
-                newItem.url = `${BASE_URL}${wholeitem['audio']}`;
-                newItem.id = wholeitem['id'] ?? '';
-                newItem.title = wholeitem['title'] ?? '';
-                newItem.description = wholeitem['description'] ?? '';
-                newItem.artist = wholeitem['artist'] ?? '';
-                newItem.is_multiple = wholeitem['is_multiple'] ?? false;
-
-                Songs.push(newItem);
-              });
-
-              await addTracks([
-                ...Songs.filter(item => item.is_multiple === false),
-              ]);
-
-              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-                }),
-              );
-            }
-          } catch (error) {
-            console.log(error);
-          }
-          setLoader(false);
-        }, 1500);
-      } else {
-        navigation.goBack();
-      }
+      navigation.goBack();
     }
 
     return true;
@@ -492,62 +443,6 @@ export const GurukulConnect = ({
           activeTrackDataPayload: {track: activeTrack, position: trackPosition},
         }),
       );
-
-      // if (setupMode === 'ALBUM') {
-      //   setTimeout(async () => {
-      //     setLoader(true);
-
-      //     try {
-      //       const res =
-      //         selectedItem.length <= 0
-      //           ? await GurkulAudioGetApi()
-      //           : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
-
-      //       if (res.resType === 'SUCCESS') {
-      //         let Songs: Array<SongType> = [];
-
-      //         const apiData: Array<any> = JSON.parse(
-      //           JSON.stringify(res.data.gurukul_audios),
-      //         );
-
-      //         apiData.map((wholeitem, mainindex) => {
-      //           let newItem: SongType = {
-      //             id: '',
-      //             url: '',
-      //             title: '',
-      //             artist: '',
-      //             description: '',
-      //           };
-      //           newItem.url = `${BASE_URL}${wholeitem['audio']}`;
-      //           newItem.id = wholeitem['id'] ?? '';
-      //           newItem.title = wholeitem['title'] ?? '';
-      //           newItem.description = wholeitem['description'] ?? '';
-      //           newItem.artist = wholeitem['artist'] ?? '';
-      //           newItem.is_multiple = wholeitem['is_multiple'] ?? false;
-
-      //           Songs.push(newItem);
-      //         });
-
-      //         await addTracks([
-      //           ...Songs.filter(item => item.is_multiple === false),
-      //         ]);
-
-      //         dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-
-      //         dispatch(
-      //           UPDATE_SETUP_MODE({
-      //             setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-      //           }),
-      //         );
-      //       }
-      //     } catch (error) {
-      //       console.log(error);
-      //     }
-      //     setLoader(false);
-      //   }, 1500);
-      // } else {
-      //   navigation.goBack();
-      // }
     }
     return true;
   }, [activeTrack, trackPosition, setupMode]);
@@ -828,7 +723,9 @@ export const GurukulConnect = ({
                     {item.is_multiple === true ? (
                       <View
                         onTouchEnd={async () => {
-                          await onAlbumClick(item.id, item.title);
+                          if (item?.id && item?.title) {
+                            await onAlbumClick(item?.id, item?.title);
+                          }
                         }}
                         style={{
                           flexDirection: 'row',

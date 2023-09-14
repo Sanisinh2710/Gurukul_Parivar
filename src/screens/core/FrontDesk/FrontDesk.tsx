@@ -64,12 +64,10 @@ export const FrontDeskScreen = ({
       // case 'goform':
       //   navigation.navigate('dailyDarshan');
       //   break;
-      // case 'speech':
-      //   navigation.navigate('dailyQuotes');
-      //   break;
       case 'connect':
         navigation.navigate('GurukulConnect');
         break;
+
       case 'quiz':
         navigation.navigate('dailyQuiz');
         break;

@@ -5,7 +5,7 @@ export const isSignedIn = () => {
 
   try {
     const auth_token = getAuthToken();
-
+    
     if (auth_token.resType === 'SUCCESS') {
       if (auth_token.loginData.is_profile_updated === true) {
         isAuthenticated = true;

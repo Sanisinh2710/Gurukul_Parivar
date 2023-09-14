@@ -1,11 +1,51 @@
 import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
-import {CustomFonts} from '../../../../utils';
+import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
+    modelSearchView: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 10,
+      height: 50,
+      marginTop: 12,
+      paddingHorizontal: 15,
+      marginBottom: 10,
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.19,
+      shadowRadius: 5.62,
+      elevation: 2,
+    },
+    iconView: {
+      width: 23,
+      height: 25,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    iconStyle: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+    },
+    formTextInput: {
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      fontWeight: '400',
+      width: '100%',
+      color: COLORS.lightModetextColor,
+      opacity: 1,
+      marginLeft: 8,
+    },
     songContainer: {
       flexDirection: 'row',
       backgroundColor: '#FFFFFF',
@@ -38,7 +78,7 @@ export const styles = () => {
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       paddingHorizontal: 20,
-      padding:20,
+      padding: 20,
       shadowColor: '#000000',
       shadowOffset: {
         width: 0,
@@ -72,17 +112,17 @@ export const styles = () => {
       gap: 15,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop:'3%',
+      marginTop: '3%',
     },
-    forwardImage:{
-      width:17,
-      height:17,
+    forwardImage: {
+      width: 17,
+      height: 17,
     },
-    trackProgressText:{
+    trackProgressText: {
       ...CustomFonts.body.large14,
       fontSize: 12,
       color: '#171717',
       lineHeight: 16,
-    }
+    },
   });
 };
