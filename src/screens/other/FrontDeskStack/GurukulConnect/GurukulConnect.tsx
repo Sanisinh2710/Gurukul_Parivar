@@ -493,119 +493,62 @@ export const GurukulConnect = ({
         }),
       );
 
-      if (setupMode === 'ALBUM') {
-        setTimeout(async () => {
-          setLoader(true);
+      // if (setupMode === 'ALBUM') {
+      //   setTimeout(async () => {
+      //     setLoader(true);
 
-          try {
-            const res =
-              selectedItem.length <= 0
-                ? await GurkulAudioGetApi()
-                : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
+      //     try {
+      //       const res =
+      //         selectedItem.length <= 0
+      //           ? await GurkulAudioGetApi()
+      //           : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
 
-            if (res.resType === 'SUCCESS') {
-              let Songs: Array<SongType> = [];
+      //       if (res.resType === 'SUCCESS') {
+      //         let Songs: Array<SongType> = [];
 
-              const apiData: Array<any> = JSON.parse(
-                JSON.stringify(res.data.gurukul_audios),
-              );
+      //         const apiData: Array<any> = JSON.parse(
+      //           JSON.stringify(res.data.gurukul_audios),
+      //         );
 
-              apiData.map((wholeitem, mainindex) => {
-                let newItem: SongType = {
-                  id: '',
-                  url: '',
-                  title: '',
-                  artist: '',
-                  description: '',
-                };
-                newItem.url = `${BASE_URL}${wholeitem['audio']}`;
-                newItem.id = wholeitem['id'] ?? '';
-                newItem.title = wholeitem['title'] ?? '';
-                newItem.description = wholeitem['description'] ?? '';
-                newItem.artist = wholeitem['artist'] ?? '';
-                newItem.is_multiple = wholeitem['is_multiple'] ?? false;
+      //         apiData.map((wholeitem, mainindex) => {
+      //           let newItem: SongType = {
+      //             id: '',
+      //             url: '',
+      //             title: '',
+      //             artist: '',
+      //             description: '',
+      //           };
+      //           newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+      //           newItem.id = wholeitem['id'] ?? '';
+      //           newItem.title = wholeitem['title'] ?? '';
+      //           newItem.description = wholeitem['description'] ?? '';
+      //           newItem.artist = wholeitem['artist'] ?? '';
+      //           newItem.is_multiple = wholeitem['is_multiple'] ?? false;
 
-                Songs.push(newItem);
-              });
+      //           Songs.push(newItem);
+      //         });
 
-              await addTracks([
-                ...Songs.filter(item => item.is_multiple === false),
-              ]);
+      //         await addTracks([
+      //           ...Songs.filter(item => item.is_multiple === false),
+      //         ]);
 
-              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+      //         dispatch(ADD_UPDATE_SONGS({songs: Songs}));
 
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-                }),
-              );
-            }
-          } catch (error) {
-            console.log(error);
-          }
-          setLoader(false);
-        }, 1500);
-      } else {
-        navigation.goBack();
-      }
-    } else {
-      if (setupMode === 'ALBUM') {
-        setTimeout(async () => {
-          setLoader(true);
-
-          try {
-            const res =
-              selectedItem.length <= 0
-                ? await GurkulAudioGetApi()
-                : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
-
-            if (res.resType === 'SUCCESS') {
-              let Songs: Array<SongType> = [];
-
-              const apiData: Array<any> = JSON.parse(
-                JSON.stringify(res.data.gurukul_audios),
-              );
-
-              apiData.map((wholeitem, mainindex) => {
-                let newItem: SongType = {
-                  id: '',
-                  url: '',
-                  title: '',
-                  artist: '',
-                  description: '',
-                };
-                newItem.url = `${BASE_URL}${wholeitem['audio']}`;
-                newItem.id = wholeitem['id'] ?? '';
-                newItem.title = wholeitem['title'] ?? '';
-                newItem.description = wholeitem['description'] ?? '';
-                newItem.artist = wholeitem['artist'] ?? '';
-                newItem.is_multiple = wholeitem['is_multiple'] ?? false;
-
-                Songs.push(newItem);
-              });
-
-              await addTracks([
-                ...Songs.filter(item => item.is_multiple === false),
-              ]);
-
-              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-                }),
-              );
-            }
-          } catch (error) {
-            console.log(error);
-          }
-          setLoader(false);
-        }, 1500);
-      } else {
-        navigation.goBack();
-      }
+      //         dispatch(
+      //           UPDATE_SETUP_MODE({
+      //             setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
+      //           }),
+      //         );
+      //       }
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //     setLoader(false);
+      //   }, 1500);
+      // } else {
+      //   navigation.goBack();
+      // }
     }
-
     return true;
   }, [activeTrack, trackPosition, setupMode]);
 
@@ -680,7 +623,7 @@ export const GurukulConnect = ({
     setWantNewSongs(false);
   };
 
-  const onAlbumClick = async (albumId: number | string) => {
+  const onAlbumClick = async (albumId: number | string, albumName: string) => {
     setLoader(true);
 
     let isSetup = await setupPlayer();
@@ -713,6 +656,7 @@ export const GurukulConnect = ({
               newItem.description = wholeitem['description'] ?? '';
               newItem.artist = wholeitem['artist'] ?? '';
               newItem.is_multiple = wholeitem['is_multiple'] ?? false;
+              newItem.album = albumName ?? '';
 
               Songs.push(newItem);
             });
@@ -752,7 +696,7 @@ export const GurukulConnect = ({
           headerTitleAlign={'left'}
           leftOnPress={onBackPress}
           headerTitle={
-            setupMode === 'ALBUM' ? activeTrack?.title : t('frontDesk.Connect')
+            setupMode === 'ALBUM' ? activeTrack?.album : t('frontDesk.Connect')
           }
           headerRight={
             setupMode === 'ALBUM'
@@ -884,7 +828,7 @@ export const GurukulConnect = ({
                     {item.is_multiple === true ? (
                       <View
                         onTouchEnd={async () => {
-                          await onAlbumClick(item.id);
+                          await onAlbumClick(item.id, item.title);
                         }}
                         style={{
                           flexDirection: 'row',
