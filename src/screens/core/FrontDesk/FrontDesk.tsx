@@ -32,9 +32,9 @@ export const FrontDeskScreen = ({
       // case 'goform':
       //   navigation.navigate('dailyDarshan');
       //   break;
-      // case 'speech':
-      //   navigation.navigate('dailyQuotes');
-      //   break;
+      case 'connect':
+        navigation.navigate('GurukulConnect');
+        break;
 
       case 'quiz':
         navigation.navigate('dailyQuiz');
@@ -93,13 +93,12 @@ export const FrontDeskScreen = ({
           onPress: () => navigation.navigate('dailyUpdates'),
         }}
       />
-      <View style={commonStyle.commonContentView}>
+      <>
         {dashboardImages.length > 0 && (
-          <View>
-            <PagerView currentPage={currentPage} images={dashboardImages} />
-          </View>
+          <PagerView currentPage={currentPage} images={dashboardImages} />
         )}
-
+      </>
+      <View style={commonStyle.commonContentView}>
         <View style={{marginTop: 24, paddingBottom: 550}}>
           <FlatList
             showsVerticalScrollIndicator={false}

@@ -323,8 +323,8 @@ export const FrontDesk = (t: any) => {
     // },
     {
       image: AllIcons.Chat,
-      title: t('frontDesk.Speech'),
-      id: 'speech',
+      title: t('frontDesk.Connect'),
+      id: 'connect',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
 

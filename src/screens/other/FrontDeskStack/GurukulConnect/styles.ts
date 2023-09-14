@@ -38,7 +38,7 @@ export const styles = () => {
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       paddingHorizontal: 20,
-      padding: 20,
+      padding:20,
       shadowColor: '#000000',
       shadowOffset: {
         width: 0,
@@ -72,17 +72,17 @@ export const styles = () => {
       gap: 15,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: '3%',
+      marginTop:'3%',
     },
-    forwardImage: {
-      width: 17,
-      height: 17,
+    forwardImage:{
+      width:17,
+      height:17,
     },
-    trackProgressText: {
+    trackProgressText:{
       ...CustomFonts.body.large14,
       fontSize: 12,
       color: '#171717',
       lineHeight: 16,
-    },
+    }
   });
 };

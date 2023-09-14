@@ -32,6 +32,7 @@ export const DailyProgram = ({
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
+          console.log(res.data.daily_programs);
           setDailyProgramData(res.data.daily_programs);
           setLoader(false);
         }, 1000);
@@ -54,76 +55,78 @@ export const DailyProgram = ({
         headerTitle={t('homeScreen.DailyProgram')}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            gap: 15,
-            marginTop: '10%',
-          }}
-          data={DailyProgramData}
-          renderItem={({item, index}) => {
-            return loader ? (
-              <Loader />
-            ) : (
-              <>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('programDetail', {
-                      title: item.title,
-                      description: item.description,
-                    });
-                  }}
-                  android_ripple={{
-                    color: COLORS.primaryRippleColor,
-                    foreground: true,
-                  }}
-                  key={item.title + index}
-                  style={{
-                    height: 65,
-                    borderRadius: 8,
-                    borderWidth: 0.4,
-                    borderColor: COLORS.primaryColor,
-                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                    overflow: 'hidden',
-                  }}>
-                  <View
+        {loader ? (
+          <Loader />
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              gap: 15,
+              marginTop: '10%',
+            }}
+            data={DailyProgramData}
+            renderItem={({item, index}) => {
+              return (
+                <>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('programDetail', {
+                        title: item.title,
+                        description: item.description,
+                      });
+                    }}
+                    android_ripple={{
+                      color: COLORS.primaryRippleColor,
+                      foreground: true,
+                    }}
+                    key={item.title + index}
                     style={{
-                      flexDirection: 'row',
-                      height: '100%',
-                      alignItems: 'center',
-                      gap: 20,
+                      height: 65,
+                      borderRadius: 8,
+                      borderWidth: 0.4,
+                      borderColor: COLORS.primaryColor,
+                      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      overflow: 'hidden',
                     }}>
                     <View
                       style={{
-                        width: 40,
-                        height: 40,
-                        padding: 8,
-                        borderRadius: 6,
+                        flexDirection: 'row',
+                        height: '100%',
+                        alignItems: 'center',
+                        gap: 20,
                       }}>
-                      <Image
-                        source={{uri: `${BASE_URL}${item.image}`}}
+                      <View
                         style={{
-                          height: 40,
                           width: 40,
-                          flex: 1,
-                          resizeMode: 'contain',
-                        }}
-                      />
+                          height: 40,
+                          padding: 8,
+                          borderRadius: 6,
+                        }}>
+                        <Image
+                          source={{uri: `${BASE_URL}${item.image}`}}
+                          style={{
+                            height: 40,
+                            width: 40,
+                            flex: 1,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+                      <Text
+                        style={{
+                          ...CustomFonts.header.medium20,
+                          color: COLORS.lightModetextColor,
+                          fontSize: 16,
+                        }}>
+                        {item.title}
+                      </Text>
                     </View>
-                    <Text
-                      style={{
-                        ...CustomFonts.header.medium20,
-                        color: COLORS.lightModetextColor,
-                        fontSize: 16,
-                      }}>
-                      {item.title}
-                    </Text>
-                  </View>
-                </Pressable>
-              </>
-            );
-          }}
-        />
+                  </Pressable>
+                </>
+              );
+            }}
+          />
+        )}
       </View>
     </ScreenWrapper>
   );

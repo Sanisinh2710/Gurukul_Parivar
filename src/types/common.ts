@@ -1,3 +1,5 @@
+import {Track} from 'react-native-track-player';
+
 export type Theme = {
   isDark: boolean;
   primary: string;

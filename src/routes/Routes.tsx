@@ -29,7 +29,7 @@ import {
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
-import {NativeStackRoute} from './routes';
+import {NativeStackRouteList} from './routes';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -107,7 +107,7 @@ export const Routes = (): React.JSX.Element => {
               orientation: 'portrait',
               headerShown: false,
             }}>
-            {NativeStackRoute.map((route, index) => {
+            {NativeStackRouteList.map((route, index) => {
               return (
                 <NativeStack.Screen
                   key={index}

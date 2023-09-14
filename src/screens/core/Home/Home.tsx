@@ -191,12 +191,10 @@ export const HomeScreen = ({
         contentContainerStyle={{
           paddingBottom: '30%',
         }}>
+        {dashboardImages.length > 0 && (
+          <PagerView currentPage={currentPage} images={dashboardImages} />
+        )}
         <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-          {dashboardImages.length > 0 && (
-            <View>
-              <PagerView currentPage={currentPage} images={dashboardImages} />
-            </View>
-          )}
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground

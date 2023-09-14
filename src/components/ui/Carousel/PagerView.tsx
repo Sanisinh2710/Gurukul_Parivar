@@ -1,9 +1,11 @@
 import React from 'react';
 
 import {BASE_URL} from '@env';
-import {Image, View} from 'react-native';
+import {Dimensions, FlatList, Image, View} from 'react-native';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
+import {useAppDispatch} from '../../../redux/hooks';
+import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
 
 type PagerViewProps = {
   currentPage: number;
@@ -69,7 +71,8 @@ export const PagerView = React.memo(
           }}
         />
 
-      <Snail snailLength={images.length} activeTabIndex={currentPage + 1} />
-    </View>
-  );
-};
+        <Snail snailLength={images.length} activeTabIndex={currentPage + 1} />
+      </View>
+    );
+  },
+);
