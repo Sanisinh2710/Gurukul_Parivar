@@ -7,7 +7,7 @@ import {App} from './src/app';
 
 import './src/localization';
 import TrackPlayer from 'react-native-track-player';
-import { PlaybackService } from './src/services/PlaybackService';
+import { PlaybackService } from './src/services';
 
 if (Text.defaultProps == null) {
   Text.defaultProps = {};

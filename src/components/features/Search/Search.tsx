@@ -30,7 +30,6 @@ export const SearchBar = ({dataForSearch , setSearchData}:SearchBarPropType) => 
                     .trim()
                     .includes(searchVal.trim().toLowerCase())
                 ) {
-                    console.log(item);
                   return item;
                 }
             }

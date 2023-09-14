@@ -14,6 +14,7 @@ import {
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
   GURUKUL_AUDIO_GET_ENDPOINT,
+  GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   GURUKUL_CONNECT_GET_ENDPOINT,
   GURUKUL_CONNECT_POST_ENDPOINT,
@@ -171,6 +172,15 @@ export const DailySatsangApi = async (date: Date) => {
 
 export const GurkulAudioApi = async ()=>{
   return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT , 'get')
+}
+
+
+
+export const GurukulMultiPartAudio = async (id:number) =>{
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
 }
 
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {

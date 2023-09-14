@@ -735,21 +735,21 @@ export const IntialValuesForFormdataAuth = {
 };
 
 
-export const SongList = [
- {
-    id: '122',
-    url: require('../../assets/music/NaaReady.mp3'),
-    title: 'Naa Ready',
-    description: 'Thalapathy Vijay, Anirudh Ravichander',
-    is_multiple : false,
-    // duration: 160,
-  },
-  {
-    id: '222',
-    url: require('../../assets/music/YoonShabnamiSaawariya.mp3'),
-    title: 'Yoon Shabnami Saawariya',
-    description: 'Monty Sharma',
-    is_multiple : false,
-    // duration: 160,
-  }
-]
+// export const SongList = [
+//  {
+//     id: '122',
+//     url: require('../../assets/music/NaaReady.mp3'),
+//     title: 'Naa Ready',
+//     description: 'Thalapathy Vijay, Anirudh Ravichander',
+//     is_multiple : false,
+//     // duration: 160,
+//   },
+//   {
+//     id: '222',
+//     url: require('../../assets/music/YoonShabnamiSaawariya.mp3'),
+//     title: 'Yoon Shabnami Saawariya',
+//     description: 'Monty Sharma',
+//     is_multiple : false,
+//     // duration: 160,
+//   }
+// ]

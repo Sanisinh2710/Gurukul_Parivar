@@ -260,7 +260,7 @@ export const downloadSong = async (REMOTE_SONG_URL :string,songName:string) => {
     let fileName = `/${songTitle}_${Math.floor(date.getTime() + date.getSeconds() / 2)}${ext}`;
     
     let options = {
-      fileCache: false,
+      fileCache: false, 
       addAndroidDownloads: {
         // Related to the Android only
         useDownloadManager: true,
@@ -271,13 +271,11 @@ export const downloadSong = async (REMOTE_SONG_URL :string,songName:string) => {
       },
     };
     
-    const response = await config(options).fetch('GET', song_URL); 
-    if(response)
-    {
-     return resType='SUCCESS';
-    }
-    else {
-      return resType = 'ERROR';
+    const response = await RNFetchBlob.config(options).fetch('GET', song_URL);
+    if (response) {
+      return (resType = 'SUCCESS');
+    } else {
+      return (resType = 'ERROR');
       // Handle download failure
     }
   }

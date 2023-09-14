@@ -27,4 +27,5 @@ declare module '@env' {
   export const NEWLOGIN_POST_ENDPOINT: string;
   export const RESET_PASSWORD_ENDPOINT: string;
   export const GURUKUL_AUDIO_GET_ENDPOINT:string;
+  export const GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT :string;
 }
