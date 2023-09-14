@@ -609,38 +609,21 @@ export const IntialValuesForFormdataAuth = {
   },
 };
 
-export const SongList = [
-  {
-    id: '11',
-    url: 'https://gurukul-dev.taskgrids.com/storage/GurukulAudio/6Pg8Myj4.mp3',
-    title: 'Maan Meri Ja',
-    artist: 'King',
-    // duration: 27,
-  },
-  {
-    id: '2222',
-    url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
-    title: 'Yaar Ka Sataya Hua Hai',
-    artist: 'B Praak',
-    // duration: 267,
-  },
-];
-export const GurukulEventsList = [
-  {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
-  {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},
-  {
-    date: '24',
-    title: 'Cultural Diversity Day',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
-  {
-    date: '21',
-    title: 'Shrimad Bhagwat Katha',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
-  {
-    date: '19',
-    title: 'Annual Talent Show',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
-];
+// export const SongList = [
+//  {
+//     id: '122',
+//     url: require('../../assets/music/NaaReady.mp3'),
+//     title: 'Naa Ready',
+//     description: 'Thalapathy Vijay, Anirudh Ravichander',
+//     is_multiple : false,
+//     // duration: 160,
+//   },
+//   {
+//     id: '222',
+//     url: require('../../assets/music/YoonShabnamiSaawariya.mp3'),
+//     title: 'Yoon Shabnami Saawariya',
+//     description: 'Monty Sharma',
+//     is_multiple : false,
+//     // duration: 160,
+//   }
+// ]

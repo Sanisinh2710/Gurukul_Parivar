@@ -3,9 +3,8 @@ import TrackPlayer, {
   Capability,
   Event,
   RepeatMode,
+  Track,
 } from 'react-native-track-player';
-import {SongList} from '../utils';
-import {storage} from '../storage';
 
 export async function PlaybackService() {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
@@ -51,10 +50,10 @@ export async function PlaybackService() {
     console.log('Event.PlaybackQueueEnded', event);
   });
 
-  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, event => {
-    console.log('Event.PlayBackProgress', event);
-    storage.set('trackProgress', JSON.stringify(event.position));
-  });
+  // TrackPlayer.addEventListener(Event.PlaybackProgressUpdated , event =>{
+  //   // console.log('Event.PlayBackProgress' , event);
+  //   storage.set('trackProgress',JSON.stringify(event.position));
+  // })
   // TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, event => {
   //   console.log('Event.PlaybackActiveTrackChanged', event);
   // });
@@ -103,12 +102,9 @@ export async function PlaybackService() {
 export async function setupPlayer() {
   let isSetup = false;
   try {
-    console.log('GET CURRENT TRACK');
-    const res = await TrackPlayer.getCurrentTrack();
-    console.log(res);
+    await TrackPlayer.getCurrentTrack();
     isSetup = true;
   } catch {
-    console.log('CATCH FOR SETUP ....');
     await TrackPlayer.setupPlayer();
 
     isSetup = true;
@@ -117,7 +113,7 @@ export async function setupPlayer() {
   }
 }
 
-export async function addTracks() {
+export async function addTracks(SongList: Array<Track>) {
   try {
     await TrackPlayer.add(SongList);
     await TrackPlayer.setRepeatMode(RepeatMode.Queue);

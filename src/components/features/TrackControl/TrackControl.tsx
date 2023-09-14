@@ -1,18 +1,20 @@
 import {Slider} from '@miblanchard/react-native-slider';
 import React from 'react';
 import {View, Text, Image, Animated, Easing} from 'react-native';
-import TrackPlayer, {State, useProgress} from 'react-native-track-player';
+import TrackPlayer, {
+  State,
+  Track,
+  useProgress,
+} from 'react-native-track-player';
 import {AllIcons} from '../../../../assets/icons';
-import {SongControl} from '../../../types';
 import {styles} from './styles';
-import {storage} from '../../../storage';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 
 type TrackPropsType = {
-  songControl: SongControl;
-  setSongControl: React.Dispatch<React.SetStateAction<SongControl>>;
+  activeTrackProp: Track;
 };
 
-async function handleControl(item: any) {
+async function handleControl() {
   try {
     const trackStatus = await TrackPlayer.getState();
     if (trackStatus == State.Playing) {
@@ -33,10 +35,12 @@ const format = (time: number) => {
   return `${minutes}:${second}`;
 };
 
-export const TrackControl = ({songControl, setSongControl}: TrackPropsType) => {
+export const TrackControl = ({activeTrackProp}: TrackPropsType) => {
   const style = styles();
   const offsetY = React.useRef(new Animated.Value(500)).current;
   const {position, duration} = useProgress();
+  const {activeTrackPosition} = useAppSelector(state => state.music);
+
   React.useEffect(() => {
     return Animated.timing(offsetY, {
       toValue: 0,
@@ -57,21 +61,25 @@ export const TrackControl = ({songControl, setSongControl}: TrackPropsType) => {
       const trackIn = await TrackPlayer.getCurrentTrack();
       const trackStatus = await TrackPlayer.getState();
       if (trackIn != null) {
-        const lastTrack = storage.getString('lastTrack');
-        const parseTrack = JSON.parse(lastTrack!);
         const track = await TrackPlayer.getTrack(trackIn);
-        const lastTrackPro = storage.getString('trackProgress');
-        if (lastTrackPro != undefined) {
-          const trackPro = JSON.parse(lastTrackPro);
-          console.log(trackPro);
-          if (track) {
-            if (parseTrack.songId != track.id || trackStatus == State.Paused) {
-              await TrackPlayer.skip(parseTrack.songIndex, trackPro);
-            }
+
+        if (
+          track &&
+          activeTrackProp.id != '' &&
+          activeTrackProp.id != undefined
+        ) {
+          console.log('first', trackStatus, track);
+          if (
+            activeTrackProp.id != track.id ||
+            trackStatus == State.Paused ||
+            track.status == false
+          ) {
+            await TrackPlayer.skip(trackIn, activeTrackPosition);
           }
         }
       }
     };
+
     checkCurrentSong();
   }, []);
 
@@ -86,7 +94,7 @@ export const TrackControl = ({songControl, setSongControl}: TrackPropsType) => {
   };
 
   return (
-    songControl.songIndex != -1 && (
+    activeTrackProp && (
       <Animated.View
         style={[
           style.trackControlContainer,
@@ -100,7 +108,7 @@ export const TrackControl = ({songControl, setSongControl}: TrackPropsType) => {
         ]}>
         <View>
           <Text style={style.trackTitle}>
-            {songControl.songId} {songControl.songTitle}
+            {activeTrackProp.id} {activeTrackProp.title}
           </Text>
         </View>
         <View
@@ -149,14 +157,13 @@ export const TrackControl = ({songControl, setSongControl}: TrackPropsType) => {
           </View>
           <View
             onTouchEnd={() => {
-              handleControl(songControl.songIndex);
-              // setSongControl({...songControl, status: !songControl.status});
+              handleControl();
             }}
             style={style.trackControlPlay}>
             <Image
               style={{width: '100%', height: '100%'}}
               source={
-                songControl.status == true
+                activeTrackProp.status == true
                   ? AllIcons.TrackPause
                   : AllIcons.TrackPlay
               }

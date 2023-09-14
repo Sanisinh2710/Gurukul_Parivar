@@ -179,6 +179,15 @@ export const GurkulAudioApi = async () => {
   return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
 };
 
+
+
+export const GurukulMultiPartAudio = async (id:number) =>{
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
+}
+
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
   const payloadData = new FormData();
 

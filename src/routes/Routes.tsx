@@ -17,6 +17,7 @@ import {
 import {TOGGLE_THEME} from '../redux/ducks/themeslice';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {
+  AlbumSong,
   CalendarScreen,
   ChangeLanguage,
   DailyDarshan,
@@ -54,6 +55,7 @@ import {
   RootBottomTabParamList,
   RootStackParamList,
 } from '../types';
+import {NativeScreenNavigationContainer} from 'react-native-screens';
 
 const AuthStack = createNativeStackNavigator<RootAuthStackParamList>();
 
@@ -169,6 +171,8 @@ export const Routes = (): React.JSX.Element => {
               name="gurkulConnect"
               component={GurukulConnect}
             />
+
+            <NativeStack.Screen name="albumSong" component={AlbumSong} />
             <NativeStack.Screen name="QuizResult" component={QuizResult} />
             <NativeStack.Screen name="donation" component={DonationScreen} />
             <NativeStack.Screen name="program" component={CommingSoon} />
