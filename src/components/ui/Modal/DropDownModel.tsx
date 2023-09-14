@@ -13,6 +13,7 @@ import {
   isString,
   isStringArray,
 } from '../../../utils';
+import {PrimaryButton} from '../Buttons';
 import {ModalStyle} from './style';
 
 type DropDownModelProps = {
@@ -29,6 +30,7 @@ type DropDownModelProps = {
   customModelchild?: React.JSX.Element;
   modelValuechoosed?: any;
   setModelValueChoosed?: React.Dispatch<React.SetStateAction<boolean>>;
+  wantApplyButton?: boolean;
   viewPhoto?: boolean;
 };
 
@@ -47,6 +49,7 @@ export const DropDownModel = React.memo(
     customModelchild,
     modelValuechoosed,
     setModelValueChoosed,
+    wantApplyButton,
     viewPhoto,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
@@ -54,6 +57,8 @@ export const DropDownModel = React.memo(
     const {t} = useTranslation();
 
     const touchY = React.useRef<any>();
+
+    const [local, setLocal] = React.useState<string[]>([]);
 
     const [searchvalue, setSearch] = React.useState('');
 
@@ -64,6 +69,17 @@ export const DropDownModel = React.memo(
     React.useEffect(() => {
       setSearchedData(inputList ?? searchedData);
     }, [inputList]);
+
+    React.useEffect(() => {
+      if (selectedItem && wantApplyButton) {
+        if (selectedItem.length <= 0 && wantApplyButton) {
+          setLocal([]);
+        }
+        if (selectedItem.length > 0 && wantApplyButton) {
+          setLocal(selectedItem);
+        }
+      }
+    }, [selectedItem]);
 
     React.useEffect(() => {
       if (inputList) {
@@ -119,6 +135,8 @@ export const DropDownModel = React.memo(
       }
     }, [searchvalue]);
 
+    console.log(local, 'loacal');
+
     return (
       <Modal
         transparent
@@ -168,16 +186,14 @@ export const DropDownModel = React.memo(
                       <Text
                         style={style.modelValueResetText}
                         onPress={() => {
-                          if (setSelectedItem && selectedItem) {
-                            if (
-                              Array.isArray(
-                                selectedItem && type === 'multi-select',
-                              )
-                            ) {
-                              setSelectedItem([]);
-                            } else {
-                              setSelectedItem('');
-                            }
+                          if (
+                            Array.isArray(selectedItem) &&
+                            type === 'multi-select'
+                          ) {
+                            setSelectedItem([]);
+                            setLocal([]);
+                          } else {
+                            setSelectedItem('');
                           }
                         }}>
                         {t('common.Reset')}
@@ -218,42 +234,111 @@ export const DropDownModel = React.memo(
                             if (isObject(item)) {
                               if (setSelectedItem) {
                                 if (type === 'multi-select') {
-                                  const newArr = [...selectedItem];
+                                  const newArr = wantApplyButton
+                                    ? [...local]
+                                    : [...selectedItem];
                                   if (
-                                    newArr.find(
-                                      newitem => newitem.name === item,
-                                    ) === undefined
+                                    newArr.find(newitem => {
+                                      return newitem === item?.id;
+                                    }) === undefined
                                   ) {
-                                    newArr.push(item);
-                                    setSelectedItem(newArr);
+                                    newArr.push(item.id);
+
+                                    if (
+                                      wantApplyButton &&
+                                      wantApplyButton !== undefined
+                                    ) {
+                                      setLocal(newArr);
+                                    } else {
+                                      setSelectedItem(newArr);
+                                    }
                                   }
                                 } else {
-                                  setSelectedItem(item?.id);
+                                  if (
+                                    wantApplyButton &&
+                                    wantApplyButton !== undefined
+                                  ) {
+                                    setLocal(item?.id);
+                                  } else {
+                                    setSelectedItem(item?.id);
+                                  }
                                 }
                                 if (setModelValueChoosed) {
                                   setModelValueChoosed(true);
                                 }
                               }
+
+                              //     const newArr = [...selectedItem];
+                              //     if (
+                              //       newArr.find(
+                              //         newitem => newitem.name === item,
+                              //       ) === undefined
+                              //     ) {
+                              //       newArr.push(item);
+                              //       setSelectedItem(newArr);
+                              //     }
+                              //   }
+
+                              //   else {
+                              //     setSelectedItem(item?.id);
+                              //   }
+
+                              //   if (setModelValueChoosed) {
+                              //     setModelValueChoosed(true);
+                              //   }
+                              // }
                             } else {
                               if (setSelectedItem) {
                                 if (type === 'multi-select') {
-                                  const newArr = [...selectedItem];
+                                  const newArr = wantApplyButton
+                                    ? [...local]
+                                    : [...selectedItem];
                                   if (newArr.includes(item) === false) {
                                     newArr.push(item);
-                                    setSelectedItem(newArr);
+
+                                    if (
+                                      wantApplyButton &&
+                                      wantApplyButton !== undefined
+                                    ) {
+                                      setLocal(newArr);
+                                    } else {
+                                      setSelectedItem(newArr);
+                                    }
                                   }
+
+                                  // const newArr = [...selectedItem];
+                                  // if (newArr.includes(item) === false) {
+                                  //   newArr.push(item);
+                                  //   setSelectedItem(newArr);
+                                  // }
                                 } else {
-                                  setSelectedItem(item);
+                                  if (
+                                    wantApplyButton &&
+                                    wantApplyButton !== undefined
+                                  ) {
+                                    setLocal(item);
+                                  } else {
+                                    setSelectedItem(item);
+                                  }
                                 }
                                 if (setModelValueChoosed) {
                                   setModelValueChoosed(true);
                                 }
+
+                                // else {
+                                //   setSelectedItem(item);
+                                // }
+                                // if (setModelValueChoosed) {
+                                //   setModelValueChoosed(true);
+                                // }
                               }
                             }
-                            const timer = setTimeout(() => {
-                              setModelVisible(false);
-                            }, 200);
-                            return () => clearTimeout(timer);
+                            if (type !== 'multi-select') {
+                              const timer = setTimeout(() => {
+                                setModelVisible(false);
+                              }, 200);
+                              return () => clearTimeout(timer);
+                            }
                           }}
                           style={[
                             style.modelMenuView,
@@ -292,7 +377,8 @@ export const DropDownModel = React.memo(
                                   item.includes(selectedItem)) ||
                                 (isString(item) &&
                                   type === 'multi-select' &&
-                                  selectedItem.includes(item))) &&
+                                  (selectedItem.includes(item) ||
+                                    local.includes(item)))) &&
                                 type !== 'radio' && {
                                   color: COLORS.primaryColor,
                                 },
@@ -303,7 +389,8 @@ export const DropDownModel = React.memo(
                                   item?.name.includes(selectedItem)) ||
                                 (isObject(item) &&
                                   type === 'multi-select' &&
-                                  selectedItem.includes(item?.id))) &&
+                                  (selectedItem.includes(item?.id) ||
+                                    local.includes(item?.id)))) &&
                                 type !== 'radio' && {
                                   color: COLORS.primaryColor,
                                 },
@@ -316,7 +403,8 @@ export const DropDownModel = React.memo(
                                 (type === 'phone' &&
                                   item.includes(selectedItem)) ||
                                 (type === 'multi-select' &&
-                                  selectedItem.includes(item))) &&
+                                  (selectedItem.includes(item) ||
+                                    local.includes(item)))) &&
                               type !== 'radio' ? (
                                 <View style={style.iconView}>
                                   <Image
@@ -355,7 +443,8 @@ export const DropDownModel = React.memo(
                                 (type === 'phone' &&
                                   item?.name.includes(selectedItem)) ||
                                 (type === 'multi-select' &&
-                                  selectedItem.includes(item?.id))) &&
+                                  (selectedItem.includes(item?.id) ||
+                                    local.includes(item?.id)))) &&
                               type !== 'radio' ? (
                               <View style={style.iconView}>
                                 <Image
@@ -395,6 +484,22 @@ export const DropDownModel = React.memo(
                       );
                     }}
                   />
+                  {wantApplyButton && (
+                    <PrimaryButton
+                      title={'Apply'}
+                      onPress={() => {
+                        setSelectedItem(local);
+                        setModelVisible(false);
+                      }}
+                      buttonStyle={{
+                        position: 'absolute',
+                        width: '100%',
+                        bottom: '-13%',
+                        alignSelf: 'center',
+                        backgroundColor: 'red',
+                      }}
+                    />
+                  )}
                 </>
               </View>
             )}

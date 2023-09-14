@@ -18,6 +18,9 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
+  GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT,
+  GURUKUL_AUDIO_GET_ENDPOINT,
+  GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
   GURUKUL_CONNECT_GET_ENDPOINT,
   GURUKUL_CONNECT_POST_ENDPOINT,
@@ -267,6 +270,31 @@ export const SliderGetApi = async () => {
 export const DeleteMydataApi = async () => {
   return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };
+
+export const GurkulAudioGetApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
+};
+
+export const GurkulAudioCategoriesGetApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT, 'get');
+};
+
+export const GurkulAudioGetFromCategoriesGetApi = async (
+  payload: Array<any>,
+) => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get', {
+    category_ids: [...payload],
+  });
+};
+
+export const GurkulMultipleAudioGetApi = async (id: number) => {
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
+};
+
+// All apis are above, below is helper function for used in auth wizard form:---
 
 export const CallBackButtonAxiosGetForWizardFormSignup = async (
   formStep: number,
