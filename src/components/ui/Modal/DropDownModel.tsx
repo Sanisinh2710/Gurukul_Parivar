@@ -133,8 +133,6 @@ export const DropDownModel = React.memo(
       }
     }, [searchvalue]);
 
-    console.log(local, 'loacal');
-
     return (
       <Modal
         transparent

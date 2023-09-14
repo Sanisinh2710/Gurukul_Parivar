@@ -79,9 +79,10 @@ export type InitialSliderPageType = {
 
 export type InitialSongsType = {
   allSongs: Array<SongType> | Array<Track> | any;
-  activeTrack: Track;
+  activeTrack: Track | undefined;
   activeTrackPosition: number;
   selectedCategories: Array<string>;
+  setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
 };
 
 export type PersonalInfoFormValidationSchemaType = {

@@ -10,6 +10,7 @@ let initialState: InitialSongsType = {
   },
   activeTrackPosition: 0,
   selectedCategories: [],
+  setupMode: 'NONE',
 };
 
 export const sliderPageSlice = createSlice({
@@ -39,7 +40,7 @@ export const sliderPageSlice = createSlice({
     SET_ACTIVE_TRACKDATA: (
       state,
       action: PayloadAction<{
-        activeTrackDataPayload: {track: Track; position?: number};
+        activeTrackDataPayload: {track: Track | undefined; position?: number};
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
@@ -88,6 +89,22 @@ export const sliderPageSlice = createSlice({
 
       return newdata;
     },
+    UPDATE_SETUP_MODE: (
+      state,
+      action: PayloadAction<{
+        setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
+      }>,
+    ) => {
+      let newdata: WritableDraft<InitialSongsType> = JSON.parse(
+        JSON.stringify(state),
+      );
+
+      const setupMode = action.payload.setupMode;
+
+      newdata.setupMode = setupMode;
+
+      return newdata;
+    },
   },
 });
 
@@ -98,6 +115,7 @@ export const {
   ADD_UPDATE_CATEGORIES,
   SET_ACTIVE_TRACKDATA,
   REMOVE_CATEGORY,
+  UPDATE_SETUP_MODE,
 } = actions;
 
 export default reducer;
