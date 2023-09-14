@@ -27,6 +27,7 @@ import {useTranslation} from 'react-i18next';
 import TrackPlayer, {
   Event,
   State,
+  usePlaybackState,
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
@@ -54,7 +55,7 @@ export const GurukulConnect = ({
   const commonStyle = CommonStyle();
   const style = styles();
   const {t} = useTranslation();
-
+  
   const [songData, setSongData] = React.useState<Array<any>>([...allSongs]);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
   const [modal, setModal] = React.useState(false);
@@ -62,6 +63,7 @@ export const GurukulConnect = ({
     status: false,
     index: -1,
   });
+  const trackStatus  = usePlaybackState();
   const screenFocused = useIsFocused();
   const [selectedItem, setSelectedItem] = React.useState([]);
   const {position} = useProgress();
@@ -77,7 +79,7 @@ export const GurukulConnect = ({
           await setup();
         }
       }
-      const trackStatus = await TrackPlayer.getState();
+    
       const track = await TrackPlayer.getCurrentTrack();
       const queue = await TrackPlayer.getQueue();
 
@@ -97,7 +99,7 @@ export const GurukulConnect = ({
   };
 
   const setDataToRedux = async (response :any) => {
-    const trackStatus : State = await TrackPlayer.getState();
+    
     console.log("Set Redux calling....", screenGoToAlbum.current ,trackStatus);
     
     if (
@@ -126,16 +128,16 @@ export const GurukulConnect = ({
           is_multiple: audioObj.is_multiple,
         });
       });
-      
+
       if (screenGoToAlbum.current == false && trackStatus == State.Paused || trackStatus == State.None ) {
         await addTracks(trackList);
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
-        const track = await TrackPlayer.getTrack(0);
-        if (track != null) {
+        const trackData = await TrackPlayer.getTrack(0);
+        if (trackData != null) {
           dispatch(
             SET_ACTIVE_TRACKDATA({
               activeTrackDataPayload: {
-                track: track,
+                track: trackData,
               },
             }),
           );
@@ -192,16 +194,10 @@ export const GurukulConnect = ({
           case Event.PlaybackTrackChanged:
             if (event.nextTrack != null) {
               const track = await TrackPlayer.getTrack(event.nextTrack);
-              const trackStatus = await TrackPlayer.getState();
-              // const cloneControl = {...activeTrack};
-              // console.log(cloneControl, "CLONE CONTROLLL");
+              
+             console.log("Gurukul Connect Track Change..",track);
               if (track != null) {
-                // cloneControl.songId = track.id;
-                // cloneControl.songTitle = track.title;
-                // cloneControl.status =
-                //   trackStatus == State.Playing ? true : false;
-                // cloneControl.songIndex = event.nextTrack;
-                // cloneControl.url = track.url;
+                
                 dispatch(
                   SET_ACTIVE_TRACKDATA({
                     activeTrackDataPayload: {
@@ -212,21 +208,21 @@ export const GurukulConnect = ({
               }
             }
             break;
-          case Event.PlaybackState:
-            const trackStatus = await TrackPlayer.getState();
-            const cloneControlStatus = {...activeTrack};
-            cloneControlStatus.status =
-              trackStatus == State.Playing ? true : false;
+          // case Event.PlaybackState:
+          //   const trackStatus = await TrackPlayer.getState();
+          //   const cloneControlStatus = {...activeTrack};
+          //   cloneControlStatus.status =
+          //     trackStatus == State.Playing ? true : false;
 
-            dispatch(
-              SET_ACTIVE_TRACKDATA({
-                activeTrackDataPayload: {
-                  track: cloneControlStatus,
-                },
-              }),
-            );
+          //   dispatch(
+          //     SET_ACTIVE_TRACKDATA({
+          //       activeTrackDataPayload: {
+          //         track: cloneControlStatus,
+          //       },
+          //     }),
+          //   );
 
-            break;
+          //   break;
 
           default:
             break;
@@ -236,6 +232,14 @@ export const GurukulConnect = ({
       }
     },
   );
+
+  const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
+    return trackStatus === State.Playing
+      ? 'PLAYING'
+      : trackStatus === State.Buffering
+      ? 'BUFFERING'
+      : 'OTHER';
+  }, [trackStatus]);
 
   React.useEffect(() => {
     const listener = AppState.addEventListener('blur', async () => {
@@ -362,7 +366,7 @@ export const GurukulConnect = ({
                             }}
                             source={
                               item.id == activeTrack.id &&
-                              activeTrack.status == true
+                              trackPlaying == 'PLAYING'
                                 ? AllIcons.PauseSong
                                 : AllIcons.PlaySong
                             }
@@ -373,9 +377,11 @@ export const GurukulConnect = ({
                       <View
                         style={{height: 24, width: 24}}
                         onTouchEnd={async() => {
+
                           navigation.navigate('albumSong', {
                             playListName: item.title,
                             id: item.id,
+                            status : trackPlaying
                           });
                           screenGoToAlbum.current = true;
                         }}>
@@ -400,7 +406,7 @@ export const GurukulConnect = ({
         </View>
       </View>
 
-      <TrackControl activeTrackProp={activeTrack} />
+      <TrackControl activeTrackProp={activeTrack} status={trackPlaying} />
 
       <DropDownModel
         modelVisible={modal}

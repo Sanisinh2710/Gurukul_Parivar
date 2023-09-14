@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 type TrackPropsType = {
   activeTrackProp: Track;
+  status : "PLAYING" | "BUFFERING" | "OTHER"
 };
 
 async function handleControl() {
@@ -32,7 +33,7 @@ const format = (time: number) => {
   return `${minutes}:${second}`;
 };
 
-export const TrackControl = ({activeTrackProp}: TrackPropsType) => {
+export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   const style = styles();
   const offsetY = React.useRef(new Animated.Value(500)).current;
   const {position, duration} = useProgress();
@@ -57,15 +58,15 @@ export const TrackControl = ({activeTrackProp}: TrackPropsType) => {
   React.useEffect(() => {
     const checkCurrentSong = async () => {
       const trackIn = await TrackPlayer.getCurrentTrack();
-      const trackStatus = await TrackPlayer.getState();
+      // const trackStatus = await TrackPlayer.getState();
       if (trackIn != null) { 
         const track = await TrackPlayer.getTrack(trackIn);
        
         if (track && activeTrackProp.id != "" && activeTrackProp.id != undefined) {
-          console.log("first" , trackStatus , track);
+          console.log("first"  , track);
           if (
             activeTrackProp.id != track.id ||
-            trackStatus == State.Paused || track.status == false
+            status == 'OTHER' 
             ) {
                 await TrackPlayer.skip(trackIn, activeTrackPosition);
               }
@@ -157,7 +158,7 @@ export const TrackControl = ({activeTrackProp}: TrackPropsType) => {
             <Image
               style={{width: '100%', height: '100%'}}
               source={
-                activeTrackProp.status == true
+               status == 'PLAYING'
                   ? AllIcons.TrackPause
                   : AllIcons.TrackPlay
               }

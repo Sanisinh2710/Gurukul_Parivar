@@ -24,7 +24,7 @@ export type RootStackParamList = {
   dailyQuiz: undefined;
   dailyQuizDetail: undefined;
   gurkulConnect :undefined;
-  albumSong : {playListName: string; id:number}
+  albumSong : {playListName: string; id:number;status : "PLAYING" | "BUFFERING" | "OTHER"}
   donation: undefined;
   QuizResult: {marks: number};
   ProfileEdit: {formStep: number} | undefined;

@@ -6,6 +6,8 @@ import {
   AppState,
   View,
   ActivityIndicator,
+  Platform,
+  BackHandler,
 } from 'react-native';
 import {
   Loader,
@@ -26,6 +28,7 @@ import {CommonStyle} from '../../../../../assets/styles';
 import TrackPlayer, {
   Event,
   State,
+  usePlaybackState,
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
@@ -40,12 +43,13 @@ import {
   ADD_UPDATE_SONGS,
   SET_ACTIVE_TRACKDATA,
 } from '../../../../redux/ducks/musicSlice';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const AlbumSong = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'albumSong'>) => {
-  const {playListName, id} = route.params;
+  const {playListName, id } = route.params;
   const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
     useAppSelector(state => state.music);
   const dispatch = useAppDispatch();
@@ -59,14 +63,22 @@ export const AlbumSong = ({
     status: false,
     index: -1,
   });
-
+  const trackStatus  = usePlaybackState();
   const {position} = useProgress();
+
+  const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
+    return trackStatus === State.Playing
+      ? 'PLAYING'
+      : trackStatus === State.Buffering
+      ? 'BUFFERING'
+      : 'OTHER';
+  }, [trackStatus]);
 
   async function handleControl(itemId: any) {
     try {
       const track = await TrackPlayer.getCurrentTrack();
       const queue = await TrackPlayer.getQueue();
-      
+
       const el = queue.slice(-1)[0].id;
       const el2 = songData.slice(-1)[0].id;
 
@@ -75,13 +87,12 @@ export const AlbumSong = ({
         await setAlbumDataToRedux();
       }
 
-      const trackStatus = await TrackPlayer.getState();
       const trackSkipIndex = songData.findIndex(item => item.id == itemId);
-      console.log(trackSkipIndex, '-----', track);
+      
       if (trackSkipIndex != track) {
         TrackPlayer.skip(trackSkipIndex);
         TrackPlayer.play();
-      } else if (trackStatus == State.Playing) {
+      } else if (trackPlaying == 'PLAYING') {
         TrackPlayer.pause();
       } else {
         TrackPlayer.play();
@@ -152,58 +163,23 @@ export const AlbumSong = ({
     }
   }, [allSongs]);
 
-  useTrackPlayerEvents(
-    [
-      Event.PlaybackTrackChanged,
-      Event.PlaybackState,
-      Event.PlaybackProgressUpdated,
-    ],
-    async event => {
-      try {
-        switch (event.type) {
-          case Event.PlaybackTrackChanged:
-            if (event.nextTrack != null) {
-              
-              const track = await TrackPlayer.getTrack(event.nextTrack);
-              if (track != null) {
-                console.log("\n\n",track, 'Track change');
-                dispatch(
-                  SET_ACTIVE_TRACKDATA({
-                    activeTrackDataPayload: {
-                      track: track,
-                    },
-                  }),
-                  );
-                }
-              
-            }
-            break;
-          case Event.PlaybackState:
-            const trackStatus = await TrackPlayer.getState();
-            const cloneControlStatus = {...activeTrack};
-            cloneControlStatus.status =
-              trackStatus == State.Playing ? true : false;
 
-            dispatch(
-              SET_ACTIVE_TRACKDATA({
-                activeTrackDataPayload: {
-                  track: cloneControlStatus,
-                },
-              }),
-            );
+  const ExitCallBack = React.useCallback(() => {
+    // Add Event Listener for hardwareBackPress
+    // BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    const blurListner = AppState.addEventListener('blur', onBlurScreen);
 
-            break;
+    return () => {
+      // Once the Screen gets blur Remove Event Listener
+      // BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      blurListner.remove();
+    };
+  }, [activeTrack]);
 
-          default:
-            break;
-        }
-      } catch (e) {
-        console.log(e, 'EVENT');
-      }
-    },
-  );
-  React.useEffect(() => {
-    const listener = AppState.addEventListener('blur', async () => {
+  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
+
+  const onBlurScreen = () => {
+    if (activeTrack) {
       dispatch(
         SET_ACTIVE_TRACKDATA({
           activeTrackDataPayload: {
@@ -213,13 +189,17 @@ export const AlbumSong = ({
         }),
       );
       return true;
-    });
-    return () => listener.remove();
-  }, []);
+    }
+  };
+
+ 
 
   if (!isPlayerReady) {
     return <Loader />;
   }
+
+
+
 
   /* JSX Return Start */
   return (
@@ -311,7 +291,7 @@ export const AlbumSong = ({
                         }}
                         source={
                           item.id == activeTrack.id &&
-                          activeTrack.status == true
+                         trackPlaying == 'PLAYING'
                             ? AllIcons.PauseSong
                             : AllIcons.PlaySong
                         }
@@ -327,7 +307,7 @@ export const AlbumSong = ({
         </View>
       </View>
 
-      <TrackControl activeTrackProp={activeTrack} />
+      <TrackControl activeTrackProp={activeTrack} status={trackPlaying}/>
     </ScreenWrapper>
   );
   /* JSX Return Start */
