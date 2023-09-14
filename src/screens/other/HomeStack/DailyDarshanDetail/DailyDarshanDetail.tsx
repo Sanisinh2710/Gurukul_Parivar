@@ -2,7 +2,7 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Image, Platform, View} from 'react-native';
+import {BackHandler, Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -14,6 +14,7 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const DailyDarshanDetail = ({
   route,
@@ -75,6 +76,8 @@ export const DailyDarshanDetail = ({
         handleNextPress={() => {
           if (pagination < TotalImages) {
             setPagination(pagination + 1);
+          } else {
+            setPagination(1);
           }
         }}
         handlePrevPress={() => {

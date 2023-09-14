@@ -63,11 +63,6 @@ export const DailyUpdateDetail = ({
               source={{uri: `${BASE_URL}/${Data.images[0]}`}}
               style={style.image}
             />
-            <ImageZoomer
-              images={[{url: `${BASE_URL}${Data.images[0]}`}]}
-              zoomModalVisible={zoomImageModalVisible}
-              setZoomModalVisiable={setZoomModalVisiable}
-            />
           </View>
           <View style={style.titleContainer}>
             <Text style={style.content}>{Data.description}</Text>
@@ -127,6 +122,11 @@ export const DailyUpdateDetail = ({
           </View>
         </ScrollView>
       </View>
+      <ImageZoomer
+        images={[{url: `${BASE_URL}${Data.images[0]}`}]}
+        zoomModalVisible={zoomImageModalVisible}
+        setZoomModalVisiable={setZoomModalVisiable}
+      />
     </ScreenWrapper>
   );
 };

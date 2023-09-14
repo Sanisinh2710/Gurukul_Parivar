@@ -145,7 +145,6 @@ export const HomeScreen = ({
 
     setRefreshing(false);
   };
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -158,7 +157,7 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {userData.userdata.full_name}
+                {userData.userdata.full_name.split(' ')[0]}
                 <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
                   {' '}
                   {userData.userdata.id}

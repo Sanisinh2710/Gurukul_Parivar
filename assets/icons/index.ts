@@ -55,4 +55,5 @@ export const AllIcons = {
   Card: require('../icons/Card.png'),
   Bank: require('../icons/Bank.png'),
   Money: require('../icons/Money.png'),
+  Cancel2: require('../icons/Cancel2.png'),
 };
