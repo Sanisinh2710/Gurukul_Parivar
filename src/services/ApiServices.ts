@@ -24,6 +24,7 @@ import {
   GURUKUL_BRANCH_GET_ENDPOINT,
   GURUKUL_CONNECT_GET_ENDPOINT,
   GURUKUL_CONNECT_POST_ENDPOINT,
+  GURUKUL_EVENTS_GET_ENDPOINT,
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
@@ -324,7 +325,9 @@ export const DailyQuizHistoryGetApi = async (id: number) => {
 export const DailyProgramGetApi = async () => {
   return apiRequest(DAILY_PROGRAM_GET_ENDPOINT, 'get');
 };
-
+export const GurukulEventGetApi = async () => {
+  return apiRequest(GURUKUL_EVENTS_GET_ENDPOINT, 'get');
+};
 // All apis are above, below is helper function for used in auth wizard form:---
 
 export const CallBackButtonAxiosGetForWizardFormSignup = async (
