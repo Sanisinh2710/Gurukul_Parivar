@@ -286,7 +286,6 @@ export const DailyDarshan = ({
                           style={[
                             style.imageContainer,
                             {
-                              backgroundColor: COLORS.primaryRippleColor,
                               borderRadius: 8,
                             },
                           ]}

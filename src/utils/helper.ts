@@ -1,13 +1,13 @@
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import RNFetchBlob from 'rn-fetch-blob';
-import Toast from 'react-native-simple-toast';
 import {
   ImagePickerResponse,
   MediaType,
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const requestCameraPermission = async () => {
   if (Platform.OS === 'android') {
@@ -254,9 +254,7 @@ export const downloadSong = async (
       let song_URL = REMOTE_SONG_URL;
 
       let ext: any = song_URL && getExtention(song_URL);
-      console.log(ext);
       let songTitle = songName.split(' ').join('_');
-      console.log(song_URL);
 
       const {config, fs} = RNFetchBlob;
       let MusicDirc = fs.dirs.MusicDir;

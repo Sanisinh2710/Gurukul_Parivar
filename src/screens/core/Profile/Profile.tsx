@@ -67,7 +67,7 @@ export const ProfileScreen = ({
   }, []);
 
   const [profileImage, setProfileImage] = React.useState<{[key: string]: any}>({
-    uri: userData.userdata?.profile,
+    uri: userData?.userdata?.profile ?? 'null',
     name: '',
     type: '',
   });
@@ -196,8 +196,9 @@ export const ProfileScreen = ({
             <View style={{height: 64, width: 64}}>
               <Image
                 source={
-                  profileImage.uri != '' && !profileImage.uri.includes('null')
-                    ? {uri: profileImage.uri}
+                  profileImage?.uri != '' &&
+                  !profileImage?.uri?.includes('null')
+                    ? {uri: profileImage?.uri}
                     : AllIcons.DummyAvtar
                 }
                 style={{height: '100%', width: '100%', borderRadius: 50}}
@@ -208,10 +209,12 @@ export const ProfileScreen = ({
             </View>
           </View>
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
-            <Text style={style.profileName}>{userData.userdata.full_name}</Text>
+            <Text style={style.profileName}>
+              {userData?.userdata?.full_name ?? 'YOUR NAME'}
+            </Text>
             <Text style={{color: 'rgba(23,23,23,0.5)'}}>
-              {userData.userdata.primary_contact_cc?.toString().split('(')[0]}
-              {userData.userdata.primary_contact}
+              {userData?.userdata?.primary_contact_cc?.toString().split('(')[0]}
+              {userData?.userdata?.primary_contact}
             </Text>
             {/* <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
@@ -399,8 +402,9 @@ export const ProfileScreen = ({
                 }}>
                 <Image
                   source={
-                    profileImage.uri != '' && !profileImage.uri.includes('null')
-                      ? {uri: profileImage.uri}
+                    profileImage?.uri != '' &&
+                    !profileImage?.uri?.includes('null')
+                      ? {uri: profileImage?.uri}
                       : AllIcons.DummyAvtar
                   }
                   style={{

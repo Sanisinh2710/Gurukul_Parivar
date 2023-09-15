@@ -14,7 +14,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {ImageZoomer, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {COLORS, options} from '../../../../utils';
+import {options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdateDetail = ({
@@ -28,9 +28,6 @@ export const DailyUpdateDetail = ({
     React.useState<boolean>(false);
   const {t} = useTranslation();
 
-  const [mainImageViewWidth, setMainImageViewWidth] = React.useState(0);
-  const [mainImageViewHeight, setMainImageViewHeight] = React.useState(0);
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -41,102 +38,110 @@ export const DailyUpdateDetail = ({
         }}
         headerTitle={t('DailyUpdate.Heading')}
       />
-      <View
-        style={{
-          flex: 1,
-        }}>
+
+      <View style={{flex: 1}}>
         <ScrollView
           overScrollMode="always"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[
             commonstyle.commonContentView,
             {
-              paddingBottom: '200%',
+              paddingBottom: '30%',
             },
           ]}>
-          <View style={style.titleContainer}>
-            <Text style={style.title}>{route.params.title}</Text>
-            <Text style={style.date}>
-              {new Date(Data.date).toLocaleString('en-US', options)}
-            </Text>
-          </View>
-
           <View
-            onTouchEnd={() => setZoomModalVisiable(true)}
-            style={[
-              style.imageContainer,
-              {
-                borderRadius: 12,
-              },
-            ]}>
-            <Image
-              source={{uri: `${BASE_URL}/${Data.images[0]}`}}
-              style={style.image}
-              resizeMode="contain"
-            />
-          </View>
+            style={{
+              flex: 1,
+            }}>
+            <View style={style.titleContainer}>
+              <Text style={style.title}>
+                {route.params?.title}
+                {'\n'}
+                <Text style={style.date}>
+                  {new Date(Data.date).toLocaleString('en-US', options)}
+                </Text>
+              </Text>
+            </View>
 
-          <View style={style.titleContainer}>
-            <Text style={style.content}>{Data.description}</Text>
-          </View>
-          <View style={{marginTop: 24}}>
-            <Text style={style.title}>{t('common.PhotoGallery')}</Text>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                flexDirection: 'row',
-                gap: 10,
-                marginTop: 10,
-              }}
-              data={Data.thumbnail}
-              renderItem={({item, index}) => (
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() =>
-                    navigation.navigate('dailyDarshanDetail', {
-                      date: new Date(Data.date).toLocaleString(
-                        'en-US',
-                        options,
-                      ),
-                      data: Data.images,
-                      totalImages: Data.images.length,
-                      currentImageIndex: index,
-                    })
-                  }>
-                  {item && (
-                    <View
-                      style={{
-                        height: 105,
-                        width: 110,
-                        borderRadius: 8,
-                        backgroundColor: COLORS.primaryRippleColor,
-                      }}>
-                      <Image
-                        source={{
-                          uri: `${BASE_URL}/${item}`,
-                        }}
-                        key={index}
+            <View
+              onTouchEnd={() => setZoomModalVisiable(true)}
+              style={[
+                style.imageContainer,
+                {
+                  borderRadius: 12,
+                },
+              ]}>
+              <Image
+                source={{uri: `${BASE_URL}/${Data.images[0]}`}}
+                style={style.image}
+                resizeMode="contain"
+              />
+            </View>
+
+            <View style={style.titleContainer}>
+              <Text style={style.content}>{Data.description}</Text>
+            </View>
+
+            <View style={{marginTop: 24}}>
+              <Text style={style.title}>{t('common.PhotoGallery')}</Text>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  gap: 10,
+                  marginTop: 10,
+                  // bottom: ,
+                  marginBottom: '20%',
+                }}
+                data={Data.thumbnail}
+                renderItem={({item, index}) => (
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() =>
+                      navigation.navigate('dailyDarshanDetail', {
+                        date: new Date(Data.date).toLocaleString(
+                          'en-US',
+                          options,
+                        ),
+                        data: Data.images,
+                        totalImages: Data.images.length,
+                        currentImageIndex: index,
+                      })
+                    }>
+                    {item && (
+                      <View
                         style={{
                           height: 105,
                           width: 110,
                           borderRadius: 8,
-                          resizeMode: 'cover',
-                        }}
-                      />
-                    </View>
-                  )}
-                </TouchableOpacity>
-              )}
-            />
+                        }}>
+                        <Image
+                          source={{
+                            uri: `${BASE_URL}/${item}`,
+                          }}
+                          key={index}
+                          style={{
+                            height: 105,
+                            width: 110,
+                            borderRadius: 8,
+                            resizeMode: 'cover',
+                          }}
+                        />
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
           </View>
+
+          <ImageZoomer
+            images={[{url: `${BASE_URL}${Data.images[0]}`}]}
+            zoomModalVisible={zoomImageModalVisible}
+            setZoomModalVisiable={setZoomModalVisiable}
+          />
         </ScrollView>
       </View>
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${Data.images[0]}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
-      />
     </ScreenWrapper>
   );
 };

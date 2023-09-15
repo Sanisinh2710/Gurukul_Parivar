@@ -2,7 +2,7 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {BackHandler, Image, Platform, View} from 'react-native';
+import {Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -12,9 +12,7 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {COLORS} from '../../../../utils';
 import {styles} from './styles';
-import {useFocusEffect} from '@react-navigation/native';
 
 export const DailyDarshanDetail = ({
   route,
@@ -54,15 +52,14 @@ export const DailyDarshanDetail = ({
           onTouchEnd={() => setZoomModalVisiable(true)}
           style={[
             {
-              height: '80%',
+              flex: 5,
               marginTop: '5%',
-              borderRadius: 8,
-              backgroundColor: COLORS.primaryRippleColor,
             },
           ]}>
           <Image
             source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
+            resizeMode="contain"
           />
         </View>
         <ShareDownload
