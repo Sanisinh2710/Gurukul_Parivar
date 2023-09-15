@@ -5,6 +5,7 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_PROGRAM_GET_ENDPOINT,
   DAILY_QUIZ_ANSWER_POST_ENDPOINT,
   DAILY_QUIZ_GET_ENDPOINT,
   DAILY_QUIZ_HISTORY_GET_ENDPOINT,
@@ -281,23 +282,6 @@ export const DeleteMydataApi = async () => {
   return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };
 
-export const DailyQuizGetApi = async (id: number | undefined) => {
-  if (id !== undefined) {
-    return apiRequest(`${DAILY_QUIZ_GET_ENDPOINT}${id}`, 'get');
-  } else {
-    return apiRequest(DAILY_QUIZ_GET_ENDPOINT, 'get');
-  }
-};
-export const DailyQuizAnswerPostApi = async (data: any) => {
-  return apiRequest(DAILY_QUIZ_ANSWER_POST_ENDPOINT, 'post', data);
-};
-export const DailyQuizStatusApi = async () => {
-  return apiRequest(DAILY_QUIZ_STATUS_GET_ENDPOINT, 'get');
-};
-export const DailyQuizHistoryGetApi = async (id: number) => {
-  return apiRequest(`${DAILY_QUIZ_HISTORY_GET_ENDPOINT}${id}`, 'get');
-};
-
 export const GurkulAudioGetApi = async () => {
   return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
 };
@@ -319,6 +303,26 @@ export const GurkulMultipleAudioGetApi = async (id: number) => {
     `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
     'get',
   );
+};
+
+export const DailyQuizGetApi = async (id: number | undefined) => {
+  if (id !== undefined) {
+    return apiRequest(`${DAILY_QUIZ_GET_ENDPOINT}${id}`, 'get');
+  } else {
+    return apiRequest(DAILY_QUIZ_GET_ENDPOINT, 'get');
+  }
+};
+export const DailyQuizAnswerPostApi = async (data: any) => {
+  return apiRequest(DAILY_QUIZ_ANSWER_POST_ENDPOINT, 'post', data);
+};
+export const DailyQuizStatusApi = async () => {
+  return apiRequest(DAILY_QUIZ_STATUS_GET_ENDPOINT, 'get');
+};
+export const DailyQuizHistoryGetApi = async (id: number) => {
+  return apiRequest(`${DAILY_QUIZ_HISTORY_GET_ENDPOINT}${id}`, 'get');
+};
+export const DailyProgramGetApi = async () => {
+  return apiRequest(DAILY_PROGRAM_GET_ENDPOINT, 'get');
 };
 
 // All apis are above, below is helper function for used in auth wizard form:---

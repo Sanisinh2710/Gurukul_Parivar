@@ -1,10 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.medium20,
@@ -29,10 +26,9 @@ export const styles = () => {
     image: {
       height: '100%',
       width: '100%',
-      borderRadius: 12,
     },
     imageContainer: {
-      height: 330,
+      height: '100%',
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',

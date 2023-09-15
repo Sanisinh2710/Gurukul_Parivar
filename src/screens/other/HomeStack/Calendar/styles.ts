@@ -32,7 +32,6 @@ export const styles = () => {
       width: '100%',
       height: 64,
       flexDirection: 'row',
-      marginVertical: '3%',
     },
     dateContainer: {
       borderTopLeftRadius: 10,

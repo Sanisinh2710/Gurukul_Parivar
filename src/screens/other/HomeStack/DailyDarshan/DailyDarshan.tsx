@@ -59,7 +59,6 @@ export const DailyDarshan = ({
   const [DarshanThumbImages, setDarshanThumbImages] = React.useState([]);
 
   const [refreshing, setRefreshing] = React.useState(false);
-
   const style = styles();
 
   React.useMemo(async () => {
@@ -180,9 +179,7 @@ export const DailyDarshan = ({
           },
         }}
       />
-
       <ScrollView
-        overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           height:
@@ -279,7 +276,7 @@ export const DailyDarshan = ({
                   contentContainerStyle={{
                     gap: 15,
                     marginTop: '3%',
-                    paddingBottom: '30%',
+                    paddingBottom: '10%',
                   }}
                   renderItem={({item, index}) => {
                     return (

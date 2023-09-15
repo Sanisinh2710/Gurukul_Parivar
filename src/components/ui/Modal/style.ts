@@ -25,6 +25,15 @@ export const ModalStyle = (modalHeight: any) => {
       borderTopRightRadius: 24,
       backgroundColor: 'rgba(255, 255, 255, 1)',
     },
+    modelViewPhotoMainView: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     modelCloserMainView: {height: 40},
     modelCloserView: {
       width: 50,

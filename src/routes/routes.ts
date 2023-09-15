@@ -1,9 +1,9 @@
-import {CommingSoon} from '../components';
 import {
   CalendarScreen,
   ChangeLanguage,
   DailyDarshan,
   DailyDarshanDetail,
+  DailyProgram,
   DailyProgramDetail,
   DailyQuiz,
   DailyQuizDetail,
@@ -124,7 +124,7 @@ export const NativeStackRouteList: Array<{
   },
   {
     name: 'program',
-    component: CommingSoon,
+    component: DailyProgram,
   },
   {
     name: 'programDetail',

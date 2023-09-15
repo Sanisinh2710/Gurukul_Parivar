@@ -2,16 +2,17 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, Text, View} from 'react-native';
-import * as Progress from 'react-native-progress';
+import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {CustomFonts} from '../../../../utils';
+import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
 import {styles} from './styles';
+import * as Progress from 'react-native-progress';
+import {CustomFonts} from '../../../../utils';
 
 export const QuizResult = ({
   route,
@@ -35,7 +36,6 @@ export const QuizResult = ({
 
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         <ScrollView
-          overScrollMode="always"
           contentContainerStyle={{
             flex: 1,
             justifyContent: 'center',
@@ -59,7 +59,7 @@ export const QuizResult = ({
               showsText={true}
               fill={'none'}
               textStyle={style.progressText}
-              formatText={() => <Text>{Marks}</Text>}
+              formatText={() => <Text>{Math.floor(Marks)}</Text>}
             />
             <View style={{marginTop: '5%'}}>
               <Text

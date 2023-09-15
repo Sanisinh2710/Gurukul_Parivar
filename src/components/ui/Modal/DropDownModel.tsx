@@ -31,6 +31,7 @@ type DropDownModelProps = {
   modelValuechoosed?: any;
   setModelValueChoosed?: React.Dispatch<React.SetStateAction<boolean>>;
   wantApplyButton?: boolean;
+  viewPhoto?: boolean;
 };
 
 export const DropDownModel = React.memo(
@@ -49,6 +50,7 @@ export const DropDownModel = React.memo(
     modelValuechoosed,
     setModelValueChoosed,
     wantApplyButton,
+    viewPhoto,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
@@ -146,7 +148,10 @@ export const DropDownModel = React.memo(
           onTouchEnd={() => {
             setModelVisible(false);
           }}>
-          <View style={style.modelMainView}>
+          <View
+            style={
+              viewPhoto ? style.modelViewPhotoMainView : style.modelMainView
+            }>
             <View
               style={style.modelCloserMainView}
               onTouchStart={e => (touchY.current = e.nativeEvent.pageY)}
@@ -157,7 +162,7 @@ export const DropDownModel = React.memo(
                   setModelVisible(false);
                 }
               }}>
-              <View style={style.modelCloserView} />
+              <View style={!viewPhoto && style.modelCloserView} />
             </View>
             {customModelchild ? (
               customModelchild

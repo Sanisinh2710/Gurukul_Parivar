@@ -11,10 +11,10 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import {DailyQuizHistoryGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
+import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
+import {DailyQuizHistoryGetApi} from '../../../../services';
 export const QuizHistory = ({
   route,
   navigation,
@@ -56,7 +56,6 @@ export const QuizHistory = ({
           <Loader />
         ) : Data.length > 0 ? (
           <FlatList
-            overScrollMode="always"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: '10%'}}
             data={Data}
@@ -120,7 +119,7 @@ export const QuizHistory = ({
                                 : isCorrect
                                 ? 'rgba(0, 166, 88, 1)'
                                 : isSelected
-                                ? COLORS.primaryColor
+                                ? 'rgba(255, 48, 48, 1)'
                                 : 'rgba(172, 43, 49, 0.1)',
                           }}>
                           <View>

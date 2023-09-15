@@ -67,17 +67,15 @@ export const FrontDeskScreen = ({
       case 'connect':
         navigation.navigate('GurukulConnect');
         break;
-
-      case 'quiz':
-        navigation.navigate('dailyQuiz');
-        break;
-      case 'donation':
-        navigation.navigate('donation');
-        break;
-
+      // case 'quiz':
+      //   navigation.navigate('dailyQuiz');
+      //   break;
+      // case 'donation':
+      //   navigation.navigate('donation');
+      //   break;
       case 'event':
         navigation.navigate('GurukulEvents');
-
+        break;
       default:
         break;
     }

@@ -1,8 +1,12 @@
+import {ReactElement} from 'react';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
+// import {AuthStackNavigator, BottomTabNavigator} from '../routes';
 import {getAuthToken} from '../services';
+
 import {Theme} from '../types';
 import {COLORS} from './colors';
+import {CommingSoon} from '../components';
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
@@ -303,21 +307,6 @@ export const Payment = [
   {title: 'UPI', icon: AllIcons.Money},
 ];
 
-// export const GuruKulList = [
-//   'Ahmedabad Gurukul: Memnagar',
-//   'Ahmedabad Gurukul: Nikol',
-//   'Ahmedabad Gurukul: Santigram',
-//   'America Gurukul',
-//   'Atlanta Gurukul',
-//   'Austin',
-//   'Bangalore Gurukul',
-//   'Bhavnagar Gurukul',
-//   'Bhayavadar Gurukul',
-//   'Bidar Gurukul',
-//   'Boise',
-//   'Boston',
-// ];
-
 export const AllCountryCodes = [
   ...countries.map(item => {
     return '+' + item.code + ' (' + item.iso + ')' + ' ' + item.country;
@@ -326,12 +315,12 @@ export const AllCountryCodes = [
 
 export const FrontDesk = (t: any) => {
   return [
-    {
-      image: AllIcons.Paper,
-      title: t('frontDesk.Form'),
-      id: 'goform',
-      imageBG: 'rgba(172, 168, 123, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Paper,
+    //   title: t('frontDesk.Form'),
+    //   id: 'goform',
+    //   imageBG: 'rgba(172, 168, 123, 0.1)',
+    // },
     {
       image: AllIcons.Chat,
       title: t('frontDesk.Connect'),
@@ -345,18 +334,18 @@ export const FrontDesk = (t: any) => {
       id: 'event',
       imageBG: 'rgba(174, 73, 141, 0.1)',
     },
-    {
-      image: AllIcons.Star,
-      title: t('frontDesk.Quiz'),
-      id: 'quiz',
-      imageBG: 'rgba(60, 42, 152, 0.1)',
-    },
-    {
-      image: AllIcons.Donation,
-      title: t('frontDesk.Donation'),
-      id: 'donation',
-      imageBG: 'rgba(0, 166, 88, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Star,
+    //   title: t('frontDesk.Quiz'),
+    //   id: 'quiz',
+    //   imageBG: 'rgba(60, 42, 152, 0.1)',
+    // },
+    // {
+    //   image: AllIcons.Donation,
+    //   title: t('frontDesk.Donation'),
+    //   id: 'donation',
+    //   imageBG: 'rgba(0, 166, 88, 0.1)',
+    // },
   ];
 };
 export const HomeGrid = (t: any) => {
@@ -395,7 +384,7 @@ export const HomeGrid = (t: any) => {
     },
   ];
 };
-export const EditProfile = (t: any, i18n: any) => {
+export const EditProfileList = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,
@@ -608,21 +597,6 @@ export const IntialValuesForFormdataAuth = {
     ],
   },
 };
-
-export const SongList = [
-  {
-    id: '1',
-    url: 'https://gurukul-dev.taskgrids.com/storage/GurukulAudio/6Pg8Myj4.mp3',
-    title: 'Maan Meri Ja',
-    artist: 'King',
-  },
-  {
-    id: '2',
-    url: require('../../assets/music/YaarKaSatayaHuaHai.mp3'),
-    title: 'Yaar Ka Sataya Hua Hai',
-    artist: 'B Praak',
-  },
-];
 export const GurukulEventsList = [
   {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
   {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},

@@ -6,13 +6,13 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {storage} from '../../../../storage';
-import {RootAuthStackParamList} from '../../../../types';
+import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
 import {COLORS, Languages} from '../../../../utils';
 import {styles} from './styles';
 
 export const ChangeLanguage = ({
   navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+}: NativeStackScreenProps<RootStackParamList>) => {
   const {t, i18n} = useTranslation();
   const [language, setLanguage] = React.useState(Languages[i18n.language]);
   const style = styles();

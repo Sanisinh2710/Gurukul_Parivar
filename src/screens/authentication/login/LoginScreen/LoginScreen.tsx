@@ -210,7 +210,6 @@ export const LoginScreen = ({
     return (
       <ScreenWrapper>
         <ScrollView
-          overScrollMode="always"
           keyboardDismissMode="on-drag"
           automaticallyAdjustKeyboardInsets={true}
           showsVerticalScrollIndicator={false}

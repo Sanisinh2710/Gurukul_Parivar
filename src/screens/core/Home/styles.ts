@@ -1,11 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
 import {CustomFonts} from '../../../utils';
-// import { CustomFonts } from '../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     WelcomeText1: {
       ...CustomFonts.body.large14,
@@ -49,6 +45,7 @@ export const styles = () => {
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginTop: 14,
     },
 
     gridItem: {height: '100%', width: '100%'},

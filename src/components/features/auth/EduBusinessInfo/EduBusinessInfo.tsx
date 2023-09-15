@@ -162,12 +162,10 @@ export const EduBusinessInfo = React.memo(
           <Loader screenHeight={'90%'} />
         ) : (
           <ScrollView
-            overScrollMode="always"
             contentContainerStyle={style.scrollViewContainer}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
             <FlatList
-              overScrollMode="always"
               data={[...EduBusinessInfoFormInputList]}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={style.flatListContainer}
