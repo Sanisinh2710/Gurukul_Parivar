@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 type TrackPropsType = {
   activeTrackProp: Track;
-  status : "PLAYING" | "BUFFERING" | "OTHER"
+  status : "PLAYING" | "PAUSED" |"BUFFERING" | "OTHER"
 };
 
 async function handleControl() {
@@ -63,10 +63,10 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
         const track = await TrackPlayer.getTrack(trackIn);
        
         if (track && activeTrackProp.id != "" && activeTrackProp.id != undefined) {
-          console.log("first"  , track);
+          console.log("TrackControl Component" , track , "Status :",status);
           if (
             activeTrackProp.id != track.id ||
-            status == 'OTHER' 
+            status == 'PAUSED' 
             ) {
                 await TrackPlayer.skip(trackIn, activeTrackPosition);
               }

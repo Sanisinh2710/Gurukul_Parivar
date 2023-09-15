@@ -47,7 +47,6 @@ export const sliderPageSlice = createSlice({
 
       const {track, position } = action.payload.activeTrackDataPayload;
 
-      console.log( "\n\n",track,"Active Track Current<<<<<<<");
       newdata.activeTrack = track;
       if (position) {
         newdata.activeTrackPosition = position;

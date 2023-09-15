@@ -23,8 +23,6 @@ import {
   SongType,
 } from '../../../../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
 import TrackPlayer, {
   Event,
   State,
@@ -41,78 +39,76 @@ import {BASE_URL} from '@env';
 import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
 import {
   ADD_UPDATE_SONGS,
-  SET_ACTIVE_TRACKDATA,
 } from '../../../../redux/ducks/musicSlice';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import { SongUi } from './SongUi';
 
 export const AlbumSong = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'albumSong'>) => {
   const {playListName, id } = route.params;
+  const resetTrack = React.useRef(false);
   const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
     useAppSelector(state => state.music);
   const dispatch = useAppDispatch();
-  const commonStyle = CommonStyle();
-  const style = styles();
 
-  const [songData, setSongData] = React.useState<Array<any>>([]);
+
+  const [songData, setSongData] = React.useState<Array<any>>([...allSongs]);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
-  const resetTrack = React.useRef(false);
-  const [loader, setLoader] = React.useState({
-    status: false,
-    index: -1,
-  });
-  const trackStatus  = usePlaybackState();
-  const {position} = useProgress();
+  // const [modal, setModal] = React.useState(false);
+  // const [loader, setLoader] = React.useState({
+  //   status: false,
+  //   index: -1,
+  // });
+  const trackStatus = usePlaybackState();
+  const screenFocused = useIsFocused();
+  // const [selectedItem, setSelectedItem] = React.useState([]);
+  // const {position} = useProgress();
 
-  const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
-    return trackStatus === State.Playing
-      ? 'PLAYING'
-      : trackStatus === State.Buffering
-      ? 'BUFFERING'
-      : 'OTHER';
-  }, [trackStatus]);
+  // const handleControl = async (itemId: any) => {
+  //   try {
+  //     const queue = await TrackPlayer.getQueue();
+  //     const isAlbum = queue.filter(item => item.id == itemId);
+  //     console.log(isAlbum, 'Is Album >><<>><>><>');
+  //     if (isAlbum.length == 0) {
+  //       resetTrack.current = true;
+  //       await setDataToRedux();
+  //     }
 
-  async function handleControl(itemId: any) {
-    try {
-      const track = await TrackPlayer.getCurrentTrack();
-      const queue = await TrackPlayer.getQueue();
+  //     const track = await TrackPlayer.getCurrentTrack();
 
-      const el = queue.slice(-1)[0].id;
-      const el2 = songData.slice(-1)[0].id;
+  //     const trackSkipIndex = queue.findIndex(item => item.id == itemId);
 
-      if (el != el2) {
-        resetTrack.current = true;
-        await setAlbumDataToRedux();
-      }
+  //     if (trackSkipIndex != track) {
+  //       await TrackPlayer.skip(trackSkipIndex);
+  //       await TrackPlayer.play();
+  //     } else if (trackStatus == State.Playing) {
+  //       await TrackPlayer.pause();
+  //     } else {
+  //       await TrackPlayer.play();
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-      const trackSkipIndex = songData.findIndex(item => item.id == itemId);
-      
-      if (trackSkipIndex != track) {
-        TrackPlayer.skip(trackSkipIndex);
-        TrackPlayer.play();
-      } else if (trackPlaying == 'PLAYING') {
-        TrackPlayer.pause();
-      } else {
-        TrackPlayer.play();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  const setAlbumDataToRedux = async () => {
+  const setDataToRedux = async () => {
     const queue = await TrackPlayer.getQueue();
     const response = await GurukulMultiPartAudio(id);
-
-    const el = queue.slice(-1)[0].id;
-    const el2 = response.data.group_audios.slice(-1)[0].id;
-    if (el == el2) {
-      resetTrack.current = false;
-      console.log('Same to Same');
+    console.log("\t\t------>>>",queue,"Album Queue")
+    
+    if (queue.length <= 0) {
+      resetTrack.current = true;
+      // const el = queue.slice(-1)[0].id;
+      // const dataSame = queue.filter(item => item.id == activeTrack.id);
+      // if (dataSame.length > 0) {
+      //   resetTrack.current = false;
+      //   console.log('Same to Same');
+      // }
     }
-
+    
+    console.log(resetTrack , "<--FF-->");
     if (
       response.resType === 'SUCCESS' &&
       response.data.group_audios.length > 0
@@ -124,19 +120,19 @@ export const AlbumSong = ({
           id: audioObj.id,
           title: audioObj.title,
           url: BASE_URL + audioObj.audio,
+          status: trackStatus == State.Playing ? true : false,
           description: audioObj.description,
         });
       });
 
-      console.log('\n\n\n', SongList, 'Album<>');
       if (resetTrack.current == true) {
         await TrackPlayer.reset();
         await addTracks(SongList);
+        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+
       } else {
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
       }
-    } else {
-      Toast.show(response.message, 2);
     }
   };
 
@@ -145,7 +141,7 @@ export const AlbumSong = ({
       let isSetup = await setupPlayer();
 
       if (isSetup) {
-        await setAlbumDataToRedux();
+        await setDataToRedux();
       }
       setIsPlayerReady(isSetup);
     } catch (e) {
@@ -154,8 +150,10 @@ export const AlbumSong = ({
   };
 
   React.useMemo(() => {
-    setup();
-  }, []);
+    if (screenFocused) {
+      setup();
+    }
+  }, [screenFocused]);
 
   React.useEffect(() => {
     if (allSongs.length > 0) {
@@ -163,152 +161,248 @@ export const AlbumSong = ({
     }
   }, [allSongs]);
 
+  // useTrackPlayerEvents(
+  //   [
+  //     Event.PlaybackTrackChanged,
+  //   ],
+  //   async event => {
+  //     try {
+  //       switch (event.type) {
+  //         case Event.PlaybackTrackChanged:
+  //           if (event.nextTrack != null) {
+  //             const track = await TrackPlayer.getTrack(event.nextTrack);
 
-  const ExitCallBack = React.useCallback(() => {
-    // Add Event Listener for hardwareBackPress
-    // BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    const blurListner = AppState.addEventListener('blur', onBlurScreen);
+  //            console.log("Gurukul Connect Track Change..",track);
+  //             if (track != null) {
 
-    return () => {
-      // Once the Screen gets blur Remove Event Listener
-      // BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      blurListner.remove();
-    };
-  }, [activeTrack]);
+  //               dispatch(
+  //                 SET_ACTIVE_TRACKDATA({
+  //                   activeTrackDataPayload: {
+  //                     track: track,
+  //                   },
+  //                 }),
+  //               );
+  //             }
+  //           }
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     } catch (e) {
+  //       console.log(e, 'EVENT');
+  //     }
+  //   },
+  // );
 
-  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
+  // const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
+  //   return trackStatus === State.Playing
+  //     ? 'PLAYING'
+  //     : trackStatus === State.Buffering
+  //     ? 'BUFFERING'
+  //     : 'OTHER';
+  // }, [trackStatus]);
 
-  const onBlurScreen = () => {
-    if (activeTrack) {
-      dispatch(
-        SET_ACTIVE_TRACKDATA({
-          activeTrackDataPayload: {
-            track: activeTrack,
-            position: position,
-          },
-        }),
-      );
-      return true;
-    }
-  };
+  // const ExitCallBack = React.useCallback(() => {
+  //   const blurListner = AppState.addEventListener('blur', onBlurScreen);
 
- 
+  //   return () => {
+  //     // Once the Screen gets blur Remove Event Listener
+  //     blurListner.remove();
+  //   };
+  // }, [activeTrack]);
+
+  // Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
+
+  // const onBlurScreen = () => {
+  //   console.log('Blur');
+  //   if (activeTrack) {
+  //     dispatch(
+  //       SET_ACTIVE_TRACKDATA({
+  //         activeTrackDataPayload: {
+  //           track: activeTrack,
+  //           position: position,
+  //         },
+  //       }),
+  //     );
+  //     return true;
+  //   }
+  // };
+
 
   if (!isPlayerReady) {
     return <Loader />;
   }
 
 
-
-
   /* JSX Return Start */
   return (
     <ScreenWrapper>
-      <ScreenHeader
-        showLeft={true}
-        headerTitleAlign={'left'}
-        leftOnPress={() => {
-          navigation.goBack();
-        }}
-        headerTitle={playListName}
+      <SongUi
+        songData={songData}
+        setSongData={setSongData}
+        navigation={navigation}
+        screenGoToAlbum={resetTrack}
+        setDataToRedux={setDataToRedux}
+        playListName={playListName}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <SearchBar dataForSearch={songData} setSearchData={setSongData} />
-
-        <View style={{flex: 1}}>
-          {songData.length > 0 ? (
-            <FlatList
-              data={songData}
-              renderItem={({item, index}) => (
-                <View
-                  key={index}
-                  style={[
-                    style.songContainer,
-                    {
-                      borderColor:
-                        item.id == activeTrack.id
-                          ? 'rgba(172, 43, 49, 1)'
-                          : 'rgba(172, 43, 49, 0.3)',
-                    },
-                  ]}>
-                  <View>
-                    <Text style={style.songTitle}>
-                      {item.id}
-                      {'. '}
-
-                      {item.title}
-                    </Text>
-                    <Text style={style.songArtist}>{item.description}</Text>
-                  </View>
-                  <View style={{flexDirection: 'row', gap: 6}}>
-                    <View
-                      style={{height: 24, width: 24}}
-                      onTouchEnd={async () => {
-                        setLoader({
-                          status: true,
-                          index: index,
-                        });
-                        const response = await downloadSong(
-                          item.url,
-                          item.title,
-                        );
-                        if (response == 'SUCCESS') {
-                          setLoader({
-                            status: false,
-                            index: index,
-                          });
-                        } else {
-                          setLoader({
-                            status: false,
-                            index: index,
-                          });
-                        }
-                      }}>
-                      {loader.status && loader.index == index ? (
-                        <ActivityIndicator size={20} />
-                      ) : (
-                        <Image
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'contain',
-                            tintColor: COLORS.primaryColor,
-                          }}
-                          source={AllIcons.DownloadSong}
-                        />
-                      )}
-                    </View>
-                    <View
-                      onTouchEnd={async () => {
-                        handleControl(item.id);
-                      }}
-                      style={{height: 24, width: 24}}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                        source={
-                          item.id == activeTrack.id &&
-                         trackPlaying == 'PLAYING'
-                            ? AllIcons.PauseSong
-                            : AllIcons.PlaySong
-                        }
-                      />
-                    </View>
-                  </View>
-                </View>
-              )}
-            />
-          ) : (
-            <NoData />
-          )}
-        </View>
-      </View>
-
-      <TrackControl activeTrackProp={activeTrack} status={trackPlaying}/>
     </ScreenWrapper>
+    // <ScreenWrapper>
+    //   <ScreenHeader
+    //     showLeft={true}
+    //     headerTitleAlign={'left'}
+    //     leftOnPress={() => {
+    //       dispatch(
+    //         SET_ACTIVE_TRACKDATA({
+    //           activeTrackDataPayload: {
+    //             track: activeTrack,
+    //             position: position,
+    //           },
+    //         }),
+    //       );
+    //       navigation.goBack();
+    //     }}
+    //     headerTitle={t('frontDesk.Connect')}
+    //     headerRight={{
+    //       icon: AllIcons.Filter,
+    //       onPress: () => {
+    //         setModal(true);
+    //       },
+    //     }}
+    //   />
+    //   <View style={[commonStyle.commonContentView, {flex: 1}]}>
+    //     <SearchBar dataForSearch={songData} setSearchData={setSongData} />
+
+    //     <View style={{flex: 1}}>
+    //       {songData.length > 0 ? (
+    //         <FlatList
+    //           data={songData}
+    //           renderItem={({item, index}) => (
+    //             <View
+    //               key={index}
+    //               style={[
+    //                 style.songContainer,
+    //                 {
+    //                   borderColor:
+    //                     item.id == activeTrack.id
+    //                       ? 'rgba(172, 43, 49, 1)'
+    //                       : 'rgba(172, 43, 49, 0.3)',
+    //                 },
+    //               ]}>
+    //               <View>
+    //                 <Text style={style.songTitle}>
+    //                   {item.id}
+    //                   {'. '}
+
+    //                   {item.title}
+    //                 </Text>
+    //                 <Text style={style.songArtist}>{item.description}</Text>
+    //               </View>
+    //               <View style={{flexDirection: 'row', gap: 6}}>
+    //                 {item.is_multiple == false ? (
+    //                   <>
+    //                     <View
+    //                       style={{height: 24, width: 24}}
+    //                       onTouchEnd={async () => {
+    //                         setLoader({
+    //                           status: true,
+    //                           index: index,
+    //                         });
+    //                         const response = await downloadSong(
+    //                           item.url,
+    //                           item.title,
+    //                         );
+    //                         if (response == 'SUCCESS') {
+    //                           setLoader({
+    //                             status: false,
+    //                             index: index,
+    //                           });
+    //                         } else {
+    //                           setLoader({
+    //                             status: false,
+    //                             index: index,
+    //                           });
+    //                         }
+    //                       }}>
+    //                       {loader.status && loader.index == index ? (
+    //                         <ActivityIndicator size={20} />
+    //                       ) : (
+    //                         <Image
+    //                           style={{
+    //                             width: '100%',
+    //                             height: '100%',
+    //                             resizeMode: 'contain',
+    //                             tintColor: COLORS.primaryColor,
+    //                           }}
+    //                           source={AllIcons.DownloadSong}
+    //                         />
+    //                       )}
+    //                     </View>
+    //                     <View
+    //                       onTouchEnd={async () => {
+    //                         handleControl(item.id);
+    //                       }}
+    //                       style={{height: 24, width: 24}}>
+    //                       <Image
+    //                         style={{
+    //                           width: '100%',
+    //                           height: '100%',
+    //                           resizeMode: 'contain',
+    //                         }}
+    //                         source={
+    //                           item.id == activeTrack.id &&
+    //                           trackPlaying == 'PLAYING'
+    //                             ? AllIcons.PauseSong
+    //                             : AllIcons.PlaySong
+    //                         }
+    //                       />
+    //                     </View>
+    //                   </>
+    //                 ) : (
+    //                   <View
+    //                     style={{height: 24, width: 24}}
+    //                     onTouchEnd={async() => {
+
+    //                       navigation.navigate('albumSong', {
+    //                         playListName: item.title,
+    //                         id: item.id,
+    //                         status : trackPlaying
+    //                       });
+    //                     }}>
+    //                     <Image
+    //                       style={{
+    //                         width: '100%',
+    //                         height: '100%',
+    //                         resizeMode: 'contain',
+    //                         tintColor: COLORS.primaryColor,
+    //                       }}
+    //                       source={AllIcons.AlbumRightArrow}
+    //                     />
+    //                   </View>
+    //                 )}
+    //               </View>
+    //             </View>
+    //           )}
+    //         />
+    //       ) : (
+    //         <NoData />
+    //       )}
+    //     </View>
+    //   </View>
+
+    //   <TrackControl activeTrackProp={activeTrack} status={trackPlaying} />
+
+    //   <DropDownModel
+    //     modelVisible={modal}
+    //     setModelVisible={setModal}
+    //     modalHeight="70%"
+    //     type="multi-select"
+    //     inputList={['a', 'b', 'c']}
+    //     selectedItem={selectedItem}
+    //     setSelectedItem={setSelectedItem}
+    //     wantResetButton={true}
+    //     label="G-connect Categories"
+    //   />
+    // </ScreenWrapper>
   );
   /* JSX Return Start */
 };
