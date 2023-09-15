@@ -56,6 +56,8 @@ export const DailyDarshan = ({
   );
   const [BranchName, setBranchName] = React.useState();
   const [DarshanImages, setDarshanImages] = React.useState([]);
+  const [DarshanThumbImages, setDarshanThumbImages] = React.useState([]);
+
   const [refreshing, setRefreshing] = React.useState(false);
   const style = styles();
 
@@ -113,13 +115,20 @@ export const DailyDarshan = ({
   };
   const Image_Data = () => {
     if (Data.length > 0 && Data !== undefined) {
-      let newImges = Data.filter(item => {
+      let newImages = Data.filter(item => {
         if (item.branch === BranchName) {
           return item.image_paths;
         }
       })?.[0]?.image_paths;
 
-      setDarshanImages(newImges ?? []);
+      let thumbImages = Data.filter(item => {
+        if (item.branch === BranchName) {
+          return item.thumbnail;
+        }
+      })?.[0]?.thumbnail;
+
+      setDarshanImages(newImages ?? []);
+      setDarshanThumbImages(thumbImages ?? []);
     }
   };
 
@@ -175,7 +184,7 @@ export const DailyDarshan = ({
         contentContainerStyle={{
           height:
             Data.find(item => item.branch === BranchName) !== undefined &&
-            DarshanImages.length > 0
+            DarshanThumbImages.length > 0
               ? 'auto'
               : '100%',
         }}
@@ -218,14 +227,8 @@ export const DailyDarshan = ({
                   type={'simple'}
                   value={changeValue}
                   onChange={setChangeValue}
-                  onBlur={function (...event: any[]): void {
-                    throw new Error('Function not implemented.');
-                  }}
-                  setFocused={function (
-                    value: React.SetStateAction<boolean>,
-                  ): void {
-                    throw new Error('Function not implemented.');
-                  }}
+                  onBlur={() => {}}
+                  setFocused={() => {}}
                   wantPlaceholderAsLabelOnModal={true}
                 />
               </View>
@@ -249,7 +252,7 @@ export const DailyDarshan = ({
             <Loader
               screenHeight={
                 Data.find(item => item.branch === BranchName) !== undefined &&
-                DarshanImages.length > 0
+                DarshanThumbImages.length > 0
                   ? '100%'
                   : '70%'
               }
@@ -261,11 +264,11 @@ export const DailyDarshan = ({
                 paddingTop: '3%',
               }}>
               {Data.find(item => item.branch === BranchName) !== undefined &&
-              DarshanImages.length > 0 ? (
+              DarshanThumbImages.length > 0 ? (
                 <FlatList
                   scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
-                  data={DarshanImages}
+                  data={DarshanThumbImages}
                   numColumns={2}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
@@ -283,7 +286,6 @@ export const DailyDarshan = ({
                           style={[
                             style.imageContainer,
                             {
-                              backgroundColor: COLORS.primaryRippleColor,
                               borderRadius: 8,
                             },
                           ]}

@@ -1,4 +1,3 @@
-import {CommingSoon} from '../components';
 import {
   CalendarScreen,
   ChangeLanguage,

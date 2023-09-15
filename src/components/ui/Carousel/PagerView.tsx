@@ -2,10 +2,10 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {Dimensions, FlatList, Image, View} from 'react-native';
+import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
+import {useAppDispatch} from '../../../redux/hooks';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
-import {useAppDispatch} from '../../../redux/hooks';
-import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
 
 type PagerViewProps = {
   currentPage: number;

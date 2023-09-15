@@ -185,6 +185,8 @@ export const LoginScreen = ({
                 if (setuserdataresponse === 'SUCCESS') {
                   navigation.replace('BottomNavBar');
                 }
+              } else {
+                navigation.replace('BottomNavBar');
               }
             } else {
               setIsApiloading(false);

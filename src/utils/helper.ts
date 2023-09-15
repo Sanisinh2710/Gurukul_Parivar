@@ -1,10 +1,13 @@
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import {
   ImagePickerResponse,
   MediaType,
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import Toast from 'react-native-simple-toast';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const requestCameraPermission = async () => {
   if (Platform.OS === 'android') {
@@ -213,4 +216,79 @@ export const CustomDateSplitAndFormat = (
 
     return newDate;
   }
+};
+
+export const checkPermission = async () => {
+  try {
+    let deviceVersionInfo = DeviceInfo.getSystemVersion();
+    let granted = PermissionsAndroid.RESULTS.GRANTED;
+
+    if (parseInt(deviceVersionInfo) >= 13) {
+      return granted == PermissionsAndroid.RESULTS.GRANTED;
+    } else {
+      granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+    }
+
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      return granted == PermissionsAndroid.RESULTS.GRANTED;
+    } else {
+      Toast.show('Storage Permission Required', 2);
+    }
+  } catch (error) {
+    console.log('Check Permission Error For Music', error);
+  }
+};
+
+export const downloadSong = async (
+  REMOTE_SONG_URL: string,
+  songName: string,
+) => {
+  try {
+    const permissionResponse = await checkPermission();
+    if (permissionResponse) {
+      let resType: 'SUCCESS' | 'ERROR';
+      let date = new Date();
+
+      let song_URL = REMOTE_SONG_URL;
+
+      let ext: any = song_URL && getExtention(song_URL);
+      let songTitle = songName.split(' ').join('_');
+
+      const {config, fs} = RNFetchBlob;
+      let MusicDirc = fs.dirs.MusicDir;
+      let fileName = `/${songTitle}_${Math.floor(
+        date.getTime() + date.getSeconds() / 2,
+      )}${ext}`;
+
+      let options = {
+        fileCache: false,
+
+        addAndroidDownloads: {
+          // Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path: MusicDirc + fileName,
+          description: 'Music',
+        },
+      };
+
+      const response = await RNFetchBlob.config(options).fetch('GET', song_URL);
+      if (response) {
+        return (resType = 'SUCCESS');
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return (resType = 'ERROR');
+        // Handle download failure
+      }
+    }
+  } catch (error) {
+    console.log(error, 'Song Download');
+  }
+};
+const getExtention = (filename: string) => {
+  // To get the file extension
+  const parts = filename.split('.');
+  return `.${parts[parts.length - 1]}`;
 };

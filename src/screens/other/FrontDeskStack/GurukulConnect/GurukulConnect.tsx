@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {BASE_URL} from '@env';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
@@ -24,6 +24,7 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
+import {batch} from 'react-redux';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -35,25 +36,29 @@ import {
   SearchBar,
 } from '../../../../components';
 import {
+  ADD_UPDATE_CATEGORIES,
   ADD_UPDATE_SONGS,
   SET_ACTIVE_TRACKDATA,
+  UPDATE_SETUP_MODE,
 } from '../../../../redux/ducks/musicSlice';
 import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
 import {
   GurkulAudioCategoriesGetApi,
   GurkulAudioGetApi,
   GurkulAudioGetFromCategoriesGetApi,
+  GurkulMultipleAudioGetApi,
   addTracks,
   resetAndAddTracks,
   setupPlayer,
 } from '../../../../services';
 import {RootStackParamList, SongType} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
+import {COLORS, CustomFonts, isString} from '../../../../utils';
 import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
   try {
     const allTracks = await TrackPlayer.getQueue();
+
     const skipToIndex = allTracks.findIndex(
       item => item?.id === wantToPlayItemId,
     );
@@ -88,8 +93,13 @@ export const GurukulConnect = ({
 
   const [isSearching, setIsSearching] = React.useState<boolean>(false);
 
-  const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
-    useAppSelector(state => state.music);
+  const {
+    allSongs,
+    activeTrack,
+    activeTrackPosition,
+    selectedCategories,
+    setupMode,
+  } = useAppSelector(state => state.music);
 
   const [searchData, setSearchData] = React.useState<Array<SongType | Track>>([
     ...allSongs,
@@ -97,100 +107,100 @@ export const GurukulConnect = ({
 
   const [modal, setModal] = React.useState(false);
   const [categoryList, setCategoryList] = React.useState<Array<any>>([]);
-  const [selectedItem, setSelectedItem] = React.useState<Array<any>>([]);
+  const [selectedItem, setSelectedItem] = React.useState<Array<any>>(
+    [...selectedCategories] ?? [],
+  );
 
   const dispatch = useAppDispatch();
-
-  const screenFocused = useIsFocused();
 
   const playbackState = usePlaybackState();
 
   const {position, duration} = useProgress();
 
-  const setup = async () => {
+  const setup = async (songsToBeAdded: Array<any>) => {
     setLoader(true);
     let isSetup = await setupPlayer();
 
     const queue = await TrackPlayer.getQueue();
 
-    console.log(queue.length, 'queue setup time');
-
     if (isSetup && queue.length <= 0) {
       try {
-        const res = await GurkulAudioGetApi();
+        let Songs: Array<SongType> = [];
 
-        console.log('audio got from api');
+        const apiData: Array<any> = JSON.parse(JSON.stringify(songsToBeAdded));
 
-        if (res.resType === 'SUCCESS') {
-          let Songs: Array<SongType> = [];
+        apiData.map((wholeitem, mainindex) => {
+          let newItem: SongType = {
+            id: '',
+            url: '',
+            title: '',
+            artist: '',
+            description: '',
+          };
+          newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+          newItem.id = wholeitem['id'] ?? '';
+          newItem.title = wholeitem['title'] ?? '';
+          newItem.description = wholeitem['description'] ?? '';
+          newItem.artist = wholeitem['artist'] ?? '';
+          newItem.is_multiple = wholeitem['is_multiple'] ?? false;
 
-          const apiData: Array<any> = JSON.parse(
-            JSON.stringify(res.data.gurukul_audios),
-          );
+          Songs.push(newItem);
+        });
 
-          apiData.map((wholeitem, mainindex) => {
-            let newItem: SongType = {
-              id: '',
-              url: '',
-              title: '',
-              artist: '',
-              description: '',
-            };
-            newItem.url = `${BASE_URL}${wholeitem['audio']}`;
-            newItem.id = wholeitem['id'] ?? '';
-            newItem.title = wholeitem['title'] ?? '';
-            newItem.description = wholeitem['description'] ?? '';
-            newItem.artist = wholeitem['artist'] ?? '';
-            newItem.is_multiple = wholeitem['is_multiple'] ?? false;
+        await addTracks([...Songs.filter(item => item.is_multiple === false)]);
 
-            Songs.push(newItem);
-          });
-          console.log('backend data receoivd');
+        dispatch(ADD_UPDATE_SONGS({songs: Songs}));
 
-          await addTracks([
-            ...Songs.filter(item => item.is_multiple === false),
-          ]);
-          console.log('came in try track added');
+        const playingTrack = await TrackPlayer.getTrack(0);
 
-          dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-          const playingTrack = await TrackPlayer.getTrack(0);
-          if (playingTrack !== null) {
-            if (activeTrack && activeTrackPosition) {
-              const newQueue = await TrackPlayer.getQueue();
-              await TrackPlayer.skip(
-                newQueue.findIndex((item: any) => item.id === activeTrack?.id),
-                activeTrackPosition,
-              );
-              const currentTrackDuration = await TrackPlayer.getDuration();
+        if (playingTrack !== null) {
+          const newQueue = await TrackPlayer.getQueue();
 
-              await TrackPlayer.updateMetadataForTrack(
-                newQueue.findIndex((item: any) => item.id === activeTrack?.id),
-                {
-                  title: activeTrack?.title,
-                  artist: activeTrack?.artist,
-                  duration: currentTrackDuration,
+          if (
+            activeTrack &&
+            activeTrackPosition &&
+            setupMode !== 'ALBUM' &&
+            setupMode !== 'FILTERED'
+          ) {
+            await TrackPlayer.skip(
+              newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+              activeTrackPosition,
+            );
+            const currentTrackDuration = await TrackPlayer.getDuration();
+
+            await TrackPlayer.updateMetadataForTrack(
+              newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+              {
+                title: activeTrack?.title,
+                artist: activeTrack?.artist,
+                duration: currentTrackDuration,
+              },
+            );
+            dispatch(
+              SET_ACTIVE_TRACKDATA({
+                activeTrackDataPayload: {
+                  track: activeTrack,
+                  position: activeTrackPosition,
                 },
-              );
-              dispatch(
-                SET_ACTIVE_TRACKDATA({
-                  activeTrackDataPayload: {
-                    track: activeTrack,
-                    position: activeTrackPosition,
-                  },
-                }),
-              );
-            } else {
-              dispatch(
-                SET_ACTIVE_TRACKDATA({
-                  activeTrackDataPayload: {
-                    track: playingTrack,
-                  },
-                }),
-              );
-            }
+              }),
+            );
+          } else {
+            dispatch(
+              SET_ACTIVE_TRACKDATA({
+                activeTrackDataPayload: {
+                  track: playingTrack,
+                },
+              }),
+            );
           }
-
-          console.log('dispatch done');
+        } else {
+          dispatch(
+            SET_ACTIVE_TRACKDATA({
+              activeTrackDataPayload: {
+                track: undefined,
+              },
+            }),
+          );
         }
       } catch (error) {
         console.log(error);
@@ -207,62 +217,69 @@ export const GurukulConnect = ({
   };
 
   React.useMemo(async () => {
-    await setup();
+    if (setupMode === 'NONE') {
+      const res = await GurkulAudioGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        await setup(res.data.gurukul_audios);
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+      }
+    } else {
+      if (setupMode !== 'FILTERED' && setupMode !== 'ALBUM') {
+        const res = await GurkulAudioGetApi();
+
+        if (res.resType === 'SUCCESS') {
+          await setup(res.data.gurukul_audios);
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+        }
+      }
+    }
   }, []);
 
   React.useMemo(async () => {
-    if (selectedItem.length > 0) {
-      setLoader(true);
+    setLoader(true);
 
+    if (
+      selectedItem.length > 0 &&
+      (setupMode === 'INITIAL' || setupMode === 'FILTERED')
+    ) {
       const response = await GurkulAudioGetFromCategoriesGetApi(selectedItem);
 
       if (response.resType === 'SUCCESS') {
-        console.log(response.data.gurukul_audios, 'response fetched success');
+        if (setupMode === 'INITIAL') {
+          await TrackPlayer.reset();
+        }
+        if (
+          setupMode === 'FILTERED' &&
+          selectedCategories.length !== selectedItem.length
+        ) {
+          await TrackPlayer.reset();
+        }
+        await setup(response.data.gurukul_audios);
       }
 
-      setLoader(false);
+      batch(() => {
+        dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'FILTERED'}));
+      });
     }
+    if (selectedItem.length <= 0) {
+      if (setupMode === 'FILTERED') {
+        await TrackPlayer.reset();
+        const res = await GurkulAudioGetApi();
+
+        if (res.resType === 'SUCCESS') {
+          await setup(res.data.gurukul_audios);
+        }
+
+        batch(() => {
+          dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+        });
+      }
+    }
+    setLoader(false);
   }, [selectedItem]);
-
-  // React.useMemo(async () => {
-  //   if (screenFocused && isPlayerReady) {
-  //     const queue = await TrackPlayer.getQueue();
-
-  //     console.log('queue llength in screen focused', queue.length);
-
-  //     if (
-  //       queue.length > 0 &&
-  //       playbackState !== State.Playing &&
-  //       playbackState !== State.Paused &&
-  //       activeTrack &&
-  //       activeTrackPosition
-  //     ) {
-  //       console.log('came in if');
-
-  //       await TrackPlayer.skip(
-  //         queue.findIndex((item: any) => item.id === activeTrack?.id),
-  //         activeTrackPosition,
-  //       );
-  //     } else {
-  //       console.log('came in else');
-  //       const playingTrackIndex = await TrackPlayer.getCurrentTrack();
-  //       console.log('came in else', playingTrackIndex);
-
-  //       if (playingTrackIndex !== null) {
-  //         const playingTrack = await TrackPlayer.getTrack(playingTrackIndex);
-  //         if (playingTrack !== null) {
-  //           dispatch(
-  //             SET_ACTIVE_TRACKDATA({
-  //               activeTrackDataPayload: {
-  //                 track: playingTrack,
-  //               },
-  //             }),
-  //           );
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [screenFocused, isPlayerReady]);
 
   React.useEffect(() => {
     if (allSongs.length > 0) {
@@ -363,13 +380,69 @@ export const GurukulConnect = ({
         }),
       );
 
-      navigation.goBack();
+      if (setupMode === 'ALBUM') {
+        setTimeout(async () => {
+          setLoader(true);
+
+          try {
+            const res =
+              selectedItem.length <= 0
+                ? await GurkulAudioGetApi()
+                : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
+
+            if (res.resType === 'SUCCESS') {
+              let Songs: Array<SongType> = [];
+
+              const apiData: Array<any> = JSON.parse(
+                JSON.stringify(res.data.gurukul_audios),
+              );
+
+              apiData.map((wholeitem, mainindex) => {
+                let newItem: SongType = {
+                  id: '',
+                  url: '',
+                  title: '',
+                  artist: '',
+                  description: '',
+                };
+                newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+                newItem.id = wholeitem['id'] ?? '';
+                newItem.title = wholeitem['title'] ?? '';
+                newItem.description = wholeitem['description'] ?? '';
+                newItem.artist = wholeitem['artist'] ?? '';
+                newItem.is_multiple = wholeitem['is_multiple'] ?? false;
+
+                Songs.push(newItem);
+              });
+
+              await addTracks([
+                ...Songs.filter(item => item.is_multiple === false),
+              ]);
+
+              batch(() => {
+                dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+                dispatch(
+                  UPDATE_SETUP_MODE({
+                    setupMode:
+                      selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
+                  }),
+                );
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          setLoader(false);
+        }, 1500);
+      } else {
+        navigation.goBack();
+      }
     } else {
       navigation.goBack();
     }
 
     return true;
-  }, [activeTrack, trackPosition]);
+  }, [activeTrack, trackPosition, setupMode]);
 
   const onBlurScreen = React.useCallback(() => {
     if (activeTrack) {
@@ -379,9 +452,8 @@ export const GurukulConnect = ({
         }),
       );
     }
-
     return true;
-  }, [activeTrack, trackPosition]);
+  }, [activeTrack, trackPosition, setupMode]);
 
   const ExitCallBack = React.useCallback(() => {
     // Add Event Listener for hardwareBackPress
@@ -393,7 +465,7 @@ export const GurukulConnect = ({
       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
       blurListner.remove();
     };
-  }, [activeTrack, trackPosition]);
+  }, [activeTrack, trackPosition, setupMode]);
 
   Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
@@ -450,7 +522,71 @@ export const GurukulConnect = ({
         );
       }
     }
+    dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
     setWantNewSongs(false);
+  };
+
+  const onAlbumClick = async (albumId: number | string, albumName: string) => {
+    setLoader(true);
+
+    let isSetup = await setupPlayer();
+
+    if (isSetup) {
+      try {
+        const res = await GurkulMultipleAudioGetApi(
+          isString(albumId) ? parseInt(albumId) : albumId,
+        );
+
+        if (res.resType === 'SUCCESS') {
+          if (setupMode === 'INITIAL' || setupMode === 'FILTERED') {
+            let Songs: Array<SongType> = [];
+
+            const apiData: Array<any> = JSON.parse(
+              JSON.stringify(res.data.group_audios),
+            );
+
+            apiData.map((wholeitem, mainindex) => {
+              let newItem: SongType = {
+                id: '',
+                url: '',
+                title: '',
+                artist: '',
+                description: '',
+              };
+              newItem.url = `${BASE_URL}${wholeitem['audio']}`;
+              newItem.id = wholeitem['id'] ?? '';
+              newItem.title = wholeitem['title'] ?? '';
+              newItem.description = wholeitem['description'] ?? '';
+              newItem.artist = wholeitem['artist'] ?? '';
+              newItem.is_multiple = wholeitem['is_multiple'] ?? false;
+              newItem.album = albumName ?? '';
+
+              Songs.push(newItem);
+            });
+
+            await resetAndAddTracks([
+              ...Songs.filter(item => item.is_multiple === false),
+            ]);
+
+            dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+          }
+        }
+      } catch (error) {
+        console.log(error, 'error came');
+      }
+      const playingTrack = await TrackPlayer.getTrack(0);
+      if (playingTrack !== null) {
+        dispatch(
+          SET_ACTIVE_TRACKDATA({
+            activeTrackDataPayload: {
+              track: playingTrack,
+            },
+          }),
+        );
+      }
+    }
+    dispatch(UPDATE_SETUP_MODE({setupMode: 'ALBUM'}));
+    setLoader(false);
   };
 
   if (!isPlayerReady || loader || isSearching) {
@@ -462,13 +598,19 @@ export const GurukulConnect = ({
           showLeft={true}
           headerTitleAlign={'left'}
           leftOnPress={onBackPress}
-          headerTitle={t('frontDesk.Connect')}
-          headerRight={{
-            icon: AllIcons.Filter,
-            onPress: () => {
-              setModal(true);
-            },
-          }}
+          headerTitle={
+            setupMode === 'ALBUM' ? activeTrack?.album : t('frontDesk.Connect')
+          }
+          headerRight={
+            setupMode === 'ALBUM'
+              ? undefined
+              : {
+                  icon: AllIcons.Filter,
+                  onPress: () => {
+                    setModal(true);
+                  },
+                }
+          }
         />
 
         <ScrollView
@@ -496,64 +638,66 @@ export const GurukulConnect = ({
             setIsSearching={setIsSearching}
           />
 
-          {Array.isArray(selectedItem) && selectedItem.length > 0 && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 8,
-                flexWrap: 'wrap',
-                marginVertical: '1.5%',
-              }}>
-              {selectedItem.map((mainitem, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: 'row',
-                      backgroundColor: COLORS.primaryLightColor,
-                      paddingLeft: 16,
-                      paddingRight: 10,
-                      height: 35,
-                      alignItems: 'center',
-                      borderRadius: 60,
-                      gap: 10,
-                    }}>
-                    <Text
-                      style={{
-                        ...CustomFonts.body.large14,
-                        fontSize: 16,
-                        color: COLORS.black,
-                      }}>
-                      {categoryList.find(item => item.id === mainitem)?.name}
-                    </Text>
+          {Array.isArray(selectedItem) &&
+            selectedItem.length > 0 &&
+            setupMode !== 'ALBUM' && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 8,
+                  flexWrap: 'wrap',
+                  marginVertical: '1.5%',
+                }}>
+                {selectedItem.map((mainitem, index) => {
+                  return (
                     <View
-                      onTouchEnd={() => {
-                        let newValues: string[] = JSON.parse(
-                          JSON.stringify(selectedItem),
-                        );
-                        newValues.splice(index, 1);
-                        setSelectedItem(newValues);
-                      }}
+                      key={index}
                       style={{
-                        width: 14,
-                        height: 14,
+                        flexDirection: 'row',
+                        backgroundColor: COLORS.primaryLightColor,
+                        paddingLeft: 16,
+                        paddingRight: 10,
+                        height: 35,
                         alignItems: 'center',
-                        justifyContent: 'center',
+                        borderRadius: 60,
+                        gap: 10,
                       }}>
-                      <Image
-                        source={AllIcons.RoundCross}
+                      <Text
                         style={{
-                          flex: 1,
-                          tintColor: COLORS.primaryColor,
-                          resizeMode: 'contain',
+                          ...CustomFonts.body.large14,
+                          fontSize: 16,
+                          color: COLORS.black,
+                        }}>
+                        {categoryList.find(item => item.id === mainitem)?.name}
+                      </Text>
+                      <View
+                        onTouchEnd={() => {
+                          let newValues: string[] = JSON.parse(
+                            JSON.stringify(selectedItem),
+                          );
+                          newValues.splice(index, 1);
+                          setSelectedItem(newValues);
                         }}
-                      />
+                        style={{
+                          width: 14,
+                          height: 14,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <Image
+                          source={AllIcons.RoundCross}
+                          style={{
+                            flex: 1,
+                            tintColor: COLORS.primaryColor,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
-          )}
+                  );
+                })}
+              </View>
+            )}
 
           <View>
             {allSongs.length > 0 && (
@@ -586,7 +730,11 @@ export const GurukulConnect = ({
                     </View>
                     {item.is_multiple === true ? (
                       <View
-                        onTouchEnd={() => {}}
+                        onTouchEnd={async () => {
+                          if (item?.id && item?.title) {
+                            await onAlbumClick(item?.id, item?.title);
+                          }
+                        }}
                         style={{
                           flexDirection: 'row',
                         }}>
@@ -637,8 +785,8 @@ export const GurukulConnect = ({
                           />
                         </View>
                         <View
-                          onTouchEnd={() => {
-                            handleControl(item?.id);
+                          onTouchEnd={async () => {
+                            await handleControl(item?.id);
                           }}
                           style={{height: 24, width: 24}}>
                           {item.id == activeTrack?.id &&
