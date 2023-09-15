@@ -373,7 +373,7 @@ export const ProfileScreen = ({
                 onPress={() => {
                   handleProfile('camera');
                 }}>
-                <Text style={style.pictureUpdateText}>Take Photo</Text>
+                <Text style={style.pictureUpdateText}>Capture your Photo</Text>
               </Pressable>
               <Pressable
                 onPress={() => {

@@ -90,11 +90,11 @@ export const CalendarScreen = ({
   }, [todayEvent]);
   const listIndex = () => {
     return sortedData.findIndex(
-      event => event.date === d.toISOString().substring(0, 10),
+      event => event.date >= d.toISOString().substring(0, 10),
     );
   };
   React.useEffect(() => {
-    if (sortedData.length > 0) {
+    if (sortedData.length > 0 && listIndex() !== -1) {
       ref.current?.scrollToIndex({
         animated: true,
         index: listIndex(),
@@ -132,68 +132,69 @@ export const CalendarScreen = ({
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         {loader ? (
           <Loader />
-        ) : Data.length > 0 &&
-          Data[0].image !== undefined &&
+        ) : (Data.length > 0 && Data[0].image !== undefined) ||
           sortedData.length > 0 ? (
           <View>
-            <View style={{height: '28%', top: 20}}>
-              <FlatList
-                data={sortedData}
-                ref={ref}
-                contentContainerStyle={{
-                  gap: 15,
-                }}
-                getItemLayout={(data, index) => {
-                  return {
-                    length: 79,
-                    offset: 79 * index,
-                    index,
-                  };
-                }}
-                refreshControl={
-                  <RefreshControl
-                    colors={[COLORS.primaryColor, COLORS.green]}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-                renderItem={({item, index}) => (
-                  <View
-                    key={index.toString()}
-                    style={[
-                      style.textBoxContainer,
-                      item.date < d.toISOString().substring(0, 10) && {
-                        opacity: 0.8,
-                      },
-                    ]}>
+            {sortedData.length > 0 && (
+              <View style={{height: '28%', top: 20}}>
+                <FlatList
+                  data={sortedData}
+                  ref={ref}
+                  contentContainerStyle={{
+                    gap: 15,
+                  }}
+                  getItemLayout={(data, index) => {
+                    return {
+                      length: 79,
+                      offset: 79 * index,
+                      index,
+                    };
+                  }}
+                  refreshControl={
+                    <RefreshControl
+                      colors={[COLORS.primaryColor, COLORS.green]}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  renderItem={({item, index}) => (
                     <View
+                      key={index.toString()}
                       style={[
-                        style.dateContainer,
+                        style.textBoxContainer,
                         item.date < d.toISOString().substring(0, 10) && {
-                          backgroundColor: '#b3898b',
-                          borderColor: '#b3898b',
+                          opacity: 0.8,
                         },
                       ]}>
-                      <Text style={style.date}>{item.date.split('-')[2]}</Text>
-                      <Text style={style.day}>
-                        {daysArray[new Date(item.date).getDay()]}
-                      </Text>
+                      <View
+                        style={[
+                          style.dateContainer,
+                          item.date < d.toISOString().substring(0, 10) && {
+                            backgroundColor: '#b3898b',
+                            borderColor: '#b3898b',
+                          },
+                        ]}>
+                        <Text style={style.date}>
+                          {item.date.split('-')[2]}
+                        </Text>
+                        <Text style={style.day}>
+                          {daysArray[new Date(item.date).getDay()]}
+                        </Text>
+                      </View>
+                      <View style={style.contentContainer}>
+                        <Text style={style.content1}>{item.title}</Text>
+                        <Text style={style.content2}>{item.description}</Text>
+                      </View>
                     </View>
-                    <View style={style.contentContainer}>
-                      <Text style={style.content1}>{item.title}</Text>
-                      <Text style={style.content2}>{item.description}</Text>
-                    </View>
-                  </View>
-                )}
-              />
-            </View>
+                  )}
+                />
+              </View>
+            )}
 
             <View
               style={[
                 {marginTop: '25%', alignSelf: 'center'},
-                todayEvent.filter(
-                  event => event.date === d.toISOString().substring(0, 10),
-                ).length === 0 && {
+                sortedData.length <= 0 && {
                   marginTop: '50%',
                 },
               ]}>
@@ -202,7 +203,6 @@ export const CalendarScreen = ({
                 style={{
                   height: 264,
                   width: 345,
-                  backgroundColor: COLORS.primaryRippleColor,
                   borderRadius: 12,
                 }}>
                 <Image
@@ -214,13 +214,13 @@ export const CalendarScreen = ({
                     resizeMode: 'cover',
                   }}
                 />
-                <ImageZoomer
-                  images={[{url: `${BASE_URL}${Data[0].image}`}]}
-                  zoomModalVisible={zoomImageModalVisible}
-                  setZoomModalVisiable={setZoomModalVisiable}
-                />
               </View>
             </View>
+            <ImageZoomer
+              images={[{url: `${BASE_URL}${Data[0].image}`}]}
+              zoomModalVisible={zoomImageModalVisible}
+              setZoomModalVisiable={setZoomModalVisiable}
+            />
             <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
         ) : (

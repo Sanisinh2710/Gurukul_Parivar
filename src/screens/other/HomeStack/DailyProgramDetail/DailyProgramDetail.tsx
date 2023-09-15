@@ -32,7 +32,7 @@ export const DailyProgramDetail = ({
           margin: 20,
         }}
         source={{
-          html: `${styledHTMLData}`,
+          html: `<html>${styledHTMLData}</html>`,
         }}
       />
     </ScreenWrapper>

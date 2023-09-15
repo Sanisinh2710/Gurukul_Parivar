@@ -2,10 +2,11 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Image, Platform, View} from 'react-native';
+import {Dimensions, Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
+  ImagePagerView,
   ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
@@ -26,6 +27,8 @@ export const DailyDarshanDetail = ({
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
   );
+  const [itemIndex, setItemIndex] = React.useState(0);
+
   const TotalImages = route.params.totalImages;
   const AllData = route.params.data;
   const [Data, setData] = React.useState<Array<String>>(AllData);
@@ -33,9 +36,18 @@ export const DailyDarshanDetail = ({
 
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
+
   React.useEffect(() => {
     setWallpaper(`${BASE_URL}${currentImageUri}`);
   }, [currentImageUri]);
+
+  React.useEffect(() => {
+    if (itemIndex !== null && itemIndex !== undefined) {
+      setPagination(itemIndex + 1);
+    }
+  }, [itemIndex]);
+
+  console.log(Data, pagination, 'data');
 
   return (
     <ScreenWrapper>
@@ -48,24 +60,48 @@ export const DailyDarshanDetail = ({
         headerTitle={route.params.date}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
+        <ImagePagerView
+          contentContainerStyle={{
+            height: Dimensions.get('window').height * 0.7,
+          }}
+          itemWidth={Dimensions.get('window').width * 0.91}
+          data={Data}
+          onSnapToItem={index => {
+            setItemIndex(index);
+          }}
+          scrollByIndex={pagination - 1}
+          renderItem={({item, index}) => {
+            return (
+              <>
+                <View
+                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  style={[
+                    {
+                      height: '100%',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                  ]}>
+                  <Image
+                    source={{uri: `${BASE_URL}${item}`}}
+                    style={style.images}
+                    resizeMode="contain"
+                  />
+                </View>
+              </>
+            );
+          }}
+        />
         <View
-          onTouchEnd={() => setZoomModalVisiable(true)}
-          style={[
-            {
-              flex: 5,
-              marginTop: '5%',
-            },
-          ]}>
-          <Image
-            source={{uri: `${BASE_URL}${currentImageUri}`}}
-            style={style.images}
-            resizeMode="contain"
+          style={{
+            top: `${-15}%`,
+          }}>
+          <ShareDownload
+            wallpaper={Platform.OS === 'android' ? true : false}
+            imgURL={`${BASE_URL}${Data?.[itemIndex]}`}
           />
         </View>
-        <ShareDownload
-          wallpaper={Platform.OS === 'android' ? true : false}
-          imgURL={wallpaper && wallpaper}
-        />
       </View>
       <CustomNavigate
         text={`${pagination}/${TotalImages}`}

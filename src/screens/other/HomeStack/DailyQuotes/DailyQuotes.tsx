@@ -14,12 +14,12 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
+  ImagePagerView,
   ImageZoomer,
   Loader,
   NoData,
@@ -254,20 +254,77 @@ export const DailyQuotes = ({
               </View>
             </View>
           </View>
-          {loader ? (
-            <Loader screenHeight={'70%'} />
-          ) : (
-            <>
-              {Data.length > 0 ? (
-                <>
-                  {Data.find((item: any) => item.branch == BranchName) ? (
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '3%',
-                      }}>
-                      <Carousel
+          <View style={{flex: 0.85}}>
+            {loader ? (
+              <Loader screenHeight={'100%'} />
+            ) : (
+              <>
+                {Data.length > 0 ? (
+                  <>
+                    {Data.find((item: any) => item.branch == BranchName) ? (
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginTop: '3%',
+                        }}>
+                        <ImagePagerView
+                          contentContainerStyle={{
+                            right: 3,
+                          }}
+                          itemWidth={Dimensions.get('window').width * 0.91}
+                          data={DailyQuotes}
+                          onSnapToItem={index => {
+                            setItemIndex(index);
+                          }}
+                          renderItem={({item, index}) => {
+                            return (
+                              <>
+                                <View
+                                  style={{
+                                    height: '100%',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 20,
+                                  }}>
+                                  <View
+                                    style={{flex: 1, width: '100%'}}
+                                    onTouchEnd={() => {
+                                      setCurrentImageUri(item.image);
+                                      setZoomModalVisiable(true);
+                                    }}>
+                                    <Image
+                                      source={{
+                                        uri: `${BASE_URL}${item.image}`,
+                                      }}
+                                      style={style.image}
+                                      onLoad={() => {
+                                        let newLoadState = JSON.parse(
+                                          JSON.stringify(imgLoad),
+                                        );
+                                        newLoadState[index] = false;
+                                        setImgLoad(newLoadState);
+                                      }}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Text
+                                      style={style.quote}
+                                      selectable={true}
+                                      onLongPress={() =>
+                                        handleClipBoard(item.quote)
+                                      }
+                                      selectionColor={'red'}>
+                                      {item.quote}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </>
+                            );
+                          }}
+                        />
+
+                        {/* <Carousel
                         sliderWidth={screenWidth}
                         slideStyle={{
                           height: Dimensions.get('window').height * 0.6,
@@ -288,9 +345,9 @@ export const DailyQuotes = ({
                                   alignItems: 'center',
                                   borderRadius: 20,
                                 },
-                                imgLoad[index] && {
-                                  backgroundColor: COLORS.primaryRippleColor,
-                                },
+                                // imgLoad[index] && {
+                                //   backgroundColor: COLORS.primaryRippleColor,
+                                // },
                               ]}>
                               <View
                                 style={{flex: 1, width: '100%'}}
@@ -325,22 +382,23 @@ export const DailyQuotes = ({
                               </View>
                             </View>
                           </>
-                        )}
-                      />
-                      <ShareDownload
-                        wallpaper={Platform.OS === 'android' ? false : false}
-                        imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
-                      />
-                    </View>
-                  ) : (
-                    <NoData />
-                  )}
-                </>
-              ) : (
-                <NoData />
-              )}
-            </>
-          )}
+                        )} 
+                                />*/}
+                        <ShareDownload
+                          wallpaper={Platform.OS === 'android' ? false : false}
+                          imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
+                        />
+                      </View>
+                    ) : (
+                      <NoData />
+                    )}
+                  </>
+                ) : (
+                  <NoData />
+                )}
+              </>
+            )}
+          </View>
         </View>
       </ScrollView>
       <View>

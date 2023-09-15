@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -11,18 +11,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AllImages } from '../../../../../assets/images';
-import { CommonStyle } from '../../../../../assets/styles';
+import {AllImages} from '../../../../../assets/images';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import { DailyUpdatesApi } from '../../../../services';
-import { RootStackParamList } from '../../../../types';
-import { COLORS } from '../../../../utils';
-import { styles } from './styles';
+import {DailyUpdatesApi} from '../../../../services';
+import {RootStackParamList} from '../../../../types';
+import {COLORS} from '../../../../utils';
+import {styles} from './styles';
 
 export const DailyUpdates = ({
   navigation,
@@ -51,6 +51,8 @@ export const DailyUpdates = ({
               created_at: string | number | Date;
               date: any;
             }) => {
+              console.log(data, 'backend data');
+
               data.description = data.description;
               data.images = data.images;
               data.thumbnail = data.thumbnail;
@@ -60,12 +62,15 @@ export const DailyUpdates = ({
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
               ) {
+                console.log(new Date(data.created_at), '1');
+
                 let time = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(0, 5);
+
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
-                  .substring(9, 12);
+                  .substring(8, 12);
 
                 data.created_at = `${time}` + ' ' + `${day}`;
               } else if (
