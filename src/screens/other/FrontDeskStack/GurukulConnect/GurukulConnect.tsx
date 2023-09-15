@@ -24,6 +24,7 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
+import {batch} from 'react-redux';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
@@ -257,8 +258,10 @@ export const GurukulConnect = ({
         await setup(response.data.gurukul_audios);
       }
 
-      dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
-      dispatch(UPDATE_SETUP_MODE({setupMode: 'FILTERED'}));
+      batch(() => {
+        dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'FILTERED'}));
+      });
     }
     if (selectedItem.length <= 0) {
       if (setupMode === 'FILTERED') {
@@ -268,8 +271,11 @@ export const GurukulConnect = ({
         if (res.resType === 'SUCCESS') {
           await setup(res.data.gurukul_audios);
         }
-        dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
-        dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+
+        batch(() => {
+          dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+        });
       }
     }
     setLoader(false);
@@ -413,13 +419,15 @@ export const GurukulConnect = ({
                 ...Songs.filter(item => item.is_multiple === false),
               ]);
 
-              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-                }),
-              );
+              batch(() => {
+                dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+                dispatch(
+                  UPDATE_SETUP_MODE({
+                    setupMode:
+                      selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
+                  }),
+                );
+              });
             }
           } catch (error) {
             console.log(error);
