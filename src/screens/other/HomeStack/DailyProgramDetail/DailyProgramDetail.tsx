@@ -15,8 +15,6 @@ export const DailyProgramDetail = ({
     `<strong style="color: rgb(172,42,43)">`,
   );
 
-  console.log(styledHTMLData);
-
   return (
     <ScreenWrapper>
       <ScreenHeader

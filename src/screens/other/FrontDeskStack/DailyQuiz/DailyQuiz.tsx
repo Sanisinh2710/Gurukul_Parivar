@@ -43,7 +43,6 @@ export const DailyQuiz = ({
       console.log(error);
     }
   }, []);
-  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader

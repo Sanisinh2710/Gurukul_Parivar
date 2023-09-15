@@ -32,7 +32,6 @@ export const DailyProgram = ({
 
       if (res.resType === 'SUCCESS') {
         setTimeout(() => {
-          console.log(res.data.daily_programs);
           setDailyProgramData(res.data.daily_programs);
           setLoader(false);
         }, 1000);

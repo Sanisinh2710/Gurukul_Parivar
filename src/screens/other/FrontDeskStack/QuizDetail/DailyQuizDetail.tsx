@@ -83,7 +83,6 @@ export const DailyQuizDetail = ({
       setAnswer(newData1);
     }
   };
-  console.log(Data);
   return (
     <ScreenWrapper>
       <ScreenHeader

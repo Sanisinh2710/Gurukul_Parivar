@@ -32,7 +32,6 @@ export const DailyDarshanDetail = ({
   const AllData = route.params.data;
   const [Data, setData] = React.useState<Array<String>>(AllData);
   const currentImageUri = Data[pagination - 1];
-  console.log(currentImageUri, 'uri');
 
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
