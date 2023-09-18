@@ -11,19 +11,7 @@ type TrackPropsType = {
   status : "PLAYING" | "PAUSED" |"BUFFERING" | "OTHER"
 };
 
-async function handleControl() {
-  try {
-    
-    const trackStatus = await TrackPlayer.getState();
-    if (trackStatus == State.Playing) {
-      TrackPlayer.pause();
-    } else {
-      TrackPlayer.play();
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
+
 
 const format = (time: number) => {
   let minutes = Math.trunc(time / 60)
@@ -49,21 +37,37 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   }, []);
 
   const progress = position / duration;
-  const [trackProgress, setProgress] = React.useState(progress);
+  const [trackProgress, setProgress] = React.useState(0);
+
+  async function handleControl() {
+    try {
+      
+      // const trackStatus = await TrackPlayer.getState();
+      if (status == 'PLAYING') {
+        TrackPlayer.pause();
+      } else {
+        TrackPlayer.play();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   React.useEffect(() => {
-    setProgress(progress);
-  }, [progress]);
+    if(position)
+    {
+    setProgress(position);
+    }
+  }, [position]);
 
   React.useEffect(() => {
     const checkCurrentSong = async () => {
       const trackIn = await TrackPlayer.getCurrentTrack();
       // const trackStatus = await TrackPlayer.getState();
       if (trackIn != null) { 
-        const track = await TrackPlayer.getTrack(trackIn);
-       
+        const track = await TrackPlayer.getTrack(trackIn); 
+        console.log("TrackControl Component" , activeTrackProp , "Status :",status);
         if (track && activeTrackProp.id != "" && activeTrackProp.id != undefined) {
-          console.log("TrackControl Component" , track , "Status :",status);
           if (
             activeTrackProp.id != track.id ||
             status == 'PAUSED' 
@@ -71,6 +75,9 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
                 await TrackPlayer.skip(trackIn, activeTrackPosition);
               }
             }
+          }
+          else{
+            console.log("first");
           }
     };
   
@@ -132,10 +139,15 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
                 borderRadius: 28,
               }}
               trackClickable={false}
+              minimumValue={0}
+              maximumValue={duration}
               value={trackProgress}
-              onSlidingComplete={value => {
+              onValueChange={async(value)=>{
                 setProgress(value[0]);
-                TrackPlayer.seekTo(value[0] * duration);
+              }}
+              onSlidingComplete={async(value) => {
+                await TrackPlayer.seekTo(value[0]);
+                setProgress(value[0]);
               }}
             />
           </View>

@@ -22,12 +22,19 @@ export type RootStackParamList = {
   program: undefined;
   programDetail: {title: string; description: string} | undefined;
   dailyQuiz: undefined;
-  dailyQuizDetail: undefined;
-  gurkulConnect :undefined;
-  albumSong : {playListName: string; id:number;status : "PLAYING" | "BUFFERING" | "OTHER"}
+  dailyQuizDetail: {id: number};
   donation: undefined;
   QuizResult: {marks: number};
+  GurukulConnect: undefined;
   ProfileEdit: {formStep: number} | undefined;
+  PaymentMethod: undefined;
+  GurukulEvents: undefined;
+  QuizHistory: {date: string; id: number};
+  albumSong: {
+    playListName: string;
+    id: number;
+    status: 'PLAYING' | 'PAUSED' | 'BUFFERING' | 'OTHER';
+  };
 };
 
 export type RootBottomTabParamList = {

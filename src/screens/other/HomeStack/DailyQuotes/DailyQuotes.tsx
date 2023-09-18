@@ -20,6 +20,7 @@ import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
+  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -54,6 +55,11 @@ export const DailyQuotes = ({
 
   const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const [zoomImageModalVisible, setZoomModalVisiable] =
+    React.useState<boolean>(false);
+
+  const [currentImageUri, setCurrentImageUri] = React.useState<string>();
 
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
@@ -186,23 +192,25 @@ export const DailyQuotes = ({
           },
         }}
       />
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            height:
-              Data.find((item: any) => item.branch == BranchName) &&
-              Data.length > 0
-                ? 'auto'
-                : '100%',
-          }}
-          refreshControl={
-            <RefreshControl
-              colors={[COLORS.primaryColor, COLORS.green]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
+      <ScrollView
+        overScrollMode="always"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          // height:
+          //   Data.find((item: any) => item.branch === BranchName) !==
+          //     undefined && Data.length > 0
+          //     ? '100%'
+          //     : '100%',
+          height: '100%',
+        }}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        <View style={[commonStyle.commonContentView, {flex: 1}]}>
           <View style={{height: '8%', marginBottom: '16%'}}>
             <View
               style={{
@@ -284,7 +292,12 @@ export const DailyQuotes = ({
                                   backgroundColor: COLORS.primaryRippleColor,
                                 },
                               ]}>
-                              <View style={{flex: 1, width: '100%'}}>
+                              <View
+                                style={{flex: 1, width: '100%'}}
+                                onTouchEnd={() => {
+                                  setCurrentImageUri(item.image);
+                                  setZoomModalVisiable(true);
+                                }}>
                                 <Image
                                   source={{
                                     uri: `${BASE_URL}${item.image}`,
@@ -328,8 +341,8 @@ export const DailyQuotes = ({
               )}
             </>
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
       <View>
         <Calendar
           setCalendarVisible={setCalendarVisible}
@@ -346,6 +359,11 @@ export const DailyQuotes = ({
         }
         handlePrevPress={handlePrev}
         handleNextPress={handleNext}
+      />
+      <ImageZoomer
+        images={[{url: `${BASE_URL}${currentImageUri}`}]}
+        zoomModalVisible={zoomImageModalVisible}
+        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

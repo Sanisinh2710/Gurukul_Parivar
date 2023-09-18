@@ -1,1 +1,1 @@
-export * from './DailyQuiz';
+export * from './GurukulEvents';

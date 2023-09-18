@@ -2,6 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {WritableDraft} from 'immer/dist/internal';
 import {Track} from 'react-native-track-player';
 import {InitialSongsType, SongType} from '../../types';
+import { copyFile } from 'react-native-fs';
 
 let initialState: InitialSongsType = {
   allSongs: [],
@@ -10,6 +11,10 @@ let initialState: InitialSongsType = {
   },
   activeTrackPosition: 0,
   selectedCategories: [],
+  trackMode : {
+    setupMode: 'NONE',
+    albumId : undefined,
+  }
 };
 
 export const sliderPageSlice = createSlice({
@@ -25,6 +30,7 @@ export const sliderPageSlice = createSlice({
       );
 
       const SongsFromPayload = action.payload.songs;
+
       if (newdata.allSongs.length <= 0) {
         SongsFromPayload.forEach(item => {
           newdata.allSongs.push(item);
@@ -38,14 +44,14 @@ export const sliderPageSlice = createSlice({
     SET_ACTIVE_TRACKDATA: (
       state,
       action: PayloadAction<{
-        activeTrackDataPayload: {track: Track; position?: number;};
+        activeTrackDataPayload: {track: Track | undefined; position?: number};
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
         JSON.stringify(state),
       );
 
-      const {track, position } = action.payload.activeTrackDataPayload;
+      const {track, position} = action.payload.activeTrackDataPayload;
 
       newdata.activeTrack = track;
       if (position) {
@@ -54,7 +60,6 @@ export const sliderPageSlice = createSlice({
 
       return newdata;
     },
-
     ADD_UPDATE_CATEGORIES: (
       state,
       action: PayloadAction<{categories: Array<string>}>,
@@ -88,6 +93,28 @@ export const sliderPageSlice = createSlice({
 
       return newdata;
     },
+    UPDATE_SETUP_MODE: (
+      state,
+      action: PayloadAction<{
+        setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
+        albumId ?: number;
+      }>,
+    ) => {
+      let newdata: WritableDraft<InitialSongsType> = JSON.parse(
+        JSON.stringify(state),
+      );  
+      console.log(newdata , "<<>><<>>",action.payload);
+
+      const {setupMode , albumId} = action.payload;
+
+      newdata.trackMode.setupMode = setupMode;
+      if(albumId!=undefined)
+      {
+      newdata.trackMode.albumId = albumId
+      }
+
+      return newdata;
+    },
   },
 });
 
@@ -98,6 +125,7 @@ export const {
   ADD_UPDATE_CATEGORIES,
   SET_ACTIVE_TRACKDATA,
   REMOVE_CATEGORY,
+  UPDATE_SETUP_MODE,
 } = actions;
 
 export default reducer;

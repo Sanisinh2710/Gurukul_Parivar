@@ -16,7 +16,7 @@ import {
   TrackControl,
 } from '../../../../components';
 import {useDispatch} from 'react-redux';
-import {SET_ACTIVE_TRACKDATA} from '../../../../redux/ducks/musicSlice';
+import {SET_ACTIVE_TRACKDATA, UPDATE_SETUP_MODE} from '../../../../redux/ducks/musicSlice';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {styles} from './styles';
@@ -46,6 +46,7 @@ type SongUiProp = {
     status: 'PLAYING'|'PAUSED' | 'BUFFERING' | 'OTHER',
   ) => void;
   setDataToRedux: () => Promise<void>;
+  setAlbumDataToRedux: (id?:number) => Promise<void>;
 };
 
 export const SongUi = ({
@@ -57,13 +58,14 @@ export const SongUi = ({
   navigateScreen,
   playListName,
   setDataToRedux,
+  setAlbumDataToRedux,
 }: SongUiProp) => {
   const dispatch = useDispatch();
   const commonStyle = CommonStyle();
   const style = styles();
   const trackStatus = usePlaybackState();
   const {t} = useTranslation();
-  const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
+  const {allSongs, activeTrack, activeTrackPosition, selectedCategories,trackMode} =
     useAppSelector(state => state.music);
   const {position} = useProgress();
 
@@ -104,7 +106,9 @@ export const SongUi = ({
     return trackStatus === State.Playing
       ? 'PLAYING'
       : trackStatus === State.Buffering
-      ? 'BUFFERING' : trackStatus == State.Paused ? 'PAUSED'
+      ? 'BUFFERING' 
+      : trackStatus == State.Paused 
+      ? 'PAUSED'
       : 'OTHER';
   }, [trackStatus]);
 
@@ -166,7 +170,16 @@ export const SongUi = ({
       <ScreenHeader
         showLeft={true}
         headerTitleAlign={'left'}
-        leftOnPress={() => {
+        leftOnPress={async() => {
+          if(trackMode.setupMode == 'ALBUM')
+          {
+            await setDataToRedux();
+            // dispatch(UPDATE_SETUP_MODE({
+            //   setupMode : 'INITIAL',
+            // }))
+          }
+          else{
+          navigation.goBack();
           dispatch(
             SET_ACTIVE_TRACKDATA({
               activeTrackDataPayload: {
@@ -175,7 +188,7 @@ export const SongUi = ({
               },
             }),
           );
-          navigation.goBack();
+          }
         }}
         headerTitle={playListName != undefined ? playListName:t('frontDesk.Connect')}
         headerRight={{
@@ -199,7 +212,7 @@ export const SongUi = ({
                     style.songContainer,
                     {
                       borderColor:
-                        item.id == activeTrack.id
+                        item.id == activeTrack?.id
                           ? 'rgba(172, 43, 49, 1)'
                           : 'rgba(172, 43, 49, 0.3)',
                     },
@@ -264,7 +277,7 @@ export const SongUi = ({
                               resizeMode: 'contain',
                             }}
                             source={
-                              item.id == activeTrack.id &&
+                              item.id == activeTrack?.id &&
                               trackPlaying == 'PLAYING'
                                 ? AllIcons.PauseSong
                                 : AllIcons.PlaySong
@@ -276,13 +289,20 @@ export const SongUi = ({
                       <View
                         style={{height: 24, width: 24}}
                         onTouchEnd={async () => {
-                          navigation.navigate('albumSong', {
-                            playListName: item.title,
-                            id: item.id,
-                            status: trackPlaying,
-                          });
+                          setAlbumDataToRedux(item.id)
+                          // navigation.navigate('albumSong', {
+                          //   playListName: item.title,
+                          //   id: item.id,
+                          //   status: trackPlaying,
+                          // });
                           if (screenGoToAlbum != undefined) {
                             screenGoToAlbum.current = false;
+                            dispatch(UPDATE_SETUP_MODE({
+                              setupMode : 'ALBUM',
+                              albumId : item.id,
+                              // setupMode : 'ALBUM',
+                              // albumId : item.id,
+                            }))
                           }
                         }}>
                         <Image
@@ -306,7 +326,7 @@ export const SongUi = ({
         </View>
       </View>
 
-      <TrackControl activeTrackProp={activeTrack} status={trackPlaying} />
+      {activeTrack!=undefined && <TrackControl activeTrackProp={activeTrack} status={trackPlaying} />}
 
       <DropDownModel
         modelVisible={modal}

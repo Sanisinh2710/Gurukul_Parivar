@@ -93,7 +93,7 @@ export const AlbumSong = ({
   //   }
   // };
 
-  const setDataToRedux = async () => {
+  const setAlbumDataToRedux = async () => {
     const queue = await TrackPlayer.getQueue();
     const response = await GurukulMultiPartAudio(id);
     console.log("\t\t------>>>",queue,"Album Queue")
@@ -126,7 +126,7 @@ export const AlbumSong = ({
       });
 
       if (resetTrack.current == true) {
-        await TrackPlayer.reset();
+        // await TrackPlayer.reset();
         await addTracks(SongList);
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
 
@@ -141,7 +141,7 @@ export const AlbumSong = ({
       let isSetup = await setupPlayer();
 
       if (isSetup) {
-        await setDataToRedux();
+        await setAlbumDataToRedux();
       }
       setIsPlayerReady(isSetup);
     } catch (e) {
@@ -242,7 +242,7 @@ export const AlbumSong = ({
         setSongData={setSongData}
         navigation={navigation}
         screenGoToAlbum={resetTrack}
-        setDataToRedux={setDataToRedux}
+        setDataToRedux={setAlbumDataToRedux}
         playListName={playListName}
       />
     </ScreenWrapper>

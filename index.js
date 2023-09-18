@@ -1,12 +1,12 @@
 /**
  * @format
  */
-import {AppRegistry, Text, TextInput} from 'react-native';
-import {name as appName} from './app.json';
-import {App} from './src/app';
+import { AppRegistry, Text, TextInput } from 'react-native';
+import { name as appName } from './app.json';
+import { App } from './src/app';
 
-import './src/localization';
 import TrackPlayer from 'react-native-track-player';
+import './src/localization';
 import { PlaybackService } from './src/services';
 
 if (Text.defaultProps == null) {

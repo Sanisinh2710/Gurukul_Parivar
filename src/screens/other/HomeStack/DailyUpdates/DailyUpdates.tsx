@@ -46,12 +46,14 @@ export const DailyUpdates = ({
             (data: {
               description: any;
               images: any;
+              thumbnail: any;
               title: any;
               created_at: string | number | Date;
               date: any;
             }) => {
               data.description = data.description;
               data.images = data.images;
+              data.thumbnail = data.thumbnail;
               data.title = data.title;
               data.date = data.created_at;
               if (
@@ -63,7 +65,7 @@ export const DailyUpdates = ({
                   .substring(0, 5);
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
-                  .substring(9, 12);
+                  .substring(8, 12);
 
                 data.created_at = `${time}` + ' ' + `${day}`;
               } else if (
@@ -74,14 +76,14 @@ export const DailyUpdates = ({
               } else {
                 data.created_at = new Date(data.created_at)
                   .toUTCString()
-                  .slice(5, 11)
+                  .slice(5, 10)
                   .concat(',');
               }
 
               return data;
             },
           );
-
+          console.log(data,"This is data")
           setData(data);
           setLoader(false);
         }, 200);
@@ -100,18 +102,22 @@ export const DailyUpdates = ({
 
     try {
       const res = await DailyUpdatesApi();
+      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         const data = res.data.daily_updates.map(
           (data: {
             description: any;
             images: any;
+            thumbnail: any;
             title: any;
             created_at: string | number | Date;
             date: any;
           }) => {
             data.description = data.description;
             data.images = data.images;
+            data.thumbnail = data.thumbnail;
+
             data.title = data.title;
             data.date = data.created_at;
             if (
@@ -137,7 +143,7 @@ export const DailyUpdates = ({
                 .slice(5, 11)
                 .concat(',');
             }
-
+           
             return data;
           },
         );
@@ -150,7 +156,7 @@ export const DailyUpdates = ({
 
     setRefreshing(false);
   };
-
+  
   return (
     <ScreenWrapper>
       <ScreenHeader

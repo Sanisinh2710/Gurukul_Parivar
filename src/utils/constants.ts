@@ -1,8 +1,12 @@
+import {ReactElement} from 'react';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
+// import {AuthStackNavigator, BottomTabNavigator} from '../routes';
 import {getAuthToken} from '../services';
+
 import {Theme} from '../types';
 import {COLORS} from './colors';
+import {CommingSoon} from '../components';
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,
@@ -297,21 +301,11 @@ export const Languages: {[key: string]: string} = {
   gu: 'Gujarati',
   hn: 'Hindi',
 };
-
-// export const GuruKulList = [
-//   'Ahmedabad Gurukul: Memnagar',
-//   'Ahmedabad Gurukul: Nikol',
-//   'Ahmedabad Gurukul: Santigram',
-//   'America Gurukul',
-//   'Atlanta Gurukul',
-//   'Austin',
-//   'Bangalore Gurukul',
-//   'Bhavnagar Gurukul',
-//   'Bhayavadar Gurukul',
-//   'Bidar Gurukul',
-//   'Boise',
-//   'Boston',
-// ];
+export const Payment = [
+  {title: 'Credit/Debit', icon: AllIcons.Card},
+  {title: 'Net Banking', icon: AllIcons.Bank},
+  {title: 'UPI', icon: AllIcons.Money},
+];
 
 export const AllCountryCodes = [
   ...countries.map(item => {
@@ -321,12 +315,12 @@ export const AllCountryCodes = [
 
 export const FrontDesk = (t: any) => {
   return [
-    {
-      image: AllIcons.Paper,
-      title: t('frontDesk.Form'),
-      id: 'goform',
-      imageBG: 'rgba(172, 168, 123, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Paper,
+    //   title: t('frontDesk.Form'),
+    //   id: 'goform',
+    //   imageBG: 'rgba(172, 168, 123, 0.1)',
+    // },
     {
       image: AllIcons.Chat,
       title: t('frontDesk.Connect'),
@@ -340,18 +334,18 @@ export const FrontDesk = (t: any) => {
       id: 'event',
       imageBG: 'rgba(174, 73, 141, 0.1)',
     },
-    {
-      image: AllIcons.Star,
-      title: t('frontDesk.Quiz'),
-      id: 'quiz',
-      imageBG: 'rgba(60, 42, 152, 0.1)',
-    },
-    {
-      image: AllIcons.Donation,
-      title: t('frontDesk.Donation'),
-      id: 'donation',
-      imageBG: 'rgba(0, 166, 88, 0.1)',
-    },
+    // {
+    //   image: AllIcons.Star,
+    //   title: t('frontDesk.Quiz'),
+    //   id: 'quiz',
+    //   imageBG: 'rgba(60, 42, 152, 0.1)',
+    // },
+    // {
+    //   image: AllIcons.Donation,
+    //   title: t('frontDesk.Donation'),
+    //   id: 'donation',
+    //   imageBG: 'rgba(0, 166, 88, 0.1)',
+    // },
   ];
 };
 export const HomeGrid = (t: any) => {
@@ -390,7 +384,7 @@ export const HomeGrid = (t: any) => {
     },
   ];
 };
-export const EditProfile = (t: any, i18n: any) => {
+export const EditProfileList = (t: any, i18n: any) => {
   return [
     {
       image: AllIcons.ProfileUser,
@@ -454,98 +448,6 @@ export const MyProfileData = (t: any) => [
   {title: t('EditProfile.GurukulConnect'), icon: AllIcons.RightArrow},
 ];
 
-export const DailyDarshanAllImages = () => {
-  return [
-    {
-      image: AllImages.Rectangle28,
-      id: 1,
-    },
-    {
-      image: AllImages.Rectangle29,
-      id: 2,
-    },
-    {
-      image: AllImages.Rectangle30,
-      id: 3,
-    },
-    {
-      image: AllImages.Rectangle31,
-      id: 4,
-    },
-  ];
-};
-
-export const DailyDarshanEveningImages = () => {
-  return [
-    {
-      image: AllImages.Rectangle30,
-      id: 1,
-    },
-    {
-      image: AllImages.Rectangle30,
-      id: 2,
-    },
-    {
-      image: AllImages.Rectangle30,
-      id: 3,
-    },
-    {
-      image: AllImages.Rectangle30,
-      id: 4,
-    },
-  ];
-};
-
-export const DailyDarshanMorningImages = () => {
-  return [
-    {
-      image: AllImages.Rectangle28,
-      id: 1,
-    },
-    {
-      image: AllImages.Rectangle28,
-      id: 2,
-    },
-    {
-      image: AllImages.Rectangle28,
-      id: 3,
-    },
-    {
-      image: AllImages.Rectangle28,
-      id: 4,
-    },
-  ];
-};
-
-export const PhotoGallery = () => {
-  return [
-    {
-      image: AllImages.Rectangle75,
-      id: 1,
-    },
-    {
-      image: AllImages.Rectangle76,
-      id: 2,
-    },
-    {
-      image: AllImages.Rectangle77,
-      id: 3,
-    },
-    {
-      image: AllImages.Rectangle75,
-      id: 4,
-    },
-    {
-      image: AllImages.Rectangle76,
-      id: 5,
-    },
-    {
-      image: AllImages.Rectangle77,
-      id: 6,
-    },
-  ];
-};
-
 export const d = new Date();
 
 export const options: Intl.DateTimeFormatOptions = {
@@ -565,59 +467,21 @@ export const ApiDateFormat: Intl.DateTimeFormatOptions = {
 };
 
 export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-export const DailyUpdate = [
-  {
-    image: AllImages.AppLogo,
-    title: 'Guru Purnima Celebration at Nikol Gurukul',
-    time: '9:29 AM',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Click This Image To Get Chaturmas Niyam Form',
-    time: '4:50 AM',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
-    time: 'Yesterday',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Praying Saints and students to Lord Shri Swaminarayan...',
-    time: 'Yesterday',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'World Tobacco Day Celebration at Gurukul',
-    time: 'Yesterday',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Ravi Sabha was organized at Nikol Gurukul in the presence...',
-    time: '25,July',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: "200 Saint's Bhojan Pankti Darshan at Nikol Gurukul",
-    time: '25,July',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Guru Purnima Celebration at Nikol Gurukul',
-    time: '24,July',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Click This Image To Get Chaturmas Niyam Form',
-    time: '23,July',
-  },
-  {
-    image: AllImages.AppLogo,
-    title: 'Jagannath Rath Yatra was organized by Nikol Gurukul',
-    time: '22,July',
-  },
+export const monthsArray = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
+
 export const QuizStatus = [
   {date: '01,Jul 2023', percent: 75},
   {date: '02,Jul 2023', percent: 30},
@@ -733,23 +597,22 @@ export const IntialValuesForFormdataAuth = {
     ],
   },
 };
-
-
-// export const SongList = [
-//  {
-//     id: '122',
-//     url: require('../../assets/music/NaaReady.mp3'),
-//     title: 'Naa Ready',
-//     description: 'Thalapathy Vijay, Anirudh Ravichander',
-//     is_multiple : false,
-//     // duration: 160,
-//   },
-//   {
-//     id: '222',
-//     url: require('../../assets/music/YoonShabnamiSaawariya.mp3'),
-//     title: 'Yoon Shabnami Saawariya',
-//     description: 'Monty Sharma',
-//     is_multiple : false,
-//     // duration: 160,
-//   }
-// ]
+export const GurukulEventsList = [
+  {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
+  {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},
+  {
+    date: '24',
+    title: 'Cultural Diversity Day',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
+  {
+    date: '21',
+    title: 'Shrimad Bhagwat Katha',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
+  {
+    date: '19',
+    title: 'Annual Talent Show',
+    content: 'Time: 10:00 AM - 4:00 PM',
+  },
+];

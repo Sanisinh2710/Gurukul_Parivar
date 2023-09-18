@@ -1,11 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {CustomFonts} from '../../../utils';
-import {useAppSelector} from '../../../redux/hooks';
-// import { CustomFonts } from '../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     WelcomeText1: {
       ...CustomFonts.body.large14,
@@ -28,13 +24,13 @@ export const styles = () => {
     images: {
       justifyContent: 'flex-end',
       borderRadius: 12,
-      height: 169,
+      height: 180,
       width: '47%',
       marginTop: 24,
     },
     textOverImage: {
       position: 'absolute',
-      bottom: 0,
+      bottom: 5,
       right: 0,
       left: 0,
       ...CustomFonts.body.large14,

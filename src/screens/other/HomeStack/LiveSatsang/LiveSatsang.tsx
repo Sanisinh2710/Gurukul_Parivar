@@ -22,12 +22,12 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {DailySatsangApi} from '../../../../services';
-import {RootAuthStackParamList} from '../../../../types';
+import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+}: NativeStackScreenProps<RootStackParamList>) => {
   const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);

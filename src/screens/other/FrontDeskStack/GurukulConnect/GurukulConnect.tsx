@@ -37,7 +37,7 @@ import {COLORS, downloadSong} from '../../../../utils';
 import {styles} from './styles';
 import {storage} from '../../../../storage';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {GurkulAudioApi} from '../../../../services';
+import {GurkulAudioApi, GurukulMultiPartAudio} from '../../../../services';
 import Toast from 'react-native-simple-toast';
 import {BASE_URL} from '@env';
 import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
@@ -46,12 +46,15 @@ import {
   SET_ACTIVE_TRACKDATA,
 } from '../../../../redux/ducks/musicSlice';
 import {SongUi} from './SongUi';
+import { isTabletMode } from 'react-native-device-info';
 
 export const GurukulConnect = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const screenGoToAlbum = React.useRef(true);
-  const {allSongs, activeTrack, activeTrackPosition, selectedCategories} =
+  const screenGoToAlbum = React.useRef(false);
+  const resetTrack = React.useRef(false);
+  
+  const {allSongs, activeTrack, activeTrackPosition, selectedCategories , trackMode} =
     useAppSelector(state => state.music);
   const dispatch = useAppDispatch();
   const commonStyle = CommonStyle();
@@ -101,11 +104,10 @@ export const GurukulConnect = ({
   const setDataToRedux = async () => {
     const queue = await TrackPlayer.getQueue();
     const response = await GurkulAudioApi();
-
-
     if (queue.length > 0) {
       const el = queue.slice(-1)[0].id;
       const el2 = response.data.gurukul_audios.slice(-1)[0].id;
+      console.log(el,el2);
       if (el == el2) {
         screenGoToAlbum.current = false;
         console.log('Same to Same');
@@ -120,15 +122,15 @@ export const GurukulConnect = ({
       const trackList: Array<any> = [];
 
       response.data.gurukul_audios.forEach((audioObj: any) => {
-        if (!audioObj.is_multiple) {
-          trackList.push({
-            id: audioObj.id,
-            title: audioObj.title,
-            url: BASE_URL + audioObj.audio,
-            status: trackStatus == State.Playing ? true : false,
-            description: audioObj.description,
-          });
-        }
+        // if (!audioObj.is_multiple) {
+        //   trackList.push({
+        //     id: audioObj.id,
+        //     title: audioObj.title,
+        //     url: BASE_URL + audioObj.audio,
+        //     status: trackStatus == State.Playing ? true : false,
+        //     description: audioObj.description,
+        //   });
+        // }
         SongList.push({
           id: audioObj.id,
           title: audioObj.title,
@@ -140,9 +142,9 @@ export const GurukulConnect = ({
       });
 
       if (screenGoToAlbum.current == true) {
-        await TrackPlayer.reset();
+        // await TrackPlayer.reset();
+        await addTracks([...SongList.filter(item=>item.is_multiple == false)]);
         
-        await addTracks(trackList);
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
 
       } else { 
@@ -151,12 +153,64 @@ export const GurukulConnect = ({
     }
   };
 
+  const setAlbumDataToRedux = async (id ?: number) => {
+    const queue = await TrackPlayer.getQueue();
+    
+    if(id!=undefined)
+    {
+    const response = await GurukulMultiPartAudio(id);
+    console.log("\t\t------>>>",queue,"Album Queue")
+    if (queue.length <= 0) {
+      resetTrack.current = true;
+      // const el = queue.slice(-1)[0].id;
+      // const dataSame = queue.filter(item => item.id == activeTrack.id);
+      // if (dataSame.length > 0) {
+      //   resetTrack.current = false;
+      //   console.log('Same to Same');
+      // }
+    }
+    
+    if (
+      response.resType === 'SUCCESS' &&
+      response.data.group_audios.length > 0
+    ) {
+      const SongList: Array<SongType> = [];
+
+      response.data.group_audios.forEach((audioObj: any) => {
+        SongList.push({
+          id: audioObj.id,
+          title: audioObj.title,
+          url: BASE_URL + audioObj.audio,
+          status: trackStatus == State.Playing ? true : false,
+          description: audioObj.description,
+        });
+      });
+
+      if (resetTrack.current == true) {
+        // await TrackPlayer.reset();
+        await addTracks(SongList);
+        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+
+      } else {
+        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+      }
+    }
+  }
+  };
+
   const setup = async () => {
     try {
       let isSetup = await setupPlayer();
-
+      console.log(trackMode.setupMode);
       if (isSetup) {
-        await setDataToRedux();
+        console.log(trackMode.setupMode,"-----",trackMode.albumId);
+        if(trackMode.setupMode == 'ALBUM' && trackMode.albumId !=undefined)
+        {
+          await setAlbumDataToRedux(trackMode.albumId);
+        }
+        else{
+          await setDataToRedux();
+        }
       }
       setIsPlayerReady(isSetup);
     } catch (e) {
@@ -256,8 +310,9 @@ export const GurukulConnect = ({
         songData={songData}
         setSongData={setSongData}
         navigation={navigation}
-        screenGoToAlbum={screenGoToAlbum}
+        screenGoToAlbum={trackMode.setupMode == 'ALBUM' ? resetTrack: screenGoToAlbum}
         setDataToRedux={setDataToRedux}
+        setAlbumDataToRedux={setAlbumDataToRedux}
       />
     </ScreenWrapper>
     // <ScreenWrapper>

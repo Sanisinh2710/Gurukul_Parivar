@@ -5,6 +5,11 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_PROGRAM_GET_ENDPOINT,
+  DAILY_QUIZ_ANSWER_POST_ENDPOINT,
+  DAILY_QUIZ_GET_ENDPOINT,
+  DAILY_QUIZ_HISTORY_GET_ENDPOINT,
+  DAILY_QUIZ_STATUS_GET_ENDPOINT,
   DAILY_QUOTES_GET_ENDPOINT,
   DAILY_SATSANG_GET_ENDPOINT,
   DAILY_UPDATES_GET_ENDPOINT,
@@ -13,6 +18,7 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
+  GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT,
   GURUKUL_AUDIO_GET_ENDPOINT,
   GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
   GURUKUL_BRANCH_GET_ENDPOINT,
@@ -170,18 +176,16 @@ export const DailySatsangApi = async (date: Date) => {
   });
 };
 
-export const GurkulAudioApi = async ()=>{
-  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT , 'get')
-}
+export const GurkulAudioApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
+};
 
-
-
-export const GurukulMultiPartAudio = async (id:number) =>{
+export const GurukulMultiPartAudio = async (id: number) => {
   return await apiRequest(
     `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
     'get',
   );
-}
+};
 
 export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
   const payloadData = new FormData();
@@ -278,6 +282,51 @@ export const DeleteMydataApi = async () => {
   return apiRequest(DELETE_USER_ENDPOINT, 'delete');
 };
 
+export const GurkulAudioGetApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get');
+};
+
+export const GurkulAudioCategoriesGetApi = async () => {
+  return await apiRequest(GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT, 'get');
+};
+
+export const GurkulAudioGetFromCategoriesGetApi = async (
+  payload: Array<any>,
+) => {
+  return await apiRequest(GURUKUL_AUDIO_GET_ENDPOINT, 'get', {
+    category_ids: [...payload],
+  });
+};
+
+export const GurkulMultipleAudioGetApi = async (id: number) => {
+  return await apiRequest(
+    `${GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT}${id}`,
+    'get',
+  );
+};
+
+export const DailyQuizGetApi = async (id: number | undefined) => {
+  if (id !== undefined) {
+    return apiRequest(`${DAILY_QUIZ_GET_ENDPOINT}${id}`, 'get');
+  } else {
+    return apiRequest(DAILY_QUIZ_GET_ENDPOINT, 'get');
+  }
+};
+export const DailyQuizAnswerPostApi = async (data: any) => {
+  return apiRequest(DAILY_QUIZ_ANSWER_POST_ENDPOINT, 'post', data);
+};
+export const DailyQuizStatusApi = async () => {
+  return apiRequest(DAILY_QUIZ_STATUS_GET_ENDPOINT, 'get');
+};
+export const DailyQuizHistoryGetApi = async (id: number) => {
+  return apiRequest(`${DAILY_QUIZ_HISTORY_GET_ENDPOINT}${id}`, 'get');
+};
+export const DailyProgramGetApi = async () => {
+  return apiRequest(DAILY_PROGRAM_GET_ENDPOINT, 'get');
+};
+
+// All apis are above, below is helper function for used in auth wizard form:---
+
 export const CallBackButtonAxiosGetForWizardFormSignup = async (
   formStep: number,
   formData: {
@@ -329,7 +378,7 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
       ) {
         const backendData: any = response.data.personal_details;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],
@@ -509,7 +558,7 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
         newFormData.completeProfile =
           profileData ?? newFormData.completeProfile;
 
-        Object.keys(backendData).map((key, index) => {
+        Object.keys(backendData).map(key => {
           if (key === 'dob') {
             const newDob = CustomBackendDateSplitAndFormat(
               backendData[key],

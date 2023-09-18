@@ -22,16 +22,12 @@ import {
   GurukulConnectPostApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
+  getAuthToken,
   setUserData,
   setUserProfilingDone,
 } from '../../../services';
 import {ProfileSignupProps} from '../../../types';
-import {
-  COLORS,
-  CustomLocalDateSplitAndFormat,
-  IntialValuesForFormdataAuth,
-  isString,
-} from '../../../utils';
+import {COLORS, CustomLocalDateSplitAndFormat, isString} from '../../../utils';
 
 export const ProfileSignup = ({
   navigation,
@@ -46,9 +42,66 @@ export const ProfileSignup = ({
 
   const [isParentLoading, setIsParentLoading] = React.useState(false);
 
-  const [formData, setFormData] = React.useState<{[key: string]: any}>(
-    IntialValuesForFormdataAuth,
-  );
+  const [formData, setFormData] = React.useState<{[key: string]: any}>({
+    completeProfile: {
+      profile: '',
+      branch_id: null,
+    },
+    personalInfo: {
+      gender: '',
+      full_name: '',
+      father_name: '',
+      dob: '',
+      blood_group: '',
+      emailInfo: [
+        {email: getAuthToken().loginData.primary_email, secondary: false},
+      ],
+      mobilenumInfo: [
+        {
+          mobilenum: '',
+          secondary: false,
+          whatsappNum: false,
+          countryCode: '',
+        },
+      ],
+    },
+    address_details: [
+      {
+        country_id: '',
+        address: '',
+        pincode: '',
+        city: '',
+        address_type: '',
+        is_preferred_communication: true,
+      },
+    ],
+    edu_businessInfo: {
+      education: '',
+      occupation: '',
+      occupation_type: '',
+      skills: [],
+      other: '',
+    },
+    gurukulInfo: {
+      exGurukulStudent: 'No',
+      gurukulData: [
+        {
+          branch_id: '',
+          attend: '',
+          standard_from: '',
+          standard_to: '',
+          ssc_year: '',
+          hsc_year: '',
+          known_saint: '',
+          known_haribhakta: '',
+          RelativeOfSaint: 'No',
+          FromFamily: '',
+          saint_from_family: '',
+          relation: '',
+        },
+      ],
+    },
+  });
 
   React.useMemo(async () => {
     await CallBackButtonAxiosGetForWizardFormSignup(

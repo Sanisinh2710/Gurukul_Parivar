@@ -37,7 +37,7 @@ import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {
   COLORS,
   CustomBackendDateSplitAndFormat,
-  EditProfile,
+  EditProfileList,
   captureImage,
   chooseFile,
 } from '../../../utils';
@@ -50,12 +50,16 @@ export const ProfileScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [modelVisible, setModelVisible] = React.useState(false);
+  const [viewPhotoModel, setPhotoModel] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
   const {t, i18n} = useTranslation();
 
+  const style = styles();
+  const commonStyle = CommonStyle();
+
   const ProfileList = React.useMemo(() => {
-    return EditProfile(t, i18n);
+    return EditProfileList(t, i18n);
   }, [t, i18n]);
 
   const userData = React.useMemo(() => {
@@ -63,7 +67,7 @@ export const ProfileScreen = ({
   }, []);
 
   const [profileImage, setProfileImage] = React.useState<{[key: string]: any}>({
-    uri: userData.userdata?.profile,
+    uri: userData?.userdata?.profile ?? 'null',
     name: '',
     type: '',
   });
@@ -103,9 +107,6 @@ export const ProfileScreen = ({
       return response;
     }
   };
-
-  const style = styles();
-  const commonStyle = CommonStyle();
 
   const handlePress = (val: string) => {
     switch (val) {
@@ -195,8 +196,9 @@ export const ProfileScreen = ({
             <View style={{height: 64, width: 64}}>
               <Image
                 source={
-                  profileImage.uri != '' && !profileImage.uri.includes('null')
-                    ? {uri: profileImage.uri}
+                  profileImage?.uri != '' &&
+                  !profileImage?.uri?.includes('null')
+                    ? {uri: profileImage?.uri}
                     : AllIcons.DummyAvtar
                 }
                 style={{height: '100%', width: '100%', borderRadius: 50}}
@@ -207,10 +209,12 @@ export const ProfileScreen = ({
             </View>
           </View>
           <View style={{justifyContent: 'center', marginLeft: '5%'}}>
-            <Text style={style.profileName}>{userData.userdata.full_name}</Text>
+            <Text style={style.profileName}>
+              {userData?.userdata?.full_name ?? 'YOUR NAME'}
+            </Text>
             <Text style={{color: 'rgba(23,23,23,0.5)'}}>
-              {userData.userdata.primary_contact_cc?.toString().split('(')[0]}
-              {userData.userdata.primary_contact}
+              {userData?.userdata?.primary_contact_cc?.toString().split('(')[0]}
+              {userData?.userdata?.primary_contact}
             </Text>
             {/* <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
@@ -371,10 +375,49 @@ export const ProfileScreen = ({
                 }}>
                 <Text style={style.pictureUpdateText}>Take Photo</Text>
               </Pressable>
+              <Pressable
+                onPress={() => {
+                  setPhotoModel(!viewPhotoModel);
+                }}>
+                <Text style={style.pictureUpdateText}>View Photo</Text>
+              </Pressable>
             </View>
           }
           type={'none'}
           modalHeight={'30%'}
+        />
+        <DropDownModel
+          viewPhoto={true}
+          modelVisible={viewPhotoModel}
+          setModelVisible={setPhotoModel}
+          customModelchild={
+            <View
+              style={{
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  height: 250,
+                  width: 250,
+                }}>
+                <Image
+                  source={
+                    profileImage?.uri != '' &&
+                    !profileImage?.uri?.includes('null')
+                      ? {uri: profileImage?.uri}
+                      : AllIcons.DummyAvtar
+                  }
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 150,
+                  }}
+                />
+              </View>
+            </View>
+          }
+          type={'simple'}
+          modalHeight={'40%'}
         />
       </ScrollView>
     </ScreenWrapper>

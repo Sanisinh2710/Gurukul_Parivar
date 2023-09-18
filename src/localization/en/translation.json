@@ -4,6 +4,7 @@
       "Signin": "Sign in",
       "Signup": "Sign up",
       "Search": "Search",
+      "SearchSpeech": "Search Speech",
       "Reset": "Reset",
       "EmptyError": "This Field is required",
       "Save&Exit": "Save & Exit",
@@ -181,6 +182,7 @@
       "Event": "Gurukul Events",
       "Quiz": "Daily Quiz",
       "Donation": "Donation",
+      "Terms": "By proceeding you agree with our Terms & Condition for Donation"
     },
     "myProfile": {
       "Heading": "My Profile",
@@ -234,21 +236,27 @@
     "DailyQuiz": {
       "Heading": "Daily Quiz",
       "NxtBtn": "Next",
-      "SubmitBtn": "Submit"
+      "SubmitBtn": "Submit",
+      "Result": "Quiz Result",
+      "hasAttendTitle":"You have completed today's quiz!",
+      "hasAttendContent":"Come back tomorrow for new challenges and opportunities"
     },
     "ResultModel": {
       "Title": "Congratulations",
-      "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!"
+      "Content": "You've completed the quiz with flying colors.\n Great Job! Keep it Up!",
+      "BtnText": "Discover My Standing"
     },
     "Donation": {
       "Heading": "Donation",
       "Quote": "In this Gurukul of divine knowledge and fearlessness bestowed by Bhagwan Swaminarayan, your constant contribution of education and protection will spread the fragrance of values in the lives of numerous children to the elderly, bringing joy, peace, and prosperity in your life as well...",
       "Branch": "Donate to Gurukul Branch",
       "Amount": "Amount",
-      "OtherNote": "Other Note by Donar"
+      "OtherNote": "Other Note by Donar",
+      "Placeholder": "Enter Donation"
     },
     "Payment": {
-      "Heading": "Select Payment Method"
+      "Heading": "Select Payment Method",
+      "Proceed": "Proceed Payment"
     },
     "NoData": {
       "Title": "Oops, We're Blanking Out!",

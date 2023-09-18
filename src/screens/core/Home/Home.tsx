@@ -19,6 +19,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
+import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
@@ -30,14 +32,20 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const [dashboardImages, setDashboardImages] = React.useState([]);
+  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
+
+  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+
   const [loader, setLoader] = React.useState<boolean>(false);
 
-  const style = styles();
-  const TouchX = React.useRef<any>();
-
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const {t} = useTranslation();
+
+  const style = styles();
+  const commonStyle = CommonStyle();
+
+  const dispatch = useAppDispatch();
 
   React.useMemo(async () => {
     setLoader(true);
@@ -46,7 +54,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        setDashboardImages(res.data.images);
+        dispatch(SET_IMAGES({images: res.data.images}));
         setLoader(false);
       }
     } catch (error) {
@@ -57,9 +65,6 @@ export const HomeScreen = ({
   const userData = React.useMemo(() => {
     return getUserData();
   }, []);
-
-  const {t} = useTranslation();
-  const commonStyle = CommonStyle();
 
   const onBackPress = () => {
     Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
@@ -108,27 +113,11 @@ export const HomeScreen = ({
       case 'program':
         navigation.navigate('program');
         break;
-      
+
       default:
         break;
     }
   };
-
-  const handlePageChange = () => {
-    if (currentPage < dashboardImages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    } else {
-      setCurrentPage(0);
-    }
-  };
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      handlePageChange();
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [currentPage, dashboardImages]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -137,7 +126,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        setDashboardImages(res.data.images);
+        dispatch(SET_IMAGES({images: res.data.images}));
       }
     } catch (error) {
       console.log(error);
@@ -180,6 +169,7 @@ export const HomeScreen = ({
         }}
       />
       <ScrollView
+        overScrollMode="always"
         refreshControl={
           <RefreshControl
             colors={[COLORS.primaryColor, COLORS.green]}
@@ -191,12 +181,10 @@ export const HomeScreen = ({
         contentContainerStyle={{
           paddingBottom: '30%',
         }}>
-        <View style={[commonStyle.commonContentView, {height: '100%'}]}>
-          {dashboardImages.length > 0 && (
-            <View>
-              <PagerView currentPage={currentPage} images={dashboardImages} />
-            </View>
-          )}
+        {dashboardImages.length > 0 && (
+          <PagerView images={dashboardImages} currentPage={currentPage} />
+        )}
+        <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
@@ -214,7 +202,7 @@ export const HomeScreen = ({
                   activeOpacity={0.5}
                   onPress={() => handlePress(item.id)}>
                   <LinearGradient
-                    colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 0.5)']}
+                    colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 1)']}
                     locations={[0, 1]}
                     style={{flex: 1, borderRadius: 12}}>
                     <Text style={style.textOverImage}>{item.name}</Text>

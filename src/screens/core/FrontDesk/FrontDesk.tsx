@@ -2,121 +2,183 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {useAppSelector} from '../../../redux/hooks';
+import {
+  Loader,
+  PagerView,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../components';
+import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
+import {SliderGetApi} from '../../../services';
 import {RootStackParamList} from '../../../types';
-import {AllImages} from '../../../../assets/images';
-import {FrontDesk} from '../../../utils';
+import {COLORS, FrontDesk} from '../../../utils';
 import {styles} from './styles';
 
 export const FrontDeskScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const theme = useAppSelector(state => state.theme.theme);
+  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
 
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [dashboardImages, setDashboardImages] = React.useState([
-    AllImages.Rectangle,
-    AllImages.Rectangle3,
-    AllImages.Rectangle2,
-  ]);
+  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+
+  const [loader, setLoader] = React.useState<boolean>(false);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const style = styles();
-  const TouchX = React.useRef<any>();
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
+
+  const dispatch = useAppDispatch();
+
+  React.useMemo(async () => {
+    setLoader(true);
+
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        dispatch(SET_IMAGES({images: res.data.images}));
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   const handlePress = (val: string) => {
     switch (val) {
       // case 'goform':
       //   navigation.navigate('dailyDarshan');
       //   break;
       case 'connect':
-        navigation.navigate('gurkulConnect');
+        navigation.navigate('GurukulConnect');
         break;
-
-      case 'quiz':
-        navigation.navigate('dailyQuiz');
+      // case 'quiz':
+      //   navigation.navigate('dailyQuiz');
+      //   break;
+      // case 'donation':
+      //   navigation.navigate('donation');
+      //   break;
+      case 'event':
+        navigation.navigate('GurukulEvents');
         break;
-      case 'donation':
-        navigation.navigate('donation');
-        break;
-
       default:
         break;
     }
   };
-  return (
-    <ScreenWrapper>
-      <ScreenHeader
-        showLeft={false}
-        headerTitleAlign={'left'}
-        customTitle={
-          <View>
-            <Text style={style.title}>{t('frontDesk.Heading')}</Text>
-          </View>
-        }
-        headerRight={{
-          icon: AllIcons.Notification,
-          onPress: () => {},
-        }}
-      />
-      <View style={commonStyle.commonContentView}>
-        <View
-          onTouchStart={e => {
-            TouchX.current = e.nativeEvent.pageX;
-          }}
-          onTouchEnd={e => {
-            if (TouchX.current - e.nativeEvent.pageX > 20) {
-              if (currentPage < dashboardImages.length - 1) {
-                setCurrentPage(currentPage + 1);
-              }
-            }
-            if (TouchX.current - e.nativeEvent.pageX < -20) {
-              if (
-                currentPage > 0 &&
-                currentPage <= dashboardImages.length - 1
-              ) {
-                setCurrentPage(currentPage - 1);
-              }
-            }
-          }}>
-          <PagerView currentPage={currentPage} images={dashboardImages} />
-        </View>
 
-        <View style={{marginTop: 24, paddingBottom: 550}}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={FrontDesk(t)}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    handlePress(item.id);
-                  }}>
-                  <View style={style.flatListContainer}>
-                    <View
-                      style={[
-                        style.imageContainer,
-                        {backgroundColor: item.imageBG},
-                      ]}>
-                      <Image
-                        source={item.image}
-                        style={{height: 24, width: 24}}
-                      />
-                    </View>
-                    <View style={{justifyContent: 'center', marginLeft: '2%'}}>
-                      <Text style={style.listTitle}>{item.title} </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        dispatch(SET_IMAGES({images: res.data.images}));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
+
+  return (
+    <>
+      {loader ? (
+        <Loader />
+      ) : (
+        <ScreenWrapper>
+          <ScreenHeader
+            showLeft={false}
+            headerTitleAlign={'left'}
+            customTitle={
+              <View>
+                <Text style={style.title}>{t('frontDesk.Heading')}</Text>
+              </View>
+            }
+            headerRight={{
+              icon: AllIcons.NotificationOutline,
+              onPress: () => {},
             }}
           />
-        </View>
-      </View>
-    </ScreenWrapper>
+          <ScrollView
+            overScrollMode="always"
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: '30%',
+            }}
+            refreshControl={
+              <RefreshControl
+                colors={[COLORS.primaryColor, COLORS.green]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
+            <View
+              style={{
+                marginBottom: '2%',
+              }}>
+              <PagerView images={dashboardImages} currentPage={currentPage} />
+            </View>
+            <View style={[{flex: 1}]}>
+              <FlatList
+                overScrollMode="always"
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[
+                  {
+                    marginTop: '5%',
+                  },
+                  commonStyle.commonContentView,
+                ]}
+                data={FrontDesk(t)}
+                renderItem={({item, index}) => {
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        handlePress(item.id);
+                      }}>
+                      <View style={style.flatListContainer}>
+                        <View
+                          style={[
+                            style.imageContainer,
+                            {backgroundColor: item.imageBG},
+                          ]}>
+                          <Image
+                            source={item.image}
+                            style={{height: 24, width: 24}}
+                          />
+                        </View>
+                        <View
+                          style={{justifyContent: 'center', marginLeft: '2%'}}>
+                          <Text style={style.listTitle}>{item.title} </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </View>
+          </ScrollView>
+        </ScreenWrapper>
+      )}
+    </>
   );
 };
