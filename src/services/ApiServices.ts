@@ -274,7 +274,6 @@ export const CalendarGetApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
   return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {date: newDate});
 };
-
 export const SliderGetApi = async () => {
   return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
 };

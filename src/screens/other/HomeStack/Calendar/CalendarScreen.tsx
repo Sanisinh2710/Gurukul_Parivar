@@ -73,11 +73,19 @@ export const CalendarScreen = ({
   }, [selectedDate]);
 
   React.useEffect(() => {
-    Data.map(item => setEvents(item.events));
-    Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
+    if (Data.length > 0) {
+      const newData = [...Data];
+      const eventData = newData.map(item => {
+        return item.events;
+      });
+      setEvents(eventData[0]);
+      setWallpaper(`${BASE_URL}${Data[0].image}`);
+    } else {
+      setEvents([]);
+    }
   }, [Data]);
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (todayEvent.length > 0) {
       let sortDate = [...todayEvent];
       let finalSort = sortDate.sort((a, b) => {
@@ -86,6 +94,8 @@ export const CalendarScreen = ({
         return date > date2 ? 1 : date < date2 ? -1 : 0;
       });
       setSortedData(finalSort);
+    } else {
+      setSortedData([]);
     }
   }, [todayEvent]);
   const listIndex = () => {
@@ -191,7 +201,46 @@ export const CalendarScreen = ({
               </View>
             )}
 
-            <View
+            {Data.length > 0 && Data[0].image !== undefined && (
+              <>
+                <View
+                  style={[
+                    {marginTop: '25%', alignSelf: 'center'},
+                    sortedData.length <= 0 && {
+                      marginTop: '50%',
+                    },
+                  ]}>
+                  <View
+                    onTouchEnd={() => setZoomModalVisiable(true)}
+                    style={{
+                      height: 264,
+                      width: 345,
+                      borderRadius: 12,
+                    }}>
+                    <Image
+                      source={{uri: `${BASE_URL}${Data[0].image}`}}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        borderRadius: 12,
+                        resizeMode: 'cover',
+                      }}
+                    />
+                  </View>
+                </View>
+                <ImageZoomer
+                  images={[{url: `${BASE_URL}${Data?.[0].image}`}]}
+                  zoomModalVisible={zoomImageModalVisible}
+                  setZoomModalVisiable={setZoomModalVisiable}
+                />
+                <ShareDownload
+                  wallpaper={false}
+                  imgURL={wallpaper && wallpaper}
+                />
+              </>
+            )}
+
+            {/* <View
               style={[
                 {marginTop: '25%', alignSelf: 'center'},
                 sortedData.length <= 0 && {
@@ -221,7 +270,7 @@ export const CalendarScreen = ({
               zoomModalVisible={zoomImageModalVisible}
               setZoomModalVisiable={setZoomModalVisiable}
             />
-            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
+            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} /> */}
           </View>
         ) : (
           <View
