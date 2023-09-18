@@ -5,6 +5,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Platform,
@@ -18,8 +19,8 @@ import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
-  CustomNavigate,
   Carousel,
+  CustomNavigate,
   ImageZoomer,
   Loader,
   NoData,
@@ -53,7 +54,7 @@ export const DailyQuotes = ({
 
   const [itemIndex, setItemIndex] = React.useState(0);
 
-  const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
+  const [imgLoad, setImgLoad] = React.useState<boolean>(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const [zoomImageModalVisible, setZoomModalVisiable] =
@@ -141,15 +142,15 @@ export const DailyQuotes = ({
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
 
-  React.useEffect(() => {
-    if (DailyQuotes) {
-      setImgLoad([
-        ...DailyQuotes?.map(item => {
-          return true;
-        }),
-      ]);
-    }
-  }, [DailyQuotes]);
+  // React.useEffect(() => {
+  //   if (DailyQuotes) {
+  //     setImgLoad([
+  //       ...DailyQuotes?.map(item => {
+  //         return true;
+  //       }),
+  //     ]);
+  //   }
+  // }, [DailyQuotes]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -236,14 +237,8 @@ export const DailyQuotes = ({
                   type={'simple'}
                   value={changeValue}
                   onChange={setChangeValue}
-                  onBlur={function (...event: any[]): void {
-                    throw new Error('Function not implemented.');
-                  }}
-                  setFocused={function (
-                    value: React.SetStateAction<boolean>,
-                  ): void {
-                    throw new Error('Function not implemented.');
-                  }}
+                  onBlur={() => {}}
+                  setFocused={() => {}}
                   wantPlaceholderAsLabelOnModal={true}
                 />
               </View>
@@ -288,18 +283,33 @@ export const DailyQuotes = ({
                                       setCurrentImageUri(item.image);
                                       setZoomModalVisiable(true);
                                     }}>
+                                    {imgLoad && (
+                                      <ActivityIndicator
+                                        size={30}
+                                        color={COLORS.primaryColor}
+                                        style={{
+                                          position: 'absolute',
+                                          left: 0,
+                                          right: 0,
+                                          top: 0,
+                                          bottom: 0,
+                                        }}
+                                      />
+                                    )}
                                     <Image
                                       source={{
                                         uri: `${BASE_URL}${item.image}`,
                                       }}
                                       style={style.image}
-                                      onLoad={() => {
-                                        let newLoadState = JSON.parse(
-                                          JSON.stringify(imgLoad),
-                                        );
-                                        newLoadState[index] = false;
-                                        setImgLoad(newLoadState);
-                                      }}
+                                      // onLoad={() => {
+                                      //   let newLoadState = JSON.parse(
+                                      //     JSON.stringify(imgLoad),
+                                      //   );
+                                      //   newLoadState[index] = false;
+                                      //   setImgLoad(newLoadState);
+                                      // }}
+                                      onLoadStart={() => setImgLoad(true)}
+                                      onLoadEnd={() => setImgLoad(false)}
                                     />
                                   </View>
                                   <View>

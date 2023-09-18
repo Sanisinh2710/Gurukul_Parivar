@@ -46,6 +46,21 @@ export const HomeScreen = ({
   const commonStyle = CommonStyle();
 
   const dispatch = useAppDispatch();
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      const res = await SliderGetApi();
+
+      if (res.resType === 'SUCCESS') {
+        dispatch(SET_IMAGES({images: res.data.images}));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    setRefreshing(false);
+  };
 
   React.useMemo(async () => {
     setLoader(true);
@@ -117,22 +132,6 @@ export const HomeScreen = ({
       default:
         break;
     }
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-
-    try {
-      const res = await SliderGetApi();
-
-      if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    setRefreshing(false);
   };
 
   return (

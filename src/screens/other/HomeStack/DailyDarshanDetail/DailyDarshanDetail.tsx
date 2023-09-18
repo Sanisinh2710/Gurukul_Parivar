@@ -2,7 +2,13 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Dimensions, Image, Platform, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  Platform,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Carousel,
@@ -14,6 +20,7 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
+import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyDarshanDetail = ({
@@ -26,6 +33,8 @@ export const DailyDarshanDetail = ({
 
   const TotalImages = route.params.totalImages;
   const AllData = route.params.data;
+
+  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
@@ -66,22 +75,39 @@ export const DailyDarshanDetail = ({
           }}
           renderItem={({item, index}) => {
             return (
-              <View
-                onTouchEnd={() => setZoomModalVisiable(true)}
-                style={[
-                  {
-                    height: '100%',
-                    width: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  },
-                ]}>
-                <Image
-                  source={{uri: `${BASE_URL}${item}`}}
-                  style={style.images}
-                  resizeMode="contain"
-                />
-              </View>
+              <>
+                <View
+                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  style={[
+                    {
+                      height: '100%',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                  ]}>
+                  {imgLoad && (
+                    <ActivityIndicator
+                      size={30}
+                      color={COLORS.primaryColor}
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                      }}
+                    />
+                  )}
+                  <Image
+                    source={{uri: `${BASE_URL}${item}`}}
+                    style={style.images}
+                    resizeMode="contain"
+                    onLoadStart={() => setimgLoad(true)}
+                    onLoadEnd={() => setimgLoad(false)}
+                  />
+                </View>
+              </>
             );
           }}
         />

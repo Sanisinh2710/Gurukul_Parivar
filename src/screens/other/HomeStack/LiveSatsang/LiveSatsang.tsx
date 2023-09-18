@@ -22,12 +22,12 @@ import {
   ScreenWrapper,
 } from '../../../../components';
 import {DailySatsangApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
+import {RootAuthStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,
-}: NativeStackScreenProps<RootStackParamList>) => {
+}: NativeStackScreenProps<RootAuthStackParamList>) => {
   const {t} = useTranslation();
   const [calendarVisible, setCalendarVisible] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
@@ -46,6 +46,14 @@ export const LiveSatsang = ({
       Alert.alert('video has finished playing!');
     }
   }, []);
+
+  const youtube_parser = (url: string) => {
+    var rx =
+      /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+
+    let r = url.match(rx);
+    return r?.[1];
+  };
 
   React.useMemo(async () => {
     setLoader(true);
@@ -185,7 +193,7 @@ export const LiveSatsang = ({
                       </Text>
                     </View>
                     <View>
-                      {videoLoad == false && (
+                      {videoLoad === false && (
                         <View
                           style={{
                             position: 'absolute',
@@ -207,13 +215,7 @@ export const LiveSatsang = ({
                         onReady={() => {
                           setVideoLoad(true);
                         }}
-                        videoId={
-                          item.url.toString().includes('youtu.be')
-                            ? item.url
-                                .split('/')[3]
-                                .slice(0, item.url.split('/')[3].indexOf('?'))
-                            : item.url.split('=')[1]
-                        }
+                        videoId={youtube_parser(item.url)}
                         onChangeState={onStateChange}
                         webViewProps={{
                           containerStyle: {borderRadius: 15},

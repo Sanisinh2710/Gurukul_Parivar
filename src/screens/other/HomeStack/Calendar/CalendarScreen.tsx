@@ -3,7 +3,14 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -25,6 +32,8 @@ export const CalendarScreen = ({
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
+
+  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [refreshing, setRefreshing] = React.useState(false);
   const [wallpaper, setWallpaper] = React.useState('');
@@ -34,6 +43,7 @@ export const CalendarScreen = ({
   const [sortedData, setSortedData] = React.useState<{[key: string]: any}[]>(
     [],
   );
+
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
   const ref = React.useRef<FlatList>(null);
@@ -220,6 +230,19 @@ export const CalendarScreen = ({
                       width: 345,
                       borderRadius: 12,
                     }}>
+                    {imgLoad && (
+                      <ActivityIndicator
+                        size={30}
+                        color={COLORS.primaryColor}
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                        }}
+                      />
+                    )}
                     <Image
                       source={{uri: `${BASE_URL}${Data[0].image}`}}
                       style={{
@@ -228,6 +251,8 @@ export const CalendarScreen = ({
                         borderRadius: 12,
                         resizeMode: 'cover',
                       }}
+                      onLoadStart={() => setimgLoad(true)}
+                      onLoadEnd={() => setimgLoad(false)}
                     />
                   </View>
                 </View>

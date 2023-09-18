@@ -113,7 +113,7 @@ export const FrontDeskScreen = ({
             }
             headerRight={{
               icon: AllIcons.NotificationOutline,
-              onPress: () => {},
+              onPress: () => navigation.navigate('dailyUpdates'),
             }}
           />
           <ScrollView

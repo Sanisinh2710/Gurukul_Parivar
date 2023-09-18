@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Modal, View} from 'react-native';
+import {ActivityIndicator, Image, Modal, View} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {AllIcons} from '../../../../assets/icons';
 
@@ -35,17 +35,15 @@ export const ImageZoomer = ({
           renderIndicator={index => {
             return <></>;
           }}
+          loadingRender={() => {
+            return (
+              <>
+                <ActivityIndicator color={'white'} size={30} />
+              </>
+            );
+          }}
           renderHeader={() => {
             return (
-              // <View
-              //   style={{
-              //     position: 'absolute',
-              //     width: '100%',
-              //     flexDirection: 'row',
-              //     justifyContent: 'flex-end',
-              //     marginTop: 50,
-              //     backgroundColor: 'green',
-              //   }}>
               <View
                 style={{
                   position: 'absolute',
@@ -64,7 +62,6 @@ export const ImageZoomer = ({
                   }}
                 />
               </View>
-              // </View>
             );
           }}
           show={false}
