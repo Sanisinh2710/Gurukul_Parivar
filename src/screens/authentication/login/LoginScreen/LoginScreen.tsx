@@ -186,7 +186,7 @@ export const LoginScreen = ({
                   navigation.replace('BottomNavBar');
                 }
               } else {
-                navigation.replace('BottomNavBar');
+                navigation.replace('ProfileSignup');
               }
             } else {
               setIsApiloading(false);

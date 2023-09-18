@@ -194,13 +194,30 @@ export const GurukulConnect = ({
             );
           }
         } else {
-          dispatch(
-            SET_ACTIVE_TRACKDATA({
-              activeTrackDataPayload: {
-                track: undefined,
-              },
-            }),
-          );
+          if (
+            activeTrack &&
+            activeTrackPosition &&
+            activeTrack?.album &&
+            activeTrack?.albumId !== null &&
+            activeTrack?.albumId !== undefined
+          ) {
+            await onAlbumClick(
+              activeTrack?.albumId,
+              activeTrack?.album,
+              false,
+              activeTrack,
+              activeTrackPosition,
+              false,
+            );
+          } else {
+            dispatch(
+              SET_ACTIVE_TRACKDATA({
+                activeTrackDataPayload: {
+                  track: undefined,
+                },
+              }),
+            );
+          }
         }
       } catch (error) {
         console.log(error);
@@ -471,6 +488,7 @@ export const GurukulConnect = ({
 
   const onRefresh = async () => {
     setWantNewSongs(true);
+
     let isSetup = await setupPlayer();
 
     if (isSetup) {
@@ -512,21 +530,41 @@ export const GurukulConnect = ({
         console.log(error);
       }
       const playingTrack = await TrackPlayer.getTrack(0);
+
       if (playingTrack !== null) {
+        batch(() => {
+          dispatch(
+            SET_ACTIVE_TRACKDATA({
+              activeTrackDataPayload: {
+                track: playingTrack,
+                position: 0,
+              },
+            }),
+          );
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+        });
+      } else {
         dispatch(
           SET_ACTIVE_TRACKDATA({
             activeTrackDataPayload: {
-              track: playingTrack,
+              track: undefined,
             },
           }),
         );
       }
     }
-    dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+
     setWantNewSongs(false);
   };
 
-  const onAlbumClick = async (albumId: number | string, albumName: string) => {
+  const onAlbumClick = async (
+    albumId: number | string,
+    albumName: string,
+    wantToResetMenuSongList: boolean = true,
+    activeTrack?: Track,
+    activeTrackPosition?: number,
+    wantToPlayActiveTrack: boolean = false,
+  ) => {
     setLoader(true);
 
     let isSetup = await setupPlayer();
@@ -560,6 +598,7 @@ export const GurukulConnect = ({
               newItem.artist = wholeitem['artist'] ?? '';
               newItem.is_multiple = wholeitem['is_multiple'] ?? false;
               newItem.album = albumName ?? '';
+              newItem.albumId = isString(albumId) ? parseInt(albumId) : albumId;
 
               Songs.push(newItem);
             });
@@ -568,21 +607,55 @@ export const GurukulConnect = ({
               ...Songs.filter(item => item.is_multiple === false),
             ]);
 
-            dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+            if (wantToResetMenuSongList) {
+              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+            }
           }
         }
       } catch (error) {
         console.log(error, 'error came');
       }
-      const playingTrack = await TrackPlayer.getTrack(0);
-      if (playingTrack !== null) {
+
+      if (activeTrack && activeTrackPosition) {
+        const newQueue = await TrackPlayer.getQueue();
+        await TrackPlayer.skip(
+          newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+          activeTrackPosition,
+        );
+        const currentTrackDuration = await TrackPlayer.getDuration();
+
+        await TrackPlayer.updateMetadataForTrack(
+          newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+          {
+            title: activeTrack?.title,
+            artist: activeTrack?.artist,
+            duration: currentTrackDuration,
+          },
+        );
+
+        if (wantToPlayActiveTrack) {
+          await TrackPlayer.play();
+        }
+
         dispatch(
           SET_ACTIVE_TRACKDATA({
             activeTrackDataPayload: {
-              track: playingTrack,
+              track: activeTrack,
+              position: activeTrackPosition,
             },
           }),
         );
+      } else {
+        const playingTrack = await TrackPlayer.getTrack(0);
+        if (playingTrack !== null) {
+          dispatch(
+            SET_ACTIVE_TRACKDATA({
+              activeTrackDataPayload: {
+                track: playingTrack,
+              },
+            }),
+          );
+        }
       }
     }
     dispatch(UPDATE_SETUP_MODE({setupMode: 'ALBUM'}));
@@ -625,11 +698,13 @@ export const GurukulConnect = ({
           ]}
           nestedScrollEnabled={true}
           refreshControl={
-            <RefreshControl
-              colors={[COLORS.primaryColor, COLORS.green]}
-              refreshing={wantNewSong}
-              onRefresh={onRefresh}
-            />
+            setupMode === 'ALBUM' ? undefined : (
+              <RefreshControl
+                colors={[COLORS.primaryColor, COLORS.green]}
+                refreshing={wantNewSong}
+                onRefresh={onRefresh}
+              />
+            )
           }>
           <SearchBar
             setSearchData={setSearchData}
@@ -715,7 +790,10 @@ export const GurukulConnect = ({
                       style.songContainer,
                       {
                         borderColor:
-                          item?.id == activeTrack?.id
+                          setupMode === 'ALBUM' && item?.id == activeTrack?.id
+                            ? 'rgba(172, 43, 49, 1)'
+                            : item?.id == activeTrack?.albumId &&
+                              setupMode !== 'ALBUM'
                             ? 'rgba(172, 43, 49, 1)'
                             : 'rgba(172, 43, 49, 0.3)',
                       },
@@ -732,7 +810,25 @@ export const GurukulConnect = ({
                       <View
                         onTouchEnd={async () => {
                           if (item?.id && item?.title) {
-                            await onAlbumClick(item?.id, item?.title);
+                            if (
+                              activeTrack &&
+                              activeTrackPosition &&
+                              activeTrack?.album &&
+                              activeTrack?.albumId !== null &&
+                              activeTrack?.albumId !== undefined &&
+                              activeTrack?.albumId == item?.id
+                            ) {
+                              await onAlbumClick(
+                                activeTrack?.albumId,
+                                activeTrack?.album,
+                                true,
+                                activeTrack,
+                                activeTrackPosition,
+                                true,
+                              );
+                            } else {
+                              await onAlbumClick(item?.id, item?.title);
+                            }
                           }
                         }}
                         style={{

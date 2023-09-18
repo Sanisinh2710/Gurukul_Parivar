@@ -19,7 +19,7 @@ import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
-  ImagePagerView,
+  Carousel,
   ImageZoomer,
   Loader,
   NoData,
@@ -196,11 +196,6 @@ export const DailyQuotes = ({
         overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          // height:
-          //   Data.find((item: any) => item.branch === BranchName) !==
-          //     undefined && Data.length > 0
-          //     ? '100%'
-          //     : '100%',
           height: '100%',
         }}
         refreshControl={
@@ -268,7 +263,7 @@ export const DailyQuotes = ({
                           alignItems: 'center',
                           marginTop: '3%',
                         }}>
-                        <ImagePagerView
+                        <Carousel
                           contentContainerStyle={{
                             right: 3,
                           }}
@@ -323,67 +318,6 @@ export const DailyQuotes = ({
                             );
                           }}
                         />
-
-                        {/* <Carousel
-                        sliderWidth={screenWidth}
-                        slideStyle={{
-                          height: Dimensions.get('window').height * 0.6,
-                          borderRadius: 20,
-                        }}
-                        onSnapToItem={index => {
-                          setItemIndex(index);
-                        }}
-                        itemWidth={Dimensions.get('window').width * 0.8}
-                        data={DailyQuotes}
-                        renderItem={({item, index}) => (
-                          <>
-                            <View
-                              style={[
-                                {
-                                  height: '100%',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  borderRadius: 20,
-                                },
-                                // imgLoad[index] && {
-                                //   backgroundColor: COLORS.primaryRippleColor,
-                                // },
-                              ]}>
-                              <View
-                                style={{flex: 1, width: '100%'}}
-                                onTouchEnd={() => {
-                                  setCurrentImageUri(item.image);
-                                  setZoomModalVisiable(true);
-                                }}>
-                                <Image
-                                  source={{
-                                    uri: `${BASE_URL}${item.image}`,
-                                  }}
-                                  style={style.image}
-                                  onLoad={() => {
-                                    let newLoadState = JSON.parse(
-                                      JSON.stringify(imgLoad),
-                                    );
-                                    newLoadState[index] = false;
-                                    setImgLoad(newLoadState);
-                                  }}
-                                />
-                              </View>
-                              <View>
-                                <Text
-                                  style={style.quote}
-                                  selectable={true}
-                                  onLongPress={() =>
-                                    handleClipBoard(item.quote)
-                                  }
-                                  selectionColor={'red'}>
-                                  {item.quote}
-                                </Text>
-                              </View>
-                            </View>
-                          </>
-                        )} 
-                                />*/}
                         <ShareDownload
                           wallpaper={Platform.OS === 'android' ? false : false}
                           imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}

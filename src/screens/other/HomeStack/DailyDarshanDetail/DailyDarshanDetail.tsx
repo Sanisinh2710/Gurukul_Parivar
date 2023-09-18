@@ -5,8 +5,9 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Dimensions, Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  Carousel,
+  CarouselMethodsType,
   CustomNavigate,
-  ImagePagerView,
   ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
@@ -23,31 +24,21 @@ export const DailyDarshanDetail = ({
   const commonStyle = CommonStyle();
   const currentImageIndex = route.params.currentImageIndex;
 
-  const [wallpaper, setWallpaper] = React.useState('');
+  const TotalImages = route.params.totalImages;
+  const AllData = route.params.data;
+
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
   );
-  const [itemIndex, setItemIndex] = React.useState(0);
 
-  const TotalImages = route.params.totalImages;
-  const AllData = route.params.data;
-  const [Data, setData] = React.useState<Array<String>>(AllData);
-  const currentImageUri = Data[pagination - 1];
+  const currentImageUri = React.useMemo(() => {
+    return AllData?.[pagination - 1];
+  }, [AllData, pagination]);
 
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    setWallpaper(`${BASE_URL}${currentImageUri}`);
-  }, [currentImageUri]);
-
-  React.useEffect(() => {
-    if (itemIndex !== null && itemIndex !== undefined) {
-      setPagination(itemIndex + 1);
-    }
-  }, [itemIndex]);
-
-  console.log(Data, pagination, 'data');
+  const ref = React.useRef<CarouselMethodsType>(null);
 
   return (
     <ScreenWrapper>
@@ -60,48 +51,44 @@ export const DailyDarshanDetail = ({
         headerTitle={route.params.date}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
-        <ImagePagerView
+        <Carousel
+          ref={ref}
           contentContainerStyle={{
-            height: Dimensions.get('window').height * 0.7,
+            marginTop: '5%',
           }}
-          itemWidth={Dimensions.get('window').width * 0.91}
-          data={Data}
+          itemWidth={Dimensions.get('window').width * 0.9}
+          itemHeight={Dimensions.get('window').height * 0.7}
+          itemGap={10}
+          data={AllData}
+          initialScrollToIndex={currentImageIndex}
           onSnapToItem={index => {
-            setItemIndex(index);
+            setPagination(index + 1);
           }}
-          scrollByIndex={pagination - 1}
           renderItem={({item, index}) => {
             return (
-              <>
-                <View
-                  onTouchEnd={() => setZoomModalVisiable(true)}
-                  style={[
-                    {
-                      height: '100%',
-                      width: '100%',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    },
-                  ]}>
-                  <Image
-                    source={{uri: `${BASE_URL}${item}`}}
-                    style={style.images}
-                    resizeMode="contain"
-                  />
-                </View>
-              </>
+              <View
+                onTouchEnd={() => setZoomModalVisiable(true)}
+                style={[
+                  {
+                    height: '100%',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Image
+                  source={{uri: `${BASE_URL}${item}`}}
+                  style={style.images}
+                  resizeMode="contain"
+                />
+              </View>
             );
           }}
         />
-        <View
-          style={{
-            top: `${-15}%`,
-          }}>
-          <ShareDownload
-            wallpaper={Platform.OS === 'android' ? true : false}
-            imgURL={`${BASE_URL}${Data?.[itemIndex]}`}
-          />
-        </View>
+        <ShareDownload
+          wallpaper={Platform.OS === 'android' ? true : false}
+          imgURL={`${BASE_URL}${currentImageUri}`}
+        />
       </View>
       <CustomNavigate
         text={`${pagination}/${TotalImages}`}
@@ -111,10 +98,12 @@ export const DailyDarshanDetail = ({
           } else {
             setPagination(1);
           }
+          ref.current?.handleNext();
         }}
         handlePrevPress={() => {
           if (pagination > 1) {
             setPagination(pagination - 1);
+            ref.current?.handlePrev();
           }
         }}
       />

@@ -492,7 +492,7 @@ export const DropDownModel = React.memo(
                       buttonStyle={{
                         position: 'absolute',
                         width: '100%',
-                        bottom: '-13%',
+                        bottom: `5%`,
                         alignSelf: 'center',
                         backgroundColor: 'red',
                       }}

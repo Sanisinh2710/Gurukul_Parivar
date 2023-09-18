@@ -21,16 +21,18 @@ export const PagerView = React.memo(
     const dispatch = useAppDispatch();
 
     const handlePageChange = () => {
-      if (currentPage < images.length - 1) {
-        scrollRef.current?.scrollToIndex({
-          animated: true,
-          index: currentPage + 1,
-        });
-      } else {
-        scrollRef.current?.scrollToIndex({
-          animated: true,
-          index: 0,
-        });
+      if (images.length > 0) {
+        if (currentPage < images.length - 1) {
+          scrollRef.current?.scrollToIndex({
+            animated: true,
+            index: currentPage + 1,
+          });
+        } else {
+          scrollRef.current?.scrollToIndex({
+            animated: true,
+            index: 0,
+          });
+        }
       }
     };
 

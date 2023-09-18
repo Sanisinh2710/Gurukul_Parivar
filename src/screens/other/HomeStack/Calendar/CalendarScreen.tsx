@@ -56,51 +56,12 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
-  React.useMemo(async () => {
-    setLoader(true);
-    try {
-      const newDate = new Date(
-        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
-      );
-      const res = await CalendarGetApi(newDate);
-      if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setData(res.data.calendar);
-          setLoader(false);
-        }, 200);
-      }
-    } catch (error) {}
-  }, [selectedDate]);
-
-  React.useEffect(() => {
-    Data.map(item => setEvents(item.events));
-    Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
-  }, [Data]);
-
-  React.useEffect(() => {
-    if (todayEvent.length > 0) {
-      let sortDate = [...todayEvent];
-      let finalSort = sortDate.sort((a, b) => {
-        let date = new Date(a.date);
-        let date2 = new Date(b.date);
-        return date > date2 ? 1 : date < date2 ? -1 : 0;
-      });
-      setSortedData(finalSort);
-    }
-  }, [todayEvent]);
   const listIndex = () => {
     return sortedData.findIndex(
       event => event.date >= d.toISOString().substring(0, 10),
     );
   };
-  React.useEffect(() => {
-    if (sortedData.length > 0 && listIndex() !== -1) {
-      ref.current?.scrollToIndex({
-        animated: true,
-        index: listIndex(),
-      });
-    }
-  }, [sortedData]);
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -118,6 +79,58 @@ export const CalendarScreen = ({
 
     setRefreshing(false);
   };
+
+  React.useMemo(async () => {
+    setLoader(true);
+    try {
+      const newDate = new Date(
+        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
+      );
+      const res = await CalendarGetApi(newDate);
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.calendar);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {}
+  }, [selectedDate]);
+
+  React.useEffect(() => {
+    if (Data.length > 0) {
+      const newData = [...Data];
+      const eventData = newData.map(item => {
+        return item.events;
+      });
+      setEvents(eventData[0]);
+      setWallpaper(`${BASE_URL}${Data[0].image}`);
+    } else {
+      setEvents([]);
+    }
+  }, [Data]);
+
+  React.useMemo(() => {
+    if (todayEvent.length > 0) {
+      let sortDate = [...todayEvent];
+      let finalSort = sortDate.sort((a, b) => {
+        let date = new Date(a.date);
+        let date2 = new Date(b.date);
+        return date > date2 ? 1 : date < date2 ? -1 : 0;
+      });
+      setSortedData(finalSort);
+    } else {
+      setSortedData([]);
+    }
+  }, [todayEvent]);
+
+  React.useEffect(() => {
+    if (sortedData.length > 0 && listIndex() !== -1) {
+      ref.current?.scrollToIndex({
+        animated: true,
+        index: listIndex(),
+      });
+    }
+  }, [sortedData]);
 
   return (
     <ScreenWrapper>
@@ -175,7 +188,7 @@ export const CalendarScreen = ({
                           },
                         ]}>
                         <Text style={style.date}>
-                          {item.date.split('-')[2]}
+                          {item.date?.split('-')[2]}
                         </Text>
                         <Text style={style.day}>
                           {daysArray[new Date(item.date).getDay()]}
@@ -191,37 +204,44 @@ export const CalendarScreen = ({
               </View>
             )}
 
-            <View
-              style={[
-                {marginTop: '25%', alignSelf: 'center'},
-                sortedData.length <= 0 && {
-                  marginTop: '50%',
-                },
-              ]}>
-              <View
-                onTouchEnd={() => setZoomModalVisiable(true)}
-                style={{
-                  height: 264,
-                  width: 345,
-                  borderRadius: 12,
-                }}>
-                <Image
-                  source={{uri: `${BASE_URL}${Data[0].image}`}}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 12,
-                    resizeMode: 'cover',
-                  }}
+            {Data.length > 0 && Data[0].image !== undefined && (
+              <>
+                <View
+                  style={[
+                    {marginTop: '25%', alignSelf: 'center'},
+                    sortedData.length <= 0 && {
+                      marginTop: '50%',
+                    },
+                  ]}>
+                  <View
+                    onTouchEnd={() => setZoomModalVisiable(true)}
+                    style={{
+                      height: 264,
+                      width: 345,
+                      borderRadius: 12,
+                    }}>
+                    <Image
+                      source={{uri: `${BASE_URL}${Data[0].image}`}}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        borderRadius: 12,
+                        resizeMode: 'cover',
+                      }}
+                    />
+                  </View>
+                </View>
+                <ImageZoomer
+                  images={[{url: `${BASE_URL}${Data?.[0].image}`}]}
+                  zoomModalVisible={zoomImageModalVisible}
+                  setZoomModalVisiable={setZoomModalVisiable}
                 />
-              </View>
-            </View>
-            <ImageZoomer
-              images={[{url: `${BASE_URL}${Data[0].image}`}]}
-              zoomModalVisible={zoomImageModalVisible}
-              setZoomModalVisiable={setZoomModalVisiable}
-            />
-            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
+                <ShareDownload
+                  wallpaper={false}
+                  imgURL={wallpaper && wallpaper}
+                />
+              </>
+            )}
           </View>
         ) : (
           <View
