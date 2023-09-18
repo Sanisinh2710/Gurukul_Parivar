@@ -181,7 +181,7 @@ export const HomeScreen = ({
           paddingBottom: '30%',
         }}>
         {dashboardImages.length > 0 && (
-          <PagerView images={dashboardImages} currentPage={currentPage} />
+          <PagerView images={dashboardImages} currentIndex={currentPage} />
         )}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>

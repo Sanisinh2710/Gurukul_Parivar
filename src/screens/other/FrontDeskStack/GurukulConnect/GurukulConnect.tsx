@@ -52,7 +52,7 @@ import {
   setupPlayer,
 } from '../../../../services';
 import {RootStackParamList, SongType} from '../../../../types';
-import {COLORS, CustomFonts, isString} from '../../../../utils';
+import {COLORS, CustomFonts, downloadSong, isString} from '../../../../utils';
 import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
@@ -88,6 +88,10 @@ export const GurukulConnect = ({
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
 
   const [loader, setLoader] = React.useState<boolean>(false);
+
+  const [isDownloading, setIsDownLoading] = React.useState<
+    {index: number; status: boolean}[]
+  >([]);
 
   const [wantNewSong, setWantNewSongs] = React.useState<boolean>(false);
 
@@ -263,7 +267,7 @@ export const GurukulConnect = ({
       const response = await GurkulAudioGetFromCategoriesGetApi(selectedItem);
 
       if (response.resType === 'SUCCESS') {
-        if (setupMode === 'INITIAL') {
+        if (setupMode === 'INITIAL' && activeTrack?.albumId === undefined) {
           await TrackPlayer.reset();
         }
         if (
@@ -493,7 +497,10 @@ export const GurukulConnect = ({
 
     if (isSetup) {
       try {
-        const res = await GurkulAudioGetApi();
+        const res =
+          selectedItem.length <= 0
+            ? await GurkulAudioGetApi()
+            : await GurkulAudioGetFromCategoriesGetApi(selectedItem);
 
         if (res.resType === 'SUCCESS') {
           let Songs: Array<SongType> = [];
@@ -541,7 +548,7 @@ export const GurukulConnect = ({
               },
             }),
           );
-          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+          dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
         });
       } else {
         dispatch(
@@ -869,16 +876,58 @@ export const GurukulConnect = ({
                       </View>
                     ) : (
                       <View style={{flexDirection: 'row', gap: 6}}>
-                        <View style={{height: 24, width: 24}}>
-                          <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              resizeMode: 'contain',
-                              tintColor: COLORS.primaryColor,
-                            }}
-                            source={AllIcons.DownloadSong}
-                          />
+                        <View
+                          style={{height: 24, width: 24}}
+                          onTouchEnd={async e => {
+                            const newDownLoad: {
+                              index: number;
+                              status: boolean;
+                            }[] = [...isDownloading];
+
+                            newDownLoad.push({index: item.id, status: true});
+
+                            setIsDownLoading(newDownLoad);
+
+                            const res = await downloadSong(
+                              item?.url,
+                              item?.title,
+                            );
+
+                            if (res) {
+                              let newDownLoad: {
+                                index: number;
+                                status: boolean;
+                              }[] = [...isDownloading];
+                              const ind = newDownLoad.findIndex(
+                                locitem => locitem.index === item?.id,
+                              );
+
+                              newDownLoad[ind] = {
+                                index: item.id,
+                                status: false,
+                              };
+
+                              setIsDownLoading(newDownLoad);
+                            }
+                          }}>
+                          {isDownloading?.find(
+                            locitem => locitem.index === item?.id,
+                          )?.status ? (
+                            <ActivityIndicator
+                              size={25}
+                              color={COLORS.primaryColor}
+                            />
+                          ) : (
+                            <Image
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                resizeMode: 'contain',
+                                tintColor: COLORS.primaryColor,
+                              }}
+                              source={AllIcons.DownloadSong}
+                            />
+                          )}
                         </View>
                         <View
                           onTouchEnd={async () => {

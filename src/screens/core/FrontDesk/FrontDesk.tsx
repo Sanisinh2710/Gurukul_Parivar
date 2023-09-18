@@ -134,7 +134,7 @@ export const FrontDeskScreen = ({
               style={{
                 marginBottom: '2%',
               }}>
-              <PagerView images={dashboardImages} currentPage={currentPage} />
+              <PagerView images={dashboardImages} currentIndex={currentPage} />
             </View>
             <View style={[{flex: 1}]}>
               <FlatList

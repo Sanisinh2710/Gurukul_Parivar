@@ -1,4 +1,5 @@
 import React from 'react';
+import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyProgramDetailProps} from '../../../../types';
@@ -30,6 +31,12 @@ export const DailyProgramDetail = ({
         style={{
           backgroundColor: 'transparent',
           paddingHorizontal: 20,
+        }}
+        onShouldStartLoadWithRequest={request => {
+          if (request.url !== 'about:blank') {
+            Linking.openURL(request.url);
+            return false;
+          } else return true;
         }}
         source={{
           html: `<html><head><style>body {padding:20px;}</style></head><body>${description}</body></html>`,
