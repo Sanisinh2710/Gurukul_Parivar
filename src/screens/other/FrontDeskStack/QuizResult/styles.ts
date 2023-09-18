@@ -8,7 +8,7 @@ export const styles = () => {
   return StyleSheet.create({
     progressText: {
       ...CustomFonts.header.large36,
-      fontSize: 24,
+      fontSize: 28,
       color: 'black',
     },
   });

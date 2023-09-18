@@ -3,10 +3,11 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, View} from 'react-native';
+import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
+  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -14,22 +15,28 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
-import {RootAuthStackParamList} from '../../../../types';
+import {RootStackParamList} from '../../../../types';
 import {COLORS, d, daysArray, options2} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
   navigation,
-}: NativeStackScreenProps<RootAuthStackParamList>) => {
+}: NativeStackScreenProps<RootStackParamList>) => {
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [wallpaper, setWallpaper] = React.useState('');
   const [loader, setLoader] = React.useState<boolean>(false);
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [todayEvent, setEvents] = React.useState<{[key: string]: any}[]>([]);
-
+  const [sortedData, setSortedData] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
+  const [zoomImageModalVisible, setZoomModalVisiable] =
+    React.useState<boolean>(false);
+  const ref = React.useRef<FlatList>(null);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setMonth(selectedDate.getMonth() - 1);
@@ -70,6 +77,48 @@ export const CalendarScreen = ({
     Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
   }, [Data]);
 
+  React.useEffect(() => {
+    if (todayEvent.length > 0) {
+      let sortDate = [...todayEvent];
+      let finalSort = sortDate.sort((a, b) => {
+        let date = new Date(a.date);
+        let date2 = new Date(b.date);
+        return date > date2 ? 1 : date < date2 ? -1 : 0;
+      });
+      setSortedData(finalSort);
+    }
+  }, [todayEvent]);
+  const listIndex = () => {
+    return sortedData.findIndex(
+      event => event.date >= d.toISOString().substring(0, 10),
+    );
+  };
+  React.useEffect(() => {
+    if (sortedData.length > 0 && listIndex() !== -1) {
+      ref.current?.scrollToIndex({
+        animated: true,
+        index: listIndex(),
+      });
+    }
+  }, [sortedData]);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const newDate = new Date(
+        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
+      );
+      const res = await CalendarGetApi(newDate);
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.calendar);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {}
+
+    setRefreshing(false);
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -83,51 +132,74 @@ export const CalendarScreen = ({
       <View style={[commonstyle.commonContentView, {flex: 1}]}>
         {loader ? (
           <Loader />
-        ) : Data.length > 0 && Data[0].image !== undefined ? (
+        ) : (Data.length > 0 && Data[0].image !== undefined) ||
+          sortedData.length > 0 ? (
           <View>
-            {todayEvent.filter(
-              // event => event.date === d.toISOString().substring(0, 10),
-              event => event.date === d.toISOString().substring(0, 10),
-            ).length > 0 && (
-              <>
-                <View>
-                  <Text style={style.title}>{t('common.TodayEventMsg')}</Text>
-                </View>
-                <ScrollView style={{height: '28%'}}>
-                  {todayEvent
-                    .filter(
-                      event => event.date === d.toISOString().substring(0, 10),
-                    )
-                    .map((item, index) => (
-                      <View key={index} style={style.textBoxContainer}>
-                        <View style={style.dateContainer}>
-                          <Text style={style.date}>
-                            {item.date.split('-')[2]}
-                          </Text>
-                          <Text style={style.day}>
-                            {daysArray[new Date(item.date).getDay()]}
-                          </Text>
-                        </View>
-                        <View style={style.contentContainer}>
-                          <Text style={style.content1}>{item.title}</Text>
-                          <Text style={style.content2}>{item.description}</Text>
-                        </View>
+            {sortedData.length > 0 && (
+              <View style={{height: '28%', top: 20}}>
+                <FlatList
+                  data={sortedData}
+                  ref={ref}
+                  contentContainerStyle={{
+                    gap: 15,
+                  }}
+                  getItemLayout={(data, index) => {
+                    return {
+                      length: 79,
+                      offset: 79 * index,
+                      index,
+                    };
+                  }}
+                  refreshControl={
+                    <RefreshControl
+                      colors={[COLORS.primaryColor, COLORS.green]}
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  renderItem={({item, index}) => (
+                    <View
+                      key={index.toString()}
+                      style={[
+                        style.textBoxContainer,
+                        item.date < d.toISOString().substring(0, 10) && {
+                          opacity: 0.8,
+                        },
+                      ]}>
+                      <View
+                        style={[
+                          style.dateContainer,
+                          item.date < d.toISOString().substring(0, 10) && {
+                            backgroundColor: '#b3898b',
+                            borderColor: '#b3898b',
+                          },
+                        ]}>
+                        <Text style={style.date}>
+                          {item.date.split('-')[2]}
+                        </Text>
+                        <Text style={style.day}>
+                          {daysArray[new Date(item.date).getDay()]}
+                        </Text>
                       </View>
-                    ))}
-                </ScrollView>
-              </>
+                      <View style={style.contentContainer}>
+                        <Text style={style.content1}>{item.title}</Text>
+                        <Text style={style.content2}>{item.description}</Text>
+                      </View>
+                    </View>
+                  )}
+                />
+              </View>
             )}
 
             <View
               style={[
-                {marginTop: '15%', alignSelf: 'center'},
-                todayEvent.filter(
-                  event => event.date === d.toISOString().substring(0, 10),
-                ).length === 0 && {
+                {marginTop: '25%', alignSelf: 'center'},
+                sortedData.length <= 0 && {
                   marginTop: '50%',
                 },
               ]}>
               <View
+                onTouchEnd={() => setZoomModalVisiable(true)}
                 style={{
                   height: 264,
                   width: 345,
@@ -140,12 +212,16 @@ export const CalendarScreen = ({
                     height: '100%',
                     width: '100%',
                     borderRadius: 12,
-
                     resizeMode: 'cover',
                   }}
                 />
               </View>
             </View>
+            <ImageZoomer
+              images={[{url: `${BASE_URL}${Data[0].image}`}]}
+              zoomModalVisible={zoomImageModalVisible}
+              setZoomModalVisiable={setZoomModalVisiable}
+            />
             <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
           </View>
         ) : (

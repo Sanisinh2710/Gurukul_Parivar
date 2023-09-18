@@ -20,6 +20,7 @@ import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
   CustomNavigate,
+  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -54,6 +55,11 @@ export const DailyQuotes = ({
 
   const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const [zoomImageModalVisible, setZoomModalVisiable] =
+    React.useState<boolean>(false);
+
+  const [currentImageUri, setCurrentImageUri] = React.useState<string>();
 
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
@@ -187,6 +193,7 @@ export const DailyQuotes = ({
         }}
       />
       <ScrollView
+        overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           // height:
@@ -285,7 +292,12 @@ export const DailyQuotes = ({
                                   backgroundColor: COLORS.primaryRippleColor,
                                 },
                               ]}>
-                              <View style={{flex: 1, width: '100%'}}>
+                              <View
+                                style={{flex: 1, width: '100%'}}
+                                onTouchEnd={() => {
+                                  setCurrentImageUri(item.image);
+                                  setZoomModalVisiable(true);
+                                }}>
                                 <Image
                                   source={{
                                     uri: `${BASE_URL}${item.image}`,
@@ -347,6 +359,11 @@ export const DailyQuotes = ({
         }
         handlePrevPress={handlePrev}
         handleNextPress={handleNext}
+      />
+      <ImageZoomer
+        images={[{url: `${BASE_URL}${currentImageUri}`}]}
+        zoomModalVisible={zoomImageModalVisible}
+        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

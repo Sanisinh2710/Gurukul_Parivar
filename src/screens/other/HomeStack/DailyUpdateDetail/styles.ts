@@ -1,10 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
 import {CustomFonts} from '../../../../utils';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.medium20,
@@ -13,15 +10,16 @@ export const styles = () => {
       lineHeight: 25.92,
     },
     content: {
+      ...CustomFonts.body.large14,
       fontSize: 16,
       color: 'black',
-      lineHeight: 25.92,
+      lineHeight: 25,
     },
     titleContainer: {
       marginTop: 20,
     },
     date: {
-      marginTop: 8,
+      ...CustomFonts.body.large14,
       fontSize: 14,
       color: 'rgba(23,23,23,0.5)',
       lineHeight: 18.9,
@@ -29,10 +27,9 @@ export const styles = () => {
     image: {
       height: '100%',
       width: '100%',
-      borderRadius: 12,
     },
     imageContainer: {
-      height: 330,
+      height: 350,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',

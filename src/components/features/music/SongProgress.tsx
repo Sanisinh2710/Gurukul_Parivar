@@ -6,7 +6,12 @@ import TrackPlayer from 'react-native-track-player';
 import {CustomFonts} from '../../../utils';
 
 const format = (time: number) => {
-  return new Date(time * 1000).toISOString().substring(15, 19);
+  return new Date(time * 1000)
+    .toISOString()
+    .substring(11, 19)
+    .substring(0, 2) === '00'
+    ? new Date(time * 1000).toISOString().substring(14, 19)
+    : new Date(time * 1000).toISOString().substring(11, 19);
 };
 
 type SongProgressProps = {
@@ -18,10 +23,10 @@ export const SongProgress = ({
   position,
   duration,
 }: SongProgressProps): React.JSX.Element => {
-  const [progress, setProgress] = React.useState(position);
+  const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
-    if (position) {
+    if (position >= 0) {
       setProgress(position);
     }
   }, [position]);
@@ -35,10 +40,10 @@ export const SongProgress = ({
           justifyContent: 'space-between',
           marginVertical: 5,
         }}>
-        <View style={{width: '11%', alignItems: 'center'}}>
-          <Text style={style.trackProgressText}>{format(position)}</Text>
+        <View style={{width: '15%', alignItems: 'center'}}>
+          <Text style={style.trackProgressText}>{format(progress)}</Text>
         </View>
-        <View style={{width: '75%'}}>
+        <View style={{width: '70%'}}>
           <Slider
             trackStyle={{width: '100%', height: 3.5, borderRadius: 10}}
             animateTransitions={true}
@@ -57,13 +62,16 @@ export const SongProgress = ({
             value={progress}
             minimumValue={0}
             maximumValue={duration}
+            onValueChange={async value => {
+              setProgress(value[0]);
+            }}
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value[0]);
               setProgress(value[0]);
             }}
           />
         </View>
-        <View style={{width: '11%', alignItems: 'center'}}>
+        <View style={{width: '15%', alignItems: 'center'}}>
           <Text style={style.trackProgressText}>{format(duration)}</Text>
         </View>
       </View>

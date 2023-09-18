@@ -56,6 +56,7 @@ export const DailyUpdates = ({
               data.thumbnail = data.thumbnail;
               data.title = data.title;
               data.date = data.created_at;
+
               if (
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
@@ -65,7 +66,7 @@ export const DailyUpdates = ({
                   .substring(0, 5);
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
-                  .substring(9, 12);
+                  .substring(8, 12);
 
                 data.created_at = `${time}` + ' ' + `${day}`;
               } else if (
@@ -102,7 +103,6 @@ export const DailyUpdates = ({
 
     try {
       const res = await DailyUpdatesApi();
-      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         const data = res.data.daily_updates.map(

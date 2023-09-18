@@ -6,12 +6,12 @@ import {Image, Platform, View} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
+  ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyDarshanDetail = ({
@@ -31,6 +31,8 @@ export const DailyDarshanDetail = ({
   const [Data, setData] = React.useState<Array<String>>(AllData);
   const currentImageUri = Data[pagination - 1];
 
+  const [zoomImageModalVisible, setZoomModalVisiable] =
+    React.useState<boolean>(false);
   React.useEffect(() => {
     setWallpaper(`${BASE_URL}${currentImageUri}`);
   }, [currentImageUri]);
@@ -47,17 +49,17 @@ export const DailyDarshanDetail = ({
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <View
+          onTouchEnd={() => setZoomModalVisiable(true)}
           style={[
             {
-              height: '80%',
+              flex: 5,
               marginTop: '5%',
-              borderRadius: 8,
-              backgroundColor: COLORS.primaryRippleColor,
             },
           ]}>
           <Image
             source={{uri: `${BASE_URL}${currentImageUri}`}}
             style={style.images}
+            resizeMode="contain"
           />
         </View>
         <ShareDownload
@@ -70,6 +72,8 @@ export const DailyDarshanDetail = ({
         handleNextPress={() => {
           if (pagination < TotalImages) {
             setPagination(pagination + 1);
+          } else {
+            setPagination(1);
           }
         }}
         handlePrevPress={() => {
@@ -77,6 +81,11 @@ export const DailyDarshanDetail = ({
             setPagination(pagination - 1);
           }
         }}
+      />
+      <ImageZoomer
+        images={[{url: `${BASE_URL}${currentImageUri}`}]}
+        zoomModalVisible={zoomImageModalVisible}
+        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

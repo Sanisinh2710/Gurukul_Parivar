@@ -13,8 +13,8 @@ import {
   isString,
   isStringArray,
 } from '../../../utils';
-import {ModalStyle} from './style';
 import {PrimaryButton} from '../Buttons';
+import {ModalStyle} from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
@@ -31,6 +31,7 @@ type DropDownModelProps = {
   modelValuechoosed?: any;
   setModelValueChoosed?: React.Dispatch<React.SetStateAction<boolean>>;
   wantApplyButton?: boolean;
+  viewPhoto?: boolean;
 };
 
 export const DropDownModel = React.memo(
@@ -49,6 +50,7 @@ export const DropDownModel = React.memo(
     modelValuechoosed,
     setModelValueChoosed,
     wantApplyButton,
+    viewPhoto,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
@@ -57,8 +59,6 @@ export const DropDownModel = React.memo(
     const touchY = React.useRef<any>();
 
     const [local, setLocal] = React.useState<string[]>([]);
-
-    console.log(local);
 
     const [searchvalue, setSearch] = React.useState('');
 
@@ -139,7 +139,7 @@ export const DropDownModel = React.memo(
       <Modal
         transparent
         visible={modelVisible}
-        animationType="slide"
+        animationType="fade"
         onDismiss={() => {
           setModelVisible(false);
         }}>
@@ -148,7 +148,10 @@ export const DropDownModel = React.memo(
           onTouchEnd={() => {
             setModelVisible(false);
           }}>
-          <View style={style.modelMainView}>
+          <View
+            style={
+              viewPhoto ? style.modelViewPhotoMainView : style.modelMainView
+            }>
             <View
               style={style.modelCloserMainView}
               onTouchStart={e => (touchY.current = e.nativeEvent.pageY)}
@@ -159,7 +162,7 @@ export const DropDownModel = React.memo(
                   setModelVisible(false);
                 }
               }}>
-              <View style={style.modelCloserView} />
+              <View style={!viewPhoto && style.modelCloserView} />
             </View>
             {customModelchild ? (
               customModelchild
@@ -262,6 +265,26 @@ export const DropDownModel = React.memo(
                                   setModelValueChoosed(true);
                                 }
                               }
+
+                              //     const newArr = [...selectedItem];
+                              //     if (
+                              //       newArr.find(
+                              //         newitem => newitem.name === item,
+                              //       ) === undefined
+                              //     ) {
+                              //       newArr.push(item);
+                              //       setSelectedItem(newArr);
+                              //     }
+                              //   }
+
+                              //   else {
+                              //     setSelectedItem(item?.id);
+                              //   }
+
+                              //   if (setModelValueChoosed) {
+                              //     setModelValueChoosed(true);
+                              //   }
+                              // }
                             } else {
                               if (setSelectedItem) {
                                 if (type === 'multi-select') {
@@ -280,6 +303,12 @@ export const DropDownModel = React.memo(
                                       setSelectedItem(newArr);
                                     }
                                   }
+
+                                  // const newArr = [...selectedItem];
+                                  // if (newArr.includes(item) === false) {
+                                  //   newArr.push(item);
+                                  //   setSelectedItem(newArr);
+                                  // }
                                 } else {
                                   if (
                                     wantApplyButton &&
@@ -293,9 +322,16 @@ export const DropDownModel = React.memo(
                                 if (setModelValueChoosed) {
                                   setModelValueChoosed(true);
                                 }
+
+                                // else {
+                                //   setSelectedItem(item);
+                                // }
+                                // if (setModelValueChoosed) {
+                                //   setModelValueChoosed(true);
+                                // }
                               }
                             }
-                            if (type != 'multi-select') {
+                            if (type !== 'multi-select') {
                               const timer = setTimeout(() => {
                                 setModelVisible(false);
                               }, 200);
@@ -456,7 +492,7 @@ export const DropDownModel = React.memo(
                       buttonStyle={{
                         position: 'absolute',
                         width: '100%',
-                        bottom: -100,
+                        bottom: '-13%',
                         alignSelf: 'center',
                         backgroundColor: 'red',
                       }}

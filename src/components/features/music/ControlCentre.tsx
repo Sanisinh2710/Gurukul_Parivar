@@ -1,7 +1,8 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
 import TrackPlayer, {State} from 'react-native-track-player';
 import {AllIcons} from '../../../../assets/icons';
+import {COLORS} from '../../../utils';
 
 const performSkipToNext = async () => {
   await TrackPlayer.skipToNext();
@@ -38,31 +39,34 @@ export const ControlCentre = ({
             source={AllIcons.ForwardControl}
           />
         </View>
-
-        <View
-          onTouchEnd={() => togglePlayback(playbackState)}
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 40,
-            shadowColor: '#3dadfc',
-            shadowOffset: {
-              width: 0,
-              height: 12,
-            },
-            shadowOpacity: 0.15,
-            shadowRadius: 13.84,
-            elevation: 7,
-          }}>
-          <Image
-            style={{width: '100%', height: '100%'}}
-            source={
-              playbackState === State.Playing
-                ? AllIcons.TrackPause
-                : AllIcons.TrackPlay
-            }
-          />
-        </View>
+        {playbackState === State.Buffering ? (
+          <ActivityIndicator size={40} color={COLORS.primaryColor} />
+        ) : (
+          <View
+            onTouchEnd={() => togglePlayback(playbackState)}
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 40,
+              shadowColor: '#3dadfc',
+              shadowOffset: {
+                width: 0,
+                height: 12,
+              },
+              shadowOpacity: 0.15,
+              shadowRadius: 13.84,
+              elevation: 7,
+            }}>
+            <Image
+              style={{width: '100%', height: '100%'}}
+              source={
+                playbackState === State.Playing
+                  ? AllIcons.TrackPause
+                  : AllIcons.TrackPlay
+              }
+            />
+          </View>
+        )}
 
         <View
           onTouchEnd={performSkipToNext}

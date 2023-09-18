@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
+  Loader,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
@@ -14,11 +15,7 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
-import {
-  DailyQuizAnswerPostApi,
-  DailyQuizGetApi,
-  DailyQuizStatusApi,
-} from '../../../../services';
+import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '../../../../services';
 export const DailyQuizDetail = ({
   route,
   navigation,
@@ -55,8 +52,7 @@ export const DailyQuizDetail = ({
 
     const response = await DailyQuizAnswerPostApi(finalData);
     if (response.resType === 'SUCCESS') {
-      const Marks = Math.floor((response.data.result / Data.length) * 100);
-      navigation.navigate('QuizResult', {marks: Marks});
+      navigation.replace('QuizResult', {marks: response.data.score});
     }
   };
   const handleAnswer = (options: string, index: number, questionId: number) => {
@@ -87,7 +83,6 @@ export const DailyQuizDetail = ({
       setAnswer(newData1);
     }
   };
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -100,101 +95,105 @@ export const DailyQuizDetail = ({
         headerRight={{
           icon: AllIcons.ChartQuiz,
           onPress: () => {
-            navigation.navigate('status');
+            navigation.replace('status');
           },
         }}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
-        <FlatList
-          data={Data}
-          renderItem={({item, index}) => (
-            <>
-              <View>
-                <LinearGradient
-                  colors={['rgba(23, 23, 23, 0.05)', 'rgba(23, 23, 23, 0)']}
-                  locations={[0, 1]}
-                  useAngle={true}
-                  style={{
-                    marginTop: '10%',
-                    flex: 1,
-                    height: 40,
-                    borderTopLeftRadius: 3,
-                    borderBottomLeftRadius: 3,
-                  }}>
-                  <View style={{flexDirection: 'row', height: '100%'}}>
-                    <View
-                      style={{
-                        width: '5%',
-                        borderLeftWidth: 7,
-                        borderTopLeftRadius: 3,
-                        borderBottomLeftRadius: 3,
-                        borderColor: COLORS.primaryColor,
-                      }}
-                    />
-                    <View style={{width: '95%', justifyContent: 'center'}}>
-                      <Text
+      {loader ? (
+        <Loader />
+      ) : (
+        <View style={[commonstyle.commonContentView, {flex: 1}]}>
+          <FlatList
+            data={Data}
+            renderItem={({item, index}) => (
+              <>
+                <View>
+                  <LinearGradient
+                    colors={['rgba(23, 23, 23, 0.05)', 'rgba(23, 23, 23, 0)']}
+                    locations={[0, 1]}
+                    useAngle={true}
+                    style={{
+                      marginTop: '10%',
+                      flex: 1,
+                      height: 40,
+                      borderTopLeftRadius: 3,
+                      borderBottomLeftRadius: 3,
+                    }}>
+                    <View style={{flexDirection: 'row', height: '100%'}}>
+                      <View
                         style={{
-                          ...CustomFonts.header.small18,
-                          color: 'black',
-                          fontSize: 14,
-                        }}>
-                        {item.question}
-                      </Text>
-                    </View>
-                  </View>
-                </LinearGradient>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                  }}>
-                  {item.options.map((options: any, opIndex: number) => {
-                    const isSelected = selectedOptions[index] === options;
-
-                    return (
-                      <Pressable
-                        key={opIndex}
-                        onPress={() => {
-                          handleAnswer(options, index, item.id);
+                          width: '5%',
+                          borderLeftWidth: 7,
+                          borderTopLeftRadius: 3,
+                          borderBottomLeftRadius: 3,
+                          borderColor: COLORS.primaryColor,
                         }}
-                        style={{
-                          width: '40%',
-                          marginRight: '5%',
-                          marginVertical: '3%',
-                          padding: 10,
-                          borderRadius: 20,
-                          backgroundColor: isSelected
-                            ? COLORS.primaryColor
-                            : 'rgba(172, 43, 49, 0.1)',
-                        }}>
-                        <View>
-                          <Text
-                            style={{
-                              textAlign: 'center',
-                              color: isSelected ? 'white' : 'black',
-                            }}>
-                            {options}
-                          </Text>
-                        </View>
-                      </Pressable>
-                    );
-                  })}
+                      />
+                      <View style={{width: '95%', justifyContent: 'center'}}>
+                        <Text
+                          style={{
+                            ...CustomFonts.header.small18,
+                            color: 'black',
+                            fontSize: 14,
+                          }}>
+                          {item.question}
+                        </Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                    }}>
+                    {item.options.map((options: any, opIndex: number) => {
+                      const isSelected = selectedOptions[index] === options;
+
+                      return (
+                        <Pressable
+                          key={opIndex}
+                          onPress={() => {
+                            handleAnswer(options, index, item.id);
+                          }}
+                          style={{
+                            width: '40%',
+                            marginRight: '5%',
+                            marginVertical: '3%',
+                            padding: 10,
+                            borderRadius: 20,
+                            backgroundColor: isSelected
+                              ? COLORS.primaryColor
+                              : 'rgba(172, 43, 49, 0.1)',
+                          }}>
+                          <View>
+                            <Text
+                              style={{
+                                textAlign: 'center',
+                                color: isSelected ? 'white' : 'black',
+                              }}>
+                              {options}
+                            </Text>
+                          </View>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
                 </View>
-              </View>
-            </>
-          )}
-        />
-        <View style={{paddingBottom: '5%', marginTop: '5%'}}>
-          <PrimaryButton
-            title={t('DailyQuiz.SubmitBtn')}
-            disabled={answer.length === Data.length ? false : true}
-            onPress={
-              async () => await handleSubmit()
-              // navigation.navigate('QuizResult', {marks: Marks});
-            }
+              </>
+            )}
           />
+          <View style={{paddingBottom: '5%', marginTop: '5%'}}>
+            <PrimaryButton
+              title={t('DailyQuiz.SubmitBtn')}
+              disabled={answer.length === Data.length ? false : true}
+              onPress={
+                async () => await handleSubmit()
+                // navigation.navigate('QuizResult', {marks: Marks});
+              }
+            />
+          </View>
         </View>
-      </View>
+      )}
     </ScreenWrapper>
   );
 };

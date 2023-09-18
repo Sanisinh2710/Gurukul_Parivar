@@ -14,3 +14,4 @@ export * from './RoundedIcon';
 export * from './ScreenWrapper';
 export * from './ShareDownloadButton';
 export * from './StatusBar';
+export * from './ImageZoomer';

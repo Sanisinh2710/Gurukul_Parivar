@@ -119,7 +119,7 @@ export const QuizHistory = ({
                                 : isCorrect
                                 ? 'rgba(0, 166, 88, 1)'
                                 : isSelected
-                                ? COLORS.primaryColor
+                                ? 'rgba(255, 48, 48, 1)'
                                 : 'rgba(172, 43, 49, 0.1)',
                           }}>
                           <View>
