@@ -4,6 +4,7 @@ import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ScrollView,
@@ -14,7 +15,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {ImageZoomer, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {options} from '../../../../utils';
+import {COLORS, options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdateDetail = ({
@@ -29,6 +30,8 @@ export const DailyUpdateDetail = ({
   const {t} = useTranslation();
 
   console.log(Data, 'data');
+
+  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
   return (
     <ScreenWrapper>
@@ -63,10 +66,25 @@ export const DailyUpdateDetail = ({
         <View
           onTouchEnd={() => setZoomModalVisiable(true)}
           style={[style.imageContainer]}>
+          {imgLoad && (
+            <ActivityIndicator
+              size={30}
+              color={COLORS.primaryColor}
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+              }}
+            />
+          )}
           <Image
             source={{uri: `${BASE_URL}/${Data.thumbnail[0]}`}}
             style={style.image}
             resizeMode="contain"
+            onLoadStart={() => setimgLoad(true)}
+            onLoadEnd={() => setimgLoad(false)}
           />
         </View>
 

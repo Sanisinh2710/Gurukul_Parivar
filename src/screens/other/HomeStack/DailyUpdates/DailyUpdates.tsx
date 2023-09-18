@@ -51,6 +51,8 @@ export const DailyUpdates = ({
               created_at: string | number | Date;
               date: any;
             }) => {
+              console.log(data, 'backend data');
+
               data.description = data.description;
               data.images = data.images;
               data.thumbnail = data.thumbnail;
@@ -61,9 +63,12 @@ export const DailyUpdates = ({
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
               ) {
+                console.log(new Date(data.created_at), '1');
+
                 let time = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(0, 5);
+
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(8, 12);

@@ -1,7 +1,5 @@
-import {useFocusEffect} from '@react-navigation/native';
 import React from 'react';
-import {BackHandler, Image, Platform, Text, View} from 'react-native';
-import {Alert, Modal} from 'react-native';
+import {Image, Modal, View} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {AllIcons} from '../../../../assets/icons';
 

@@ -3,7 +3,14 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
@@ -34,6 +41,8 @@ export const CalendarScreen = ({
   const [sortedData, setSortedData] = React.useState<{[key: string]: any}[]>(
     [],
   );
+  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
+
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
   const ref = React.useRef<FlatList>(null);
@@ -203,11 +212,25 @@ export const CalendarScreen = ({
                 style={{
                   height: 264,
                   width: 345,
-                  backgroundColor: COLORS.primaryRippleColor,
                   borderRadius: 12,
                 }}>
+                {imgLoad && (
+                  <ActivityIndicator
+                    size={30}
+                    color={COLORS.primaryColor}
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                    }}
+                  />
+                )}
                 <Image
                   source={{uri: `${BASE_URL}${Data[0].image}`}}
+                  onLoadStart={() => setimgLoad(true)}
+                  onLoadEnd={() => setimgLoad(false)}
                   style={{
                     height: '100%',
                     width: '100%',

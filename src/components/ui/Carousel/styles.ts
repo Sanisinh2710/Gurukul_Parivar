@@ -1,5 +1,4 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {COLORS} from '../../../utils';
 
 export const style = (currentPage?: number) => {
   return StyleSheet.create({

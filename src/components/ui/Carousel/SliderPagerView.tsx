@@ -1,11 +1,18 @@
 import React from 'react';
 
 import {BASE_URL} from '@env';
-import {Dimensions, FlatList, Image, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  View,
+} from 'react-native';
 import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
 import {useAppDispatch} from '../../../redux/hooks';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
+import {COLORS} from '../../../utils';
 
 type PagerViewProps = {
   currentPage: number;
@@ -17,6 +24,7 @@ export const PagerView = React.memo(
     const {width, height} = Dimensions.get('window');
 
     const scrollRef = React.useRef<FlatList>(null);
+    const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
 
@@ -62,9 +70,24 @@ export const PagerView = React.memo(
               <View
                 key={index}
                 style={[style().pagerViewImageView, {width: width}]}>
+                {imgLoad && (
+                  <ActivityIndicator
+                    size={30}
+                    color={COLORS.primaryColor}
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                    }}
+                  />
+                )}
                 <Image
                   source={{uri: `${BASE_URL}${images[currentPage]}`}}
                   style={style().pagerViewImage}
+                  onLoadStart={() => setimgLoad(true)}
+                  onLoadEnd={() => setimgLoad(false)}
                 />
               </View>
             );
