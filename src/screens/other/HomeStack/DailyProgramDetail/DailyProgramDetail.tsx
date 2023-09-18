@@ -10,10 +10,10 @@ export const DailyProgramDetail = ({
   const title = route.params?.title;
   const description = route.params?.description;
 
-  const styledHTMLData = description?.replaceAll(
-    '<strong>', // Replace this with the actual HTML element you want to style
-    `<strong style="color: rgb(172,42,43)">`,
-  );
+  // const styledHTMLData = description?.replaceAll(
+  //   '<strong>', // Replace this with the actual HTML element you want to style
+  //   `<strong style="color: rgb(172,42,43)">`,
+  // );
 
   return (
     <ScreenWrapper>
@@ -32,7 +32,7 @@ export const DailyProgramDetail = ({
           margin: 20,
         }}
         source={{
-          html: `<html>${styledHTMLData}</html>`,
+          html: `${description}`,
         }}
       />
     </ScreenWrapper>

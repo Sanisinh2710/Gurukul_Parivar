@@ -27,12 +27,10 @@ export const styles = () => {
     image: {
       height: '100%',
       width: '100%',
+      resizeMode: 'contain',
     },
     imageContainer: {
       height: 350,
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
       marginTop: '3%',
     },
   });
