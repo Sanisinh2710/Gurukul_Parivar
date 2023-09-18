@@ -46,7 +46,6 @@ import {
   SET_ACTIVE_TRACKDATA,
 } from '../../../../redux/ducks/musicSlice';
 import {SongUi} from './SongUi';
-import { isTabletMode } from 'react-native-device-info';
 
 export const GurukulConnect = ({
   navigation,
@@ -63,54 +62,64 @@ export const GurukulConnect = ({
 
   const [songData, setSongData] = React.useState<Array<any>>([...allSongs]);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
+  const [trackStatus , setTrackStatus] = React.useState<State>()
   const [modal, setModal] = React.useState(false);
   const [loader, setLoader] = React.useState({
     status: false,
     index: -1,
   });
-  const trackStatus = usePlaybackState();
   const screenFocused = useIsFocused();
   const [selectedItem, setSelectedItem] = React.useState([]);
   const {position} = useProgress();
 
-  // const handleControl = async (itemId: any) => {
-  //   try {
-  //     const queue = await TrackPlayer.getQueue();
-  //     const isAlbum = queue.filter(item => item.id == itemId);
+  React.useMemo(async()=>{
+    const playerState = await TrackPlayer.getState();
+    console.log("first",playerState);
+    setTrackStatus(playerState);
+  },[Event.PlaybackState])
   
-  //     if (isAlbum.length == 0) {
-  //       screenGoToAlbum.current = true;
-  //       await TrackPlayer.reset();
-  //       await setDataToRedux();
-  //     }
-
-  //     const track = await TrackPlayer.getCurrentTrack();
-
-  //     const trackSkipIndex = queue.findIndex(item => item.id == itemId);
-
-  //     if (trackSkipIndex != track) {
-  //       await TrackPlayer.skip(trackSkipIndex);
-  //       await TrackPlayer.play();
-  //     } else if (trackStatus == State.Playing) {
-  //       await TrackPlayer.pause();
-  //     } else {
-  //       await TrackPlayer.play();
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   const setDataToRedux = async () => {
     const queue = await TrackPlayer.getQueue();
     const response = await GurkulAudioApi();
     if (queue.length > 0) {
       const el = queue.slice(-1)[0].id;
       const el2 = response.data.gurukul_audios.slice(-1)[0].id;
-      console.log(el,el2);
       if (el == el2) {
         screenGoToAlbum.current = false;
         console.log('Same to Same');
+      }
+    }
+    
+    console.log(trackStatus,"THIS inner Staatus");
+    const findSong = response.data.gurukul_audios.filter((item:any)=> item.id == activeTrack?.id);
+    console.log(findSong,"Find Song",trackStatus);
+    if(findSong.length == 0 ||  findSong[0].is_multiple)
+    {
+      screenGoToAlbum.current =  false;
+      if(trackMode.albumId && trackStatus != State.Playing && trackStatus == 'idle')
+      {
+        const albumSong : Array<SongType> = [];
+        const response = await GurukulMultiPartAudio(trackMode.albumId);
+        response.data.group_audios.filter((song:any)=> song.id == activeTrack?.id).map((item:any)=>{
+          albumSong.push({
+            id: item.id,
+          title: item.title,
+          url: BASE_URL + item.audio,
+          status: false,
+          description: item.description,
+          })
+        })
+        response.data.group_audios.filter((song:any)=> song.id != activeTrack?.id).map((item:any)=>{
+          albumSong.push({
+          id: item.id,
+          title: item.title,
+          url: BASE_URL + item.audio,
+          status: false,
+          description: item.description,
+          })
+        })
+        console.log(albumSong, "This My ")
+        await addTracks(albumSong);
       }
     }
 
@@ -159,7 +168,7 @@ export const GurukulConnect = ({
     if(id!=undefined)
     {
     const response = await GurukulMultiPartAudio(id);
-    console.log("\t\t------>>>",queue,"Album Queue")
+    console.log("\t------>>>",queue,"Album Queue")
     if (queue.length <= 0) {
       resetTrack.current = true;
       // const el = queue.slice(-1)[0].id;
@@ -186,11 +195,11 @@ export const GurukulConnect = ({
         });
       });
 
+      
+  
       if (resetTrack.current == true) {
-        // await TrackPlayer.reset();
         await addTracks(SongList);
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
-
       } else {
         dispatch(ADD_UPDATE_SONGS({songs: SongList}));
       }
@@ -203,14 +212,7 @@ export const GurukulConnect = ({
       let isSetup = await setupPlayer();
       console.log(trackMode.setupMode);
       if (isSetup) {
-        console.log(trackMode.setupMode,"-----",trackMode.albumId);
-        if(trackMode.setupMode == 'ALBUM' && trackMode.albumId !=undefined)
-        {
-          await setAlbumDataToRedux(trackMode.albumId);
-        }
-        else{
           await setDataToRedux();
-        }
       }
       setIsPlayerReady(isSetup);
     } catch (e) {

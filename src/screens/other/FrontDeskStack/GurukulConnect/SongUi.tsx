@@ -83,7 +83,13 @@ export const SongUi = ({
         console.log(isAlbum , "<--Is Album" , "\t\tItem-->" ,itemId);
       if (isAlbum.length == 0 && screenGoToAlbum != undefined) {
         screenGoToAlbum.current = true;
-        await setDataToRedux();
+        if(trackMode.setupMode == 'ALBUM')
+        {
+          await setAlbumDataToRedux(trackMode.albumId);
+        }
+        else{
+         await setDataToRedux();
+        }
       }
 
       const track = await TrackPlayer.getCurrentTrack();
@@ -102,16 +108,20 @@ export const SongUi = ({
     }
   };
 
-  const trackPlaying = React.useMemo((): 'PLAYING' | 'PAUSED' | 'BUFFERING' | 'OTHER' => {
+  const trackPlaying = React.useMemo((): 'PLAYING' | 'PAUSED' | 'BUFFERING' | 'IDLE' | 'OTHER' => {
     return trackStatus === State.Playing
       ? 'PLAYING'
       : trackStatus === State.Buffering
       ? 'BUFFERING' 
       : trackStatus == State.Paused 
       ? 'PAUSED'
+      : trackStatus == 'idle' 
+      ? 'IDLE'
       : 'OTHER';
   }, [trackStatus]);
 
+
+  console.log(trackPlaying);
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     try {
       switch (event.type) {
@@ -174,9 +184,9 @@ export const SongUi = ({
           if(trackMode.setupMode == 'ALBUM')
           {
             await setDataToRedux();
-            // dispatch(UPDATE_SETUP_MODE({
-            //   setupMode : 'INITIAL',
-            // }))
+            dispatch(UPDATE_SETUP_MODE({
+              setupMode : 'INITIAL',
+            }))
           }
           else{
           navigation.goBack();

@@ -1,14 +1,14 @@
 import {Slider} from '@miblanchard/react-native-slider';
 import React from 'react';
 import {View, Text, Image, Animated, Easing} from 'react-native';
-import TrackPlayer, {State, Track, useProgress} from 'react-native-track-player';
+import TrackPlayer, {State, Track, usePlaybackState, useProgress} from 'react-native-track-player';
 import {AllIcons} from '../../../../assets/icons';
 import {styles} from './styles';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 type TrackPropsType = {
   activeTrackProp: Track;
-  status : "PLAYING" | "PAUSED" |"BUFFERING" | "OTHER"
+  status : 'PLAYING' | 'PAUSED' |'BUFFERING' | 'IDLE' | 'OTHER'
 };
 
 
@@ -24,6 +24,7 @@ const format = (time: number) => {
 export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   const style = styles();
   const offsetY = React.useRef(new Animated.Value(500)).current;
+
   const {position, duration} = useProgress();
   const {activeTrackPosition} =
   useAppSelector(state => state.music);
@@ -63,14 +64,14 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   React.useEffect(() => {
     const checkCurrentSong = async () => {
       const trackIn = await TrackPlayer.getCurrentTrack();
-      // const trackStatus = await TrackPlayer.getState();
+      const trackStatus = await TrackPlayer.getState();
       if (trackIn != null) { 
         const track = await TrackPlayer.getTrack(trackIn); 
         console.log("TrackControl Component" , activeTrackProp , "Status :",status);
         if (track && activeTrackProp.id != "" && activeTrackProp.id != undefined) {
           if (
             activeTrackProp.id != track.id ||
-            status == 'PAUSED' 
+            trackStatus == State.Paused || trackStatus == 'idle'
             ) {
                 await TrackPlayer.skip(trackIn, activeTrackPosition);
               }
