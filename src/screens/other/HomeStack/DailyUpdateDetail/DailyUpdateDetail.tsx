@@ -29,8 +29,6 @@ export const DailyUpdateDetail = ({
     React.useState<boolean>(false);
   const {t} = useTranslation();
 
-  console.log(Data, 'data');
-
   const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
   return (
