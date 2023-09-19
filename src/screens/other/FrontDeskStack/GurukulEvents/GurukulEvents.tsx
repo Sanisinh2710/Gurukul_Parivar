@@ -141,8 +141,8 @@ export const GurukulEvents = ({
                         }}>
                         <Text style={style.content2}>
                           Time: {item.start_time}
+                          {'  -'}
                         </Text>
-                        <Text>-</Text>
                         <Text style={style.content2}>{item.end_time}</Text>
                       </View>
                     </View>
