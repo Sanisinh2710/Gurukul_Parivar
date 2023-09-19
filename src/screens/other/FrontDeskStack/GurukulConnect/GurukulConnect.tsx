@@ -52,7 +52,7 @@ import {
   setupPlayer,
 } from '../../../../services';
 import {RootStackParamList, SongType} from '../../../../types';
-import {COLORS, CustomFonts, isString} from '../../../../utils';
+import {COLORS, CustomFonts, downloadSong, isString} from '../../../../utils';
 import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
@@ -869,7 +869,14 @@ export const GurukulConnect = ({
                       </View>
                     ) : (
                       <View style={{flexDirection: 'row', gap: 6}}>
-                        <View style={{height: 24, width: 24}}>
+                        <View
+                          style={{height: 24, width: 24}}
+                          onTouchEnd={async () => {
+                            const res = await downloadSong(
+                              item.url,
+                              item.title,
+                            );
+                          }}>
                           <Image
                             style={{
                               width: '100%',
