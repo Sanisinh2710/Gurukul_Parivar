@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {StyleSheet} from 'react-native';
-import {COLORS, CustomFonts} from '../../../../utils';
 import {useAppSelector} from '../../../../redux/hooks';
+import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -88,10 +88,8 @@ export const styles = () => {
     },
     NextBtn: {
       width: '100%',
-      marginTop: 50,
+      marginTop: '25%',
       alignSelf: 'center',
-      position: 'absolute',
-      bottom: 100,
     },
     contentView: {
       marginTop: 10,
