@@ -2,10 +2,17 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {Image, ScrollView, Text, TextInput, View} from 'react-native';
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
+import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
 import {GurukulEventGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, monthsArray} from '../../../../utils';
@@ -20,9 +27,11 @@ export const GurukulEvents = ({
     React.useState<Array<{[key: string]: any}>>(EventData);
   const [loader, setLoader] = React.useState<boolean>(false);
 
-  const style = styles();
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const style = styles();
   const commonstyle = CommonStyle();
+
   const searchEvent = (val: string) => {
     if (val) {
       setSearchListData(
@@ -41,24 +50,31 @@ export const GurukulEvents = ({
     }
   };
 
-  console.log(searchListData, 'Search Data');
-
-  React.useMemo(async () => {
-    setLoader(true);
+  const getAndSetEventData = async () => {
     try {
       const res = await GurukulEventGetApi();
 
       if (res.resType === 'SUCCESS') {
         setEventData(res.data.gurukul_events);
         setSearchListData(res.data.gurukul_events);
-        setLoader(false);
-      } else {
-        setLoader(false);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  React.useMemo(async () => {
+    setLoader(true);
+    await getAndSetEventData();
+    setLoader(false);
   }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getAndSetEventData();
+    setRefreshing(false);
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -69,23 +85,34 @@ export const GurukulEvents = ({
         }}
         headerTitle={'Gurukul Events'}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1, marginTop: 25}]}>
-        <>
-          <View style={style.modelSearchView}>
-            <View style={style.iconView}>
-              <Image source={AllIcons.Search} style={style.iconStyle} />
+      <View style={[commonstyle.commonContentView, {flex: 1, marginTop: '3%'}]}>
+        {loader ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                colors={[COLORS.primaryColor, COLORS.green]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+            contentContainerStyle={{paddingBottom: '10%'}}
+            showsVerticalScrollIndicator={false}>
+            <View style={style.modelSearchView}>
+              <View style={style.iconView}>
+                <Image source={AllIcons.Search} style={style.iconStyle} />
+              </View>
+              <TextInput
+                // value={searchvalue}
+                placeholder={t('common.Search')}
+                placeholderTextColor={COLORS.lightModetextColor}
+                style={[style.formTextInput, {width: '80%'}]}
+                onChangeText={val => {
+                  searchEvent(val.trim());
+                }}
+              />
             </View>
-            <TextInput
-              // value={searchvalue}
-              placeholder={t('common.Search')}
-              placeholderTextColor={COLORS.lightModetextColor}
-              style={[style.formTextInput, {width: '80%'}]}
-              onChangeText={val => {
-                searchEvent(val.trim());
-              }}
-            />
-          </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
             {searchListData.length > 0 &&
               searchListData.map((item, index) => {
                 return (
@@ -117,7 +144,7 @@ export const GurukulEvents = ({
                 );
               })}
           </ScrollView>
-        </>
+        )}
       </View>
     </ScreenWrapper>
   );

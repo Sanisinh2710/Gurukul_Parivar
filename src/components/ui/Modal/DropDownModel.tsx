@@ -179,6 +179,7 @@ export const DropDownModel = React.memo(
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        marginBottom: '3%',
                       }}>
                       <Text style={style.modelLabelText}>{label}</Text>
                       <Text
@@ -221,7 +222,12 @@ export const DropDownModel = React.memo(
                   )}
                   <FlatList
                     keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={style.modelFlatListContainerStyle}
+                    contentContainerStyle={[
+                      style.modelFlatListContainerStyle,
+                      {
+                        paddingBottom: '48%',
+                      },
+                    ]}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                     data={wantSearchBar ? searchedData : inputList}
@@ -490,9 +496,8 @@ export const DropDownModel = React.memo(
                         setModelVisible(false);
                       }}
                       buttonStyle={{
-                        position: 'absolute',
                         width: '100%',
-                        bottom: `5%`,
+                        bottom: `22%`,
                         alignSelf: 'center',
                         backgroundColor: 'red',
                       }}

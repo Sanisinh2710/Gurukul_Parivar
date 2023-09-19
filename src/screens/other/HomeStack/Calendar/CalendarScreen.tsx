@@ -152,8 +152,12 @@ export const CalendarScreen = ({
         headerTitle={t('homeScreen.Calendar')}
       />
       <ScrollView
-        contentContainerStyle={[commonstyle.commonContentView, {flex: 1}]}
+        contentContainerStyle={[
+          commonstyle.commonContentView,
+          {flex: 1, alignItems: 'center', justifyContent: 'center'},
+        ]}
         scrollEnabled={false}
+        horizontal
         refreshControl={
           <RefreshControl
             colors={[COLORS.primaryColor, COLORS.green]}
@@ -168,7 +172,7 @@ export const CalendarScreen = ({
           sortedData.length > 0 ? (
           <View>
             {sortedData.length > 0 && (
-              <View style={{height: '28%', marginTop: 20}}>
+              <View style={{height: '22%', marginTop: 20}}>
                 <FlatList
                   data={sortedData}
                   ref={ref}

@@ -2,12 +2,19 @@ import React from 'react';
 
 import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, Pressable, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {DailyProgramGetApi} from '../../../../services';
 import {DailyProgramProps} from '../../../../types';
 import {COLORS, CustomFonts} from '../../../../utils';
-import {DailyProgramGetApi} from '../../../../services';
 
 export const DailyProgram = ({
   navigation,
@@ -25,23 +32,31 @@ export const DailyProgram = ({
     }[]
   >([]);
 
-  React.useMemo(async () => {
-    setLoader(true);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const getAndSetDailyPrograms = async () => {
     try {
       const res = await DailyProgramGetApi();
 
       if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setDailyProgramData(res.data.daily_programs);
-          setLoader(false);
-        }, 1000);
-      } else {
-        setLoader(false);
+        setDailyProgramData(res.data.daily_programs);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  React.useMemo(async () => {
+    setLoader(true);
+    await getAndSetDailyPrograms();
+    setLoader(false);
   }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getAndSetDailyPrograms();
+    setRefreshing(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -63,6 +78,13 @@ export const DailyProgram = ({
               gap: 15,
               marginTop: '10%',
             }}
+            refreshControl={
+              <RefreshControl
+                colors={[COLORS.primaryColor, COLORS.green]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
             data={DailyProgramData}
             renderItem={({item, index}) => {
               return (
