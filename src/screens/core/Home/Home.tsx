@@ -146,10 +146,10 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {userData.userdata.full_name}
+                {userData?.userdata?.full_name?.split(' ')?.at(0)}
                 <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
                   {' '}
-                  {userData.userdata.id}
+                  {userData?.userdata?.id}
                 </Text>
               </Text>
             </View>

@@ -3,6 +3,7 @@ import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  Dimensions,
   Image,
   RefreshControl,
   ScrollView,
@@ -12,7 +13,12 @@ import {
 } from 'react-native';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
-import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {GurukulEventGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, monthsArray} from '../../../../utils';
@@ -113,7 +119,7 @@ export const GurukulEvents = ({
                 }}
               />
             </View>
-            {searchListData.length > 0 &&
+            {searchListData.length > 0 ? (
               searchListData.map((item, index) => {
                 return (
                   <View key={index} style={style.textBoxContainer}>
@@ -142,7 +148,12 @@ export const GurukulEvents = ({
                     </View>
                   </View>
                 );
-              })}
+              })
+            ) : (
+              <View style={{height: Dimensions.get('window').height * 0.65}}>
+                <NoData />
+              </View>
+            )}
           </ScrollView>
         )}
       </View>

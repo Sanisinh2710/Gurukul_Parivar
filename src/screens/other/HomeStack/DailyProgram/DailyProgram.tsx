@@ -3,6 +3,7 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {useTranslation} from 'react-i18next';
 import {
+  Dimensions,
   FlatList,
   Image,
   Pressable,
@@ -11,7 +12,12 @@ import {
   View,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {Loader, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '../../../../components';
 import {DailyProgramGetApi} from '../../../../services';
 import {DailyProgramProps} from '../../../../types';
 import {COLORS, CustomFonts} from '../../../../utils';
@@ -71,7 +77,7 @@ export const DailyProgram = ({
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         {loader ? (
           <Loader />
-        ) : (
+        ) : DailyProgramData.length > 0 ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
@@ -147,6 +153,13 @@ export const DailyProgram = ({
               );
             }}
           />
+        ) : (
+          <View
+            style={{
+              height: Dimensions.get('window').height * 0.8,
+            }}>
+            <NoData />
+          </View>
         )}
       </View>
     </ScreenWrapper>

@@ -1057,7 +1057,7 @@ export const GurukulConnect = ({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           wantResetButton={true}
-          label="G-connect Categories"
+          label="G-Connect Categories"
           wantApplyButton={true}
         />
       </ScreenWrapper>
