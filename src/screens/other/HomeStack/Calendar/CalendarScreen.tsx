@@ -5,6 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   Image,
   RefreshControl,
@@ -33,6 +34,8 @@ export const CalendarScreen = ({
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
+
+  const {width, height} = Dimensions.get('window');
 
   const [imgLoad, setimgLoad] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
@@ -170,9 +173,23 @@ export const CalendarScreen = ({
           <Loader />
         ) : (Data.length > 0 && Data[0].image !== undefined) ||
           sortedData.length > 0 ? (
-          <View>
+          <View
+            style={[
+              {
+                height: height * 0.8,
+              },
+              sortedData.length <= 0
+                ? {
+                    justifyContent: 'center',
+                  }
+                : {},
+            ]}>
             {sortedData.length > 0 && (
-              <View style={{height: '22%', marginTop: 20}}>
+              <View
+                style={{
+                  height: height * 0.2,
+                  marginTop: 10,
+                }}>
                 <FlatList
                   data={sortedData}
                   ref={ref}
@@ -180,7 +197,7 @@ export const CalendarScreen = ({
                   contentContainerStyle={{
                     gap: 15,
                   }}
-                  showsVerticalScrollIndicator
+                  showsVerticalScrollIndicator={false}
                   getItemLayout={(data, index) => {
                     return {
                       length: 79,
@@ -223,46 +240,50 @@ export const CalendarScreen = ({
             )}
 
             {Data.length > 0 && Data[0].image !== undefined && (
-              <>
+              <View
+                style={[
+                  {
+                    alignItems: 'center',
+                  },
+                  sortedData.length <= 0
+                    ? {
+                        justifyContent: 'center',
+                      }
+                    : {
+                        marginTop: '10%',
+                      },
+                ]}>
                 <View
-                  style={[
-                    {marginTop: '25%', alignSelf: 'center'},
-                    sortedData.length <= 0 && {
-                      marginTop: '50%',
-                    },
-                  ]}>
-                  <View
-                    onTouchEnd={() => setZoomModalVisiable(true)}
-                    style={{
-                      height: 264,
-                      width: 345,
-                      borderRadius: 12,
-                    }}>
-                    {imgLoad && (
-                      <ActivityIndicator
-                        size={30}
-                        color={COLORS.primaryColor}
-                        style={{
-                          position: 'absolute',
-                          left: 0,
-                          right: 0,
-                          top: 0,
-                          bottom: 0,
-                        }}
-                      />
-                    )}
-                    <Image
-                      source={{uri: `${BASE_URL}${Data[0].image}`}}
+                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  style={{
+                    height: 264,
+                    width: 345,
+                    borderRadius: 12,
+                  }}>
+                  {imgLoad && (
+                    <ActivityIndicator
+                      size={30}
+                      color={COLORS.primaryColor}
                       style={{
-                        height: '100%',
-                        width: '100%',
-                        borderRadius: 12,
-                        resizeMode: 'cover',
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
                       }}
-                      onLoadStart={() => setimgLoad(true)}
-                      onLoadEnd={() => setimgLoad(false)}
                     />
-                  </View>
+                  )}
+                  <Image
+                    source={{uri: `${BASE_URL}${Data[0].image}`}}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      borderRadius: 12,
+                      resizeMode: 'cover',
+                    }}
+                    onLoadStart={() => setimgLoad(true)}
+                    onLoadEnd={() => setimgLoad(false)}
+                  />
                 </View>
                 <ImageZoomer
                   images={[{url: `${BASE_URL}${Data?.[0].image}`}]}
@@ -273,7 +294,7 @@ export const CalendarScreen = ({
                   wallpaper={false}
                   imgURL={wallpaper && wallpaper}
                 />
-              </>
+              </View>
             )}
           </View>
         ) : (

@@ -12,7 +12,6 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Carousel,
-  CarouselMethodsType,
   CustomNavigate,
   ImageZoomer,
   ScreenHeader,
@@ -20,6 +19,7 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
+import {CarouselRef} from '../../../../types/Carousel';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
@@ -47,7 +47,7 @@ export const DailyDarshanDetail = ({
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
 
-  const ref = React.useRef<CarouselMethodsType>(null);
+  const ref = React.useRef<CarouselRef>(null);
 
   return (
     <ScreenWrapper>
@@ -66,8 +66,8 @@ export const DailyDarshanDetail = ({
             marginTop: '5%',
           }}
           itemWidth={Dimensions.get('window').width * 0.9}
-          itemHeight={Dimensions.get('window').height * 0.7}
-          itemGap={10}
+          itemHeight={Dimensions.get('window').height * 0.65}
+          itemGap={20}
           data={AllData}
           initialScrollToIndex={currentImageIndex}
           onSnapToItem={index => {

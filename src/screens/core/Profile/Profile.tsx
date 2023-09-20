@@ -276,10 +276,10 @@ export const ProfileScreen = ({
           />
         </View>
         <DropDownModel
+          type={'none'}
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          type={'phone'}
-          modalHeight={'50%'}
+          modalHeight={'55%'}
           customModelchild={
             <View style={{alignItems: 'center', marginTop: '5%'}}>
               <View style={{height: 80, width: 80}}>
@@ -384,7 +384,7 @@ export const ProfileScreen = ({
             </View>
           }
           type={'none'}
-          modalHeight={'30%'}
+          modalHeight={'40%'}
         />
         <DropDownModel
           viewPhoto={true}

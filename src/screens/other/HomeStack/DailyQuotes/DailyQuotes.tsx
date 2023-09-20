@@ -142,16 +142,6 @@ export const DailyQuotes = ({
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
 
-  // React.useEffect(() => {
-  //   if (DailyQuotes) {
-  //     setImgLoad([
-  //       ...DailyQuotes?.map(item => {
-  //         return true;
-  //       }),
-  //     ]);
-  //   }
-  // }, [DailyQuotes]);
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -259,10 +249,8 @@ export const DailyQuotes = ({
                           marginTop: '3%',
                         }}>
                         <Carousel
-                          contentContainerStyle={{
-                            right: 3,
-                          }}
                           itemWidth={Dimensions.get('window').width * 0.91}
+                          itemGap={10}
                           data={DailyQuotes}
                           onSnapToItem={index => {
                             setItemIndex(index);
@@ -345,14 +333,12 @@ export const DailyQuotes = ({
           </View>
         </View>
       </ScrollView>
-      <View>
-        <Calendar
-          setCalendarVisible={setCalendarVisible}
-          calendarVisible={calendarVisible}
-          selectedParentDate={selectedDate}
-          setSelectedParentDate={setSelectedDate}
-        />
-      </View>
+      <Calendar
+        setCalendarVisible={setCalendarVisible}
+        calendarVisible={calendarVisible}
+        selectedParentDate={selectedDate}
+        setSelectedParentDate={setSelectedDate}
+      />
       <CustomNavigate
         text={
           selectedDate !== undefined

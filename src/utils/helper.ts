@@ -1,4 +1,4 @@
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
   ImagePickerResponse,
@@ -45,16 +45,16 @@ export const captureImage = async (type: MediaType) => {
       },
       response => {
         if (response.didCancel) {
-          Alert.alert('User cancelled camera picker');
+          console.log('User cancelled camera picker');
         }
         if (response.errorCode == 'camera_unavailable') {
-          Alert.alert('Camera not available on device');
+          console.log('Camera not available on device');
         }
         if (response.errorCode == 'permission') {
-          Alert.alert('Permission not satisfied');
+          console.log('Permission not satisfied');
         }
         if (response.errorCode == 'others') {
-          Alert.alert(`${response.errorMessage}`);
+          console.log(`${response.errorMessage}`);
         }
       },
     );
@@ -74,16 +74,16 @@ export const chooseFile = async (type: MediaType) => {
   let mainuri: ImagePickerResponse;
   mainuri = await launchImageLibrary(options, response => {
     if (response.didCancel) {
-      Alert.alert('User cancelled camera picker');
+      console.log('User cancelled camera picker');
     }
     if (response.errorCode == 'camera_unavailable') {
-      Alert.alert('Camera not available on device');
+      console.log('Camera not available on device');
     }
     if (response.errorCode == 'permission') {
-      Alert.alert('Permission not satisfied');
+      console.log('Permission not satisfied');
     }
     if (response.errorCode == 'others') {
-      Alert.alert(`${response.errorMessage}`);
+      console.log(`${response.errorMessage}`);
     }
   });
 
@@ -241,7 +241,7 @@ export const CustomDateSplitAndFormat = (
 //   }
 // };
 
-export const checkPermission = async () => {
+export const checkPermissionOfWritingStorage = async () => {
   try {
     let deviceVersionInfo = DeviceInfo.getSystemVersion();
     let granted = PermissionsAndroid.RESULTS.GRANTED;
@@ -316,7 +316,7 @@ export const downloadSong = async (
   songName: string,
 ) => {
   try {
-    const permissionResponse = await checkPermission();
+    const permissionResponse = await checkPermissionOfWritingStorage();
     if (permissionResponse) {
       let resType: 'SUCCESS' | 'ERROR';
       let date = new Date();

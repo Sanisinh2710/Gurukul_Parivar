@@ -1,41 +1,16 @@
 import React from 'react';
 
-import {
-  FlatList,
-  ListRenderItem,
-  StyleProp,
-  View,
-  ViewStyle,
-} from 'react-native';
-
-type DataType = ArrayLike<{[key: string]: any}>;
-
-type CarouselProps = {
-  data: DataType;
-  renderItem: ListRenderItem<any>;
-  itemWidth: number;
-  itemHeight?: number;
-  itemGap?: number;
-  contentContainerStyle?: StyleProp<ViewStyle>;
-  itemStyle?: StyleProp<ViewStyle>;
-  initialScrollToIndex?: number;
-  onSnapToItem?(slideIndex: number): void;
-};
-
-export type CarouselMethodsType = {
-  /**
-   * Use This method to skip to the next index...
-   */
-  handleNext(): void;
-  /**
-   * Use this method to skip to the previous index...
-   */
-  handlePrev(): void;
-};
+import {FlatList, View} from 'react-native';
+import {CarouselProps, CarouselRef} from '../../../types/Carousel';
 
 export const Carousel = React.forwardRef(
   (
-    {
+    props: CarouselProps,
+    ref: React.ForwardedRef<CarouselRef>,
+  ): React.JSX.Element => {
+    const [currentScrollIndex, setCurrentScrollIndex] = React.useState(0);
+
+    const {
       data,
       renderItem,
       contentContainerStyle,
@@ -45,10 +20,7 @@ export const Carousel = React.forwardRef(
       itemStyle,
       initialScrollToIndex,
       onSnapToItem,
-    }: CarouselProps,
-    ref: React.ForwardedRef<CarouselMethodsType>,
-  ): React.JSX.Element => {
-    const [currentScrollIndex, setCurrentScrollIndex] = React.useState(0);
+    } = props;
 
     const scrollRef = React.useRef<FlatList>(null);
 
@@ -72,7 +44,7 @@ export const Carousel = React.forwardRef(
       }
     }, []);
 
-    const ChildMethods = (): CarouselMethodsType => {
+    const ChildMethods = (): CarouselRef => {
       return {
         handleNext() {
           if (currentScrollIndex < data.length - 1) {
@@ -125,7 +97,7 @@ export const Carousel = React.forwardRef(
               setCurrentScrollIndex(parseInt((x / itemWidth).toFixed(0)));
             }
           }}
-          onMomentumScrollEnd={e => {
+          onMomentumScrollEnd={() => {
             if (itemWidth !== null && itemWidth !== undefined) {
               if (
                 onSnapToItem &&

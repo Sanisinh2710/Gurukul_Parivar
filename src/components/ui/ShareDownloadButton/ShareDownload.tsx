@@ -85,7 +85,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
-  const checkPermission = async () => {
+  const checkPermissionOfWritingStorage = async () => {
     if (Platform.OS === 'ios') {
       downloadImage();
     } else {
@@ -245,7 +245,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </>
           </View>
           <View
-            onTouchEnd={checkPermission}
+            onTouchEnd={checkPermissionOfWritingStorage}
             style={[
               style.iconContainer,
               {backgroundColor: 'rgba(174, 73, 141, 1)'},

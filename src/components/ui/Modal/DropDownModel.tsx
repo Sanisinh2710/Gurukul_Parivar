@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {FlatList, Modal, Text, TextInput, View} from 'react-native';
+import {Dimensions, FlatList, Modal, Text, TextInput, View} from 'react-native';
 
 import {Image} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
@@ -55,6 +55,8 @@ export const DropDownModel = React.memo(
     const style = ModalStyle(modalHeight);
 
     const {t} = useTranslation();
+
+    const {width, height} = Dimensions.get('window');
 
     const touchY = React.useRef<any>();
 
@@ -222,7 +224,7 @@ export const DropDownModel = React.memo(
                   )}
                   <View
                     style={{
-                      height: wantApplyButton ? '65%' : 'auto',
+                      height: wantApplyButton ? height * 0.43 : 'auto',
                     }}>
                     <FlatList
                       keyboardShouldPersistTaps="handled"
@@ -498,7 +500,6 @@ export const DropDownModel = React.memo(
                   {wantApplyButton && (
                     <View
                       style={{
-                        height: '35%',
                         alignItems: 'center',
                       }}>
                       <PrimaryButton
