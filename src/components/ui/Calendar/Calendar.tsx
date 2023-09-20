@@ -222,12 +222,20 @@ export const Calendar = ({
     <Modal
       transparent
       visible={calendarVisible}
-      animationType="slide"
+      animationType="fade"
       onDismiss={() => {
         setCalendarVisible(false);
       }}>
-      <View style={styles.mainContainer}>
-        <View style={styles.container}>
+      <View
+        style={styles.mainContainer}
+        onTouchEnd={() => {
+          setCalendarVisible(false);
+        }}>
+        <View
+          style={styles.container}
+          onTouchEnd={e => {
+            e.stopPropagation();
+          }}>
           <View style={styles.header}>
             <TouchableOpacity
               onPress={handleOpenYearModal}

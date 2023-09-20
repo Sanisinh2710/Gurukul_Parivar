@@ -73,7 +73,6 @@ export const ModalStyle = (modalHeight: any) => {
     },
     modelFlatListContainerStyle: {
       paddingTop: 30,
-      paddingBottom: '40%',
       gap: 25,
     },
     modelMenuView: {
