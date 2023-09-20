@@ -8,6 +8,7 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  ScrollView,
   Text,
   View,
 } from 'react-native';
@@ -66,30 +67,6 @@ export const CalendarScreen = ({
     setSelectedDate(NextDate);
   };
 
-  const listIndex = () => {
-    return sortedData.findIndex(
-      event => event.date >= d.toISOString().substring(0, 10),
-    );
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    try {
-      const newDate = new Date(
-        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
-      );
-      const res = await CalendarGetApi(newDate);
-      if (res.resType === 'SUCCESS') {
-        setTimeout(() => {
-          setData(res.data.calendar);
-          setLoader(false);
-        }, 200);
-      }
-    } catch (error) {}
-
-    setRefreshing(false);
-  };
-
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -132,7 +109,11 @@ export const CalendarScreen = ({
       setSortedData([]);
     }
   }, [todayEvent]);
-
+  const listIndex = () => {
+    return sortedData.findIndex(
+      event => event.date >= d.toISOString().substring(0, 10),
+    );
+  };
   React.useEffect(() => {
     if (sortedData.length > 0 && listIndex() !== -1) {
       ref.current?.scrollToIndex({
@@ -141,6 +122,24 @@ export const CalendarScreen = ({
       });
     }
   }, [sortedData]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const newDate = new Date(
+        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}`,
+      );
+      const res = await CalendarGetApi(newDate);
+      if (res.resType === 'SUCCESS') {
+        setTimeout(() => {
+          setData(res.data.calendar);
+          setLoader(false);
+        }, 200);
+      }
+    } catch (error) {}
+
+    setRefreshing(false);
+  };
 
   return (
     <ScreenWrapper>
@@ -152,20 +151,32 @@ export const CalendarScreen = ({
         }}
         headerTitle={t('homeScreen.Calendar')}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
+      <ScrollView
+        contentContainerStyle={[commonstyle.commonContentView, {flex: 1}]}
+        scrollEnabled={false}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        nestedScrollEnabled={true}>
         {loader ? (
           <Loader />
         ) : (Data.length > 0 && Data[0].image !== undefined) ||
           sortedData.length > 0 ? (
           <View>
             {sortedData.length > 0 && (
-              <View style={{height: '28%', top: 20}}>
+              <View style={{height: '28%', marginTop: 20}}>
                 <FlatList
                   data={sortedData}
                   ref={ref}
+                  nestedScrollEnabled={true}
                   contentContainerStyle={{
                     gap: 15,
                   }}
+                  showsVerticalScrollIndicator
                   getItemLayout={(data, index) => {
                     return {
                       length: 79,
@@ -173,13 +184,6 @@ export const CalendarScreen = ({
                       index,
                     };
                   }}
-                  refreshControl={
-                    <RefreshControl
-                      colors={[COLORS.primaryColor, COLORS.green]}
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                  }
                   renderItem={({item, index}) => (
                     <View
                       key={index.toString()}
@@ -198,7 +202,7 @@ export const CalendarScreen = ({
                           },
                         ]}>
                         <Text style={style.date}>
-                          {item.date?.split('-')[2]}
+                          {item.date.split('-')[2]}
                         </Text>
                         <Text style={style.day}>
                           {daysArray[new Date(item.date).getDay()]}
@@ -276,7 +280,7 @@ export const CalendarScreen = ({
             <NoData />
           </View>
         )}
-      </View>
+      </ScrollView>
       <CustomNavigate
         handleNextPress={handleNext}
         handlePrevPress={handlePrev}

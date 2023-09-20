@@ -53,13 +53,15 @@ export const Carousel = React.forwardRef(
     const scrollRef = React.useRef<FlatList>(null);
 
     const handlePageChange = (index: number) => {
-      if (index <= data.length - 1 && index >= 0) {
-        scrollRef.current?.scrollToIndex({
-          animated: true,
-          index: index,
-        });
-        if (onSnapToItem) {
-          onSnapToItem(index);
+      if (data.length > 0) {
+        if (index <= data.length - 1) {
+          scrollRef.current?.scrollToIndex({
+            animated: true,
+            index: index,
+          });
+          if (onSnapToItem) {
+            onSnapToItem(index);
+          }
         }
       }
     };

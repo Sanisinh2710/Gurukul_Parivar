@@ -1,4 +1,5 @@
 import React from 'react';
+import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyProgramDetailProps} from '../../../../types';

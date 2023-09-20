@@ -15,42 +15,39 @@ import {Snail} from './SnailIndicator';
 import {style} from './styles';
 
 type PagerViewProps = {
-  currentPage: number;
+  currentIndex: number;
   images: any[];
 };
 
 export const PagerView = React.memo(
-  ({currentPage, images}: PagerViewProps): React.JSX.Element => {
-    const {width, height} = Dimensions.get('window');
+  ({currentIndex, images}: PagerViewProps): React.JSX.Element => {
+    const {width} = Dimensions.get('window');
 
     const scrollRef = React.useRef<FlatList>(null);
+
     const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
 
-    const handlePageChange = () => {
-      if (images.length > 0) {
-        if (currentPage < images.length - 1) {
-          scrollRef.current?.scrollToIndex({
-            animated: true,
-            index: currentPage + 1,
-          });
-        } else {
-          scrollRef.current?.scrollToIndex({
-            animated: true,
-            index: 0,
-          });
-        }
-      }
-    };
-
     React.useEffect(() => {
       const timer = setTimeout(() => {
-        handlePageChange();
-      }, 2000);
+        if (images.length > 0) {
+          if (currentIndex < images.length - 1) {
+            scrollRef.current?.scrollToIndex({
+              animated: true,
+              index: currentIndex + 1,
+            });
+          } else {
+            scrollRef.current?.scrollToIndex({
+              animated: true,
+              index: 0,
+            });
+          }
+        }
+      }, 3000);
 
       return () => clearTimeout(timer);
-    }, [currentPage]);
+    }, [currentIndex]);
 
     return (
       <View style={style().pagerViewMainView}>
@@ -63,9 +60,20 @@ export const PagerView = React.memo(
           }}
           showsHorizontalScrollIndicator={false}
           pagingEnabled={true}
+          getItemLayout={(data, index) => {
+            return {
+              length: width,
+              offset: width * index,
+              index,
+            };
+          }}
           onScroll={e => {
             const x = e.nativeEvent.contentOffset.x;
-            dispatch(CHANGE_PAGE({nextPage: parseInt((x / width).toFixed(0))}));
+            if (currentIndex !== parseInt((x / width).toFixed(0))) {
+              dispatch(
+                CHANGE_PAGE({nextPage: parseInt((x / width).toFixed(0))}),
+              );
+            }
           }}
           renderItem={({item, index}) => {
             return (
@@ -86,7 +94,7 @@ export const PagerView = React.memo(
                   />
                 )}
                 <Image
-                  source={{uri: `${BASE_URL}${images[currentPage]}`}}
+                  source={{uri: `${BASE_URL}${images[currentIndex]}`}}
                   style={style().pagerViewImage}
                   onLoadStart={() => setimgLoad(true)}
                   onLoadEnd={() => setimgLoad(false)}
@@ -96,7 +104,7 @@ export const PagerView = React.memo(
           }}
         />
 
-        <Snail snailLength={images.length} activeTabIndex={currentPage + 1} />
+        <Snail snailLength={images.length} activeTabIndex={currentIndex + 1} />
       </View>
     );
   },
