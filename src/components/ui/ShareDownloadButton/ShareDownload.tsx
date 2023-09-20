@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Dimensions,
   Easing,
   Image,
   NativeModules,
@@ -41,6 +42,8 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const [isDownloading, setIsdownloading] = React.useState(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
+
+  const {height} = Dimensions.get('window');
 
   const [modalForWallpaper, setModalForWallpaper] =
     React.useState<boolean>(false);
@@ -87,6 +90,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
   const checkPermissionOfWritingStorage = async () => {
     if (Platform.OS === 'ios') {
+      // Implement Downloading logic for photos on ios:-----------------------
       downloadImage();
     } else {
       try {
@@ -101,7 +105,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         }
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          downloadImage();
+          await downloadImage();
           setModalVisible(!modalVisible);
         } else {
           Toast.show('Storage Permission Required', 2);
@@ -201,7 +205,11 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
-              onTouchEnd={() => setModalForWallpaper(!modalForWallpaper)}
+              onTouchEnd={
+                isDownloading
+                  ? () => {}
+                  : () => setModalForWallpaper(!modalForWallpaper)
+              }
               style={[
                 style.iconContainer,
                 {backgroundColor: 'rgba(98, 177, 158, 1)'},
@@ -306,6 +314,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       />
 
       <DropDownModel
+        modalHeight={`${height * 0.045}%`}
         customModelchild={
           <>
             <Pressable
@@ -340,7 +349,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </Pressable>
           </>
         }
-        modalHeight="30%"
         setModelVisible={setModalForWallpaper}
         type={'none'}
         modelVisible={modalForWallpaper}

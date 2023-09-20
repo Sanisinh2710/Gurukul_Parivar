@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ImageZoomer, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, options} from '../../../../utils';
 import {styles} from './styles';
@@ -25,8 +25,7 @@ export const DailyUpdateDetail = ({
   const style = styles();
   const commonstyle = CommonStyle();
   const Data = route.params.data;
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
+
   const {t} = useTranslation();
 
   const [imgLoad, setimgLoad] = React.useState<boolean>(false);
@@ -62,7 +61,11 @@ export const DailyUpdateDetail = ({
         </View>
 
         <View
-          onTouchEnd={() => setZoomModalVisiable(true)}
+          onTouchEnd={() => {
+            navigation.navigate('ImageZommer', {
+              images: [{url: `${BASE_URL}${Data.thumbnail[0]}`}],
+            });
+          }}
           style={[style.imageContainer]}>
           {imgLoad && (
             <ActivityIndicator
@@ -137,11 +140,6 @@ export const DailyUpdateDetail = ({
           />
         </View>
       </ScrollView>
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${Data.images[0]}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
-      />
     </ScreenWrapper>
   );
 };

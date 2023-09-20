@@ -399,7 +399,7 @@ export const LoginScreen = ({
         <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          inputList={Object.values(Languages)}
+          inputList={[...Object.values(Languages)]}
           wantSearchBar={false}
           type={'radio'}
           selectedItem={language}

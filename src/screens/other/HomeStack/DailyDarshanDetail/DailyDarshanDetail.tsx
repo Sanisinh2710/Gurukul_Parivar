@@ -14,7 +14,6 @@ import {
   Carousel,
   CarouselRef,
   CustomNavigate,
-  ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
   ShareDownload,
@@ -43,9 +42,6 @@ export const DailyDarshanDetail = ({
   const currentImageUri = React.useMemo(() => {
     return AllData?.[pagination - 1];
   }, [AllData, pagination]);
-
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
 
   const ref = React.useRef<CarouselRef>(null);
 
@@ -77,7 +73,11 @@ export const DailyDarshanDetail = ({
             return (
               <>
                 <View
-                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  onTouchEnd={() => {
+                    navigation.navigate('ImageZommer', {
+                      images: [{url: `${BASE_URL}${item}`}],
+                    });
+                  }}
                   style={[
                     {
                       height: '100%',
@@ -132,11 +132,6 @@ export const DailyDarshanDetail = ({
             ref.current?.handlePrev();
           }
         }}
-      />
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${currentImageUri}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

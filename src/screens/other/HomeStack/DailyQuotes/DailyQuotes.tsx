@@ -21,7 +21,6 @@ import {
   Calendar,
   Carousel,
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -57,11 +56,6 @@ export const DailyQuotes = ({
   const [imgLoad, setImgLoad] = React.useState<boolean>(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
-
-  const [currentImageUri, setCurrentImageUri] = React.useState<string>();
-
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
@@ -79,7 +73,6 @@ export const DailyQuotes = ({
     }
   }, [changeValue, GurukulList]);
 
-  const {width: screenWidth} = Dimensions.get('window');
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -197,7 +190,7 @@ export const DailyQuotes = ({
           />
         }>
         <View style={[commonStyle.commonContentView, {flex: 1}]}>
-          <View style={{height: '8%', marginBottom: '16%'}}>
+          <View style={{height: 60, marginBottom: '16%'}}>
             <View
               style={{
                 marginTop: '5%',
@@ -268,8 +261,11 @@ export const DailyQuotes = ({
                                   <View
                                     style={{flex: 1, width: '100%'}}
                                     onTouchEnd={() => {
-                                      setCurrentImageUri(item.image);
-                                      setZoomModalVisiable(true);
+                                      navigation.navigate('ImageZommer', {
+                                        images: [
+                                          {url: `${BASE_URL}${item.image}`},
+                                        ],
+                                      });
                                     }}>
                                     {imgLoad && (
                                       <ActivityIndicator
@@ -289,13 +285,6 @@ export const DailyQuotes = ({
                                         uri: `${BASE_URL}${item.image}`,
                                       }}
                                       style={style.image}
-                                      // onLoad={() => {
-                                      //   let newLoadState = JSON.parse(
-                                      //     JSON.stringify(imgLoad),
-                                      //   );
-                                      //   newLoadState[index] = false;
-                                      //   setImgLoad(newLoadState);
-                                      // }}
                                       onLoadStart={() => setImgLoad(true)}
                                       onLoadEnd={() => setImgLoad(false)}
                                     />
@@ -347,11 +336,6 @@ export const DailyQuotes = ({
         }
         handlePrevPress={handlePrev}
         handleNextPress={handleNext}
-      />
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${currentImageUri}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

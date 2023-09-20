@@ -6,6 +6,7 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  Dimensions,
   Image,
   Pressable,
   ScrollView,
@@ -57,6 +58,8 @@ export const ProfileScreen = ({
 
   const style = styles();
   const commonStyle = CommonStyle();
+
+  const {height} = Dimensions.get('window');
 
   const ProfileList = React.useMemo(() => {
     return EditProfileList(t, i18n);
@@ -279,7 +282,7 @@ export const ProfileScreen = ({
           type={'none'}
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          modalHeight={'55%'}
+          modalHeight={`${height * 0.065}%`}
           customModelchild={
             <View style={{alignItems: 'center', marginTop: '5%'}}>
               <View style={{height: 80, width: 80}}>
@@ -384,7 +387,7 @@ export const ProfileScreen = ({
             </View>
           }
           type={'none'}
-          modalHeight={'40%'}
+          modalHeight={`${height * 0.045}%`}
         />
         <DropDownModel
           viewPhoto={true}

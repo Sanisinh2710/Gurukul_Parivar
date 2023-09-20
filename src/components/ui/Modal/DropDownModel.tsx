@@ -231,7 +231,7 @@ export const DropDownModel = React.memo(
                       contentContainerStyle={[
                         style.modelFlatListContainerStyle,
                         {
-                          paddingBottom: '10%',
+                          paddingBottom: '40%',
                         },
                       ]}
                       showsHorizontalScrollIndicator={false}

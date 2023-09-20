@@ -16,7 +16,6 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -254,7 +253,11 @@ export const CalendarScreen = ({
                       },
                 ]}>
                 <View
-                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  onTouchEnd={() => {
+                    navigation.navigate('ImageZommer', {
+                      images: [{url: `${BASE_URL}${Data[0].image}`}],
+                    });
+                  }}
                   style={{
                     height: 264,
                     width: 345,
@@ -285,11 +288,7 @@ export const CalendarScreen = ({
                     onLoadEnd={() => setimgLoad(false)}
                   />
                 </View>
-                <ImageZoomer
-                  images={[{url: `${BASE_URL}${Data?.[0].image}`}]}
-                  zoomModalVisible={zoomImageModalVisible}
-                  setZoomModalVisiable={setZoomModalVisiable}
-                />
+
                 <ShareDownload
                   wallpaper={false}
                   imgURL={wallpaper && wallpaper}
