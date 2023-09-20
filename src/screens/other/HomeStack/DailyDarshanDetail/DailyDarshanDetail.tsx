@@ -12,6 +12,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Carousel,
+  CarouselRef,
   CustomNavigate,
   ImageZoomer,
   ScreenHeader,
@@ -19,7 +20,6 @@ import {
   ShareDownload,
 } from '../../../../components';
 import {RootStackParamList} from '../../../../types';
-import {CarouselRef} from '../../../../types/Carousel';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
