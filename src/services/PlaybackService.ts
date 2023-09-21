@@ -25,13 +25,6 @@ export async function setupPlayer() {
         // Capability.SkipToPrevious,
         Capability.SeekTo,
       ],
-
-      // compactCapabilities: [
-      //   Capability.Play,
-      //   Capability.Pause,
-      //   Capability.SkipToNext,
-      // ],
-      // progressUpdateEventInterval: 2,
     });
 
     isSetup = true;
@@ -41,14 +34,31 @@ export async function setupPlayer() {
 }
 
 export async function addTracks(songs: Array<SongType>) {
+  try{
+    console.log(songs , "Add Song To Tracks..........");
   await TrackPlayer.add(songs);
-  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  return true;
+  // await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  }
+  catch(error)
+  {
+    console.log(error,"Tracks Add Error");
+  }
 }
 
 export async function resetAndAddTracks(songs: Array<SongType>) {
-  await TrackPlayer.reset();
-  await TrackPlayer.add(songs);
-  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  try{
+    
+    await TrackPlayer.reset();
+    await TrackPlayer.add(songs);
+
+    // await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+    return true;
+  }
+  catch(er)
+  {
+    console.log(er,"Track Adding Time Error");
+  }
 }
 
 export async function PlaybackService() {

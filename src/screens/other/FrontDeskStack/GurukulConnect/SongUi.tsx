@@ -15,7 +15,7 @@ import {
   SearchBar,
   TrackControl,
 } from '../../../../components';
-import {useDispatch} from 'react-redux';
+import {batch, useDispatch} from 'react-redux';
 import {SET_ACTIVE_TRACKDATA, UPDATE_SETUP_MODE} from '../../../../redux/ducks/musicSlice';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -37,14 +37,14 @@ type SongUiProp = {
   songData: Array<any>;
   setSongData: React.Dispatch<React.SetStateAction<any[]>>;
   screenGoToAlbum?: React.MutableRefObject<boolean>;
-  playListName ? :string,
+  // playListName ? :string,
   navigation: NavigationProp<any>;
   goBack?: () => void;
-  navigateScreen?: (
-    playlistname: string,
-    id: number,
-    status: 'PLAYING'|'PAUSED' | 'BUFFERING' | 'OTHER',
-  ) => void;
+  // navigateScreen?: (
+  //   playlistname: string,
+  //   id: number,
+  //   status: 'PLAYING'|'PAUSED' | 'BUFFERING' | 'OTHER',
+  // ) => void;
   setDataToRedux: () => Promise<void>;
   setAlbumDataToRedux: (id?:number) => Promise<void>;
 };
@@ -55,8 +55,8 @@ export const SongUi = ({
   screenGoToAlbum,
   navigation,
   goBack,
-  navigateScreen,
-  playListName,
+  // navigateScreen,
+  // playListName,
   setDataToRedux,
   setAlbumDataToRedux,
 }: SongUiProp) => {
@@ -79,16 +79,17 @@ export const SongUi = ({
   const handleControl = async (itemId: any) => {
     try {
       const queue = await TrackPlayer.getQueue();
-      const isAlbum = queue.filter(item => item.id == itemId);
-        console.log(isAlbum , "<--Is Album" , "\t\tItem-->" ,itemId);
-      if (isAlbum.length == 0 && screenGoToAlbum != undefined) {
+      // const isAlbum = queue.filter(item => item.id == itemId);
+      //   console.log(isAlbum , "<--Is Album" , "\t\tItem->" ,itemId ,trackMode.setupMode);
+      if (screenGoToAlbum != undefined) {
         screenGoToAlbum.current = true;
         if(trackMode.setupMode == 'ALBUM')
         {
           await setAlbumDataToRedux(trackMode.albumId);
         }
         else{
-         await setDataToRedux();
+         console.log("first--->>Else part");
+          await setDataToRedux();
         }
       }
 
@@ -121,7 +122,6 @@ export const SongUi = ({
   }, [trackStatus]);
 
 
-  console.log(trackPlaying);
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     try {
       switch (event.type) {
@@ -163,6 +163,7 @@ export const SongUi = ({
   const onBlurScreen = () => {
 
     if (activeTrack) {
+      batch( () =>{
       dispatch(
         SET_ACTIVE_TRACKDATA({
           activeTrackDataPayload: {
@@ -170,7 +171,11 @@ export const SongUi = ({
             position: position,
           },
         }),
-      );
+      )
+      dispatch(UPDATE_SETUP_MODE({
+        setupMode : 'INITIAL'
+      }))
+    })
       return true;
     }
   };
@@ -186,6 +191,7 @@ export const SongUi = ({
             await setDataToRedux();
             dispatch(UPDATE_SETUP_MODE({
               setupMode : 'INITIAL',
+              albumName : undefined,
             }))
           }
           else{
@@ -200,13 +206,13 @@ export const SongUi = ({
           );
           }
         }}
-        headerTitle={playListName != undefined ? playListName:t('frontDesk.Connect')}
-        headerRight={{
+        headerTitle={trackMode.setupMode == 'ALBUM' && trackMode.albumName !=undefined ? trackMode.albumName :t('frontDesk.Connect')}
+        headerRight={trackMode.setupMode != 'ALBUM' ? {
           icon: AllIcons.Filter,
           onPress: () => {
             setModal(true);
           },
-        }}
+        } : undefined}
       />
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <SearchBar dataForSearch={songData} setSearchData={setSongData} />
@@ -310,6 +316,7 @@ export const SongUi = ({
                             dispatch(UPDATE_SETUP_MODE({
                               setupMode : 'ALBUM',
                               albumId : item.id,
+                              albumName : item.title
                               // setupMode : 'ALBUM',
                               // albumId : item.id,
                             }))
@@ -336,7 +343,7 @@ export const SongUi = ({
         </View>
       </View>
 
-      {activeTrack!=undefined && <TrackControl activeTrackProp={activeTrack} status={trackPlaying} />}
+      <TrackControl  status={trackPlaying} />
 
       <DropDownModel
         modelVisible={modal}

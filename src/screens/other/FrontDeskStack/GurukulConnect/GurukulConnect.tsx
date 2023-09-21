@@ -32,7 +32,11 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import {addTracks, setupPlayer} from '../../../../services/PlaybackService';
+import {
+  addTracks,
+  resetAndAddTracks,
+  setupPlayer,
+} from '../../../../services/PlaybackService';
 import {COLORS, downloadSong} from '../../../../utils';
 import {styles} from './styles';
 import {storage} from '../../../../storage';
@@ -52,167 +56,176 @@ export const GurukulConnect = ({
 }: NativeStackScreenProps<RootStackParamList>) => {
   const screenGoToAlbum = React.useRef(false);
   const resetTrack = React.useRef(false);
-  
-  const {allSongs, activeTrack, activeTrackPosition, selectedCategories , trackMode} =
-    useAppSelector(state => state.music);
+
+  const {
+    allSongs,
+    activeTrack,
+    trackMode,
+  } = useAppSelector(state => state.music);
   const dispatch = useAppDispatch();
-  const commonStyle = CommonStyle();
-  const style = styles();
-  const {t} = useTranslation();
+
 
   const [songData, setSongData] = React.useState<Array<any>>([...allSongs]);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
-  const [trackStatus , setTrackStatus] = React.useState<State>()
-  const [modal, setModal] = React.useState(false);
-  const [loader, setLoader] = React.useState({
-    status: false,
-    index: -1,
-  });
+
   const screenFocused = useIsFocused();
-  const [selectedItem, setSelectedItem] = React.useState([]);
-  const {position} = useProgress();
+  const trackStatus = usePlaybackState();
 
-  React.useMemo(async()=>{
-    const playerState = await TrackPlayer.getState();
-    console.log("first",playerState);
-    setTrackStatus(playerState);
-  },[Event.PlaybackState])
-  
-  const setDataToRedux = async () => {
-    const queue = await TrackPlayer.getQueue();
-    const response = await GurkulAudioApi();
-    if (queue.length > 0) {
-      const el = queue.slice(-1)[0].id;
-      const el2 = response.data.gurukul_audios.slice(-1)[0].id;
-      if (el == el2) {
-        screenGoToAlbum.current = false;
-        console.log('Same to Same');
-      }
-    }
-    
-    console.log(trackStatus,"THIS inner Staatus");
-    const findSong = response.data.gurukul_audios.filter((item:any)=> item.id == activeTrack?.id);
-    console.log(findSong,"Find Song",trackStatus);
-    if(findSong.length == 0 ||  findSong[0].is_multiple)
-    {
-      screenGoToAlbum.current =  false;
-      if(trackMode.albumId && trackStatus != State.Playing && trackStatus == 'idle')
-      {
-        const albumSong : Array<SongType> = [];
-        const response = await GurukulMultiPartAudio(trackMode.albumId);
-        response.data.group_audios.filter((song:any)=> song.id == activeTrack?.id).map((item:any)=>{
-          albumSong.push({
-            id: item.id,
-          title: item.title,
-          url: BASE_URL + item.audio,
-          status: false,
-          description: item.description,
-          })
-        })
-        response.data.group_audios.filter((song:any)=> song.id != activeTrack?.id).map((item:any)=>{
-          albumSong.push({
-          id: item.id,
-          title: item.title,
-          url: BASE_URL + item.audio,
-          status: false,
-          description: item.description,
-          })
-        })
-        console.log(albumSong, "This My ")
-        await addTracks(albumSong);
-      }
-    }
-
-    if (
-      response.resType === 'SUCCESS' &&
-      response.data.gurukul_audios.length > 0
-    ) {
-      const SongList: Array<SongType> = [];
-      const trackList: Array<any> = [];
-
-      response.data.gurukul_audios.forEach((audioObj: any) => {
-        // if (!audioObj.is_multiple) {
-        //   trackList.push({
-        //     id: audioObj.id,
-        //     title: audioObj.title,
-        //     url: BASE_URL + audioObj.audio,
-        //     status: trackStatus == State.Playing ? true : false,
-        //     description: audioObj.description,
-        //   });
-        // }
-        SongList.push({
-          id: audioObj.id,
-          title: audioObj.title,
-          url: BASE_URL + audioObj.audio,
-          status: trackStatus == State.Playing ? true : false,
-          description: audioObj.description,
-          is_multiple: audioObj.is_multiple,
-        });
-      });
-
-      if (screenGoToAlbum.current == true) {
-        // await TrackPlayer.reset();
-        await addTracks([...SongList.filter(item=>item.is_multiple == false)]);
+  const findActiveTrack = async () => {
+    try {
+      const trackPlayerStatus = await TrackPlayer.getState();
+      const response = await GurkulAudioApi();
+      
+      const findSong = response.data.gurukul_audios.filter(
+        (item: any) => item.id == activeTrack?.id,
+        );
         
-        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        if (findSong.length == 0 || findSong[0].is_multiple) {
+        console.log("\t\t\t-------------This is Find Active Track------------------------");
 
-      } else { 
-        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        screenGoToAlbum.current = false;
+        if (trackMode.albumId && trackPlayerStatus != State.Playing) {
+          const albumSong: Array<SongType> = [];
+          const response = await GurukulMultiPartAudio(trackMode.albumId);
+          response.data.group_audios
+            .filter((song: any) => song.id == activeTrack?.id)
+            .map((item: any) => {
+              albumSong.push({
+                id: item.id,
+                title: item.title,
+                url: BASE_URL + item.audio,
+                status: false,
+                description: item.description,
+              });
+            });
+          response.data.group_audios
+            .filter((song: any) => song.id != activeTrack?.id)
+            .map((item: any) => {
+              albumSong.push({
+                id: item.id,
+                title: item.title,
+                url: BASE_URL + item.audio,
+                status: false,
+                description: item.description,
+              });
+            });
+          
+          await addTracks(albumSong);
+          return true;
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const setAlbumDataToRedux = async (id ?: number) => {
-    const queue = await TrackPlayer.getQueue();
+  const setDataToRedux = async () => {
+    try {
+      const queue = await TrackPlayer.getQueue();
+      const response = await GurkulAudioApi();
     
-    if(id!=undefined)
-    {
-    const response = await GurukulMultiPartAudio(id);
-    console.log("\t------>>>",queue,"Album Queue")
-    if (queue.length <= 0) {
-      resetTrack.current = true;
-      // const el = queue.slice(-1)[0].id;
-      // const dataSame = queue.filter(item => item.id == activeTrack.id);
-      // if (dataSame.length > 0) {
-      //   resetTrack.current = false;
-      //   console.log('Same to Same');
-      // }
-    }
-    
-    if (
-      response.resType === 'SUCCESS' &&
-      response.data.group_audios.length > 0
-    ) {
-      const SongList: Array<SongType> = [];
+      if (queue.length <= 0) {
+        console.log("\t\t-----------set data to redux length = 0 -------------");
+        const responseActive = await findActiveTrack();
+       
+        if (responseActive) {
+          screenGoToAlbum.current = false;
+        } else {
+          screenGoToAlbum.current = true;
+        }
+      }
 
-      response.data.group_audios.forEach((audioObj: any) => {
-        SongList.push({
-          id: audioObj.id,
-          title: audioObj.title,
-          url: BASE_URL + audioObj.audio,
-          status: trackStatus == State.Playing ? true : false,
-          description: audioObj.description,
+      if (
+        response.resType === 'SUCCESS' &&
+        response.data.gurukul_audios.length > 0
+      ) {
+        const SongList: Array<SongType> = [];
+        const trackList: Array<any> = [];
+        
+
+        response.data.gurukul_audios.forEach((audioObj: any) => {
+          if (!audioObj.is_multiple) {
+            trackList.push({
+              id: audioObj.id,
+              title: audioObj.title,
+              url: BASE_URL + audioObj.audio,
+              status: trackStatus == State.Playing ? true : false,
+              description: audioObj.description,
+            }); 
+          }
+          SongList.push({
+            id: audioObj.id,
+            title: audioObj.title,
+            url: BASE_URL + audioObj.audio,
+            status: trackStatus == State.Playing ? true : false,
+            description: audioObj.description,
+            is_multiple: audioObj.is_multiple,
+          });
         });
-      });
 
-      
-  
-      if (resetTrack.current == true) {
-        await addTracks(SongList);
-        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
-      } else {
-        dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        if (screenGoToAlbum.current == true) {
+             
+                await addTracks(trackList);
+                console.log("\t\t----------Song Added ----------");
+              
+        } else {
+          dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        }
+      }
+    } catch (e) {
+      console.log(e, 'Set Data Error');
+    }
+  };
+
+  const setAlbumDataToRedux = async (id?: number) => {
+    const queue = await TrackPlayer.getQueue();
+
+    if (id != undefined) {
+      const response = await GurukulMultiPartAudio(id);
+     
+      if (queue.length <= 0) {
+        resetTrack.current = true;
+        // const el = queue.slice(-1)[0].id;
+        // const dataSame = queue.filter(item => item.id == activeTrack.id);
+        // if (dataSame.length > 0) {
+        //   resetTrack.current = false;
+        //   console.log('Same to Same');
+        // }
+      }
+
+      if (
+        response.resType === 'SUCCESS' &&
+        response.data.group_audios.length > 0
+      ) {
+        const SongList: Array<SongType> = [];
+
+        response.data.group_audios.forEach((audioObj: any) => {
+          SongList.push({
+            id: audioObj.id,
+            title: audioObj.title,
+            url: BASE_URL + audioObj.audio,
+            status: trackStatus == State.Playing ? true : false,
+            description: audioObj.description,
+          });
+        });
+
+        if (resetTrack.current == true) {
+          await resetAndAddTracks(SongList);
+          console.log('Add Album ');
+          // dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        } else {
+          dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+        }
       }
     }
-  }
   };
 
   const setup = async () => {
     try {
       let isSetup = await setupPlayer();
-      console.log(trackMode.setupMode);
+
       if (isSetup) {
-          await setDataToRedux();
+        await setDataToRedux();
       }
       setIsPlayerReady(isSetup);
     } catch (e) {
@@ -232,78 +245,10 @@ export const GurukulConnect = ({
     }
   }, [allSongs]);
 
-  // useTrackPlayerEvents(
-  //   [
-  //     Event.PlaybackTrackChanged,
-  //   ],
-  //   async event => {
-  //     try {
-  //       switch (event.type) {
-  //         case Event.PlaybackTrackChanged:
-  //           if (event.nextTrack != null) {
-  //             const track = await TrackPlayer.getTrack(event.nextTrack);
-
-  //            console.log("Gurukul Connect Track Change..",track);
-  //             if (track != null) {
-
-  //               dispatch(
-  //                 SET_ACTIVE_TRACKDATA({
-  //                   activeTrackDataPayload: {
-  //                     track: track,
-  //                   },
-  //                 }),
-  //               );
-  //             }
-  //           }
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     } catch (e) {
-  //       console.log(e, 'EVENT');
-  //     }
-  //   },
-  // );
-
-  // const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
-  //   return trackStatus === State.Playing
-  //     ? 'PLAYING'
-  //     : trackStatus === State.Buffering
-  //     ? 'BUFFERING'
-  //     : 'OTHER';
-  // }, [trackStatus]);
-
-  // const ExitCallBack = React.useCallback(() => {
-  //   const blurListner = AppState.addEventListener('blur', onBlurScreen);
-
-  //   return () => {
-  //     // Once the Screen gets blur Remove Event Listener
-  //     blurListner.remove();
-  //   };
-  // }, [activeTrack]);
-
-  // Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
-
-  // const onBlurScreen = () => {
-  //   console.log('Blur');
-  //   if (activeTrack) {
-  //     dispatch(
-  //       SET_ACTIVE_TRACKDATA({
-  //         activeTrackDataPayload: {
-  //           track: activeTrack,
-  //           position: position,
-  //         },
-  //       }),
-  //     );
-  //     return true;
-  //   }
-  // };
-
-
+  
   if (!isPlayerReady) {
     return <Loader />;
   }
-
 
   /* JSX Return Start */
   return (
@@ -312,7 +257,9 @@ export const GurukulConnect = ({
         songData={songData}
         setSongData={setSongData}
         navigation={navigation}
-        screenGoToAlbum={trackMode.setupMode == 'ALBUM' ? resetTrack: screenGoToAlbum}
+        screenGoToAlbum={
+          trackMode.setupMode == 'ALBUM' ? resetTrack : screenGoToAlbum
+        }
         setDataToRedux={setDataToRedux}
         setAlbumDataToRedux={setAlbumDataToRedux}
       />

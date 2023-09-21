@@ -7,10 +7,8 @@ import {styles} from './styles';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 type TrackPropsType = {
-  activeTrackProp: Track;
   status : 'PLAYING' | 'PAUSED' |'BUFFERING' | 'IDLE' | 'OTHER'
 };
-
 
 
 const format = (time: number) => {
@@ -21,14 +19,14 @@ const format = (time: number) => {
   return `${minutes}:${second}`;
 };
 
-export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
+export const TrackControl = ({status}: TrackPropsType) => {
   const style = styles();
   const offsetY = React.useRef(new Animated.Value(500)).current;
-
+  
   const {position, duration} = useProgress();
-  const {activeTrackPosition} =
+  const {activeTrackPosition ,activeTrack} =
   useAppSelector(state => state.music);
-
+  
   React.useEffect(() => {
     return Animated.timing(offsetY, {
       toValue: 0,
@@ -37,13 +35,10 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
     }).start();
   }, []);
 
-  const progress = position / duration;
   const [trackProgress, setProgress] = React.useState(0);
 
   async function handleControl() {
     try {
-      
-      // const trackStatus = await TrackPlayer.getState();
       if (status == 'PLAYING') {
         TrackPlayer.pause();
       } else {
@@ -55,6 +50,7 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   }
 
   React.useEffect(() => {
+
     if(position)
     {
     setProgress(position);
@@ -62,29 +58,27 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   }, [position]);
 
   React.useEffect(() => {
+    console.log('\t\t-----------check current call ---------');
     const checkCurrentSong = async () => {
-      const trackIn = await TrackPlayer.getCurrentTrack();
+      const queue = await TrackPlayer.getQueue();
+      const trackIn = queue.findIndex((item)=> item.id == activeTrack?.id);
       const trackStatus = await TrackPlayer.getState();
       if (trackIn != null) { 
         const track = await TrackPlayer.getTrack(trackIn); 
-        console.log("TrackControl Component" , activeTrackProp , "Status :",status);
-        if (track && activeTrackProp.id != "" && activeTrackProp.id != undefined) {
+        console.log("TrackControl Component" , activeTrack , "Status :",trackStatus ,track,trackIn);
+        if (track && activeTrack?.id != "" && activeTrack?.id != undefined) {
           if (
-            activeTrackProp.id != track.id ||
-            trackStatus == State.Paused || trackStatus == 'idle'
+            trackStatus == State.Paused || trackStatus == 'idle' || trackStatus == 'ready'
             ) {
                 await TrackPlayer.skip(trackIn, activeTrackPosition);
               }
             }
           }
-          else{
-            console.log("first");
-          }
     };
   
     checkCurrentSong();
    
-  }, []);
+  }, [activeTrack]);
 
   const handleNext = async () => {
     await TrackPlayer.skipToNext();
@@ -97,7 +91,7 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
   };
 
   return (
-    activeTrackProp && (
+    
       <Animated.View
         style={[
           style.trackControlContainer,
@@ -111,7 +105,7 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
         ]}>
         <View>
           <Text style={style.trackTitle}>
-            {activeTrackProp.id} {activeTrackProp.title}
+            {activeTrack?.id} {activeTrack?.title}
           </Text>
         </View>
         <View
@@ -192,6 +186,6 @@ export const TrackControl = ({activeTrackProp ,status}: TrackPropsType) => {
           </View>
         </View>
       </Animated.View>
-    )
+    
   );
 };

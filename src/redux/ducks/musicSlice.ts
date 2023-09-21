@@ -14,6 +14,7 @@ let initialState: InitialSongsType = {
   trackMode : {
     setupMode: 'NONE',
     albumId : undefined,
+    albumName : undefined,
   }
 };
 
@@ -98,19 +99,23 @@ export const sliderPageSlice = createSlice({
       action: PayloadAction<{
         setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
         albumId ?: number;
+        albumName ?: string;
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
         JSON.stringify(state),
       );  
-      console.log(newdata , "<<>><<>>",action.payload);
 
-      const {setupMode , albumId} = action.payload;
+      const {setupMode , albumId ,albumName} = action.payload;
 
       newdata.trackMode.setupMode = setupMode;
       if(albumId!=undefined)
       {
       newdata.trackMode.albumId = albumId
+      }
+      if(albumName != undefined)
+      {
+        newdata.trackMode.albumName = albumName;
       }
 
       return newdata;

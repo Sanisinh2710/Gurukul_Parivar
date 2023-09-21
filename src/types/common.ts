@@ -85,6 +85,7 @@ export type InitialSongsType = {
   trackMode : {
     setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
     albumId : number | undefined;
+    albumName : string | undefined;
   }
 };
 

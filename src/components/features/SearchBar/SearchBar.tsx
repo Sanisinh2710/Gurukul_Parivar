@@ -45,7 +45,7 @@ export const SearchBar = ({
           });
           setSearchData(filterData);
         } else {
-          setSearchData(temp);
+          setSearchData(dataForSearch);
         }
       }
       if (isObjectArray(dataForSearch)) {
@@ -68,7 +68,7 @@ export const SearchBar = ({
           });
           setSearchData(filterData);
         } else {
-          setSearchData(temp);
+          setSearchData(dataForSearch);
         }
       }
     }, 800);
