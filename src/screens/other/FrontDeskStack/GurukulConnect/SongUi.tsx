@@ -32,12 +32,13 @@ import TrackPlayer, {
 import {useAppSelector} from '../../../../redux/hooks';
 import {useTranslation} from 'react-i18next';
 import { Status } from '../Status';
+import { resetTracks } from '../../../../services';
 
 type SongUiProp = {
   songData: Array<any>;
   setSongData: React.Dispatch<React.SetStateAction<any[]>>;
   screenGoToAlbum?: React.MutableRefObject<boolean>;
-  // playListName ? :string,
+  trackAdd : boolean;
   navigation: NavigationProp<any>;
   goBack?: () => void;
   // navigateScreen?: (
@@ -54,7 +55,7 @@ export const SongUi = ({
   setSongData,
   screenGoToAlbum,
   navigation,
-  goBack,
+ trackAdd,
   // navigateScreen,
   // playListName,
   setDataToRedux,
@@ -65,7 +66,7 @@ export const SongUi = ({
   const style = styles();
   const trackStatus = usePlaybackState();
   const {t} = useTranslation();
-  const {allSongs, activeTrack, activeTrackPosition, selectedCategories,trackMode} =
+  const {activeTrack,trackMode} =
     useAppSelector(state => state.music);
   const {position} = useProgress();
 
@@ -78,32 +79,47 @@ export const SongUi = ({
 
   const handleControl = async (itemId: any) => {
     try {
-      const queue = await TrackPlayer.getQueue();
-      // const isAlbum = queue.filter(item => item.id == itemId);
-      //   console.log(isAlbum , "<--Is Album" , "\t\tItem->" ,itemId ,trackMode.setupMode);
-      if (screenGoToAlbum != undefined) {
-        screenGoToAlbum.current = true;
+      
+    
+      if (screenGoToAlbum?.current == false) {
+
         if(trackMode.setupMode == 'ALBUM')
         {
-          await setAlbumDataToRedux(trackMode.albumId);
+          const resetResponse = await resetTracks();
+          if(resetResponse)
+          { 
+            await setAlbumDataToRedux(trackMode.albumId);
+          }
         }
         else{
          console.log("first--->>Else part");
-          await setDataToRedux();
+         const resetResponse = await resetTracks();
+          if(resetResponse)
+          {
+            screenGoToAlbum.current = true;
+        
+            await setDataToRedux();
+          }
         }
       }
-
-      const track = await TrackPlayer.getCurrentTrack();
-      const trackSkipIndex = queue.findIndex(item => item.id == itemId);
-
-      if (trackSkipIndex != track) {
-        await TrackPlayer.skip(trackSkipIndex);
+console.log(trackAdd);
+    if(trackAdd == true)
+    {
+      const queue = await TrackPlayer.getQueue();
+      const index = queue.findIndex(item=> item.id == itemId);
+      console.log(index);
+      if(activeTrack?.id != itemId)
+      {
+        console.log("--Index--",index);
+        await TrackPlayer.skip(index);
         await TrackPlayer.play();
-      } else if (trackStatus == State.Playing) {
+      }
+      else if (trackStatus == State.Playing) {
         await TrackPlayer.pause();
       } else {
         await TrackPlayer.play();
       }
+    }
     } catch (e) {
       console.log(e);
     }
@@ -122,32 +138,7 @@ export const SongUi = ({
   }, [trackStatus]);
 
 
-  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
-    try {
-      switch (event.type) {
-        case Event.PlaybackTrackChanged:
-          if (event.nextTrack != null) {
-            const track = await TrackPlayer.getTrack(event.nextTrack);
-
-            console.log('Gurukul Connect Track Change..', track);
-            if (track != null) {
-              dispatch(
-                SET_ACTIVE_TRACKDATA({
-                  activeTrackDataPayload: {
-                    track: track,
-                  },
-                }),
-              );
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    } catch (e) {
-      console.log(e, 'EVENT');
-    }
-  });
+  
 
   const ExitCallBack = React.useCallback(() => {
     const blurListner = AppState.addEventListener('blur', onBlurScreen);
@@ -305,7 +296,7 @@ export const SongUi = ({
                       <View
                         style={{height: 24, width: 24}}
                         onTouchEnd={async () => {
-                          setAlbumDataToRedux(item.id)
+                          await setAlbumDataToRedux(item.id)
                           // navigation.navigate('albumSong', {
                           //   playListName: item.title,
                           //   id: item.id,
@@ -317,8 +308,6 @@ export const SongUi = ({
                               setupMode : 'ALBUM',
                               albumId : item.id,
                               albumName : item.title
-                              // setupMode : 'ALBUM',
-                              // albumId : item.id,
                             }))
                           }
                         }}>
@@ -342,8 +331,8 @@ export const SongUi = ({
           )}
         </View>
       </View>
-
-      <TrackControl  status={trackPlaying} />
+          
+      {activeTrack && <TrackControl  status={trackPlaying} />}
 
       <DropDownModel
         modelVisible={modal}

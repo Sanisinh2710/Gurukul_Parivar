@@ -39,6 +39,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
 
   async function handleControl() {
     try {
+      console.log("status",status)
       if (status == 'PLAYING') {
         TrackPlayer.pause();
       } else {
@@ -57,27 +58,26 @@ export const TrackControl = ({status}: TrackPropsType) => {
     }
   }, [position]);
 
-  React.useEffect(() => {
-    console.log('\t\t-----------check current call ---------');
-    const checkCurrentSong = async () => {
-      const queue = await TrackPlayer.getQueue();
-      const trackIn = queue.findIndex((item)=> item.id == activeTrack?.id);
-      const trackStatus = await TrackPlayer.getState();
-      if (trackIn != null) { 
-        const track = await TrackPlayer.getTrack(trackIn); 
-        console.log("TrackControl Component" , activeTrack , "Status :",trackStatus ,track,trackIn);
-        if (track && activeTrack?.id != "" && activeTrack?.id != undefined) {
-          if (
-            trackStatus == State.Paused || trackStatus == 'idle' || trackStatus == 'ready'
-            ) {
-                await TrackPlayer.skip(trackIn, activeTrackPosition);
-              }
+  const checkCurrentSong = async () => {
+    const queue = await TrackPlayer.getQueue();
+    const trackIn = queue.findIndex((item)=> item.id == activeTrack?.id);
+    const trackStatus = await TrackPlayer.getState();
+    if (trackIn != null) { 
+      const track = await TrackPlayer.getTrack(trackIn); 
+      console.log("TrackControl Component" , activeTrack , "Status :",trackStatus ,track,trackIn);
+      if (track && activeTrack?.id != "" && activeTrack?.id != undefined) {
+        if (
+          trackStatus == State.Paused || trackStatus == 'idle' || trackStatus == 'ready'
+          ) {
+              await TrackPlayer.skip(trackIn, activeTrackPosition);
             }
           }
-    };
-  
-    checkCurrentSong();
-   
+        }
+  };
+
+
+  React.useMemo(async() => {
+    await checkCurrentSong();
   }, [activeTrack]);
 
   const handleNext = async () => {

@@ -45,7 +45,7 @@ export const sliderPageSlice = createSlice({
     SET_ACTIVE_TRACKDATA: (
       state,
       action: PayloadAction<{
-        activeTrackDataPayload: {track: Track | undefined; position?: number};
+        activeTrackDataPayload: {track: Track | undefined; position?: number;};
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(

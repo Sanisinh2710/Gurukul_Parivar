@@ -34,7 +34,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {
   addTracks,
-  resetAndAddTracks,
+  resetTracks,
   setupPlayer,
 } from '../../../../services/PlaybackService';
 import {COLORS, downloadSong} from '../../../../utils';
@@ -57,17 +57,14 @@ export const GurukulConnect = ({
   const screenGoToAlbum = React.useRef(false);
   const resetTrack = React.useRef(false);
 
-  const {
-    allSongs,
-    activeTrack,
-    trackMode,
-  } = useAppSelector(state => state.music);
+  const {allSongs, activeTrack, trackMode} = useAppSelector(
+    state => state.music,
+  );
   const dispatch = useAppDispatch();
-
 
   const [songData, setSongData] = React.useState<Array<any>>([...allSongs]);
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
-
+  const [trackAdd, setTrackAdd] = React.useState(false);
   const screenFocused = useIsFocused();
   const trackStatus = usePlaybackState();
 
@@ -75,15 +72,16 @@ export const GurukulConnect = ({
     try {
       const trackPlayerStatus = await TrackPlayer.getState();
       const response = await GurkulAudioApi();
-      
+
       const findSong = response.data.gurukul_audios.filter(
         (item: any) => item.id == activeTrack?.id,
-        );
-        
-        if (findSong.length == 0 || findSong[0].is_multiple) {
-        console.log("\t\t\t-------------This is Find Active Track------------------------");
+      );
 
-        screenGoToAlbum.current = false;
+      if (findSong.length == 0 || findSong[0].is_multiple) {
+        console.log(
+          '\t\t\t-------------This is Find Active Track------------------------',
+        );
+
         if (trackMode.albumId && trackPlayerStatus != State.Playing) {
           const albumSong: Array<SongType> = [];
           const response = await GurukulMultiPartAudio(trackMode.albumId);
@@ -109,7 +107,7 @@ export const GurukulConnect = ({
                 description: item.description,
               });
             });
-          
+
           await addTracks(albumSong);
           return true;
         }
@@ -123,11 +121,9 @@ export const GurukulConnect = ({
     try {
       const queue = await TrackPlayer.getQueue();
       const response = await GurkulAudioApi();
-    
+
       if (queue.length <= 0) {
-        console.log("\t\t-----------set data to redux length = 0 -------------");
         const responseActive = await findActiveTrack();
-       
         if (responseActive) {
           screenGoToAlbum.current = false;
         } else {
@@ -141,7 +137,6 @@ export const GurukulConnect = ({
       ) {
         const SongList: Array<SongType> = [];
         const trackList: Array<any> = [];
-        
 
         response.data.gurukul_audios.forEach((audioObj: any) => {
           if (!audioObj.is_multiple) {
@@ -151,7 +146,7 @@ export const GurukulConnect = ({
               url: BASE_URL + audioObj.audio,
               status: trackStatus == State.Playing ? true : false,
               description: audioObj.description,
-            }); 
+            });
           }
           SongList.push({
             id: audioObj.id,
@@ -162,12 +157,14 @@ export const GurukulConnect = ({
             is_multiple: audioObj.is_multiple,
           });
         });
-
+      
         if (screenGoToAlbum.current == true) {
-             
-                await addTracks(trackList);
-                console.log("\t\t----------Song Added ----------");
-              
+          const addResposne = await addTracks(trackList);
+         
+          if (addResposne == true) {
+            setTrackAdd(true);
+          }
+          dispatch(ADD_UPDATE_SONGS({songs: SongList}));
         } else {
           dispatch(ADD_UPDATE_SONGS({songs: SongList}));
         }
@@ -182,17 +179,10 @@ export const GurukulConnect = ({
 
     if (id != undefined) {
       const response = await GurukulMultiPartAudio(id);
-     
+
       if (queue.length <= 0) {
         resetTrack.current = true;
-        // const el = queue.slice(-1)[0].id;
-        // const dataSame = queue.filter(item => item.id == activeTrack.id);
-        // if (dataSame.length > 0) {
-        //   resetTrack.current = false;
-        //   console.log('Same to Same');
-        // }
       }
-
       if (
         response.resType === 'SUCCESS' &&
         response.data.group_audios.length > 0
@@ -210,9 +200,11 @@ export const GurukulConnect = ({
         });
 
         if (resetTrack.current == true) {
-          await resetAndAddTracks(SongList);
-          console.log('Add Album ');
-          // dispatch(ADD_UPDATE_SONGS({songs: SongList}));
+          const addResposne = await addTracks(SongList);
+          if (addResposne) {
+            setTrackAdd(true);
+          }
+          dispatch(ADD_UPDATE_SONGS({songs: SongList}));
         } else {
           dispatch(ADD_UPDATE_SONGS({songs: SongList}));
         }
@@ -237,15 +229,42 @@ export const GurukulConnect = ({
     if (screenFocused) {
       setup();
     }
-  }, [screenFocused]);
+  }, []);
+
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
+    try {
+      switch (event.type) {
+        case Event.PlaybackTrackChanged:
+          if (event.nextTrack != null) {
+            const track = await TrackPlayer.getTrack(event.nextTrack);
+
+            if (track != null) {
+              console.log("calling Tracj Change",track);
+              dispatch(
+                SET_ACTIVE_TRACKDATA({
+                  activeTrackDataPayload: {
+                    track: track,
+                    position: 0,
+                  },
+                }),
+              );
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      console.log(e, 'EVENT');
+    }
+  });
 
   React.useEffect(() => {
     if (allSongs.length > 0) {
-      setSongData(allSongs);
+      setSongData([...allSongs]);
     }
   }, [allSongs]);
 
-  
   if (!isPlayerReady) {
     return <Loader />;
   }
@@ -262,6 +281,7 @@ export const GurukulConnect = ({
         }
         setDataToRedux={setDataToRedux}
         setAlbumDataToRedux={setAlbumDataToRedux}
+        trackAdd={trackAdd}
       />
     </ScreenWrapper>
     // <ScreenWrapper>

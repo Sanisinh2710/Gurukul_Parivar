@@ -35,10 +35,9 @@ export async function setupPlayer() {
 
 export async function addTracks(songs: Array<SongType>) {
   try{
-    console.log(songs , "Add Song To Tracks..........");
-  await TrackPlayer.add(songs);
-  return true;
-  // await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+    
+    await TrackPlayer.add(songs);
+    return true;
   }
   catch(error)
   {
@@ -46,20 +45,29 @@ export async function addTracks(songs: Array<SongType>) {
   }
 }
 
-export async function resetAndAddTracks(songs: Array<SongType>) {
+export async function resetTracks(){
   try{
-    
     await TrackPlayer.reset();
-    await TrackPlayer.add(songs);
-
-    // await TrackPlayer.setRepeatMode(RepeatMode.Queue);
     return true;
   }
-  catch(er)
+  catch(error)
   {
-    console.log(er,"Track Adding Time Error");
+    console.log(error,"Reset Error");
   }
 }
+
+// export async function resetAndAddTracks(songs: Array<SongType>) {
+//   try{
+    
+//     await TrackPlayer.reset();
+//     await TrackPlayer.add(songs);
+//     return true;
+//   }
+//   catch(er)
+//   {
+//     console.log(er,"Track Adding Time Error");
+//   }
+// }
 
 export async function PlaybackService() {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
