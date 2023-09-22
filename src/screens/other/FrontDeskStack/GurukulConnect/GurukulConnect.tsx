@@ -266,7 +266,7 @@ export const GurukulConnect = ({
   React.useMemo(async () => {
     if (setupMode === 'NONE') {
       const res = await GurkulAudioGetApi();
-
+      console.log(res, 'res is called');
       if (res.resType === 'SUCCESS') {
         await setup(res.data.gurukul_audios);
         dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
@@ -295,14 +295,14 @@ export const GurukulConnect = ({
         //  try to comment this if song getting paused after coming from album playing
         if (setupMode === 'INITIAL') {
           await TrackPlayer.reset();
-          dispatch(
-            SET_ACTIVE_TRACKDATA({
-              activeTrackDataPayload: {
-                track: undefined,
-                position: undefined,
-              },
-            }),
-          );
+          // dispatch(
+          //   SET_ACTIVE_TRACKDATA({
+          //     activeTrackDataPayload: {
+          //       track: undefined,
+          //       position: undefined,
+          //     },
+          //   }),
+          // );
         }
         if (
           setupMode === 'FILTERED' &&
