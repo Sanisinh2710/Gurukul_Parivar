@@ -1,6 +1,6 @@
 import {Slider} from '@miblanchard/react-native-slider';
 import React from 'react';
-import {View, Text, Image, Animated, Easing} from 'react-native';
+import {View, Text, Image, Animated, Easing, Dimensions} from 'react-native';
 import TrackPlayer, {State, Track, usePlaybackState, useProgress} from 'react-native-track-player';
 import {AllIcons} from '../../../../assets/icons';
 import {styles} from './styles';
@@ -39,7 +39,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
 
   async function handleControl() {
     try {
-      console.log("status",status)
+
       if (status == 'PLAYING') {
         TrackPlayer.pause();
       } else {
@@ -64,7 +64,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
     const trackStatus = await TrackPlayer.getState();
     if (trackIn != null) { 
       const track = await TrackPlayer.getTrack(trackIn); 
-      console.log("TrackControl Component" , activeTrack , "Status :",trackStatus ,track,trackIn);
+ 
       if (track && activeTrack?.id != "" && activeTrack?.id != undefined) {
         if (
           trackStatus == State.Paused || trackStatus == 'idle' || trackStatus == 'ready'
@@ -74,7 +74,6 @@ export const TrackControl = ({status}: TrackPropsType) => {
           }
         }
   };
-
 
   React.useMemo(async() => {
     await checkCurrentSong();
@@ -115,10 +114,10 @@ export const TrackControl = ({status}: TrackPropsType) => {
             justifyContent: 'space-between',
             marginVertical: 5,
           }}>
-          <View style={{width: '11%', alignItems: 'center'}}>
+          <View style={{width: Dimensions.get('window').width *0.1, alignItems: 'center'}}>
             <Text style={style.trackProgressText}>{format(position)}</Text>
           </View>
-          <View style={{width: '75%'}}>
+          <View style={{width: '70%',marginHorizontal:'3%'}}>
             <Slider
               trackStyle={{width: '100%', height: 3.5, borderRadius: 10}}
               animateTransitions={true}
@@ -134,7 +133,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
                 borderRadius: 28,
               }}
               trackClickable={false}
-              minimumValue={0}
+              minimumValue={0}  
               maximumValue={duration}
               value={trackProgress}
               onValueChange={async(value)=>{
@@ -146,7 +145,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
               }}
             />
           </View>
-          <View style={{width: '11%', alignItems: 'center'}}>
+          <View style={{width: Dimensions.get('window').width *0.1, alignItems: 'center'}}>
             <Text style={style.trackProgressText}>{format(duration)}</Text>
           </View>
         </View>

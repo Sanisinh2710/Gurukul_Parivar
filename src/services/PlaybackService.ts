@@ -21,8 +21,6 @@ export async function setupPlayer() {
       capabilities: [
         Capability.Play,
         Capability.Pause,
-        // Capability.SkipToNext,
-        // Capability.SkipToPrevious,
         Capability.SeekTo,
       ],
     });
@@ -56,18 +54,6 @@ export async function resetTracks(){
   }
 }
 
-// export async function resetAndAddTracks(songs: Array<SongType>) {
-//   try{
-    
-//     await TrackPlayer.reset();
-//     await TrackPlayer.add(songs);
-//     return true;
-//   }
-//   catch(er)
-//   {
-//     console.log(er,"Track Adding Time Error");
-//   }
-// }
 
 export async function PlaybackService() {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
