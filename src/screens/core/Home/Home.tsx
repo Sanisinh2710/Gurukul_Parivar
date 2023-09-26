@@ -32,9 +32,9 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
+  // const currentPage = useAppSelector(state => state.sliderPage.currentPage);
 
-  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+  // const dashboardImages = useAppSelector(state => state.sliderPage.images);
 
   const [loader, setLoader] = React.useState<boolean>(false);
 
@@ -46,6 +46,10 @@ export const HomeScreen = ({
   const commonStyle = CommonStyle();
 
   const dispatch = useAppDispatch();
+
+  const [dashboardImages, setDashboardImages] = React.useState([]);
+  // const [currentPage, setCurrentPage] = React.useState(0);
+
   const onRefresh = async () => {
     setRefreshing(true);
 
@@ -53,7 +57,8 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        // dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
       }
     } catch (error) {
       console.log(error);
@@ -69,7 +74,8 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        // dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
         setLoader(false);
       }
     } catch (error) {
@@ -180,9 +186,7 @@ export const HomeScreen = ({
         contentContainerStyle={{
           paddingBottom: '30%',
         }}>
-        {dashboardImages.length > 0 && (
-          <PagerView images={dashboardImages} currentIndex={currentPage} />
-        )}
+        {dashboardImages.length > 0 && <PagerView images={dashboardImages} />}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (

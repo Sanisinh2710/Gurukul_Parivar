@@ -343,6 +343,7 @@ export const Calendar = ({
               color: COLORS.primaryRippleColor,
             }}
             style={{
+              top: 20,
               right: 10,
               bottom: 0,
               width: '23%',

@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -53,7 +54,7 @@ export const DailyQuotes = ({
 
   const [itemIndex, setItemIndex] = React.useState(0);
 
-  const [imgLoad, setImgLoad] = React.useState<boolean>(false);
+  const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
   React.useMemo(async () => {
@@ -250,58 +251,64 @@ export const DailyQuotes = ({
                           }}
                           renderItem={({item, index}) => {
                             return (
-                              <>
-                                <View
-                                  style={{
-                                    height: '100%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 20,
+                              <View
+                                style={{
+                                  height: '100%',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  borderRadius: 20,
+                                }}>
+                                <Pressable
+                                  style={{flex: 1, width: '100%'}}
+                                  onPress={() => {
+                                    navigation.navigate('ImageZommer', {
+                                      images: [
+                                        {url: `${BASE_URL}${item.image}`},
+                                      ],
+                                    });
                                   }}>
-                                  <View
-                                    style={{flex: 1, width: '100%'}}
-                                    onTouchEnd={() => {
-                                      navigation.navigate('ImageZommer', {
-                                        images: [
-                                          {url: `${BASE_URL}${item.image}`},
-                                        ],
-                                      });
-                                    }}>
-                                    {imgLoad && (
-                                      <ActivityIndicator
-                                        size={30}
-                                        color={COLORS.primaryColor}
-                                        style={{
-                                          position: 'absolute',
-                                          left: 0,
-                                          right: 0,
-                                          top: 0,
-                                          bottom: 0,
-                                        }}
-                                      />
-                                    )}
-                                    <Image
-                                      source={{
-                                        uri: `${BASE_URL}${item.image}`,
+                                  {imgLoad[index] && (
+                                    <ActivityIndicator
+                                      size={30}
+                                      color={COLORS.primaryColor}
+                                      style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        right: 0,
+                                        top: 0,
+                                        bottom: 0,
                                       }}
-                                      style={style.image}
-                                      onLoadStart={() => setImgLoad(true)}
-                                      onLoadEnd={() => setImgLoad(false)}
                                     />
-                                  </View>
-                                  <View>
-                                    <Text
-                                      style={style.quote}
-                                      selectable={true}
-                                      onLongPress={() =>
-                                        handleClipBoard(item.quote)
-                                      }
-                                      selectionColor={'red'}>
-                                      {item.quote}
-                                    </Text>
-                                  </View>
+                                  )}
+                                  <Image
+                                    source={{
+                                      uri: `${BASE_URL}${item.image}`,
+                                    }}
+                                    style={style.image}
+                                    onLoadStart={() => {
+                                      let clone = [...imgLoad];
+                                      clone[index] = true;
+                                      setImgLoad(clone);
+                                    }}
+                                    onLoadEnd={() => {
+                                      let clone = [...imgLoad];
+                                      clone[index] = false;
+                                      setImgLoad(clone);
+                                    }}
+                                  />
+                                </Pressable>
+                                <View>
+                                  <Text
+                                    style={style.quote}
+                                    selectable={true}
+                                    onLongPress={() =>
+                                      handleClipBoard(item.quote)
+                                    }
+                                    selectionColor={'red'}>
+                                    {item.quote}
+                                  </Text>
                                 </View>
-                              </>
+                              </View>
                             );
                           }}
                         />

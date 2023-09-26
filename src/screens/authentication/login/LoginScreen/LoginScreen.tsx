@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   View,
@@ -218,7 +219,8 @@ export const LoginScreen = ({
           contentContainerStyle={{
             paddingBottom: '5%',
           }}>
-          <KeyboardAvoidingView behavior="position">
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
             <View style={commonStyle.commonContentView}>
               {/* Header:------------------------------------------------------------------------ */}
               <View key={'LoginFormHeader'} style={style.headerView}>

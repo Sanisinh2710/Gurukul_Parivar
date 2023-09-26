@@ -18,6 +18,7 @@ import {ModalStyle} from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
+  isCamera?: boolean;
   setModelVisible: React.Dispatch<React.SetStateAction<boolean>>;
   inputList?: Array<string> | Array<object>;
   wantSearchBar?: boolean;
@@ -51,6 +52,7 @@ export const DropDownModel = React.memo(
     setModelValueChoosed,
     wantApplyButton,
     viewPhoto,
+    isCamera,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
@@ -138,17 +140,11 @@ export const DropDownModel = React.memo(
     }, [searchvalue]);
 
     return (
-      <Modal
-        transparent
-        visible={modelVisible}
-        animationType="fade"
-        onDismiss={() => {
-          setModelVisible(false);
-        }}>
+      <Modal transparent visible={modelVisible} animationType="fade">
         <View
           style={style.modelWholeView}
           onTouchEnd={() => {
-            setModelVisible(false);
+            if (!isCamera) setModelVisible(false);
           }}>
           <View
             style={

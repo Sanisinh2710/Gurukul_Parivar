@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -117,11 +118,13 @@ export const CalendarScreen = ({
     );
   };
   React.useEffect(() => {
-    if (sortedData.length > 0 && listIndex() !== -1) {
-      ref.current?.scrollToIndex({
-        animated: true,
-        index: listIndex(),
-      });
+    if (sortedData.length > 0 && listIndex() >= 0) {
+      setTimeout(() => {
+        ref.current?.scrollToIndex({
+          animated: true,
+          index: listIndex(),
+        });
+      }, 500);
     }
   }, [sortedData]);
 
@@ -158,8 +161,9 @@ export const CalendarScreen = ({
           commonstyle.commonContentView,
           {flex: 1, alignItems: 'center', justifyContent: 'center'},
         ]}
-        scrollEnabled={false}
-        horizontal
+        showsVerticalScrollIndicator={false}
+        // scrollEnabled={false}
+        // horizontal
         refreshControl={
           <RefreshControl
             colors={[COLORS.primaryColor, COLORS.green]}
@@ -186,7 +190,7 @@ export const CalendarScreen = ({
             {sortedData.length > 0 && (
               <View
                 style={{
-                  height: height * 0.2,
+                  height: height * 0.19,
                   marginTop: 10,
                 }}>
                 <FlatList
@@ -195,6 +199,8 @@ export const CalendarScreen = ({
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
                     gap: 15,
+                    marginTop: 10,
+                    paddingBottom: 15,
                   }}
                   showsVerticalScrollIndicator={false}
                   getItemLayout={(data, index) => {
@@ -252,8 +258,8 @@ export const CalendarScreen = ({
                         marginTop: '10%',
                       },
                 ]}>
-                <View
-                  onTouchEnd={() => {
+                <Pressable
+                  onPress={() => {
                     navigation.navigate('ImageZommer', {
                       images: [{url: `${BASE_URL}${Data[0].image}`}],
                     });
@@ -287,7 +293,7 @@ export const CalendarScreen = ({
                     onLoadStart={() => setimgLoad(true)}
                     onLoadEnd={() => setimgLoad(false)}
                   />
-                </View>
+                </Pressable>
 
                 <ShareDownload
                   wallpaper={false}

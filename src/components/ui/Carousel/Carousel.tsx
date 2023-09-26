@@ -172,6 +172,7 @@ export const Carousel = React.forwardRef(
               setCurrentScrollIndex(parseInt((x / itemWidth).toFixed(0)));
             }
           }}
+          snapToAlignment="center"
           onMomentumScrollEnd={() => {
             if (itemWidth !== null && itemWidth !== undefined) {
               if (
@@ -185,6 +186,7 @@ export const Carousel = React.forwardRef(
           }}
           data={data}
           contentContainerStyle={[contentContainerStyle]}
+          style={{width: itemWidth}}
           renderItem={({item, index, separators}: FlatListItemProps<ItemT>) => {
             return (
               <View

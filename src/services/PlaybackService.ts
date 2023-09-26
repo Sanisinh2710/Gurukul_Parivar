@@ -25,7 +25,6 @@ export async function setupPlayer() {
         // Capability.SkipToPrevious,
         Capability.SeekTo,
       ],
-
       // compactCapabilities: [
       //   Capability.Play,
       //   Capability.Pause,
@@ -51,7 +50,7 @@ export async function resetAndAddTracks(songs: Array<SongType>) {
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
-export async function PlaybackService() {
+export const PlaybackService =  async function() {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
     console.log('Event.RemotePause');
     TrackPlayer.pause();
@@ -72,74 +71,7 @@ export async function PlaybackService() {
     TrackPlayer.skipToPrevious();
   });
 
-  //   TrackPlayer.addEventListener(Event.RemoteJumpForward, async event => {
-  //     console.log('Event.RemoteJumpForward', event);
-  //     TrackPlayer.seekBy(event.interval);
-  //   });
-
-  //   TrackPlayer.addEventListener(Event.RemoteJumpBackward, async event => {
-  //     console.log('Event.RemoteJumpBackward', event);
-  //     TrackPlayer.seekBy(-event.interval);
-  //   });
-
-  // TrackPlayer.addEventListener(Event.RemoteSeek, event => {
-  //   console.log('Event.RemoteSeek', event);
-  //   TrackPlayer.seekTo(event.position);
-  // });
-
-  // TrackPlayer.addEventListener(Event.RemoteDuck, async event => {
-  //   console.log('Event.RemoteDuck', event);
-  // });
-
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, event => {
     console.log('Event.PlaybackQueueEnded', event);
-  });
-
-  // TrackPlayer.addEventListener(Event.PlaybackProgressUpdated , event =>{
-  //   // console.log('Event.PlayBackProgress' , event);
-  //   storage.set('trackProgress',JSON.stringify(event.position));
-  // })
-  // TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, event => {
-  //   console.log('Event.PlaybackActiveTrackChanged', event);
-  // });
-
-  //   TrackPlayer.addEventListener(Event.PlaybackPlayWhenReadyChanged, event => {
-  //     console.log('Event.PlaybackPlayWhenReadyChanged', event);
-  //   });
-
-  // TrackPlayer.addEventListener(Event.PlaybackState, event => {
-  //   console.log('Event.PlaybackState', event);
-  // });
-
-  // TrackPlayer.addEventListener(
-  //   Event.PlaybackMetadataReceived,
-  //   async ({title, artist}) => {
-
-  //     let trackIndex = await TrackPlayer.getCurrentTrack();
-  //     let trackObject = await TrackPlayer.getTrack(trackIndex ?? 0);
-  //     TrackPlayer.updateNowPlayingMetadata({
-  //       artist: [title, artist].filter(Boolean).join(' - '),
-  //       title: trackObject?.title,
-  //       artwork: trackObject?.artwork,
-  //     });
-  //   },
-  // );
-  await TrackPlayer.updateOptions({
-    android: {
-      appKilledPlaybackBehavior:
-        AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
-    },
-    // capabilities: [
-    //   Capability.Play,
-    //   Capability.Pause,
-    //   Capability.SkipToNext,
-    //   Capability.SkipToPrevious,
-    //],
-    compactCapabilities: [
-      Capability.Play,
-      Capability.Pause,
-      Capability.SkipToNext,
-    ],
-    progressUpdateEventInterval: 2,
   });
 }
