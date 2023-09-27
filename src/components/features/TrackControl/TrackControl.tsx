@@ -77,7 +77,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
 
   React.useMemo(async() => {
     await checkCurrentSong();
-  }, [activeTrack]);
+  }, []);
 
   const handleNext = async () => {
     await TrackPlayer.skipToNext();
@@ -182,7 +182,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
               style={{width: '100%', height: '100%'}}
               source={AllIcons.ForwardControl}
             />
-          </View>
+          </View> 
         </View>
       </Animated.View>
     

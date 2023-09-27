@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   AppState,
   Platform,
+  RefreshControl,
+  ScrollView,
 } from 'react-native';
 import {
   DropDownModel,
@@ -50,6 +52,7 @@ type SongUiProp = {
   screenGoToAlbum?: React.MutableRefObject<boolean>;
   trackAdd: boolean;
   navigation: NavigationProp<any>;
+  resetTrack?:React.MutableRefObject<boolean>;
   goBack?: () => void;
   // navigateScreen?: (
   //   playlistname: string,
@@ -63,7 +66,7 @@ type SongUiProp = {
 export const SongUi = ({
   songData,
   setSongData,
-
+  resetTrack,
   screenGoToAlbum,
   navigation,
   trackAdd,
@@ -89,31 +92,40 @@ export const SongUi = ({
   const [selectedItem, setSelectedItem] = React.useState(
     [...selectedCategories] ?? [],
   );
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const [modal, setModal] = React.useState(false);
   const [categoryList, setCategoryList] = React.useState<Array<any>>([]);
 
   const handleControl = async (itemId: any) => {
     try {
-      if (screenGoToAlbum?.current == false) {
+     
+      
         if (trackMode.setupMode == 'ALBUM') {
-            screenGoToAlbum.current = true;
+          if(resetTrack!=undefined && resetTrack?.current == false)
+          {
+            resetTrack.current = true;
             await setAlbumDataToRedux(trackMode.albumId);
+          }
         } else {
-         
-          screenGoToAlbum.current = true;
-          await setDataToRedux();
+          if(screenGoToAlbum!=undefined && screenGoToAlbum?.current == false)
+          {
+            screenGoToAlbum.current = true;
+            await setDataToRedux();
+          }
         }
-      }
+      
 
       if (trackAdd == true) {
         const queue = await TrackPlayer.getQueue();
         const index = queue.findIndex(item => item.id == itemId);
+        console.log("trackAdd ==",trackAdd, "Index" , index);
         if (activeTrack?.id != itemId) {
           await TrackPlayer.skip(index , 0);
           await TrackPlayer.play();
          
         } else if (trackStatus == State.Playing) {
-          await TrackPlayer.pause();
+          await TrackPlayer.pause(); 
         } else {
           await TrackPlayer.play();
         }
@@ -237,6 +249,17 @@ export const SongUi = ({
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+     await setDataToRedux();
+    } catch (error) {
+      console.log(error);
+    }
+    setRefreshing(false);
+  };
+
   return (
     <>
       <ScreenHeader
@@ -244,15 +267,16 @@ export const SongUi = ({
         headerTitleAlign={'left'}
         leftOnPress={async () => {
           if (trackMode.setupMode == 'ALBUM') {
-            if(selectedItem.length == 0)
+            if(selectedItem.length == 0 && screenGoToAlbum !=undefined)
             {             
-              await setDataToRedux(true);
+              screenGoToAlbum.current = false;
               dispatch(
                 UPDATE_SETUP_MODE({
                   setupMode: 'INITIAL',
                   albumName: undefined,
                 }),
-              );
+                );
+                await setDataToRedux(true);
             }
             else{
               dispatch(
@@ -291,6 +315,15 @@ export const SongUi = ({
             : undefined
         }
       />
+      <ScrollView 
+      refreshControl={
+        <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+      }
+      >
       <View style={[commonStyle.commonContentView, {flex: 1}]}>
         <SearchBar dataForSearch={songData} setSearchData={setSongData} />
         {Array.isArray(selectedItem) &&
@@ -357,6 +390,7 @@ export const SongUi = ({
         <View style={{flex: 1}}>
 
           {songData.length > 0 ? (
+            
             <FlatList
               data={songData}
               renderItem={({item, index}) => (
@@ -451,10 +485,10 @@ export const SongUi = ({
                               albumName: item.title,
                             }),
                             );
-                          if (screenGoToAlbum != undefined) {
-                              screenGoToAlbum.current = false;
-                          }
-                          await setAlbumDataToRedux(item.id);
+                            if (resetTrack != undefined) {
+                            resetTrack.current = false;
+                            }
+                            await setAlbumDataToRedux(item.id);
                         }}>
                         <Image
                           style={{
@@ -471,13 +505,14 @@ export const SongUi = ({
                 </View>
               )}
             />
+           
           ) : (
             <NoData />
           )}
         </View>
       </View>
-
-      {activeTrack.url != "" && <TrackControl status={trackPlaying} />}
+      </ScrollView>
+      {activeTrack?.url != "" && <TrackControl status={trackPlaying} />}
 
       <DropDownModel
         modelVisible={modal}

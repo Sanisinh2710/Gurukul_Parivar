@@ -59,9 +59,6 @@ export const GurukulConnect = ({
         (item: any) => item.id == activeTrack?.id,
       );
 
-   
-
-
       if (findSong.length == 0 || findSong[0].is_multiple) {
         
 
@@ -102,13 +99,16 @@ export const GurukulConnect = ({
           screenGoToAlbum.current = true;
         }
       }
+
+      console.log("Screen Go to album ==" , screenGoToAlbum);
+
+
       if (
         response.resType === 'SUCCESS' &&
         response.data.gurukul_audios.length > 0
       ) {
         const SongList: Array<SongType> = [];
-        const trackList: Array<any> = [];
-
+     
         response.data.gurukul_audios.forEach((item: any) => {
     
           SongList.push({
@@ -129,7 +129,6 @@ export const GurukulConnect = ({
               setTrackAdd(true);
             }
           }
-          if(trackMode.setupMode == 'NONE' || trackMode.setupMode == 'INITIAL') 
             dispatch(ADD_UPDATE_SONGS({songs: SongList}));
         } else {
           if(trackMode.setupMode == 'INITIAL' || trackMode.setupMode == 'NONE' || de == true)
@@ -141,9 +140,9 @@ export const GurukulConnect = ({
     }
   };
 
-  
   const setAlbumDataToRedux = async (id?: number) => {
     const queue = await TrackPlayer.getQueue();
+console.log("resetTrack==",resetTrack);
 
     if (id != undefined) {
       const response = await GurukulMultiPartAudio(id);
@@ -259,9 +258,9 @@ export const GurukulConnect = ({
         songData={songData}
         setSongData={setSongData}
         navigation={navigation}
-        screenGoToAlbum={
-          trackMode.setupMode == 'ALBUM' ? resetTrack : screenGoToAlbum
+        screenGoToAlbum={screenGoToAlbum
         }
+        resetTrack={resetTrack}
         setDataToRedux={setDataToRedux}
         setAlbumDataToRedux={setAlbumDataToRedux}
         trackAdd={trackAdd}
