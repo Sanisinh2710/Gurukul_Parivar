@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking} from 'react-native';
+import {Linking, Platform} from 'react-native';
 import WebView from 'react-native-webview';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyProgramDetailProps} from '../../../../types';
@@ -27,7 +27,7 @@ export const DailyProgramDetail = ({
         headerTitle={title}
       />
       <WebView
-        scalesPageToFit={false}
+        // scalesPageToFit={false}
         style={{
           backgroundColor: 'transparent',
           paddingHorizontal: 20,
@@ -38,8 +38,11 @@ export const DailyProgramDetail = ({
             return false;
           } else return true;
         }}
+        scalesPageToFit={Platform.OS === 'ios'}
         source={{
-          html: `<html><head><style>body {padding:20px;}</style></head><body>${description}</body></html>`,
+          html: `<html><head>
+          <meta content="width=width, initial-scale=1, maximum-scale=1" name="viewport"></meta>
+          <style>body {padding:20px;}</style></head><body>${description}</body></html>`,
         }}
       />
     </ScreenWrapper>

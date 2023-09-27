@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  Text,
   View,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
@@ -22,6 +23,19 @@ import {
 import {RootStackParamList} from '../../../../types';
 import {COLORS} from '../../../../utils';
 import {styles} from './styles';
+import {
+  GestureHandlerRootView,
+  PinchGestureHandler,
+  PinchGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 
 export const DailyDarshanDetail = ({
   route,
@@ -48,7 +62,21 @@ export const DailyDarshanDetail = ({
     React.useState<boolean>(false);
 
   const ref = React.useRef<CarouselMethodsType>(null);
-
+  const scale = useSharedValue(1);
+  const pinchHandler =
+    useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
+      onActive: event => {
+        scale.value = event.scale;
+      },
+      onEnd: () => {
+        scale.value = withTiming(1);
+      },
+    });
+  const rStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: scale.value}],
+    };
+  });
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -77,7 +105,9 @@ export const DailyDarshanDetail = ({
             return (
               <>
                 <View
-                  onTouchEnd={() => setZoomModalVisiable(true)}
+                  onTouchEnd={() =>
+                    navigation.navigate('zoomImage', {image: item})
+                  }
                   style={[
                     {
                       height: '100%',
@@ -99,9 +129,10 @@ export const DailyDarshanDetail = ({
                       }}
                     />
                   )}
+
                   <Image
+                    style={[style.images]}
                     source={{uri: `${BASE_URL}${item}`}}
-                    style={style.images}
                     resizeMode="contain"
                     onLoadStart={() => setimgLoad(true)}
                     onLoadEnd={() => setimgLoad(false)}

@@ -21,7 +21,6 @@ import {
   Calendar,
   Carousel,
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -281,7 +280,9 @@ export const DailyQuotes = ({
                                     style={{flex: 1, width: '100%'}}
                                     onTouchEnd={() => {
                                       setCurrentImageUri(item.image);
-                                      setZoomModalVisiable(true);
+                                      navigation.navigate('zoomImage', {
+                                        image: item.image,
+                                      });
                                     }}>
                                     {imgLoad && (
                                       <ActivityIndicator
@@ -361,11 +362,6 @@ export const DailyQuotes = ({
         }
         handlePrevPress={handlePrev}
         handleNextPress={handleNext}
-      />
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${currentImageUri}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

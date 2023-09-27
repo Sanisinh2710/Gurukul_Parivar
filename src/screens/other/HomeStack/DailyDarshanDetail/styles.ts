@@ -11,6 +11,7 @@ export const styles = () => {
       color: 'black',
     },
     images: {
+      flex: 1,
       height: '100%',
       width: '100%',
     },

@@ -30,6 +30,7 @@ import {
   RegisterScreen,
   ResetPassword,
   Status,
+  ZoomImageScreen,
 } from '../screens';
 import {
   RootAuthStackParamList,
@@ -133,6 +134,10 @@ export const NativeStackRouteList: Array<{
   {
     name: 'status',
     component: Status,
+  },
+  {
+    name: 'zoomImage',
+    component: ZoomImageScreen,
   },
 ];
 

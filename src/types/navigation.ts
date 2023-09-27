@@ -31,6 +31,7 @@ export type RootStackParamList = {
   PaymentMethod: undefined;
   GurukulEvents: undefined;
   QuizHistory: {date: string; id: number};
+  zoomImage: {image: any};
 };
 
 export type RootBottomTabParamList = {
