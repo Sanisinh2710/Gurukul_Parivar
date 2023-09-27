@@ -172,7 +172,6 @@ export const Carousel = React.forwardRef(
               setCurrentScrollIndex(parseInt((x / itemWidth).toFixed(0)));
             }
           }}
-          snapToAlignment="center"
           onMomentumScrollEnd={() => {
             if (itemWidth !== null && itemWidth !== undefined) {
               if (
