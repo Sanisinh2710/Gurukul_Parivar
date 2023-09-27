@@ -1,6 +1,7 @@
 import {PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import ImagePicker from 'react-native-image-crop-picker';
+import {ImagePickerResponse, launchCamera} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -30,23 +31,35 @@ export const captureImage = async (
 
   if (Platform.OS === 'android') {
     if (isCameraPermitted) {
-      const res = await ImagePicker.openCamera({
-        cropping: true,
-        width: 500,
-        height: 500,
-        includeExif: true,
-        mediaType: type,
-      });
+      mainuri = await launchCamera(
+        {
+          mediaType: type,
+          maxWidth: 300,
+          maxHeight: 550,
+          quality: 1,
+          videoQuality: 'low',
+          durationLimit: 30, //Video max duration in seconds
+          saveToPhotos: true,
+        },
+        response => {
+          if (response.didCancel) {
+            console.log('User cancelled camera picker');
+          }
+          if (response.errorCode == 'camera_unavailable') {
+            console.log('Camera not available on device');
+          }
+          if (response.errorCode == 'permission') {
+            console.log('Permission not satisfied');
+          }
+          if (response.errorCode == 'others') {
+            console.log(`${response.errorMessage}`);
+          }
+        },
+      );
 
-      let finalURI: {uri: any; fileName: any; type: any}[] = [];
+      let finaluri: any = mainuri.assets;
 
-      finalURI.push({
-        uri: `file:/` + res.path,
-        fileName: res.filename ?? Date.now().toString(),
-        type: res.mime,
-      });
-
-      return finalURI;
+      return finaluri;
     }
   } else {
     const res = await ImagePicker.openCamera({
@@ -60,7 +73,7 @@ export const captureImage = async (
     let finalURI: {uri: any; fileName: any; type: any}[] = [];
 
     finalURI.push({
-      uri: `file:/` + res.path,
+      uri: `file://` + res.path,
       fileName: res.filename ?? Date.now().toString(),
       type: res.mime,
     });
@@ -83,7 +96,7 @@ export const chooseFile = async (
   let finalURI: {uri: any; fileName: any; type: any}[] = [];
 
   finalURI.push({
-    uri: `file:/` + res.path,
+    uri: `file://` + res.path,
     fileName: res.filename ?? Date.now().toString(),
     type: res.mime,
   });

@@ -7,14 +7,14 @@ import {
   Dimensions,
   Image,
   Platform,
+  Pressable,
   View,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Carousel,
-  CarouselMethodsType,
+  CarouselRef,
   CustomNavigate,
-  ImageZoomer,
   ScreenHeader,
   ScreenWrapper,
   ShareDownload,
@@ -34,7 +34,7 @@ export const DailyDarshanDetail = ({
   const TotalImages = route.params.totalImages;
   const AllData = route.params.data;
 
-  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
+  const [imgLoad, setimgLoad] = React.useState<boolean[]>([]);
 
   const [pagination, setPagination] = React.useState<number>(
     currentImageIndex + 1,
@@ -44,10 +44,7 @@ export const DailyDarshanDetail = ({
     return AllData?.[pagination - 1];
   }, [AllData, pagination]);
 
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
-
-  const ref = React.useRef<CarouselMethodsType>(null);
+  const ref = React.useRef<CarouselRef>(null);
 
   return (
     <ScreenWrapper>
@@ -65,9 +62,9 @@ export const DailyDarshanDetail = ({
           contentContainerStyle={{
             marginTop: '5%',
           }}
-          itemWidth={Dimensions.get('window').width * 0.9}
-          itemHeight={Dimensions.get('window').height * 0.7}
-          itemGap={10}
+          itemWidth={Dimensions.get('window').width}
+          itemHeight={Dimensions.get('window').height * 0.65}
+          itemGap={20}
           data={AllData}
           initialScrollToIndex={currentImageIndex}
           onSnapToItem={index => {
@@ -75,39 +72,49 @@ export const DailyDarshanDetail = ({
           }}
           renderItem={({item, index}) => {
             return (
-              <>
-                <View
-                  onTouchEnd={() => setZoomModalVisiable(true)}
-                  style={[
-                    {
-                      height: '100%',
-                      width: '100%',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    },
-                  ]}>
-                  {imgLoad && (
-                    <ActivityIndicator
-                      size={30}
-                      color={COLORS.primaryColor}
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                      }}
-                    />
-                  )}
-                  <Image
-                    source={{uri: `${BASE_URL}${item}`}}
-                    style={style.images}
-                    resizeMode="contain"
-                    onLoadStart={() => setimgLoad(true)}
-                    onLoadEnd={() => setimgLoad(false)}
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('ImageZommer', {
+                    images: [{url: `${BASE_URL}${item}`}],
+                  });
+                }}
+                style={[
+                  {
+                    height: '100%',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  },
+                ]}>
+                {imgLoad[index] && (
+                  <ActivityIndicator
+                    size={30}
+                    color={COLORS.primaryColor}
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                    }}
                   />
-                </View>
-              </>
+                )}
+                <Image
+                  source={{uri: `${BASE_URL}${item}`}}
+                  style={style.images}
+                  resizeMode="contain"
+                  onLoadStart={() => {
+                    let clone = [...imgLoad];
+                    clone[index] = true;
+                    setimgLoad(clone);
+                  }}
+                  onLoadEnd={() => {
+                    let clone = [...imgLoad];
+                    clone[index] = false;
+                    setimgLoad(clone);
+                  }}
+                />
+              </Pressable>
             );
           }}
         />
@@ -132,11 +139,6 @@ export const DailyDarshanDetail = ({
             ref.current?.handlePrev();
           }
         }}
-      />
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${currentImageUri}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

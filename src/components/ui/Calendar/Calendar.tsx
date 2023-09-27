@@ -343,7 +343,7 @@ export const Calendar = ({
               color: COLORS.primaryRippleColor,
             }}
             style={{
-              // position: 'absolute',
+              top: 20,
               right: 10,
               bottom: 0,
               width: '23%',
@@ -364,8 +364,8 @@ export const Calendar = ({
           </Pressable>
 
           {isModalVisible && (
-            <Modal visible={isModalVisible} transparent animationType="slide">
-              <View style={styles.modal}>
+            <Modal visible={isModalVisible} transparent animationType="fade">
+              <View style={styles.modal} onTouchEnd={handleCloseYearModal}>
                 <View
                   style={{
                     width: '50%',
@@ -375,6 +375,9 @@ export const Calendar = ({
                     borderRadius: 20,
                     backgroundColor: COLORS.lightModeBackgroundColor,
                     padding: '5%',
+                  }}
+                  onTouchEnd={e => {
+                    e.stopPropagation();
                   }}>
                   <Text style={styles.modalTitle}>Select Year</Text>
                   <ScrollView

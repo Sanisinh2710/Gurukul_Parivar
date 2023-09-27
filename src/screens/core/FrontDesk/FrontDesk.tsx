@@ -29,9 +29,11 @@ import {styles} from './styles';
 export const FrontDeskScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
+  // const currentPage = useAppSelector(state => state.sliderPage.currentPage);
 
-  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+  // const dashboardImages = useAppSelector(state => state.sliderPage.images);
+
+  const [dashboardImages, setDashboardImages] = React.useState([]);
 
   const [loader, setLoader] = React.useState<boolean>(false);
 
@@ -51,7 +53,9 @@ export const FrontDeskScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        // dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
+
         setLoader(false);
       }
     } catch (error) {
@@ -88,7 +92,8 @@ export const FrontDeskScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        // dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
       }
     } catch (error) {
       console.log(error);
@@ -134,7 +139,7 @@ export const FrontDeskScreen = ({
               style={{
                 marginBottom: '2%',
               }}>
-              <PagerView images={dashboardImages} currentIndex={currentPage} />
+              <PagerView images={dashboardImages} />
             </View>
             <View style={[{flex: 1}]}>
               <FlatList

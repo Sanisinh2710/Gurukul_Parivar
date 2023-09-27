@@ -6,7 +6,9 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  Dimensions,
   Image,
+  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -42,6 +44,7 @@ import {
   chooseFile,
 } from '../../../utils';
 import {styles} from './styles';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 export const ProfileScreen = ({
   navigation,
@@ -54,9 +57,13 @@ export const ProfileScreen = ({
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
   const {t, i18n} = useTranslation();
-
   const style = styles();
   const commonStyle = CommonStyle();
+
+  const {height} = Dimensions.get('screen');
+  // const updatedHeight = React.useMemo(()=>{
+  //   return height
+  // },[height])
 
   const ProfileList = React.useMemo(() => {
     return EditProfileList(t, i18n);
@@ -147,6 +154,7 @@ export const ProfileScreen = ({
         break;
       case 'camera':
         let pathCamera = await captureImage('photo');
+
         if (pathCamera) {
           userProfileUpdate({
             uri: pathCamera[0].uri,
@@ -262,26 +270,35 @@ export const ProfileScreen = ({
             );
           })}
         </View>
-        <View>
-          <PrimaryButton
-            title={t('DeleteModel.DltBtn')}
-            onPress={() => {
-              setModelType('deleteAcc');
-              setModelVisible(!modelVisible);
-            }}
-            buttonColor={'rgba(172, 43, 49, 0.1)'}
-            titleColor={COLORS.primaryColor}
-            buttonStyle={style.btnStyle}
-            textStyle={{fontSize: 16}}
-          />
-        </View>
+        <PrimaryButton
+          title={t('DeleteModel.DltBtn')}
+          onPress={() => {
+            setModelType('deleteAcc');
+            setModelVisible(!modelVisible);
+          }}
+          buttonColor={'rgba(172, 43, 49, 0.1)'}
+          titleColor={COLORS.primaryColor}
+          buttonStyle={style.btnStyle}
+          textStyle={{fontSize: 16}}
+        />
         <DropDownModel
+          type={'none'}
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}
-          type={'phone'}
-          modalHeight={'50%'}
+          modalHeight={`${
+            Platform.OS === 'ios'
+              ? height > 700
+                ? height * 0.052
+                : height * 0.078
+              : 50
+          }%`}
           customModelchild={
-            <View style={{alignItems: 'center', marginTop: '5%'}}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                alignItems: 'center',
+                marginTop: '5%',
+              }}>
               <View style={{height: 80, width: 80}}>
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
@@ -354,10 +371,11 @@ export const ProfileScreen = ({
                   }
                 />
               </View>
-            </View>
+            </ScrollView>
           }
         />
         <DropDownModel
+          isCamera={true}
           modelVisible={profileModel}
           setModelVisible={setProfileModel}
           customModelchild={
@@ -377,14 +395,21 @@ export const ProfileScreen = ({
               </Pressable>
               <Pressable
                 onPress={() => {
-                  setPhotoModel(!viewPhotoModel);
+                  setProfileModel(false);
+                  setPhotoModel(true);
                 }}>
                 <Text style={style.pictureUpdateText}>View Photo</Text>
               </Pressable>
             </View>
           }
           type={'none'}
-          modalHeight={'30%'}
+          modalHeight={`${
+            Platform.OS === 'ios'
+              ? height > 700
+                ? height * 0.04
+                : height * 0.055
+              : 40
+          }%`}
         />
         <DropDownModel
           viewPhoto={true}

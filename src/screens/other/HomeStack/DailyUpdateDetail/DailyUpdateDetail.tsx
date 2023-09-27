@@ -7,13 +7,14 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
-import {ImageZoomer, ScreenHeader, ScreenWrapper} from '../../../../components';
+import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {RootStackParamList} from '../../../../types';
 import {COLORS, options} from '../../../../utils';
 import {styles} from './styles';
@@ -25,8 +26,7 @@ export const DailyUpdateDetail = ({
   const style = styles();
   const commonstyle = CommonStyle();
   const Data = route.params.data;
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
+
   const {t} = useTranslation();
 
   const [imgLoad, setimgLoad] = React.useState<boolean>(false);
@@ -61,8 +61,12 @@ export const DailyUpdateDetail = ({
           </Text>
         </View>
 
-        <View
-          onTouchEnd={() => setZoomModalVisiable(true)}
+        <Pressable
+          onPress={() => {
+            navigation.navigate('ImageZommer', {
+              images: [{url: `${BASE_URL}${Data.images[0]}`}],
+            });
+          }}
           style={[style.imageContainer]}>
           {imgLoad && (
             <ActivityIndicator
@@ -84,7 +88,7 @@ export const DailyUpdateDetail = ({
             onLoadStart={() => setimgLoad(true)}
             onLoadEnd={() => setimgLoad(false)}
           />
-        </View>
+        </Pressable>
 
         <View style={style.titleContainer}>
           <Text style={style.content}>{Data.description}</Text>
@@ -94,7 +98,7 @@ export const DailyUpdateDetail = ({
           <Text style={style.title}>{t('common.PhotoGallery')}</Text>
           <FlatList
             horizontal
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             contentContainerStyle={{
               gap: 10,
               marginTop: 10,
@@ -114,8 +118,8 @@ export const DailyUpdateDetail = ({
                 {item && (
                   <View
                     style={{
-                      height: 105,
-                      width: 110,
+                      height: 95,
+                      width: 100,
                       borderRadius: 8,
                     }}>
                     <Image
@@ -124,8 +128,8 @@ export const DailyUpdateDetail = ({
                       }}
                       key={index}
                       style={{
-                        height: 105,
-                        width: 110,
+                        height: 95,
+                        width: 100,
                         borderRadius: 8,
                         resizeMode: 'cover',
                       }}
@@ -137,11 +141,6 @@ export const DailyUpdateDetail = ({
           />
         </View>
       </ScrollView>
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${Data.images[0]}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
-      />
     </ScreenWrapper>
   );
 };

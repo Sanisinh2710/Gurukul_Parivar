@@ -3,13 +3,13 @@
   <uses-feature
     android:name="android.hardware.camera"
     android:required="false" />
-
   <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.SET_WALLPAPER" />
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
   <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
@@ -50,12 +50,12 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
-        <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+        <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
       </intent-filter>
     </activity>
     <activity
-        android:name="com.yalantis.ucrop.UCropActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+      android:name="com.yalantis.ucrop.UCropActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
   </application>
 </manifest>

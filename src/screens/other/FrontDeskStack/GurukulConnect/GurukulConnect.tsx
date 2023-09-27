@@ -16,6 +16,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import TrackPlayer, {
   Event,
   State,
@@ -90,6 +91,8 @@ export const GurukulConnect = ({
 
   const [loader, setLoader] = React.useState<boolean>(false);
 
+  const [filtering, setFiltering] = React.useState<boolean>(false);
+
   const [isDownloading, setIsDownLoading] = React.useState<
     {index: number; status: boolean}[]
   >([]);
@@ -162,6 +165,7 @@ export const GurukulConnect = ({
         await addTracks([...Songs.filter(item => item.is_multiple === false)]);
 
         dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+        setSearchData(Songs);
 
         const playingTrack = await TrackPlayer.getTrack(0);
 
@@ -257,6 +261,8 @@ export const GurukulConnect = ({
 
     if (response.resType === 'SUCCESS') {
       setCategoryList(response.data.categories);
+    } else {
+      Toast.show(response.message, 2);
     }
 
     setLoader(false);
@@ -264,12 +270,15 @@ export const GurukulConnect = ({
   };
 
   React.useMemo(async () => {
+    setLoader(true);
     if (setupMode === 'NONE') {
       const res = await GurkulAudioGetApi();
 
       if (res.resType === 'SUCCESS') {
         await setup(res.data.gurukul_audios);
         dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+      } else {
+        Toast.show(res.message, 2);
       }
     } else {
       if (setupMode !== 'FILTERED' && setupMode !== 'ALBUM') {
@@ -277,13 +286,16 @@ export const GurukulConnect = ({
 
         if (res.resType === 'SUCCESS') {
           await setup(res.data.gurukul_audios);
+        } else {
+          Toast.show(res.message, 2);
         }
       }
     }
+    setLoader(false);
   }, []);
 
   React.useMemo(async () => {
-    setLoader(true);
+    setFiltering(true);
 
     if (
       selectedItem.length > 0 &&
@@ -295,14 +307,6 @@ export const GurukulConnect = ({
         //  try to comment this if song getting paused after coming from album playing
         if (setupMode === 'INITIAL') {
           await TrackPlayer.reset();
-          dispatch(
-            SET_ACTIVE_TRACKDATA({
-              activeTrackDataPayload: {
-                track: undefined,
-                position: undefined,
-              },
-            }),
-          );
         }
         if (
           setupMode === 'FILTERED' &&
@@ -311,6 +315,8 @@ export const GurukulConnect = ({
           await TrackPlayer.reset();
         }
         await setup(response.data.gurukul_audios);
+      } else {
+        Toast.show(response.message, 2);
       }
 
       batch(() => {
@@ -325,6 +331,8 @@ export const GurukulConnect = ({
 
         if (res.resType === 'SUCCESS') {
           await setup(res.data.gurukul_audios);
+        } else {
+          Toast.show(res.message, 2);
         }
 
         batch(() => {
@@ -334,7 +342,7 @@ export const GurukulConnect = ({
       }
     }
 
-    setLoader(false);
+    setFiltering(false);
   }, [selectedItem]);
 
   useTrackPlayerEvents(
@@ -347,24 +355,26 @@ export const GurukulConnect = ({
             playbackState !== State.Connecting &&
             playbackState !== 'idle'
           ) {
-            const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
+            if (event.nextTrack) {
+              const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
 
-            const currentTrackDuration = await TrackPlayer.getDuration();
+              const currentTrackDuration = await TrackPlayer.getDuration();
 
-            if (playingTrack !== null) {
-              await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
-                title: playingTrack?.title,
-                artist: playingTrack?.artist,
-                duration: currentTrackDuration,
-              });
+              if (playingTrack !== null) {
+                await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
+                  title: playingTrack?.title,
+                  artist: playingTrack?.artist,
+                  duration: currentTrackDuration,
+                });
 
-              dispatch(
-                SET_ACTIVE_TRACKDATA({
-                  activeTrackDataPayload: {
-                    track: playingTrack,
-                  },
-                }),
-              );
+                dispatch(
+                  SET_ACTIVE_TRACKDATA({
+                    activeTrackDataPayload: {
+                      track: playingTrack,
+                    },
+                  }),
+                );
+              }
             }
           }
           break;
@@ -512,7 +522,10 @@ export const GurukulConnect = ({
                     }),
                   );
                 });
+                setSearchData(Songs);
               }
+            } else {
+              Toast.show(res.message, 2);
             }
           } catch (error) {
             console.log(error);
@@ -583,6 +596,9 @@ export const GurukulConnect = ({
           ]);
 
           dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+          setSearchData(Songs);
+        } else {
+          Toast.show(res.message, 2);
         }
       } catch (error) {
         console.log(error);
@@ -610,6 +626,14 @@ export const GurukulConnect = ({
           }),
         );
       }
+    }
+
+    const response = await GurkulAudioCategoriesGetApi();
+
+    if (response.resType === 'SUCCESS') {
+      setCategoryList(response.data.categories);
+    } else {
+      Toast.show(response.message, 2);
     }
 
     setWantNewSongs(false);
@@ -667,8 +691,11 @@ export const GurukulConnect = ({
 
             if (wantToResetMenuSongList) {
               dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+              setSearchData(Songs);
             }
           }
+        } else {
+          Toast.show(res.message, 2);
         }
       } catch (error) {
         console.log(error, 'error came');
@@ -725,7 +752,7 @@ export const GurukulConnect = ({
     setLoader(false);
   };
 
-  if (!isPlayerReady || loader || isSearching) {
+  if (isPlayerReady === false || loader || filtering || isSearching) {
     return <Loader screenHeight={'100%'} />;
   } else {
     return (
@@ -858,9 +885,39 @@ export const GurukulConnect = ({
                             : item?.id == activeTrack?.albumId &&
                               setupMode !== 'ALBUM'
                             ? 'rgba(172, 43, 49, 1)'
+                            : item?.id == activeTrack?.id &&
+                              setupMode !== 'ALBUM'
+                            ? 'rgba(172, 43, 49, 1)'
                             : 'rgba(172, 43, 49, 0.3)',
                       },
-                    ]}>
+                    ]}
+                    onTouchEnd={
+                      item.is_multiple
+                        ? async e => {
+                            if (item?.id && item?.title) {
+                              if (
+                                activeTrack &&
+                                activeTrackPosition &&
+                                activeTrack?.album &&
+                                activeTrack?.albumId !== null &&
+                                activeTrack?.albumId !== undefined &&
+                                activeTrack?.albumId == item?.id
+                              ) {
+                                await onAlbumClick(
+                                  activeTrack?.albumId,
+                                  activeTrack?.album,
+                                  true,
+                                  activeTrack,
+                                  activeTrackPosition,
+                                  playbackState === State.Playing,
+                                );
+                              } else {
+                                await onAlbumClick(item?.id, item?.title);
+                              }
+                            }
+                          }
+                        : e => {}
+                    }>
                     <View>
                       <Text style={style.songTitle}>
                         {item?.id}
@@ -870,33 +927,7 @@ export const GurukulConnect = ({
                       <Text style={style.songArtist}>{item?.description}</Text>
                     </View>
                     {item.is_multiple === true ? (
-                      <View
-                        onTouchEnd={async e => {
-                          if (item?.id && item?.title) {
-                            if (
-                              activeTrack &&
-                              activeTrackPosition &&
-                              activeTrack?.album &&
-                              activeTrack?.albumId !== null &&
-                              activeTrack?.albumId !== undefined &&
-                              activeTrack?.albumId == item?.id
-                            ) {
-                              await onAlbumClick(
-                                activeTrack?.albumId,
-                                activeTrack?.album,
-                                true,
-                                activeTrack,
-                                activeTrackPosition,
-                                playbackState === State.Playing,
-                              );
-                            } else {
-                              await onAlbumClick(item?.id, item?.title);
-                            }
-                          }
-                        }}
-                        style={{
-                          flexDirection: 'row',
-                        }}>
+                      <View style={{flexDirection: 'row'}}>
                         <View style={{height: 15, width: 15}}>
                           <Image
                             style={{

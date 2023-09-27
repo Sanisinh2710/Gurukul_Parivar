@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {FlatList, Modal, Text, TextInput, View} from 'react-native';
+import {Dimensions, FlatList, Modal, Text, TextInput, View} from 'react-native';
 
 import {Image} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
@@ -18,6 +18,7 @@ import {ModalStyle} from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
+  isCamera?: boolean;
   setModelVisible: React.Dispatch<React.SetStateAction<boolean>>;
   inputList?: Array<string> | Array<object>;
   wantSearchBar?: boolean;
@@ -51,10 +52,13 @@ export const DropDownModel = React.memo(
     setModelValueChoosed,
     wantApplyButton,
     viewPhoto,
+    isCamera,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
     const {t} = useTranslation();
+
+    const {width, height} = Dimensions.get('window');
 
     const touchY = React.useRef<any>();
 
@@ -136,17 +140,11 @@ export const DropDownModel = React.memo(
     }, [searchvalue]);
 
     return (
-      <Modal
-        transparent
-        visible={modelVisible}
-        animationType="fade"
-        onDismiss={() => {
-          setModelVisible(false);
-        }}>
+      <Modal transparent visible={modelVisible} animationType="fade">
         <View
           style={style.modelWholeView}
           onTouchEnd={() => {
-            // setModelVisible(false);
+            if (!isCamera) setModelVisible(false);
           }}>
           <View
             style={
@@ -222,14 +220,14 @@ export const DropDownModel = React.memo(
                   )}
                   <View
                     style={{
-                      height: wantApplyButton ? '65%' : 'auto',
+                      height: wantApplyButton ? height * 0.43 : 'auto',
                     }}>
                     <FlatList
                       keyboardShouldPersistTaps="handled"
                       contentContainerStyle={[
                         style.modelFlatListContainerStyle,
                         {
-                          paddingBottom: '10%',
+                          paddingBottom: '40%',
                         },
                       ]}
                       showsHorizontalScrollIndicator={false}
@@ -498,7 +496,6 @@ export const DropDownModel = React.memo(
                   {wantApplyButton && (
                     <View
                       style={{
-                        height: '35%',
                         alignItems: 'center',
                       }}>
                       <PrimaryButton
