@@ -1,6 +1,5 @@
 import {combineReducers} from 'redux';
 
-import ImageSliderReducer from './ducks/imageSliderslice';
 import MusicReducer from './ducks/musicSlice';
 import ThemeReducer from './ducks/themeslice';
 
@@ -20,6 +19,5 @@ const musicPersistConfig: PersistConfig<InitialSongsType> = {
 
 export const rootReducer = combineReducers({
   theme: persistReducer(themePersistConfig, ThemeReducer),
-  sliderPage: ImageSliderReducer,
   music: persistReducer(musicPersistConfig, MusicReducer),
 });

@@ -19,8 +19,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
@@ -32,10 +30,6 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  // const currentPage = useAppSelector(state => state.sliderPage.currentPage);
-
-  // const dashboardImages = useAppSelector(state => state.sliderPage.images);
-
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -45,10 +39,7 @@ export const HomeScreen = ({
   const style = styles();
   const commonStyle = CommonStyle();
 
-  const dispatch = useAppDispatch();
-
   const [dashboardImages, setDashboardImages] = React.useState([]);
-  // const [currentPage, setCurrentPage] = React.useState(0);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -57,7 +48,6 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        // dispatch(SET_IMAGES({images: res.data.images}));
         setDashboardImages(res.data.images);
       }
     } catch (error) {
@@ -74,7 +64,6 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        // dispatch(SET_IMAGES({images: res.data.images}));
         setDashboardImages(res.data.images);
         setLoader(false);
       }

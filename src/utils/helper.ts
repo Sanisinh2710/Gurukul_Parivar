@@ -1,7 +1,11 @@
 import {PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import ImagePicker from 'react-native-image-crop-picker';
-import {ImagePickerResponse, launchCamera} from 'react-native-image-picker';
+import {
+  ImagePickerResponse,
+  MediaType,
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -24,9 +28,7 @@ const requestCameraPermission = async () => {
   }
 };
 
-export const captureImage = async (
-  type: 'photo' | 'video' | 'any' | undefined,
-) => {
+export const captureImage = async (type: MediaType) => {
   let isCameraPermitted = await requestCameraPermission();
   let mainuri: ImagePickerResponse;
 
@@ -68,50 +70,68 @@ export const captureImage = async (
     }
   } else {
     try {
-      const res = await ImagePicker.openCamera({
-        cropping: true,
-        width: 500,
-        height: 500,
-        includeExif: true,
-        mediaType: type,
-      });
+      mainuri = await launchCamera(
+        {
+          mediaType: type,
+          maxWidth: 300,
+          maxHeight: 550,
+          quality: 1,
+          videoQuality: 'low',
+          durationLimit: 30, //Video max duration in seconds
+          saveToPhotos: true,
+        },
+        response => {
+          if (response.didCancel) {
+            console.log('User cancelled camera picker');
+          }
+          if (response.errorCode == 'camera_unavailable') {
+            console.log('Camera not available on device');
+          }
+          if (response.errorCode == 'permission') {
+            console.log('Permission not satisfied');
+          }
+          if (response.errorCode == 'others') {
+            console.log(`${response.errorMessage}`);
+          }
+        },
+      );
 
-      let finalURI: {uri: any; fileName: any; type: any}[] = [];
+      let finaluri: any = mainuri.assets;
 
-      finalURI.push({
-        uri: `file://` + res.path,
-        fileName: res.filename ?? Date.now().toString(),
-        type: res.mime,
-      });
-
-      return finalURI;
+      return finaluri;
     } catch (error) {
       console.log(error);
     }
   }
 };
 
-export const chooseFile = async (
-  type: 'photo' | 'video' | 'any' | undefined,
-) => {
+export const chooseFile = async (type: MediaType) => {
   try {
-    const res = await ImagePicker.openPicker({
-      cropping: true,
-      width: 500,
-      height: 500,
-      includeExif: true,
+    let options = {
       mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+    };
+
+    let mainuri: ImagePickerResponse;
+    mainuri = await launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled camera picker');
+      }
+      if (response.errorCode == 'camera_unavailable') {
+        console.log('Camera not available on device');
+      }
+      if (response.errorCode == 'permission') {
+        console.log('Permission not satisfied');
+      }
+      if (response.errorCode == 'others') {
+        console.log(`${response.errorMessage}`);
+      }
     });
 
-    let finalURI: {uri: any; fileName: any; type: any}[] = [];
+    let finaluri: any = mainuri.assets;
 
-    finalURI.push({
-      uri: `file://` + res.path,
-      fileName: res.filename ?? Date.now().toString(),
-      type: res.mime,
-    });
-
-    return finalURI;
+    return finaluri;
   } catch (error) {
     console.log(error);
   }
