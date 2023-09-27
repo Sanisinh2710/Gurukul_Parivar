@@ -1,9 +1,6 @@
 package com.gurukul_parivar;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.view.View;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,7 +10,6 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
-
     /**
      * Returns the name of the main component registered from JavaScript. This is
      * used to schedule
@@ -44,11 +40,5 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this);
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.launch_screen);
-
-
-
-        // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        // getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 }
