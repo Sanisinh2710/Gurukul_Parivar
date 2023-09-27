@@ -359,7 +359,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       />
 
       <DropDownModel
-        modalHeight={`${height * 0.045}%`}
+        modalHeight={`40%`}
         customModelchild={
           <>
             <Pressable

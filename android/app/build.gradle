@@ -81,7 +81,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9
         versionName "1.2.2"
-        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         release{
