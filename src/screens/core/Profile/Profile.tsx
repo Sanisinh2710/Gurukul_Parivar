@@ -44,7 +44,6 @@ import {
   chooseFile,
 } from '../../../utils';
 import {styles} from './styles';
-import ImageCropPicker from 'react-native-image-crop-picker';
 
 export const ProfileScreen = ({
   navigation,
@@ -61,9 +60,6 @@ export const ProfileScreen = ({
   const commonStyle = CommonStyle();
 
   const {height} = Dimensions.get('screen');
-  // const updatedHeight = React.useMemo(()=>{
-  //   return height
-  // },[height])
 
   const ProfileList = React.useMemo(() => {
     return EditProfileList(t, i18n);
@@ -148,6 +144,7 @@ export const ProfileScreen = ({
                 name: pathGallery[0].fileName,
                 type: pathGallery[0].type,
               });
+              setProfileModel(false);
             }
           });
         }
@@ -167,6 +164,7 @@ export const ProfileScreen = ({
                 name: pathCamera[0].fileName,
                 type: pathCamera[0].type,
               });
+              setProfileModel(false);
             }
           });
         }

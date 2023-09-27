@@ -227,7 +227,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
   return (
     <>
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
+      <View style={[commonStyle.commonContentView]}>
         <View
           style={{
             flexDirection: 'row',
