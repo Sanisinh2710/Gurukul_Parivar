@@ -3,7 +3,6 @@ import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import {ScreenHeader, ScreenWrapper} from '../../../../components';
 import {DailyProgramDetailProps} from '../../../../types';
-import {Linking} from 'react-native';
 
 export const DailyProgramDetail = ({
   route,

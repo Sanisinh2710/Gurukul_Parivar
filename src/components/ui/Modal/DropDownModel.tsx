@@ -146,7 +146,7 @@ export const DropDownModel = React.memo(
         <View
           style={style.modelWholeView}
           onTouchEnd={() => {
-            setModelVisible(false);
+            // setModelVisible(false);
           }}>
           <View
             style={

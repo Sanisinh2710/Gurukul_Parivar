@@ -1,11 +1,6 @@
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {
-  ImagePickerResponse,
-  MediaType,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -25,71 +20,75 @@ const requestCameraPermission = async () => {
       console.warn(err);
       return false;
     }
-  } else return true;
-};
-
-export const captureImage = async (type: MediaType) => {
-  let isCameraPermitted = await requestCameraPermission();
-  let mainuri: ImagePickerResponse;
-
-  if (isCameraPermitted) {
-    mainuri = await launchCamera(
-      {
-        mediaType: type,
-        maxWidth: 300,
-        maxHeight: 550,
-        quality: 1,
-        videoQuality: 'low',
-        durationLimit: 30, //Video max duration in seconds
-        saveToPhotos: true,
-      },
-      response => {
-        if (response.didCancel) {
-          Alert.alert('User cancelled camera picker');
-        }
-        if (response.errorCode == 'camera_unavailable') {
-          Alert.alert('Camera not available on device');
-        }
-        if (response.errorCode == 'permission') {
-          Alert.alert('Permission not satisfied');
-        }
-        if (response.errorCode == 'others') {
-          Alert.alert(`${response.errorMessage}`);
-        }
-      },
-    );
-    let finaluri: any = mainuri.assets;
-
-    return finaluri;
   }
 };
 
-export const chooseFile = async (type: MediaType) => {
-  let options = {
-    mediaType: type,
-    maxWidth: 300,
-    maxHeight: 550,
-  };
+export const captureImage = async (
+  type: 'photo' | 'video' | 'any' | undefined,
+) => {
+  let isCameraPermitted = await requestCameraPermission();
 
-  let mainuri: ImagePickerResponse;
-  mainuri = await launchImageLibrary(options, response => {
-    if (response.didCancel) {
-      Alert.alert('User cancelled camera picker');
+  if (Platform.OS === 'android') {
+    if (isCameraPermitted) {
+      const res = await ImagePicker.openCamera({
+        cropping: true,
+        width: 500,
+        height: 500,
+        includeExif: true,
+        mediaType: type,
+      });
+
+      let finalURI: {uri: any; fileName: any; type: any}[] = [];
+
+      finalURI.push({
+        uri: `file:/` + res.path,
+        fileName: res.filename ?? Date.now().toString(),
+        type: res.mime,
+      });
+
+      return finalURI;
     }
-    if (response.errorCode == 'camera_unavailable') {
-      Alert.alert('Camera not available on device');
-    }
-    if (response.errorCode == 'permission') {
-      Alert.alert('Permission not satisfied');
-    }
-    if (response.errorCode == 'others') {
-      Alert.alert(`${response.errorMessage}`);
-    }
+  } else {
+    const res = await ImagePicker.openCamera({
+      cropping: true,
+      width: 500,
+      height: 500,
+      includeExif: true,
+      mediaType: type,
+    });
+
+    let finalURI: {uri: any; fileName: any; type: any}[] = [];
+
+    finalURI.push({
+      uri: `file:/` + res.path,
+      fileName: res.filename ?? Date.now().toString(),
+      type: res.mime,
+    });
+
+    return finalURI;
+  }
+};
+
+export const chooseFile = async (
+  type: 'photo' | 'video' | 'any' | undefined,
+) => {
+  const res = await ImagePicker.openPicker({
+    cropping: true,
+    width: 500,
+    height: 500,
+    includeExif: true,
+    mediaType: type,
   });
 
-  let finaluri: any = mainuri.assets;
+  let finalURI: {uri: any; fileName: any; type: any}[] = [];
 
-  return finaluri;
+  finalURI.push({
+    uri: `file:/` + res.path,
+    fileName: res.filename ?? Date.now().toString(),
+    type: res.mime,
+  });
+
+  return finalURI;
 };
 
 export const isStringArray = (object: any): object is Array<string> => {
@@ -241,7 +240,7 @@ export const CustomDateSplitAndFormat = (
 //   }
 // };
 
-export const checkPermission = async () => {
+export const checkPermissionOfWritingStorage = async () => {
   try {
     let deviceVersionInfo = DeviceInfo.getSystemVersion();
     let granted = PermissionsAndroid.RESULTS.GRANTED;
@@ -316,7 +315,7 @@ export const downloadSong = async (
   songName: string,
 ) => {
   try {
-    const permissionResponse = await checkPermission();
+    const permissionResponse = await checkPermissionOfWritingStorage();
     if (permissionResponse) {
       let resType: 'SUCCESS' | 'ERROR';
       let date = new Date();
@@ -327,30 +326,53 @@ export const downloadSong = async (
       let songTitle = songName.split(' ').join('_');
 
       const {config, fs} = RNFetchBlob;
-      let MusicDirc = fs.dirs.MusicDir;
-      let fileName = `/${songTitle}_${Math.floor(
+
+      const {MusicDir, DocumentDir} = fs.dirs;
+
+      const aPath = Platform.select({
+        ios: DocumentDir,
+        android: MusicDir,
+      });
+
+      let fileName = `/Gurukul-Parivar/Musics/${songTitle}_${Math.floor(
         date.getTime() + date.getSeconds() / 2,
       )}${ext}`;
 
-      let options = {
-        fileCache: false,
+      const finalPath = aPath + fileName;
 
-        addAndroidDownloads: {
-          // Related to the Android only
-          useDownloadManager: true,
+      let options = Platform.select({
+        ios: {
+          fileCache: true,
+          path: finalPath,
+          // mime: 'application/xlsx',
+          // appendExt: 'xlsx',
+          //path: filePath,
+          //appendExt: fileExt,
           notification: true,
-          path: MusicDirc + fileName,
-          description: 'Music',
         },
-      };
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            // Related to the Android only
+            useDownloadManager: true,
+            notification: true,
+            path: finalPath,
+            description: 'Music',
+          },
+        },
+      });
 
-      const response = await RNFetchBlob.config(options).fetch('GET', song_URL);
-      if (response) {
-        return (resType = 'SUCCESS');
+      if (options) {
+        const response = await config(options).fetch('GET', song_URL);
+        if (response) {
+          return (resType = 'SUCCESS');
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          return (resType = 'ERROR');
+          // Handle download failure
+        }
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return (resType = 'ERROR');
-        // Handle download failure
       }
     }
   } catch (error) {
