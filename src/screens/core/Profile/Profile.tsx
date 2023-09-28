@@ -288,7 +288,7 @@ export const ProfileScreen = ({
               ? height > 700
                 ? height * 0.052
                 : height * 0.078
-              : 50
+              : 47
           }%`}
           customModelchild={
             <ScrollView
@@ -406,7 +406,9 @@ export const ProfileScreen = ({
               ? height > 700
                 ? height * 0.04
                 : height * 0.055
-              : 40
+              : height > 700
+              ? height * 0.04
+              : height * 0.055
           }%`}
         />
         <DropDownModel
