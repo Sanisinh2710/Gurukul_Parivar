@@ -55,6 +55,8 @@ export const PersonalInfo = React.memo(
       ] || [false],
     );
 
+    console.log(initialValues, 'intial personal in fo');
+
     const [isArraySet, setIsArrayset] = React.useState(false);
 
     const PerosnalInfoForm1InputList: {
@@ -84,7 +86,7 @@ export const PersonalInfo = React.memo(
             gap: 10,
           },
         },
-        required: true,
+        required: false,
       },
       {
         name: 'full_name',
@@ -98,14 +100,14 @@ export const PersonalInfo = React.memo(
         lable: t('personalInfo.FatherNameLable'),
         placeholder: t('personalInfo.FatherNamePlaceholder'),
         type: 'text',
-        required: true,
+        required: false,
       },
       {
         name: 'dob',
         lable: t('personalInfo.DOB'),
         placeholder: 'DD/MM/YYYY',
         type: 'dob',
-        required: true,
+        required: false,
       },
       {
         name: 'blood_group',
@@ -113,7 +115,7 @@ export const PersonalInfo = React.memo(
         placeholder: t('personalInfo.BloodGroupDropDown'),
         type: 'select',
         menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+', 'AB+', 'AB-'],
-        required: true,
+        required: false,
         customProps: {
           wantPlaceholderAsLabelOnModal: true,
           wantSearchBar: false,
@@ -225,7 +227,8 @@ export const PersonalInfo = React.memo(
     }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
+      console.log(data, 'on right click');
+      if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
           full_name: data.full_name || '',
@@ -254,7 +257,7 @@ export const PersonalInfo = React.memo(
     };
 
     const leftOnSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
+      if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
           full_name: data.full_name || '',
@@ -368,7 +371,7 @@ export const PersonalInfo = React.memo(
                                   : ''
                               }
                               required={mainindex === 0 ? true : false}
-                              editable={mainindex === 0 ? false : true}
+                              editable={mainindex === 0 && value ? false : true}
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {
@@ -444,7 +447,7 @@ export const PersonalInfo = React.memo(
                                   ? t('personalInfo.AddSecondaryNumber')
                                   : ''
                               }
-                              required={mainindex === 0 ? true : false}
+                              required={mainindex === 0 ? false : false}
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {
