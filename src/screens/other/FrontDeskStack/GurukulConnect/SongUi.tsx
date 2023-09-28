@@ -330,32 +330,14 @@ export const SongUi = ({
             selectedItem.length > 0 &&
             trackMode.setupMode !== 'ALBUM' && (
               <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 8,
-                  flexWrap: 'wrap',
-                  marginVertical: '1.5%',
-                }}>
+                style={style.filterDataContainer}>
                 {selectedItem.map((mainitem, index) => {
                   return (
                     <View
                       key={index}
-                      style={{
-                        flexDirection: 'row',
-                        backgroundColor: COLORS.primaryLightColor,
-                        paddingLeft: 16,
-                        paddingRight: 10,
-                        height: 35,
-                        alignItems: 'center',
-                        borderRadius: 60,
-                        gap: 10,
-                      }}>
+                      style={style.filterDataView}>
                       <Text
-                        style={{
-                          ...CustomFonts.body.large14,
-                          fontSize: 16,
-                          color: COLORS.black,
-                        }}>
+                        style={style.filterDataText}>
                         {categoryList.find(item => item.id === mainitem)?.name}
                       </Text>
                       <View
@@ -366,19 +348,10 @@ export const SongUi = ({
                           newValues.splice(index, 1);
                           setSelectedItem(newValues);
                         }}
-                        style={{
-                          width: 14,
-                          height: 14,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
+                        style={style.filterDataCancelImage}>
                         <Image
                           source={AllIcons.RoundCross}
-                          style={{
-                            flex: 1,
-                            tintColor: COLORS.primaryColor,
-                            resizeMode: 'contain',
-                          }}
+                          style={style.filterImageStyle}
                         />
                       </View>
                     </View>
@@ -388,7 +361,6 @@ export const SongUi = ({
             )}
 
         <View style={{flex: 1}}>
-
           {songData.length > 0 ? (
             
             <FlatList
@@ -413,12 +385,12 @@ export const SongUi = ({
                     </Text>
                     <Text style={style.songArtist}>{item.description}</Text>
                   </View>
-                  <View style={{flexDirection: 'row', gap: 6}}>
+                  <View style={style.imageContainer}>
                     {item.is_multiple == false ||
                     item.is_multiple == undefined ? (
                       <>
                         <View
-                          style={{height: 24, width: 24}}
+                          style={style.imageView}
                           onTouchEnd={async () => {
                             setLoader({
                               status: true,
@@ -444,12 +416,7 @@ export const SongUi = ({
                             <ActivityIndicator size={20} />
                           ) : (
                             <Image
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                resizeMode: 'contain',
-                                tintColor: COLORS.primaryColor,
-                              }}
+                              style={style.imageStyle}
                               source={AllIcons.DownloadSong}
                             />
                           )}
@@ -458,13 +425,9 @@ export const SongUi = ({
                           onTouchEnd={async () => {
                             handleControl(item.id);
                           }}
-                          style={{height: 24, width: 24}}>
+                          style={style.imageView}>
                           <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              resizeMode: 'contain',
-                            }}
+                            style={style.imageStyle}
                             source={
                               item.id == activeTrack?.id &&
                               trackPlaying == 'PLAYING'
@@ -476,7 +439,7 @@ export const SongUi = ({
                       </>
                     ) : (
                       <View
-                        style={{height: 24, width: 24}}
+                        style={style.imageView}
                         onTouchEnd={async () => {
                           dispatch(
                             UPDATE_SETUP_MODE({
@@ -491,12 +454,7 @@ export const SongUi = ({
                             await setAlbumDataToRedux(item.id);
                         }}>
                         <Image
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'contain',
-                            tintColor: COLORS.primaryColor,
-                          }}
+                          style={style.imageStyle}
                           source={AllIcons.AlbumRightArrow}
                         />
                       </View>

@@ -10,12 +10,12 @@ export const styles = () => {
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor:'#FFFFFF',
+      backgroundColor: '#FFFFFF',
       borderRadius: 10,
       height: 50,
       marginTop: 12,
       paddingHorizontal: 15,
-      marginBottom:10,
+      marginBottom: 10,
       shadowColor: '#000000',
       shadowOffset: {
         width: 0,
@@ -56,6 +56,20 @@ export const styles = () => {
       padding: 15,
       alignItems: 'center',
     },
+    imageContainer: {
+      flexDirection: 'row',
+      gap: 6,
+    },
+    imageView: {
+      height: 24,
+      width: 24,
+    },
+    imageStyle: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+      tintColor: COLORS.primaryColor,
+    },
     songTitle: {
       ...CustomFonts.body.large14,
       fontSize: 16,
@@ -78,7 +92,7 @@ export const styles = () => {
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       paddingHorizontal: 20,
-      padding:20,
+      padding: 20,
       shadowColor: '#000000',
       shadowOffset: {
         width: 0,
@@ -112,17 +126,49 @@ export const styles = () => {
       gap: 15,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop:'3%',
+      marginTop: '3%',
     },
-    forwardImage:{
-      width:17,
-      height:17,
+    forwardImage: {
+      width: 17,
+      height: 17,
     },
-    trackProgressText:{
+    trackProgressText: {
       ...CustomFonts.body.large14,
       fontSize: 12,
       color: '#171717',
       lineHeight: 16,
+    },
+    filterDataContainer: {
+      flexDirection: 'row',
+      gap: 8,
+      flexWrap: 'wrap',
+      marginVertical: '1.5%',
+    },
+    filterDataView: {
+      flexDirection: 'row',
+      backgroundColor: COLORS.primaryLightColor,
+      paddingLeft: 16,
+      paddingRight: 10,
+      height: 35,
+      alignItems: 'center',
+      borderRadius: 60,
+      gap: 10,
+    },
+    filterDataText:{
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      color: COLORS.black,
+    },
+    filterDataCancelImage:{
+      width: 14,
+      height: 14,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    filterImageStyle:{
+      flex: 1,
+      tintColor: COLORS.primaryColor,
+      resizeMode: 'contain',
     }
   });
 };

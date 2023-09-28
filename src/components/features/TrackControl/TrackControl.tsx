@@ -108,30 +108,18 @@ export const TrackControl = ({status}: TrackPropsType) => {
           </Text>
         </View>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginVertical: 5,
-          }}>
-          <View style={{width: Dimensions.get('window').width *0.1, alignItems: 'center'}}>
+          style={style.trackProgressContainer}>
+          <View style={style.trackTimeTextView}>
             <Text style={style.trackProgressText}>{format(position)}</Text>
           </View>
-          <View style={{width: '70%',marginHorizontal:'3%'}}>
+          <View style={style.trackSliderView}>
             <Slider
-              trackStyle={{width: '100%', height: 3.5, borderRadius: 10}}
+              trackStyle={style.trackSliderStyle}
               animateTransitions={true}
               animationType="timing"
               minimumTrackTintColor="#DBB159"
               maximumTrackTintColor="#78788029"
-              thumbStyle={{
-                backgroundColor: '#FFFFFF',
-                shadowColor: '#70eaff',
-                elevation: 5,
-                height: 25,
-                width: 25,
-                borderRadius: 28,
-              }}
+              thumbStyle={style.trackSliderThumb}
               trackClickable={false}
               minimumValue={0}  
               maximumValue={duration}
@@ -145,14 +133,14 @@ export const TrackControl = ({status}: TrackPropsType) => {
               }}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width *0.1, alignItems: 'center'}}>
+          <View style={style.trackTimeTextView}>
             <Text style={style.trackProgressText}>{format(duration)}</Text>
           </View>
         </View>
         <View style={style.trackForwardControl}>
           <View onTouchEnd={() => handlePrevious()} style={style.forwardImage}>
             <Image
-              style={{width: '100%', height: '100%'}}
+              style={style.imageStyle}
               source={AllIcons.ForwardControl}
             />
           </View>
@@ -162,7 +150,7 @@ export const TrackControl = ({status}: TrackPropsType) => {
             }}
             style={style.trackControlPlay}>
             <Image
-              style={{width: '100%', height: '100%'}}
+              style={style.imageStyle}
               source={
                status == 'PLAYING'
                   ? AllIcons.TrackPause
@@ -174,12 +162,9 @@ export const TrackControl = ({status}: TrackPropsType) => {
             onTouchEnd={() => handleNext()}
             style={[
               style.forwardImage,
-              {
-                transform: [{rotate: '180deg'}],
-              },
             ]}>
             <Image
-              style={{width: '100%', height: '100%'}}
+              style={style.imageStyle}
               source={AllIcons.ForwardControl}
             />
           </View> 
