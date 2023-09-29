@@ -49,5 +49,15 @@ export const styles = () => {
     },
 
     gridItem: {height: '100%', width: '100%'},
+    linearGradientView: {height: '100%', width: '100%'},
+    linearGradientStyle: {flex: 1, borderRadius: 12},
+    imageBgStyle: {
+      height: '100%',
+      width: '100%',
+      resizeMode: 'cover',
+    },
+    contentContainerStyle: {
+      paddingBottom: '30%',
+    },
   });
 };

@@ -193,35 +193,28 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
 
-  const settingWallPap = async (mode: 'HOME' | 'LOCK' | 'BOTH') => {
-    return new Promise(resolve => {
-      setTimeout(async () => {
-        const result = await WallpaperModule.setAsWallpaper(
-          REMOTE_IMAGE_PATH,
-          mode,
-        );
-        resolve(result);
-      }, 1500);
-    });
-  };
-
   const setWallPaper = async (mode: 'HOME' | 'LOCK' | 'BOTH') => {
     setIsdownloadingforWallpaper(true);
     let resultFetched: boolean = false;
     try {
-      const result = await settingWallPap(mode);
+      const result = await new Promise(resolve => {
+        const myresult = WallpaperModule.setAsWallpaper(
+          REMOTE_IMAGE_PATH,
+          mode,
+        );
+        resolve(myresult);
+      });
       resultFetched = true;
 
       if (result === 'SUCCESS') {
         Toast.show('Wallpaper set successfully..!', Toast.LONG);
       }
-    } catch (error) {
-      console.log(error, 'wallpaper error');
+    } catch (error: any) {
+      resultFetched = true;
+      Toast.show(error.toString(), Toast.LONG);
     }
     if (resultFetched) {
-      setTimeout(() => {
-        setIsdownloadingforWallpaper(false);
-      }, 1500);
+      setIsdownloadingforWallpaper(false);
     }
   };
 
@@ -359,15 +352,15 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       />
 
       <DropDownModel
-        modalHeight={`${height * 0.045}%`}
+        modalHeight={`35%`}
         customModelchild={
           <>
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? () => {}
-                  : async () => {
-                      await setWallPaper('HOME');
+                  ? e => {}
+                  : e => {
+                      setWallPaper('HOME');
                     }
               }>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>
@@ -375,9 +368,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? () => {}
-                  : async () => {
-                      await setWallPaper('LOCK');
+                  ? e => {}
+                  : e => {
+                      setWallPaper('LOCK');
                     }
               }>
               <Text style={style.wallpaperText}>Set as a Lock screen</Text>
@@ -385,8 +378,8 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? () => {}
-                  : async () => {
+                  ? e => {}
+                  : async e => {
                       await setWallPaper('BOTH');
                     }
               }>

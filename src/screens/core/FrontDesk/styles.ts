@@ -32,5 +32,19 @@ export const styles = () => {
       height: 64,
       backgroundColor: '#ffffff',
     },
+    contentContainerStyle: {
+      paddingBottom: '30%',
+    },
+    dashboardImagesContainer: {
+      marginBottom: '2%',
+    },
+    container: {
+      flex: 1,
+    },
+    flatlistContainer: {
+      marginTop: '5%',
+    },
+    image: {height: 24, width: 24},
+    titleWrapper: {justifyContent: 'center', marginLeft: '2%'},
   });
 };

@@ -226,6 +226,20 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
+  const userDataCloneObjFinal = {...finalPayload};
+
+  for (let i in finalPayload) {
+    if (
+      userDataCloneObjFinal[i] === null ||
+      userDataCloneObjFinal[i] === undefined ||
+      userDataCloneObjFinal[i] === ''
+    ) {
+      delete userDataCloneObjFinal[i];
+    }
+  }
+
+  console.log(userDataCloneObjFinal, 'final payload');
+
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
@@ -382,32 +396,42 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
 
         Object.keys(backendData).map(key => {
           if (key === 'dob') {
-            const newDob = CustomBackendDateSplitAndFormat(
-              backendData[key],
-              '-',
-              '/',
-              'dd/mm/yyyy',
-            );
+            if (backendData[key] !== null) {
+              const newDob = CustomBackendDateSplitAndFormat(
+                backendData[key],
+                '-',
+                '/',
+                'dd/mm/yyyy',
+              );
 
-            newFormData.personalInfo.dob = newDob;
+              newFormData.personalInfo.dob = newDob;
+            }
           } else if (key === 'gender') {
-            const newgender =
-              backendData[key][0] +
-              backendData[key].slice(1).toLocaleLowerCase();
-            newFormData.personalInfo.gender =
-              newgender ?? newFormData.personalInfo.gender;
+            if (backendData[key] !== null) {
+              const newgender =
+                backendData[key][0] +
+                backendData[key].slice(1).toLocaleLowerCase();
+              newFormData.personalInfo.gender =
+                newgender ?? newFormData.personalInfo.gender;
+            }
           } else if (key === 'primary_contact') {
-            newFormData.personalInfo.mobilenumInfo[0].mobilenum =
-              backendData[key].toString() ??
-              newFormData.personalInfo.mobilenumInfo[0].mobilenum;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].mobilenum =
+                backendData[key]?.toString() ??
+                newFormData.personalInfo.mobilenumInfo[0].mobilenum;
+            }
           } else if (key === 'primary_contact_cc') {
-            newFormData.personalInfo.mobilenumInfo[0].countryCode =
-              backendData[key] ??
-              newFormData.personalInfo.mobilenumInfo[0].countryCode;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].countryCode =
+                backendData[key] ??
+                newFormData.personalInfo.mobilenumInfo[0].countryCode;
+            }
           } else if (key === 'is_primary_contact_wp') {
-            newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
-              backendData[key] ??
-              newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
+                backendData[key] ??
+                newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
+            }
           } else if (key === 'secondary_contact') {
             return;
           } else if (key === 'secondary_contact_cc') {
@@ -415,13 +439,17 @@ export const CallBackButtonAxiosGetForWizardFormSignup = async (
           } else if (key === 'is_secondary_contact_wp') {
             return;
           } else if (key === 'primary_email') {
-            newFormData.personalInfo.emailInfo[0].email =
-              backendData[key] ?? newFormData.personalInfo.emailInfo[0].email;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.emailInfo[0].email =
+                backendData[key] ?? newFormData.personalInfo.emailInfo[0].email;
+            }
           } else if (key === 'secondary_email') {
             return;
           } else {
-            newFormData.personalInfo[key] =
-              backendData[key] ?? newFormData.personalInfo[key];
+            if (backendData[key] !== null) {
+              newFormData.personalInfo[key] =
+                backendData[key] ?? newFormData.personalInfo[key];
+            }
           }
         });
 
@@ -562,32 +590,41 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
 
         Object.keys(backendData).map(key => {
           if (key === 'dob') {
-            const newDob = CustomBackendDateSplitAndFormat(
-              backendData[key],
-              '-',
-              '/',
-              'dd/mm/yyyy',
-            );
-
-            newFormData.personalInfo.dob = newDob;
+            if (backendData[key] !== null) {
+              const newDob = CustomBackendDateSplitAndFormat(
+                backendData[key],
+                '-',
+                '/',
+                'dd/mm/yyyy',
+              );
+              newFormData.personalInfo.dob = newDob;
+            }
           } else if (key === 'gender') {
-            const newgender =
-              backendData[key][0] +
-              backendData[key].slice(1).toLocaleLowerCase();
-            newFormData.personalInfo.gender =
-              newgender ?? newFormData.personalInfo.gender;
+            if (backendData[key] !== null) {
+              const newgender =
+                backendData[key][0] +
+                backendData[key].slice(1).toLocaleLowerCase();
+              newFormData.personalInfo.gender =
+                newgender ?? newFormData.personalInfo.gender;
+            }
           } else if (key === 'primary_contact') {
-            newFormData.personalInfo.mobilenumInfo[0].mobilenum =
-              backendData[key].toString() ??
-              newFormData.personalInfo.mobilenumInfo[0].mobilenum;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].mobilenum =
+                backendData[key].toString() ??
+                newFormData.personalInfo.mobilenumInfo[0].mobilenum;
+            }
           } else if (key === 'primary_contact_cc') {
-            newFormData.personalInfo.mobilenumInfo[0].countryCode =
-              backendData[key] ??
-              newFormData.personalInfo.mobilenumInfo[0].countryCode;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].countryCode =
+                backendData[key] ??
+                newFormData.personalInfo.mobilenumInfo[0].countryCode;
+            }
           } else if (key === 'is_primary_contact_wp') {
-            newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
-              backendData[key] ??
-              newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.mobilenumInfo[0].whatsappNum =
+                backendData[key] ??
+                newFormData.personalInfo.mobilenumInfo[0].whatsappNum;
+            }
           } else if (key === 'secondary_contact') {
             return;
           } else if (key === 'secondary_contact_cc') {
@@ -595,13 +632,17 @@ export const CallBackButtonAxiosGetForWizardFormEdit = async (
           } else if (key === 'is_secondary_contact_wp') {
             return;
           } else if (key === 'primary_email') {
-            newFormData.personalInfo.emailInfo[0].email =
-              backendData[key] ?? newFormData.personalInfo.emailInfo[0].email;
+            if (backendData[key] !== null) {
+              newFormData.personalInfo.emailInfo[0].email =
+                backendData[key] ?? newFormData.personalInfo.emailInfo[0].email;
+            }
           } else if (key === 'secondary_email') {
             return;
           } else {
-            newFormData.personalInfo[key] =
-              backendData[key] ?? newFormData.personalInfo[key];
+            if (backendData[key] !== null) {
+              newFormData.personalInfo[key] =
+                backendData[key] ?? newFormData.personalInfo[key];
+            }
           }
         });
 

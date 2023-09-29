@@ -175,23 +175,27 @@ export const CustomLocalDateSplitAndFormat = (
   toSplitParameter: string,
   format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
 ) => {
-  if (format === 'mm/dd/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[0]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+  if (date !== '' && date !== null && date !== undefined) {
+    if (format === 'mm/dd/yyyy') {
+      const newDate = `${
+        date.split(`${fromSplitParameter}`)[1]
+      }${toSplitParameter}${
+        date.split(`${fromSplitParameter}`)[0]
+      }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
 
-    return newDate;
-  }
-  if (format === 'dd/mm/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[0]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+      return newDate;
+    }
+    if (format === 'dd/mm/yyyy') {
+      const newDate = `${
+        date.split(`${fromSplitParameter}`)[0]
+      }${toSplitParameter}${
+        date.split(`${fromSplitParameter}`)[1]
+      }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
 
-    return newDate;
+      return newDate;
+    }
+  } else {
+    return '';
   }
 };
 
@@ -201,23 +205,27 @@ export const CustomBackendDateSplitAndFormat = (
   toSplitParameter: string,
   format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
 ) => {
-  if (format === 'mm/dd/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[2]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
+  if (date !== '' && date !== null && date !== undefined) {
+    if (format === 'mm/dd/yyyy') {
+      const newDate = `${
+        date.split(`${fromSplitParameter}`)[1]
+      }${toSplitParameter}${
+        date.split(`${fromSplitParameter}`)[2]
+      }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
 
-    return newDate;
-  }
-  if (format === 'dd/mm/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[2]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
+      return newDate;
+    }
+    if (format === 'dd/mm/yyyy') {
+      const newDate = `${
+        date.split(`${fromSplitParameter}`)[2]
+      }${toSplitParameter}${
+        date.split(`${fromSplitParameter}`)[1]
+      }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
 
-    return newDate;
+      return newDate;
+    }
+  } else {
+    return '';
   }
 };
 

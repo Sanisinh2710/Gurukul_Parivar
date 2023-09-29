@@ -199,7 +199,7 @@ export const ProfileScreen = ({
         showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
           <View onTouchEnd={() => setProfileModel(true)}>
-            <View style={{height: 64, width: 64}}>
+            <View style={style.imageView}>
               <Image
                 source={
                   profileImage?.uri != '' &&
@@ -207,14 +207,14 @@ export const ProfileScreen = ({
                     ? {uri: profileImage?.uri}
                     : AllIcons.DummyAvtar
                 }
-                style={{height: '100%', width: '100%', borderRadius: 50}}
+                style={style.imageStyle}
               />
             </View>
-            <View style={style.pictureUpdateIcon}>
-              <Image source={AllIcons.Camera} style={{height: 20, width: 20}} />
+            <View style={style.pictureUpdateIconView}>
+              <Image source={AllIcons.Camera} style={style.pictureUpdateIcon} />
             </View>
           </View>
-          <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+          <View style={style.userNameView}>
             <Text style={style.profileName}>
               {userData?.userdata?.full_name ?? 'YOUR NAME'}
             </Text>
@@ -246,21 +246,16 @@ export const ProfileScreen = ({
                     onPress={() => {}}
                     imageStyle={{width: 20, height: 20}}
                   />
-                  <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+                  <View style={style.flatlistNameView}>
                     <Text style={style.listName}>{item.name} </Text>
                   </View>
                   <View style={style.languageContainer}>
-                    <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
-                      {item.language}
-                    </Text>
+                    <Text style={style.langText}>{item.language}</Text>
                   </View>
                   <View
                     style={{justifyContent: 'center', alignItems: 'flex-end'}}>
                     {item.rightIcon && (
-                      <Image
-                        source={item.rightIcon}
-                        style={{height: 24, width: 24}}
-                      />
+                      <Image source={item.rightIcon} style={style.arrow} />
                     )}
                   </View>
                 </View>
@@ -288,7 +283,7 @@ export const ProfileScreen = ({
               ? height > 700
                 ? height * 0.052
                 : height * 0.078
-              : 50
+              : 47
           }%`}
           customModelchild={
             <ScrollView
@@ -297,7 +292,7 @@ export const ProfileScreen = ({
                 alignItems: 'center',
                 marginTop: '5%',
               }}>
-              <View style={{height: 80, width: 80}}>
+              <View style={style.linearGradientContainer}>
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
                   locations={[0, 1]}
@@ -377,12 +372,12 @@ export const ProfileScreen = ({
           modelVisible={profileModel}
           setModelVisible={setProfileModel}
           customModelchild={
-            <View style={{justifyContent: 'center'}}>
+            <View style={style.modelOption}>
               <Pressable
                 onPress={() => {
                   handleProfile('gallery');
                 }}
-                style={{justifyContent: 'center'}}>
+                style={style.modelOption}>
                 <Text style={style.pictureUpdateText}>Upload From Gallery</Text>
               </Pressable>
               <Pressable
@@ -406,7 +401,9 @@ export const ProfileScreen = ({
               ? height > 700
                 ? height * 0.04
                 : height * 0.055
-              : 40
+              : height > 700
+              ? height * 0.04
+              : height * 0.055
           }%`}
         />
         <DropDownModel

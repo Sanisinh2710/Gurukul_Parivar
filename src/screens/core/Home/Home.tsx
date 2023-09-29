@@ -172,31 +172,25 @@ export const HomeScreen = ({
           />
         }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: '30%',
-        }}>
+        contentContainerStyle={style.contentContainerStyle}>
         {dashboardImages.length > 0 && <PagerView images={dashboardImages} />}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
                 key={index}
-                imageStyle={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'cover',
-                }}
+                imageStyle={style.imageBgStyle}
                 borderRadius={12}
                 source={item.image}
                 style={style.images}>
                 <TouchableOpacity
-                  style={{height: '100%', width: '100%'}}
+                  style={style.linearGradientView}
                   activeOpacity={0.5}
                   onPress={() => handlePress(item.id)}>
                   <LinearGradient
                     colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 1)']}
                     locations={[0, 1]}
-                    style={{flex: 1, borderRadius: 12}}>
+                    style={style.linearGradientStyle}>
                     <Text style={style.textOverImage}>{item.name}</Text>
                   </LinearGradient>
                 </TouchableOpacity>

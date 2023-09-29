@@ -115,9 +115,7 @@ export const FrontDeskScreen = ({
             overScrollMode="always"
             nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: '30%',
-            }}
+            contentContainerStyle={style.contentContainerStyle}
             refreshControl={
               <RefreshControl
                 colors={[COLORS.primaryColor, COLORS.green]}
@@ -125,21 +123,16 @@ export const FrontDeskScreen = ({
                 onRefresh={onRefresh}
               />
             }>
-            <View
-              style={{
-                marginBottom: '2%',
-              }}>
+            <View style={style.dashboardImagesContainer}>
               <PagerView images={dashboardImages} />
             </View>
-            <View style={[{flex: 1}]}>
+            <View style={style.container}>
               <FlatList
                 overScrollMode="always"
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={[
-                  {
-                    marginTop: '5%',
-                  },
+                  style.flatlistContainer,
                   commonStyle.commonContentView,
                 ]}
                 data={FrontDesk(t)}
@@ -156,13 +149,9 @@ export const FrontDeskScreen = ({
                             style.imageContainer,
                             {backgroundColor: item.imageBG},
                           ]}>
-                          <Image
-                            source={item.image}
-                            style={{height: 24, width: 24}}
-                          />
+                          <Image source={item.image} style={style.image} />
                         </View>
-                        <View
-                          style={{justifyContent: 'center', marginLeft: '2%'}}>
+                        <View style={style.titleWrapper}>
                           <Text style={style.listTitle}>{item.title} </Text>
                         </View>
                       </View>

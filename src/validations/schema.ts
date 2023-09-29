@@ -69,7 +69,8 @@ export const PersonalInfoFormValidationSchema =
   (): yup.ObjectSchema<PersonalInfoFormValidationSchemaType> => {
     const {t} = useTranslation();
     return yup.object().shape({
-      gender: yup.string().trim().required(t('FieldRequiredError.Gender')),
+      gender: yup.string().trim(),
+      // .required(t('FieldRequiredError.Gender')),
       full_name: yup
         .string()
         .trim()
@@ -78,36 +79,68 @@ export const PersonalInfoFormValidationSchema =
       father_name: yup
         .string()
         .trim()
-        .required(t('FieldRequiredError.FatherName'))
+        // .required(t('FieldRequiredError.FatherName'))
         .matches(nameRegex, {message: t('personalInfo.NameErr')}),
-      dob: yup.string().trim().required(t('FieldRequiredError.DOB')),
-      blood_group: yup.string().required(t('FieldRequiredError.BloodGroup')),
+      dob: yup.string().trim(),
+      // .required(t('FieldRequiredError.DOB')),
+      blood_group: yup.string().trim(),
+      // .required(t('FieldRequiredError.BloodGroup')),
       emailInfo: yup
         .array()
         .of(
           yup.object().shape({
             email: yup
               .string()
-              .required(t('FieldRequiredError.Email'))
-              .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
+              .trim()
+              .test({
+                name: 'email',
+                skipAbsent: true,
+                test(value, err) {
+                  if (value === '' || value === undefined) {
+                    return true;
+                  } else if (!value?.match(mailRegex)) {
+                    return err.createError({
+                      message: t('personalInfo.EmailErr'),
+                    });
+                  } else {
+                    return true;
+                  }
+                },
+              }),
+            // .required(t('FieldRequiredError.Email'))
+            // .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
             secondary: yup.boolean(),
           }),
         )
         .required(),
-      mobilenumInfo: yup
-        .array()
-        .of(
-          yup.object().shape({
-            mobilenum: yup
-              .string()
-              .required(t('FieldRequiredError.MobileNumber'))
-              .matches(phoneRegex, {message: t('common.MobileErr')}),
-            whatsappNum: yup.boolean(),
-            secondary: yup.boolean(),
-            countryCode: yup.string(),
-          }),
-        )
-        .required(),
+      mobilenumInfo: yup.array().of(
+        yup.object().shape({
+          mobilenum: yup
+            .string()
+            .trim()
+            .test({
+              name: 'mobilenum',
+              skipAbsent: true,
+              test(value, err) {
+                if (value === '' || value === undefined) {
+                  return true;
+                } else if (!value?.match(phoneRegex)) {
+                  return err.createError({
+                    message: t('common.MobileErr'),
+                  });
+                } else {
+                  return true;
+                }
+              },
+            }),
+          // .required(t('FieldRequiredError.MobileNumber'))
+          // .matches(phoneRegex, {message: t('common.MobileErr')}),
+          whatsappNum: yup.boolean(),
+          secondary: yup.boolean(),
+          countryCode: yup.string(),
+        }),
+      ),
+      // .required(),
     });
   };
 
