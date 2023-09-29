@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {useTranslation} from 'react-i18next';
-import {Image, StyleProp, TextInput, View, ViewStyle} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {isObjectArray, isStringArray} from '../../../utils';
-import {styles} from './style';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleProp, TextInput, View, ViewStyle } from 'react-native';
+import { AllIcons } from '../../../../assets/icons';
+import { isObjectArray, isStringArray } from '../../../utils';
+import { styles } from './style';
 
 type SearchBarPropType = {
   dataForSearch: Array<object>;
@@ -24,7 +24,7 @@ export const SearchBar = ({
   const style = styles();
 
   const [searchVal, setSearchVal] = React.useState('');
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     const data = setTimeout(() => {
@@ -77,21 +77,20 @@ export const SearchBar = ({
   }, [searchVal]);
 
   return (
-    <>
-      <View style={[style.modelSearchView, searchBarstyle]}>
-        <View style={style.iconView}>
-          <Image source={AllIcons.Search} style={style.iconStyle} />
-        </View>
-        <TextInput
-          value={searchVal}
-          placeholder={placeholder ? placeholder : t('common.Search')}
-          placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
-          style={[style.formTextInput, {width: '80%'}]}
-          onChangeText={val => {
-            setSearchVal(val);
-          }}
-        />
+
+    <View style={[style.modelSearchView, searchBarstyle]}>
+      <View style={style.iconView}>
+        <Image source={AllIcons.Search} style={style.iconStyle} />
       </View>
-    </>
+      <TextInput
+        value={searchVal}
+        placeholder={placeholder ? placeholder : t('common.Search')}
+        placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
+        style={style.formTextInput}
+        onChangeText={val => {
+          setSearchVal(val);
+        }}
+      />
+    </View>
   );
 };

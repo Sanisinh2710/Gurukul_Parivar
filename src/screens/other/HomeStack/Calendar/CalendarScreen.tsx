@@ -162,8 +162,6 @@ export const CalendarScreen = ({
           {flex: 1, alignItems: 'center', justifyContent: 'center'},
         ]}
         showsVerticalScrollIndicator={false}
-        // scrollEnabled={false}
-        // horizontal
         refreshControl={
           <RefreshControl
             colors={[COLORS.primaryColor, COLORS.green]}
@@ -190,7 +188,7 @@ export const CalendarScreen = ({
             {sortedData.length > 0 && (
               <View
                 style={{
-                  height: height * 0.19,
+                  height: '25%',
                   marginTop: 10,
                 }}>
                 <FlatList
@@ -267,7 +265,6 @@ export const CalendarScreen = ({
                   style={{
                     height: 264,
                     width: 345,
-                    borderRadius: 12,
                   }}>
                   {imgLoad && (
                     <ActivityIndicator
@@ -287,8 +284,7 @@ export const CalendarScreen = ({
                     style={{
                       height: '100%',
                       width: '100%',
-                      borderRadius: 12,
-                      resizeMode: 'cover',
+                      resizeMode: 'contain',
                     }}
                     onLoadStart={() => setimgLoad(true)}
                     onLoadEnd={() => setimgLoad(false)}

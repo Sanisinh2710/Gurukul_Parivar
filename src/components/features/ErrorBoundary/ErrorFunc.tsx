@@ -1,9 +1,10 @@
-import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
-import {NoData} from '../../ui';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import { NoData } from '../../ui';
+import React from 'react';
 
 export const ErrorFunc = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <NoData title={t('NoData.ErrorTitle')} content={t('NoData.ErrorContent')} />

@@ -43,5 +43,10 @@ export const style = (currentPage?: number) => {
       height: '100%',
       resizeMode: 'cover',
     },
+    carouselMainView: {
+      flexShrink: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   });
 };

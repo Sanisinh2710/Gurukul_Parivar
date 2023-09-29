@@ -1,17 +1,18 @@
 import React from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {FlatList, Image, ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { AllIcons } from '../../../../../assets/icons';
 import {
   PersonalInfoFormValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
-import {PersonalInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+import { COLORS, CustomFonts } from '../../../../utils';
+import { PersonalInfoFormValidationSchema } from '../../../../validations';
+import { FormInput, Loader, PrimaryButton, SecondaryButton } from '../../../ui';
+import { PersonalInfoStyle } from './styles';
 
 type PersonalInfoProps = {
   isParentLoading: boolean;
@@ -38,7 +39,9 @@ export const PersonalInfo = React.memo(
     rightButtonProps,
     onSubmitEvent,
   }: PersonalInfoProps): React.JSX.Element => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+
+    const personalInfoStyle = PersonalInfoStyle();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
@@ -55,6 +58,8 @@ export const PersonalInfo = React.memo(
       ] || [false],
     );
 
+    console.log(initialValues, 'intial personal in fo');
+
     const [isArraySet, setIsArrayset] = React.useState(false);
 
     const PerosnalInfoForm1InputList: {
@@ -67,66 +72,66 @@ export const PersonalInfo = React.memo(
       customProps?: object;
       required: boolean;
     }[] = [
-      {
-        name: 'gender',
-        lable: t('personalInfo.Gender'),
-        placeholder: '',
-        type: 'radio',
-        menuList: [
-          {name: 'Male', icon: AllIcons.Male},
-          {name: 'Female', icon: AllIcons.Female},
-        ],
-        customProps: {
-          showHeading: true,
-          wantFullSpace: true,
-          customStyle: {
-            justifyContent: 'flex-start',
-            gap: 10,
+        {
+          name: 'gender',
+          lable: t('personalInfo.Gender'),
+          placeholder: '',
+          type: 'radio',
+          menuList: [
+            { name: 'Male', icon: AllIcons.Male },
+            { name: 'Female', icon: AllIcons.Female },
+          ],
+          customProps: {
+            showHeading: true,
+            wantFullSpace: true,
+            customStyle: {
+              justifyContent: 'flex-start',
+              gap: 10,
+            },
+          },
+          required: false,
+        },
+        {
+          name: 'full_name',
+          lable: t('personalInfo.FullNameLable'),
+          placeholder: t('personalInfo.FullNamePlaceholder'),
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'father_name',
+          lable: t('personalInfo.FatherNameLable'),
+          placeholder: t('personalInfo.FatherNamePlaceholder'),
+          type: 'text',
+          required: false,
+        },
+        {
+          name: 'dob',
+          lable: t('personalInfo.DOB'),
+          placeholder: 'DD/MM/YYYY',
+          type: 'dob',
+          required: false,
+        },
+        {
+          name: 'blood_group',
+          lable: t('personalInfo.BloodGroup'),
+          placeholder: t('personalInfo.BloodGroupDropDown'),
+          type: 'select',
+          menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+', 'AB+', 'AB-'],
+          required: false,
+          customProps: {
+            wantPlaceholderAsLabelOnModal: true,
+            wantSearchBar: false,
           },
         },
-        required: false,
-      },
-      {
-        name: 'full_name',
-        lable: t('personalInfo.FullNameLable'),
-        placeholder: t('personalInfo.FullNamePlaceholder'),
-        type: 'text',
-        required: true,
-      },
-      {
-        name: 'father_name',
-        lable: t('personalInfo.FatherNameLable'),
-        placeholder: t('personalInfo.FatherNamePlaceholder'),
-        type: 'text',
-        required: false,
-      },
-      {
-        name: 'dob',
-        lable: t('personalInfo.DOB'),
-        placeholder: 'DD/MM/YYYY',
-        type: 'dob',
-        required: false,
-      },
-      {
-        name: 'blood_group',
-        lable: t('personalInfo.BloodGroup'),
-        placeholder: t('personalInfo.BloodGroupDropDown'),
-        type: 'select',
-        menuList: ['A-', 'A+', 'B-', 'B+', 'O-', 'O+', 'AB+', 'AB-'],
-        required: false,
-        customProps: {
-          wantPlaceholderAsLabelOnModal: true,
-          wantSearchBar: false,
-        },
-      },
-    ];
+      ];
 
     const {
       control,
       handleSubmit,
       getValues,
       setValue,
-      formState: {errors},
+      formState: { errors },
     } = useForm<PersonalInfoFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(PersonalInfoFormValidationSchema()),
@@ -225,7 +230,8 @@ export const PersonalInfo = React.memo(
     }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
+      console.log(data, 'on right click');
+      if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
           full_name: data.full_name || '',
@@ -254,7 +260,7 @@ export const PersonalInfo = React.memo(
     };
 
     const leftOnSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      if (data && data.mobilenumInfo && data.emailInfo) {
+      if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
           full_name: data.full_name || '',
@@ -290,22 +296,19 @@ export const PersonalInfo = React.memo(
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: '30%',
-              flexGrow: 1,
-            }}>
+            contentContainerStyle={personalInfoStyle.mainScrollviewContainer}>
             <>
               <FlatList
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{gap: 15}}
+                contentContainerStyle={{ gap: 15 }}
                 data={[...PerosnalInfoForm1InputList]}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   return (
                     <Controller
                       control={control}
                       name={item.name}
-                      render={({field: {onChange, onBlur, value}}) => {
+                      render={({ field: { onChange, onBlur, value } }) => {
                         return (
                           <FormInput
                             icon={item.icon}
@@ -327,27 +330,24 @@ export const PersonalInfo = React.memo(
                   );
                 }}
               />
-              <View style={{gap: 15, marginTop: '5%'}}>
+              <View style={personalInfoStyle.emailFieldMainView}>
                 {emailfield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          style={personalInfoStyle.removeImgView}
                           onTouchEnd={() => emailremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
+                            style={personalInfoStyle.removeImgStyle}
                           />
                         </View>
                       )}
                       <Controller
                         control={control}
                         name={`emailInfo.${mainindex}.email`}
-                        render={({field: {onChange, onBlur, value}}) => {
+                        render={({ field: { onChange, onBlur, value } }) => {
                           return (
                             <FormInput
                               type={'email'}
@@ -372,14 +372,14 @@ export const PersonalInfo = React.memo(
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {
-                                      if (emailfield.length <= 1) {
-                                        emailappend({
-                                          email: '',
-                                          secondary: true,
-                                        });
-                                      }
+                                    if (emailfield.length <= 1) {
+                                      emailappend({
+                                        email: '',
+                                        secondary: true,
+                                      });
                                     }
-                                  : () => {}
+                                  }
+                                  : () => { }
                               }
                             />
                           );
@@ -393,21 +393,18 @@ export const PersonalInfo = React.memo(
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          style={personalInfoStyle.removeImgView}
                           onTouchEnd={() => mobileremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
+                            style={personalInfoStyle.removeImgStyle}
                           />
                         </View>
                       )}
                       <Controller
                         control={control}
                         name={`mobilenumInfo.${mainindex}.mobilenum`}
-                        render={({field: {onChange, onBlur, value}}) => {
+                        render={({ field: { onChange, onBlur, value } }) => {
                           return (
                             <FormInput
                               type={'phone'}
@@ -423,17 +420,17 @@ export const PersonalInfo = React.memo(
                               state={
                                 mainindex === 0
                                   ? {
-                                      countryCodeSelect:
-                                        primarycountryCodeSelect,
-                                      setCountryCodeSelect:
-                                        setPrimaryCountryCodeSelect,
-                                    }
+                                    countryCodeSelect:
+                                      primarycountryCodeSelect,
+                                    setCountryCodeSelect:
+                                      setPrimaryCountryCodeSelect,
+                                  }
                                   : {
-                                      countryCodeSelect:
-                                        secondarycountryCodeSelect,
-                                      setCountryCodeSelect:
-                                        setSecondaryCountryCodeSelect,
-                                    }
+                                    countryCodeSelect:
+                                      secondarycountryCodeSelect,
+                                    setCountryCodeSelect:
+                                      setSecondaryCountryCodeSelect,
+                                  }
                               }
                               defaultPhoneCountryCode={
                                 getValues()?.mobilenumInfo?.[mainindex]
@@ -448,22 +445,22 @@ export const PersonalInfo = React.memo(
                               rightTextOnPress={
                                 mainindex === 0
                                   ? () => {
-                                      if (mobilefield.length <= 1) {
-                                        mobileappend({
-                                          mobilenum: '',
-                                          secondary: true,
-                                          whatsappNum: false,
-                                          countryCode: '',
-                                        });
+                                    if (mobilefield.length <= 1) {
+                                      mobileappend({
+                                        mobilenum: '',
+                                        secondary: true,
+                                        whatsappNum: false,
+                                        countryCode: '',
+                                      });
 
-                                        let newArr = JSON.parse(
-                                          JSON.stringify(checkedArray),
-                                        );
-                                        newArr.push(false);
-                                        setCheckedArray(newArr);
-                                      }
+                                      let newArr = JSON.parse(
+                                        JSON.stringify(checkedArray),
+                                      );
+                                      newArr.push(false);
+                                      setCheckedArray(newArr);
                                     }
-                                  : () => {}
+                                  }
+                                  : () => { }
                               }
                             />
                           );
@@ -471,66 +468,59 @@ export const PersonalInfo = React.memo(
                       />
                       <View
                         style={{
-                          marginTop: '5%',
+
+
+                          flexDirection: 'row',
+                          gap: 10,
+                          marginVertical: '5%',
                         }}>
                         <View
                           style={{
-                            flexDirection: 'row',
-                            gap: 10,
-                            marginBottom: '5%',
+                            height: 20,
+                            width: 20,
+                            alignItems: 'center',
+                            borderRadius: 5,
+                            borderColor: COLORS.primaryColor,
+                            borderWidth: checkedArray[mainindex] ? 0 : 1,
+                          }}
+                          onTouchEnd={() => {
+                            let newArr = JSON.parse(
+                              JSON.stringify(checkedArray),
+                            );
+                            let returnArr = newArr.map(
+                              (item: any, index: number) => {
+                                return mainindex === index ? !item : false;
+                              },
+                            );
+                            setCheckedArray(returnArr);
                           }}>
-                          <View
-                            style={{
-                              height: 20,
-                              width: 20,
-                              alignItems: 'center',
-                              borderRadius: 5,
-                              borderColor: COLORS.primaryColor,
-                              borderWidth: checkedArray[mainindex] ? 0 : 1,
-                            }}
-                            onTouchEnd={() => {
-                              let newArr = JSON.parse(
-                                JSON.stringify(checkedArray),
-                              );
-                              let returnArr = newArr.map(
-                                (item: any, index: number) => {
-                                  return mainindex === index ? !item : false;
-                                },
-                              );
-                              setCheckedArray(returnArr);
-                            }}>
-                            {checkedArray[mainindex] ? (
-                              <Image
-                                source={AllIcons.Checkbox}
-                                style={{
-                                  height: '100%',
-                                  width: '100%',
-                                }}
-                              />
-                            ) : null}
-                          </View>
-                          <Text
-                            style={{
-                              ...CustomFonts.body.medium12,
-                              fontSize: 14,
-                              fontWeight: '400',
-                              lineHeight: 18.9,
-                              color: COLORS.lightModetextColor,
-                            }}>
-                            {t('personalInfo.MobileFieldCheckbox')}
-                          </Text>
+                          {checkedArray[mainindex] ? (
+                            <Image
+                              source={AllIcons.Checkbox}
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                              }}
+                            />
+                          ) : null}
                         </View>
+                        <Text
+                          style={{
+                            ...CustomFonts.body.medium12,
+                            fontSize: 14,
+                            fontWeight: '400',
+                            lineHeight: 18.9,
+                            color: COLORS.lightModetextColor,
+                          }}>
+                          {t('personalInfo.MobileFieldCheckbox')}
+                        </Text>
                       </View>
                     </View>
                   );
                 })}
               </View>
               <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: '5%',
-                }}>
+                style={personalInfoStyle.bottomBtnView}>
                 <SecondaryButton
                   title={
                     leftButtonProps
@@ -538,9 +528,7 @@ export const PersonalInfo = React.memo(
                       : t('common.Save&Exit')
                   }
                   onPress={handleSubmit(leftOnSubmit)}
-                  buttonStyle={{
-                    width: '47%',
-                  }}
+                  buttonStyle={personalInfoStyle.commonBtnStyle}
                 />
                 <PrimaryButton
                   title={
@@ -549,7 +537,7 @@ export const PersonalInfo = React.memo(
                       : t('common.Save&Next')
                   }
                   onPress={handleSubmit(onSubmit)}
-                  buttonStyle={{width: '47%'}}
+                  buttonStyle={personalInfoStyle.commonBtnStyle}
                 />
               </View>
             </>

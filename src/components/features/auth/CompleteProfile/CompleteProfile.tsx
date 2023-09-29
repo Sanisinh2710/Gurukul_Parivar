@@ -1,19 +1,19 @@
 import React from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {ScrollView, Text, View} from 'react-native';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, Text, View } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {GurukulBranchGetApi} from '../../../../services';
-import {CompleteProfileFormValidationSchemaType} from '../../../../types';
-import {CompleteProfileFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton} from '../../../ui';
-import {styles} from './styles';
+import { GurukulBranchGetApi } from '../../../../services';
+import { CompleteProfileFormValidationSchemaType } from '../../../../types';
+import { CompleteProfileFormValidationSchema } from '../../../../validations';
+import { FormInput, Loader, PrimaryButton } from '../../../ui';
+import { styles } from './styles';
 
 export const CompleteYourProfile = React.memo(
-  ({isParentLoading, initialValues, onSubmitEvent}: any) => {
-    const {t} = useTranslation();
+  ({ isParentLoading, initialValues, onSubmitEvent }: any) => {
+    const { t } = useTranslation();
     const style = styles();
 
     const [isLoading, setIsLoading] = React.useState(false);
@@ -69,7 +69,7 @@ export const CompleteYourProfile = React.memo(
       control,
       setValue,
       handleSubmit,
-      formState: {errors},
+      formState: { errors },
     } = useForm<CompleteProfileFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(CompleteProfileFormValidationSchema()),
@@ -117,7 +117,7 @@ export const CompleteYourProfile = React.memo(
               <Controller
                 control={control}
                 name={completeProfileInputList.profilePic.name}
-                render={({field: {onBlur, onChange, value}}) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                   return (
                     <FormInput
                       type={completeProfileInputList.profilePic.type}
@@ -150,7 +150,7 @@ export const CompleteYourProfile = React.memo(
                 <Controller
                   control={control}
                   name={completeProfileInputList.gurukulName.name}
-                  render={({field: {onBlur, onChange, value}}) => {
+                  render={({ field: { onBlur, onChange, value } }) => {
                     return (
                       <View style={style.formInputView}>
                         <FormInput

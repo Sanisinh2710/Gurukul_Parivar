@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {Pressable, Text, TouchableOpacity, View} from 'react-native';
-import {COLORS} from '../../../utils';
-import {ButtonStyles} from './style';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../utils';
+import { ButtonStyles } from './style';
 
 type Props = {
   title: string;
@@ -11,8 +11,8 @@ type Props = {
   disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
-  buttonStyle?: {[key: string]: any};
-  textStyle?: {[key: string]: any};
+  buttonStyle?: { [key: string]: any };
+  textStyle?: { [key: string]: any };
 };
 export const SecondaryButton = React.memo(
   ({
@@ -29,7 +29,7 @@ export const SecondaryButton = React.memo(
 
     return (
       <View
-        onTouchEnd={disabled ? () => {} : onPress}
+        onTouchEnd={disabled ? () => { } : onPress}
         style={[
           {
             ...styles.container,

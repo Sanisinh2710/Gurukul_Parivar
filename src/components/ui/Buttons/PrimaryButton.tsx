@@ -1,9 +1,9 @@
 import React from 'react';
 
-import {Pressable, Text, TouchableOpacity, View} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
-import {COLORS} from '../../../utils';
-import {ButtonStyles} from './style';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useAppSelector } from '../../../redux/hooks';
+import { COLORS } from '../../../utils';
+import { ButtonStyles } from './style';
 
 type Props = {
   title: string;
@@ -11,8 +11,8 @@ type Props = {
   disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
-  buttonStyle?: {[key: string]: any};
-  textStyle?: {[key: string]: any};
+  buttonStyle?: { [key: string]: any };
+  textStyle?: { [key: string]: any };
   customWidget?: React.JSX.Element;
 };
 export const PrimaryButton = React.memo(
@@ -32,7 +32,7 @@ export const PrimaryButton = React.memo(
 
     return (
       <View
-        onTouchEnd={disabled ? () => {} : onPress}
+        onTouchEnd={disabled ? () => { } : onPress}
         style={{
           ...styles.container,
           ...buttonStyle,

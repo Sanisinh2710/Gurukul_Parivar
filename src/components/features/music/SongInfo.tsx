@@ -1,14 +1,14 @@
 import React from 'react';
 
-import {StyleSheet, Text, View} from 'react-native';
-import {Track} from 'react-native-track-player';
-import {CustomFonts} from '../../../utils';
+import { StyleSheet, Text, View } from 'react-native';
+import { Track } from 'react-native-track-player';
+import { CustomFonts } from '../../../utils';
 
 type SongInfoProps = {
   track: Track;
 };
 
-export const SongInfo = ({track}: SongInfoProps): React.JSX.Element => {
+export const SongInfo = ({ track }: SongInfoProps): React.JSX.Element => {
   return (
     <>
       <View>

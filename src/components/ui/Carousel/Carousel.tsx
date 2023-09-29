@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {FlatList, StyleProp, View, ViewStyle} from 'react-native';
+import { FlatList, StyleProp, View, ViewStyle } from 'react-native';
+import { style } from './styles';
 
 export type FlatListItemProps<ItemT> = {
   item: any;
@@ -97,6 +98,7 @@ export const Carousel = React.forwardRef(
     } = props;
 
     const scrollRef = React.useRef<FlatList>(null);
+    const styles = style();
 
     const handlePageChange = (index: number) => {
       if (data.length > 0) {
@@ -148,11 +150,7 @@ export const Carousel = React.forwardRef(
 
     return (
       <View
-        style={{
-          flexShrink: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+        style={styles.carouselMainView}>
         <FlatList
           ref={scrollRef}
           horizontal={true}
@@ -185,8 +183,8 @@ export const Carousel = React.forwardRef(
           }}
           data={data}
           contentContainerStyle={[contentContainerStyle]}
-          style={{width: itemWidth}}
-          renderItem={({item, index, separators}: FlatListItemProps<ItemT>) => {
+          style={{ width: itemWidth }}
+          renderItem={({ item, index, separators }: FlatListItemProps<ItemT>) => {
             return (
               <View
                 key={index.toString()}
@@ -197,10 +195,10 @@ export const Carousel = React.forwardRef(
                   },
                   itemHeight
                     ? {
-                        height: itemHeight,
-                      }
+                      height: itemHeight,
+                    }
                     : {},
-                  itemGap ? {paddingHorizontal: itemGap} : {},
+                  itemGap ? { paddingHorizontal: itemGap } : {},
                 ]}>
                 {renderItem({
                   item,

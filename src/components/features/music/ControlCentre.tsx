@@ -1,8 +1,8 @@
 import React from 'react';
-import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
-import TrackPlayer, {State} from 'react-native-track-player';
-import {AllIcons} from '../../../../assets/icons';
-import {COLORS} from '../../../utils';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import TrackPlayer, { State } from 'react-native-track-player';
+import { AllIcons } from '../../../../assets/icons';
+import { COLORS } from '../../../utils';
 
 const performSkipToNext = async () => {
   await TrackPlayer.skipToNext();
@@ -35,7 +35,7 @@ export const ControlCentre = ({
       <View style={style.trackForwardControl}>
         <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={style.commomImgStyle}
             source={AllIcons.ForwardControl}
           />
         </View>
@@ -44,21 +44,9 @@ export const ControlCentre = ({
         ) : (
           <View
             onTouchEnd={() => togglePlayback(playbackState)}
-            style={{
-              height: 40,
-              width: 40,
-              borderRadius: 40,
-              shadowColor: '#3dadfc',
-              shadowOffset: {
-                width: 0,
-                height: 12,
-              },
-              shadowOpacity: 0.15,
-              shadowRadius: 13.84,
-              elevation: 7,
-            }}>
+            style={style.playBtnView}>
             <Image
-              style={{width: '100%', height: '100%'}}
+              style={style.commomImgStyle}
               source={
                 playbackState === State.Playing
                   ? AllIcons.TrackPause
@@ -68,16 +56,9 @@ export const ControlCentre = ({
           </View>
         )}
 
-        <View
-          onTouchEnd={performSkipToNext}
-          style={[
-            style.forwardImage,
-            {
-              transform: [{rotate: '180deg'}],
-            },
-          ]}>
+        <View onTouchEnd={performSkipToNext} style={style.forwardImage}>
           <Image
-            style={{width: '100%', height: '100%'}}
+            style={style.commomImgStyle}
             source={AllIcons.ForwardControl}
           />
         </View>
@@ -97,5 +78,23 @@ const style = StyleSheet.create({
   forwardImage: {
     width: 17,
     height: 17,
+    transform: [{ rotate: '180deg' }],
+  },
+  commomImgStyle: {
+    width: '100%',
+    height: '100%',
+  },
+  playBtnView: {
+    height: 40,
+    width: 40,
+    borderRadius: 40,
+    shadowColor: '#3dadfc',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 13.84,
+    elevation: 7,
   },
 });

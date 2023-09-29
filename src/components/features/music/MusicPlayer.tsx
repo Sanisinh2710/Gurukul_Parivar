@@ -1,8 +1,8 @@
 import React from 'react';
-import {State, Track} from 'react-native-track-player';
-import {ControlCentre} from './ControlCentre';
-import {SongInfo} from './SongInfo';
-import {SongProgress} from './SongProgress';
+import { State, Track } from 'react-native-track-player';
+import { ControlCentre } from './ControlCentre';
+import { SongInfo } from './SongInfo';
+import { SongProgress } from './SongProgress';
 
 type MusicPlayerProps = {
   playbackState: State;

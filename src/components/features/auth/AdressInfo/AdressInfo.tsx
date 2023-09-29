@@ -1,21 +1,21 @@
 import React from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Alert, FlatList, Image, ScrollView, Text, View } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {AllIcons} from '../../../../../assets/icons';
-import {AddressDeleteApi, GetCountriesApi} from '../../../../services';
+import { AllIcons } from '../../../../../assets/icons';
+import { AddressDeleteApi, GetCountriesApi } from '../../../../services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
   UserAddress,
 } from '../../../../types';
-import {COLORS} from '../../../../utils';
-import {AddressFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
-import {styles} from './style';
+import { COLORS } from '../../../../utils';
+import { AddressFormValidationSchema } from '../../../../validations';
+import { FormInput, Loader, PrimaryButton, SecondaryButton } from '../../../ui';
+import { styles } from './style';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;
@@ -42,9 +42,9 @@ type AddressInfoProps = {
 };
 
 const TypeAddress = (t: any) => [
-  {name: t('addressInfo.HomeField'), id: 'Home'},
-  {name: t('addressInfo.NativeField'), id: 'Native'},
-  {name: t('addressInfo.Work/BusinessField'), id: 'Work/Business'},
+  { name: t('addressInfo.HomeField'), id: 'Home' },
+  { name: t('addressInfo.NativeField'), id: 'Native' },
+  { name: t('addressInfo.Work/BusinessField'), id: 'Work/Business' },
 ];
 
 export const AdressInfo = React.memo(
@@ -56,7 +56,7 @@ export const AdressInfo = React.memo(
     setFormData,
     onSubmitEvent,
   }: AddressInfoProps): React.JSX.Element => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const style = styles();
 
     const [loader, setLoader] = React.useState<boolean>(false);
@@ -91,61 +91,61 @@ export const AdressInfo = React.memo(
       required: boolean;
       wantPlaceholderAsLabelOnModal?: boolean;
     }[] = [
-      {
-        name: 'country_id',
-        lable: t('addressInfo.CountryLbl'),
-        placeholder: t('addressInfo.CountryPlaceHolder'),
-        type: 'select',
-        menuList: countries,
-        required: true,
-        wantPlaceholderAsLabelOnModal: true,
-      },
-      {
-        name: 'address',
-        lable: t('addressInfo.AddressLbl'),
-        placeholder: t('addressInfo.AddressPlaceholder'),
-        type: 'text',
-        required: true,
-      },
-      {
-        name: 'pincode',
-        lable: t('addressInfo.PincodeLbl'),
-        placeholder: t('addressInfo.PincodePlaceholder'),
-        type: 'number',
-        required: true,
-      },
-      {
-        name: 'city',
-        lable: t('addressInfo.CityVillageLbl'),
-        placeholder: t('addressInfo.CityVillagePlaceholder'),
-        type: 'text',
-        required: true,
-      },
-      {
-        name: 'address_type',
-        lable: t('addressInfo.TypeofaddressLbl'),
-        placeholder: '',
-        type: 'radio',
-        menuList: TypeAddress(t),
-        customProps: {
-          wantFullSpace: false,
-          customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
+        {
+          name: 'country_id',
+          lable: t('addressInfo.CountryLbl'),
+          placeholder: t('addressInfo.CountryPlaceHolder'),
+          type: 'select',
+          menuList: countries,
+          required: true,
+          wantPlaceholderAsLabelOnModal: true,
         },
-        required: true,
-      },
-    ];
+        {
+          name: 'address',
+          lable: t('addressInfo.AddressLbl'),
+          placeholder: t('addressInfo.AddressPlaceholder'),
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'pincode',
+          lable: t('addressInfo.PincodeLbl'),
+          placeholder: t('addressInfo.PincodePlaceholder'),
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'city',
+          lable: t('addressInfo.CityVillageLbl'),
+          placeholder: t('addressInfo.CityVillagePlaceholder'),
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'address_type',
+          lable: t('addressInfo.TypeofaddressLbl'),
+          placeholder: '',
+          type: 'radio',
+          menuList: TypeAddress(t),
+          customProps: {
+            wantFullSpace: false,
+            customStyle: { height: 35, borderWidth: 0, borderRadius: 60 },
+          },
+          required: true,
+        },
+      ];
 
     const {
       control,
       handleSubmit,
-      formState: {errors},
+      formState: { errors },
     } = useForm<AddressFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(AddressFormValidationSchema()),
       mode: 'onBlur',
     });
 
-    const {fields, append, remove, replace} = useFieldArray({
+    const { fields, append, remove, replace } = useFieldArray({
       control,
       name: 'address_details',
     });
@@ -243,9 +243,9 @@ export const AdressInfo = React.memo(
                       onTouchEnd={() => {
                         if (
                           initialValues?.address_details?.[mainindex]?.id !==
-                            undefined &&
+                          undefined &&
                           initialValues?.address_details?.[mainindex]?.id !==
-                            null &&
+                          null &&
                           initialValues?.address_details?.[mainindex]?.id !== ''
                         ) {
                           Alert.alert(
@@ -254,7 +254,7 @@ export const AdressInfo = React.memo(
                             [
                               {
                                 text: 'Cancel',
-                                onPress: () => {},
+                                onPress: () => { },
                                 style: 'cancel',
                               },
                               {
@@ -304,12 +304,12 @@ export const AdressInfo = React.memo(
                     ]}
                     showsVerticalScrollIndicator={false}
                     data={addressFormInputList}
-                    renderItem={({item, index}) => (
+                    renderItem={({ item, index }) => (
                       <View>
                         <Controller
                           control={control}
                           name={`address_details.${mainindex}.${item.name}`}
-                          render={({field: {onBlur, onChange, value}}) => {
+                          render={({ field: { onBlur, onChange, value } }) => {
                             return (
                               <FormInput
                                 menuList={item.menuList}
@@ -339,7 +339,7 @@ export const AdressInfo = React.memo(
                             <View
                               style={[
                                 style.checkboxInnerView,
-                                {borderWidth: checkedArray[mainindex] ? 0 : 1},
+                                { borderWidth: checkedArray[mainindex] ? 0 : 1 },
                               ]}
                               onTouchEnd={() => {
                                 let newArr = JSON.parse(

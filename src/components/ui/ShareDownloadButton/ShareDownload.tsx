@@ -352,7 +352,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       />
 
       <DropDownModel
-        modalHeight={`40%`}
+        modalHeight={`35%`}
         customModelchild={
           <>
             <Pressable
@@ -360,7 +360,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 isDownLoadingForWallPaper
                   ? e => {}
                   : e => {
-                      setWallPaper();
+                      setWallPaper('HOME');
                     }
               }>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>

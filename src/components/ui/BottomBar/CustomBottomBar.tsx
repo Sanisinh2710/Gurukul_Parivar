@@ -10,13 +10,13 @@ import {
   ParamListBase,
   TabNavigationState,
 } from '@react-navigation/native';
-import {Image, Pressable, Text, View} from 'react-native';
-import {EdgeInsets} from 'react-native-safe-area-context';
-import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {Theme} from '../../../types';
-import {CustomFonts} from '../../../utils';
-import {BottomNavStyle} from './BottomNav.style';
+import { Image, Pressable, Text, View } from 'react-native';
+import { EdgeInsets } from 'react-native-safe-area-context';
+import { AllIcons } from '../../../../assets/icons';
+import { useAppSelector } from '../../../redux/hooks';
+import { Theme } from '../../../types';
+import { CustomFonts } from '../../../utils';
+import { BottomNavStyle } from './BottomNav.style';
 
 export const CustomBottomTabBar = React.memo(
   ({
@@ -36,13 +36,13 @@ export const CustomBottomTabBar = React.memo(
     return (
       <View style={style.barStyle}>
         {state.routes.map((route: any, index: number) => {
-          const {options} = descriptors[route.key];
+          const { options } = descriptors[route.key];
           const label =
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-              ? options.title
-              : route.name;
+                ? options.title
+                : route.name;
 
           const isFocused = state.index === index;
 
