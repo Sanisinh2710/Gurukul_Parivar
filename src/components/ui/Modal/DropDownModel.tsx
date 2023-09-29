@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {FlatList, Modal, Text, TextInput, View} from 'react-native';
+import {Dimensions, FlatList, Modal, Text, TextInput, View} from 'react-native';
 
 import {Image} from 'react-native';
 import {AllIcons} from '../../../../assets/icons';
@@ -18,6 +18,7 @@ import {ModalStyle} from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
+  isCamera?: boolean;
   setModelVisible: React.Dispatch<React.SetStateAction<boolean>>;
   inputList?: Array<string> | Array<object>;
   wantSearchBar?: boolean;
@@ -51,10 +52,13 @@ export const DropDownModel = React.memo(
     setModelValueChoosed,
     wantApplyButton,
     viewPhoto,
+    isCamera,
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
     const {t} = useTranslation();
+
+    const {width, height} = Dimensions.get('window');
 
     const touchY = React.useRef<any>();
 
@@ -136,17 +140,11 @@ export const DropDownModel = React.memo(
     }, [searchvalue]);
 
     return (
-      <Modal
-        transparent
-        visible={modelVisible}
-        animationType="fade"
-        onDismiss={() => {
-          setModelVisible(false);
-        }}>
+      <Modal transparent visible={modelVisible} animationType="fade">
         <View
           style={style.modelWholeView}
           onTouchEnd={() => {
-            setModelVisible(false);
+            if (!isCamera) setModelVisible(false);
           }}>
           <View
             style={
@@ -172,13 +170,14 @@ export const DropDownModel = React.memo(
                 onTouchEnd={e => {
                   e.stopPropagation();
                 }}>
-                <>
+                <View>
                   {wantResetButton ? (
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        marginBottom: '3%',
                       }}>
                       <Text style={style.modelLabelText}>{label}</Text>
                       <Text
@@ -219,191 +218,241 @@ export const DropDownModel = React.memo(
                       />
                     </View>
                   )}
-                  <FlatList
-                    keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={style.modelFlatListContainerStyle}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    data={wantSearchBar ? searchedData : inputList}
-                    renderItem={({item, index}: any) => {
-                      return (
-                        <View
-                          onTouchEnd={() => {
-                            if (isObject(item)) {
-                              if (setSelectedItem) {
-                                if (type === 'multi-select') {
-                                  const newArr = wantApplyButton
-                                    ? [...local]
-                                    : [...selectedItem];
-                                  if (
-                                    newArr.find(newitem => {
-                                      return newitem === item?.id;
-                                    }) === undefined
-                                  ) {
-                                    newArr.push(item.id);
-
+                  <View
+                    style={{
+                      height: wantApplyButton ? height * 0.43 : 'auto',
+                    }}>
+                    <FlatList
+                      keyboardShouldPersistTaps="handled"
+                      contentContainerStyle={[
+                        style.modelFlatListContainerStyle,
+                        {
+                          paddingBottom: '40%',
+                        },
+                      ]}
+                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
+                      data={wantSearchBar ? searchedData : inputList}
+                      renderItem={({item, index}: any) => {
+                        return (
+                          <View
+                            onTouchEnd={() => {
+                              if (isObject(item)) {
+                                if (setSelectedItem) {
+                                  if (type === 'multi-select') {
+                                    const newArr = wantApplyButton
+                                      ? [...local]
+                                      : [...selectedItem];
                                     if (
-                                      wantApplyButton &&
-                                      wantApplyButton !== undefined
+                                      newArr.find(newitem => {
+                                        return newitem === item?.id;
+                                      }) === undefined
                                     ) {
-                                      setLocal(newArr);
-                                    } else {
-                                      setSelectedItem(newArr);
+                                      newArr.push(item.id);
+
+                                      if (
+                                        wantApplyButton &&
+                                        wantApplyButton !== undefined
+                                      ) {
+                                        setLocal(newArr);
+                                      } else {
+                                        setSelectedItem(newArr);
+                                      }
                                     }
-                                  }
-                                } else {
-                                  if (
-                                    wantApplyButton &&
-                                    wantApplyButton !== undefined
-                                  ) {
-                                    setLocal(item?.id);
                                   } else {
-                                    setSelectedItem(item?.id);
-                                  }
-                                }
-                                if (setModelValueChoosed) {
-                                  setModelValueChoosed(true);
-                                }
-                              }
-
-                              //     const newArr = [...selectedItem];
-                              //     if (
-                              //       newArr.find(
-                              //         newitem => newitem.name === item,
-                              //       ) === undefined
-                              //     ) {
-                              //       newArr.push(item);
-                              //       setSelectedItem(newArr);
-                              //     }
-                              //   }
-
-                              //   else {
-                              //     setSelectedItem(item?.id);
-                              //   }
-
-                              //   if (setModelValueChoosed) {
-                              //     setModelValueChoosed(true);
-                              //   }
-                              // }
-                            } else {
-                              if (setSelectedItem) {
-                                if (type === 'multi-select') {
-                                  const newArr = wantApplyButton
-                                    ? [...local]
-                                    : [...selectedItem];
-                                  if (newArr.includes(item) === false) {
-                                    newArr.push(item);
-
                                     if (
                                       wantApplyButton &&
                                       wantApplyButton !== undefined
                                     ) {
-                                      setLocal(newArr);
+                                      setLocal(item?.id);
                                     } else {
-                                      setSelectedItem(newArr);
+                                      setSelectedItem(item?.id);
                                     }
                                   }
+                                  if (setModelValueChoosed) {
+                                    setModelValueChoosed(true);
+                                  }
+                                }
 
-                                  // const newArr = [...selectedItem];
-                                  // if (newArr.includes(item) === false) {
-                                  //   newArr.push(item);
-                                  //   setSelectedItem(newArr);
+                                //     const newArr = [...selectedItem];
+                                //     if (
+                                //       newArr.find(
+                                //         newitem => newitem.name === item,
+                                //       ) === undefined
+                                //     ) {
+                                //       newArr.push(item);
+                                //       setSelectedItem(newArr);
+                                //     }
+                                //   }
+
+                                //   else {
+                                //     setSelectedItem(item?.id);
+                                //   }
+
+                                //   if (setModelValueChoosed) {
+                                //     setModelValueChoosed(true);
+                                //   }
+                                // }
+                              } else {
+                                if (setSelectedItem) {
+                                  if (type === 'multi-select') {
+                                    const newArr = wantApplyButton
+                                      ? [...local]
+                                      : [...selectedItem];
+                                    if (newArr.includes(item) === false) {
+                                      newArr.push(item);
+
+                                      if (
+                                        wantApplyButton &&
+                                        wantApplyButton !== undefined
+                                      ) {
+                                        setLocal(newArr);
+                                      } else {
+                                        setSelectedItem(newArr);
+                                      }
+                                    }
+
+                                    // const newArr = [...selectedItem];
+                                    // if (newArr.includes(item) === false) {
+                                    //   newArr.push(item);
+                                    //   setSelectedItem(newArr);
+                                    // }
+                                  } else {
+                                    if (
+                                      wantApplyButton &&
+                                      wantApplyButton !== undefined
+                                    ) {
+                                      setLocal(item);
+                                    } else {
+                                      setSelectedItem(item);
+                                    }
+                                  }
+                                  if (setModelValueChoosed) {
+                                    setModelValueChoosed(true);
+                                  }
+
+                                  // else {
+                                  //   setSelectedItem(item);
                                   // }
-                                } else {
-                                  if (
-                                    wantApplyButton &&
-                                    wantApplyButton !== undefined
-                                  ) {
-                                    setLocal(item);
-                                  } else {
-                                    setSelectedItem(item);
-                                  }
+                                  // if (setModelValueChoosed) {
+                                  //   setModelValueChoosed(true);
+                                  // }
                                 }
-                                if (setModelValueChoosed) {
-                                  setModelValueChoosed(true);
-                                }
-
-                                // else {
-                                //   setSelectedItem(item);
-                                // }
-                                // if (setModelValueChoosed) {
-                                //   setModelValueChoosed(true);
-                                // }
                               }
-                            }
-                            if (type !== 'multi-select') {
-                              const timer = setTimeout(() => {
-                                setModelVisible(false);
-                              }, 200);
-                              return () => clearTimeout(timer);
-                            }
-                          }}
-                          style={[
-                            style.modelMenuView,
-                            type === 'radio' && {
-                              borderColor: 'rgba(172, 43, 49, 0.4)',
-                              borderWidth: 1,
-                              borderRadius: 8,
-                              paddingLeft: 16,
-                              paddingVertical: 17,
-                            },
-                            isString(item)
-                              ? type === 'radio' &&
-                                selectedItem?.includes(item) &&
-                                item.includes(selectedItem) && {
-                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                                }
-                              : type === 'radio' &&
-                                selectedItem === item?.id &&
-                                item?.name.includes(selectedItem) && {
-                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                                },
-                          ]}>
-                          <Text
+                              if (type !== 'multi-select') {
+                                const timer = setTimeout(() => {
+                                  setModelVisible(false);
+                                }, 200);
+                                return () => clearTimeout(timer);
+                              }
+                            }}
                             style={[
-                              style.modelMenuText,
+                              style.modelMenuView,
                               type === 'radio' && {
-                                ...CustomFonts.body.large14,
-                                paddingBottom: 0,
-                                fontWeight: '500',
-                                fontSize: 16,
-                                color: COLORS.lightModetextColor,
+                                borderColor: 'rgba(172, 43, 49, 0.4)',
+                                borderWidth: 1,
+                                borderRadius: 8,
+                                paddingLeft: 16,
+                                paddingVertical: 17,
                               },
-                              ((isString(item) && selectedItem === item) ||
-                                (isString(item) &&
-                                  type === 'phone' &&
-                                  item.includes(selectedItem)) ||
-                                (isString(item) &&
-                                  type === 'multi-select' &&
-                                  (selectedItem.includes(item) ||
-                                    local.includes(item)))) &&
-                                type !== 'radio' && {
-                                  color: COLORS.primaryColor,
-                                },
-
-                              ((isObject(item) && selectedItem === item?.id) ||
-                                (isObject(item) &&
-                                  type === 'phone' &&
-                                  item?.name.includes(selectedItem)) ||
-                                (isObject(item) &&
-                                  type === 'multi-select' &&
-                                  (selectedItem.includes(item?.id) ||
-                                    local.includes(item?.id)))) &&
-                                type !== 'radio' && {
-                                  color: COLORS.primaryColor,
-                                },
+                              isString(item)
+                                ? type === 'radio' &&
+                                  selectedItem?.includes(item) &&
+                                  item.includes(selectedItem) && {
+                                    backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                  }
+                                : type === 'radio' &&
+                                  selectedItem === item?.id &&
+                                  item?.name.includes(selectedItem) && {
+                                    backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                  },
                             ]}>
-                            {isString(item) ? item : item?.name}
-                          </Text>
-                          <>
-                            {isString(item) ? (
-                              (selectedItem === item ||
-                                (type === 'phone' &&
-                                  item.includes(selectedItem)) ||
-                                (type === 'multi-select' &&
-                                  (selectedItem.includes(item) ||
-                                    local.includes(item)))) &&
-                              type !== 'radio' ? (
+                            <Text
+                              style={[
+                                style.modelMenuText,
+                                type === 'radio' && {
+                                  ...CustomFonts.body.large14,
+                                  paddingBottom: 0,
+                                  fontWeight: '500',
+                                  fontSize: 16,
+                                  color: COLORS.lightModetextColor,
+                                },
+                                ((isString(item) && selectedItem === item) ||
+                                  (isString(item) &&
+                                    type === 'phone' &&
+                                    item.includes(selectedItem)) ||
+                                  (isString(item) &&
+                                    type === 'multi-select' &&
+                                    (selectedItem.includes(item) ||
+                                      local.includes(item)))) &&
+                                  type !== 'radio' && {
+                                    color: COLORS.primaryColor,
+                                  },
+
+                                ((isObject(item) &&
+                                  selectedItem === item?.id) ||
+                                  (isObject(item) &&
+                                    type === 'phone' &&
+                                    item?.name.includes(selectedItem)) ||
+                                  (isObject(item) &&
+                                    type === 'multi-select' &&
+                                    (selectedItem.includes(item?.id) ||
+                                      local.includes(item?.id)))) &&
+                                  type !== 'radio' && {
+                                    color: COLORS.primaryColor,
+                                  },
+                              ]}>
+                              {isString(item) ? item : item?.name}
+                            </Text>
+                            <View>
+                              {isString(item) ? (
+                                (selectedItem === item ||
+                                  (type === 'phone' &&
+                                    item.includes(selectedItem)) ||
+                                  (type === 'multi-select' &&
+                                    (selectedItem.includes(item) ||
+                                      local.includes(item)))) &&
+                                type !== 'radio' ? (
+                                  <View style={style.iconView}>
+                                    <Image
+                                      source={AllIcons.RoundCheckedCircle}
+                                      style={style.iconStyle}
+                                    />
+                                  </View>
+                                ) : (
+                                  type === 'radio' &&
+                                  (selectedItem === item ||
+                                    item === selectedItem) && (
+                                    <View
+                                      style={{
+                                        width: 20,
+                                        height: 20,
+                                        borderColor: COLORS.primaryColor,
+                                        borderWidth: 1,
+                                        borderRadius: 60,
+                                        padding: 1,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        right: 16,
+                                      }}>
+                                      <View
+                                        style={{
+                                          backgroundColor: COLORS.primaryColor,
+                                          borderRadius: 60,
+                                          width: 12,
+                                          height: 12,
+                                        }}
+                                      />
+                                    </View>
+                                  )
+                                )
+                              ) : (selectedItem === item?.id ||
+                                  (type === 'phone' &&
+                                    item?.name.includes(selectedItem)) ||
+                                  (type === 'multi-select' &&
+                                    (selectedItem.includes(item?.id) ||
+                                      local.includes(item?.id)))) &&
+                                type !== 'radio' ? (
                                 <View style={style.iconView}>
                                   <Image
                                     source={AllIcons.RoundCheckedCircle}
@@ -412,8 +461,8 @@ export const DropDownModel = React.memo(
                                 </View>
                               ) : (
                                 type === 'radio' &&
-                                (selectedItem === item ||
-                                  item === selectedItem) && (
+                                (selectedItem === item?.id ||
+                                  item?.name.includes(selectedItem)) && (
                                   <View
                                     style={{
                                       width: 20,
@@ -436,69 +485,34 @@ export const DropDownModel = React.memo(
                                     />
                                   </View>
                                 )
-                              )
-                            ) : (selectedItem === item?.id ||
-                                (type === 'phone' &&
-                                  item?.name.includes(selectedItem)) ||
-                                (type === 'multi-select' &&
-                                  (selectedItem.includes(item?.id) ||
-                                    local.includes(item?.id)))) &&
-                              type !== 'radio' ? (
-                              <View style={style.iconView}>
-                                <Image
-                                  source={AllIcons.RoundCheckedCircle}
-                                  style={style.iconStyle}
-                                />
-                              </View>
-                            ) : (
-                              type === 'radio' &&
-                              (selectedItem === item?.id ||
-                                item?.name.includes(selectedItem)) && (
-                                <View
-                                  style={{
-                                    width: 20,
-                                    height: 20,
-                                    borderColor: COLORS.primaryColor,
-                                    borderWidth: 1,
-                                    borderRadius: 60,
-                                    padding: 1,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    right: 16,
-                                  }}>
-                                  <View
-                                    style={{
-                                      backgroundColor: COLORS.primaryColor,
-                                      borderRadius: 60,
-                                      width: 12,
-                                      height: 12,
-                                    }}
-                                  />
-                                </View>
-                              )
-                            )}
-                          </>
-                        </View>
-                      );
-                    }}
-                  />
-                  {wantApplyButton && (
-                    <PrimaryButton
-                      title={'Apply'}
-                      onPress={() => {
-                        setSelectedItem(local);
-                        setModelVisible(false);
-                      }}
-                      buttonStyle={{
-                        position: 'absolute',
-                        width: '100%',
-                        bottom: `5%`,
-                        alignSelf: 'center',
-                        backgroundColor: 'red',
+                              )}
+                            </View>
+                          </View>
+                        );
                       }}
                     />
+                  </View>
+
+                  {wantApplyButton && (
+                    <View
+                      style={{
+                        alignItems: 'center',
+                      }}>
+                      <PrimaryButton
+                        title={'Apply'}
+                        onPress={() => {
+                          setSelectedItem(local);
+                          setModelVisible(false);
+                        }}
+                        buttonStyle={{
+                          alignSelf: 'center',
+                          backgroundColor: 'red',
+                          width: '100%',
+                        }}
+                      />
+                    </View>
                   )}
-                </>
+                </View>
               </View>
             )}
           </View>

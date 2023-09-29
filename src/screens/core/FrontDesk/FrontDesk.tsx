@@ -19,8 +19,6 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../components';
-import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {SliderGetApi} from '../../../services';
 import {RootStackParamList} from '../../../types';
 import {COLORS, FrontDesk} from '../../../utils';
@@ -29,9 +27,7 @@ import {styles} from './styles';
 export const FrontDeskScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
-
-  const dashboardImages = useAppSelector(state => state.sliderPage.images);
+  const [dashboardImages, setDashboardImages] = React.useState([]);
 
   const [loader, setLoader] = React.useState<boolean>(false);
 
@@ -42,8 +38,6 @@ export const FrontDeskScreen = ({
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
 
-  const dispatch = useAppDispatch();
-
   React.useMemo(async () => {
     setLoader(true);
 
@@ -51,7 +45,8 @@ export const FrontDeskScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
+
         setLoader(false);
       }
     } catch (error) {
@@ -88,7 +83,7 @@ export const FrontDeskScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
       }
     } catch (error) {
       console.log(error);
@@ -134,7 +129,7 @@ export const FrontDeskScreen = ({
               style={{
                 marginBottom: '2%',
               }}>
-              <PagerView images={dashboardImages} currentIndex={currentPage} />
+              <PagerView images={dashboardImages} />
             </View>
             <View style={[{flex: 1}]}>
               <FlatList

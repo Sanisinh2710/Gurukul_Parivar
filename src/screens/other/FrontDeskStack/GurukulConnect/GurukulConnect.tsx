@@ -6,8 +6,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
-  AppState,
   BackHandler,
+  Dimensions,
   FlatList,
   Image,
   Platform,
@@ -16,6 +16,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import TrackPlayer, {
   Event,
   State,
@@ -31,6 +32,7 @@ import {
   DropDownModel,
   Loader,
   MusicPlayer,
+  NoData,
   ScreenHeader,
   ScreenWrapper,
   SearchBar,
@@ -89,6 +91,8 @@ export const GurukulConnect = ({
 
   const [loader, setLoader] = React.useState<boolean>(false);
 
+  const [filtering, setFiltering] = React.useState<boolean>(false);
+
   const [isDownloading, setIsDownLoading] = React.useState<
     {index: number; status: boolean}[]
   >([]);
@@ -121,7 +125,14 @@ export const GurukulConnect = ({
 
   const {position, duration} = useProgress();
 
-  const setup = async (songsToBeAdded: Array<any>) => {
+  const trackPosition = React.useMemo(() => {
+    return position;
+  }, [position]);
+
+  const setup = async (
+    songsToBeAdded: Array<any>,
+    playSkippedSong: boolean = false,
+  ) => {
     setLoader(true);
     let isSetup = await setupPlayer();
 
@@ -154,6 +165,7 @@ export const GurukulConnect = ({
         await addTracks([...Songs.filter(item => item.is_multiple === false)]);
 
         dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+        setSearchData(Songs);
 
         const playingTrack = await TrackPlayer.getTrack(0);
 
@@ -164,11 +176,16 @@ export const GurukulConnect = ({
             activeTrack &&
             activeTrackPosition &&
             setupMode !== 'ALBUM' &&
-            setupMode !== 'FILTERED'
+            setupMode !== 'FILTERED' &&
+            newQueue.findIndex((item: any) => item.id === activeTrack?.id) >= 0
           ) {
             await TrackPlayer.skip(
               newQueue.findIndex((item: any) => item.id === activeTrack?.id),
-              activeTrackPosition,
+              playbackState === State.Playing ||
+                playbackState === State.Paused ||
+                playbackState === State.Stopped
+                ? trackPosition
+                : activeTrackPosition,
             );
             const currentTrackDuration = await TrackPlayer.getDuration();
 
@@ -180,11 +197,18 @@ export const GurukulConnect = ({
                 duration: currentTrackDuration,
               },
             );
+
+            if (playSkippedSong) await TrackPlayer.play();
             dispatch(
               SET_ACTIVE_TRACKDATA({
                 activeTrackDataPayload: {
                   track: activeTrack,
-                  position: activeTrackPosition,
+                  position:
+                    playbackState === State.Playing ||
+                    playbackState === State.Paused ||
+                    playbackState === State.Stopped
+                      ? trackPosition
+                      : activeTrackPosition,
                 },
               }),
             );
@@ -193,6 +217,12 @@ export const GurukulConnect = ({
               SET_ACTIVE_TRACKDATA({
                 activeTrackDataPayload: {
                   track: playingTrack,
+                  position:
+                    playbackState === State.Playing ||
+                    playbackState === State.Paused ||
+                    playbackState === State.Stopped
+                      ? trackPosition
+                      : activeTrackPosition,
                 },
               }),
             );
@@ -231,6 +261,8 @@ export const GurukulConnect = ({
 
     if (response.resType === 'SUCCESS') {
       setCategoryList(response.data.categories);
+    } else {
+      Toast.show(response.message, 2);
     }
 
     setLoader(false);
@@ -238,12 +270,15 @@ export const GurukulConnect = ({
   };
 
   React.useMemo(async () => {
+    setLoader(true);
     if (setupMode === 'NONE') {
       const res = await GurkulAudioGetApi();
 
       if (res.resType === 'SUCCESS') {
         await setup(res.data.gurukul_audios);
         dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+      } else {
+        Toast.show(res.message, 2);
       }
     } else {
       if (setupMode !== 'FILTERED' && setupMode !== 'ALBUM') {
@@ -251,14 +286,16 @@ export const GurukulConnect = ({
 
         if (res.resType === 'SUCCESS') {
           await setup(res.data.gurukul_audios);
-          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
+        } else {
+          Toast.show(res.message, 2);
         }
       }
     }
+    setLoader(false);
   }, []);
 
   React.useMemo(async () => {
-    setLoader(true);
+    setFiltering(true);
 
     if (
       selectedItem.length > 0 &&
@@ -267,7 +304,8 @@ export const GurukulConnect = ({
       const response = await GurkulAudioGetFromCategoriesGetApi(selectedItem);
 
       if (response.resType === 'SUCCESS') {
-        if (setupMode === 'INITIAL' && activeTrack?.albumId === undefined) {
+        //  try to comment this if song getting paused after coming from album playing
+        if (setupMode === 'INITIAL') {
           await TrackPlayer.reset();
         }
         if (
@@ -277,6 +315,8 @@ export const GurukulConnect = ({
           await TrackPlayer.reset();
         }
         await setup(response.data.gurukul_audios);
+      } else {
+        Toast.show(response.message, 2);
       }
 
       batch(() => {
@@ -291,6 +331,8 @@ export const GurukulConnect = ({
 
         if (res.resType === 'SUCCESS') {
           await setup(res.data.gurukul_audios);
+        } else {
+          Toast.show(res.message, 2);
         }
 
         batch(() => {
@@ -299,14 +341,9 @@ export const GurukulConnect = ({
         });
       }
     }
-    setLoader(false);
-  }, [selectedItem]);
 
-  React.useEffect(() => {
-    if (allSongs.length > 0) {
-      setSearchData(allSongs);
-    }
-  }, [allSongs]);
+    setFiltering(false);
+  }, [selectedItem]);
 
   useTrackPlayerEvents(
     [Event.PlaybackTrackChanged, Event.PlaybackState],
@@ -318,24 +355,26 @@ export const GurukulConnect = ({
             playbackState !== State.Connecting &&
             playbackState !== 'idle'
           ) {
-            const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
+            if (event.nextTrack) {
+              const playingTrack = await TrackPlayer.getTrack(event.nextTrack);
 
-            const currentTrackDuration = await TrackPlayer.getDuration();
+              const currentTrackDuration = await TrackPlayer.getDuration();
 
-            if (playingTrack !== null) {
-              await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
-                title: playingTrack?.title,
-                artist: playingTrack?.artist,
-                duration: currentTrackDuration,
-              });
+              if (playingTrack !== null) {
+                await TrackPlayer.updateMetadataForTrack(event.nextTrack, {
+                  title: playingTrack?.title,
+                  artist: playingTrack?.artist,
+                  duration: currentTrackDuration,
+                });
 
-              dispatch(
-                SET_ACTIVE_TRACKDATA({
-                  activeTrackDataPayload: {
-                    track: playingTrack,
-                  },
-                }),
-              );
+                dispatch(
+                  SET_ACTIVE_TRACKDATA({
+                    activeTrackDataPayload: {
+                      track: playingTrack,
+                    },
+                  }),
+                );
+              }
             }
           }
           break;
@@ -360,9 +399,7 @@ export const GurukulConnect = ({
                   artist: playingTrack1?.artist,
                   duration: currentTrackDuration1,
                 });
-              }
 
-              if (playingTrack1 !== null) {
                 dispatch(
                   SET_ACTIVE_TRACKDATA({
                     activeTrackDataPayload: {
@@ -381,26 +418,8 @@ export const GurukulConnect = ({
     },
   );
 
-  const trackPlaying = React.useMemo((): 'PLAYING' | 'BUFFERING' | 'OTHER' => {
-    return playbackState === State.Playing
-      ? 'PLAYING'
-      : playbackState === State.Buffering
-      ? 'BUFFERING'
-      : 'OTHER';
-  }, [playbackState]);
-
-  const trackPosition = React.useMemo(() => {
-    return position;
-  }, [position]);
-
   const onBackPress = React.useCallback(() => {
     if (activeTrack) {
-      dispatch(
-        SET_ACTIVE_TRACKDATA({
-          activeTrackDataPayload: {track: activeTrack, position: trackPosition},
-        }),
-      );
-
       if (setupMode === 'ALBUM') {
         setTimeout(async () => {
           setLoader(true);
@@ -440,21 +459,79 @@ export const GurukulConnect = ({
                 ...Songs.filter(item => item.is_multiple === false),
               ]);
 
-              batch(() => {
-                dispatch(ADD_UPDATE_SONGS({songs: Songs}));
-                dispatch(
-                  UPDATE_SETUP_MODE({
-                    setupMode:
-                      selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
-                  }),
+              const newQueue = await TrackPlayer.getQueue();
+
+              if (
+                activeTrack &&
+                newQueue.findIndex(
+                  (item: any) => item.id === activeTrack?.id,
+                ) >= 0
+              ) {
+                await TrackPlayer.skip(
+                  newQueue.findIndex(
+                    (item: any) => item.id === activeTrack?.id,
+                  ),
+                  playbackState === State.Playing ||
+                    playbackState === State.Paused ||
+                    playbackState === State.Stopped
+                    ? trackPosition
+                    : activeTrackPosition,
                 );
-              });
+                const currentTrackDuration = await TrackPlayer.getDuration();
+
+                await TrackPlayer.updateMetadataForTrack(
+                  newQueue.findIndex(
+                    (item: any) => item.id === activeTrack?.id,
+                  ),
+                  {
+                    title: activeTrack?.title,
+                    artist: activeTrack?.artist,
+                    duration: currentTrackDuration,
+                  },
+                );
+
+                if (playbackState === State.Playing) {
+                  await TrackPlayer.play();
+                }
+                if (
+                  playbackState === State.Paused ||
+                  playbackState === State.Stopped
+                ) {
+                  await TrackPlayer.pause();
+                }
+
+                batch(() => {
+                  dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+                  dispatch(
+                    UPDATE_SETUP_MODE({
+                      setupMode:
+                        selectedItem.length <= 0 ? 'INITIAL' : 'FILTERED',
+                    }),
+                  );
+                  dispatch(
+                    SET_ACTIVE_TRACKDATA({
+                      activeTrackDataPayload: {
+                        track: activeTrack,
+                        position:
+                          playbackState === State.Playing ||
+                          playbackState === State.Paused ||
+                          playbackState === State.Stopped
+                            ? trackPosition
+                            : activeTrackPosition,
+                      },
+                    }),
+                  );
+                });
+                setSearchData(Songs);
+              }
+            } else {
+              Toast.show(res.message, 2);
             }
           } catch (error) {
             console.log(error);
           }
           setLoader(false);
-        }, 1500);
+        }, 500);
       } else {
         navigation.goBack();
       }
@@ -465,26 +542,13 @@ export const GurukulConnect = ({
     return true;
   }, [activeTrack, trackPosition, setupMode]);
 
-  const onBlurScreen = React.useCallback(() => {
-    if (activeTrack) {
-      dispatch(
-        SET_ACTIVE_TRACKDATA({
-          activeTrackDataPayload: {track: activeTrack, position: trackPosition},
-        }),
-      );
-    }
-    return true;
-  }, [activeTrack, trackPosition, setupMode]);
-
   const ExitCallBack = React.useCallback(() => {
     // Add Event Listener for hardwareBackPress
     BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    const blurListner = AppState.addEventListener('blur', onBlurScreen);
 
     return () => {
       // Once the Screen gets blur Remove Event Listener
       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      blurListner.remove();
     };
   }, [activeTrack, trackPosition, setupMode]);
 
@@ -532,6 +596,9 @@ export const GurukulConnect = ({
           ]);
 
           dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+          setSearchData(Songs);
+        } else {
+          Toast.show(res.message, 2);
         }
       } catch (error) {
         console.log(error);
@@ -559,6 +626,14 @@ export const GurukulConnect = ({
           }),
         );
       }
+    }
+
+    const response = await GurkulAudioCategoriesGetApi();
+
+    if (response.resType === 'SUCCESS') {
+      setCategoryList(response.data.categories);
+    } else {
+      Toast.show(response.message, 2);
     }
 
     setWantNewSongs(false);
@@ -616,42 +691,50 @@ export const GurukulConnect = ({
 
             if (wantToResetMenuSongList) {
               dispatch(ADD_UPDATE_SONGS({songs: Songs}));
+              setSearchData(Songs);
             }
           }
+        } else {
+          Toast.show(res.message, 2);
         }
       } catch (error) {
         console.log(error, 'error came');
       }
 
-      if (activeTrack && activeTrackPosition) {
+      if (activeTrack && trackPosition) {
         const newQueue = await TrackPlayer.getQueue();
-        await TrackPlayer.skip(
-          newQueue.findIndex((item: any) => item.id === activeTrack?.id),
-          activeTrackPosition,
-        );
-        const currentTrackDuration = await TrackPlayer.getDuration();
 
-        await TrackPlayer.updateMetadataForTrack(
-          newQueue.findIndex((item: any) => item.id === activeTrack?.id),
-          {
-            title: activeTrack?.title,
-            artist: activeTrack?.artist,
-            duration: currentTrackDuration,
-          },
-        );
+        if (
+          newQueue.findIndex((item: any) => item.id === activeTrack?.id) >= 0
+        ) {
+          await TrackPlayer.skip(
+            newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+            trackPosition,
+          );
+          const currentTrackDuration = await TrackPlayer.getDuration();
 
-        if (wantToPlayActiveTrack) {
-          await TrackPlayer.play();
-        }
-
-        dispatch(
-          SET_ACTIVE_TRACKDATA({
-            activeTrackDataPayload: {
-              track: activeTrack,
-              position: activeTrackPosition,
+          await TrackPlayer.updateMetadataForTrack(
+            newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+            {
+              title: activeTrack?.title,
+              artist: activeTrack?.artist,
+              duration: currentTrackDuration,
             },
-          }),
-        );
+          );
+
+          dispatch(
+            SET_ACTIVE_TRACKDATA({
+              activeTrackDataPayload: {
+                track: activeTrack,
+                position: activeTrackPosition,
+              },
+            }),
+          );
+
+          if (wantToPlayActiveTrack) {
+            await TrackPlayer.play();
+          }
+        }
       } else {
         const playingTrack = await TrackPlayer.getTrack(0);
         if (playingTrack !== null) {
@@ -669,7 +752,7 @@ export const GurukulConnect = ({
     setLoader(false);
   };
 
-  if (!isPlayerReady || loader || isSearching) {
+  if (isPlayerReady === false || loader || filtering || isSearching) {
     return <Loader screenHeight={'100%'} />;
   } else {
     return (
@@ -782,7 +865,7 @@ export const GurukulConnect = ({
             )}
 
           <View>
-            {allSongs.length > 0 && (
+            {allSongs.length > 0 && searchData.length > 0 ? (
               <FlatList
                 data={searchData}
                 overScrollMode="always"
@@ -802,9 +885,39 @@ export const GurukulConnect = ({
                             : item?.id == activeTrack?.albumId &&
                               setupMode !== 'ALBUM'
                             ? 'rgba(172, 43, 49, 1)'
+                            : item?.id == activeTrack?.id &&
+                              setupMode !== 'ALBUM'
+                            ? 'rgba(172, 43, 49, 1)'
                             : 'rgba(172, 43, 49, 0.3)',
                       },
-                    ]}>
+                    ]}
+                    onTouchEnd={
+                      item.is_multiple
+                        ? async e => {
+                            if (item?.id && item?.title) {
+                              if (
+                                activeTrack &&
+                                activeTrackPosition &&
+                                activeTrack?.album &&
+                                activeTrack?.albumId !== null &&
+                                activeTrack?.albumId !== undefined &&
+                                activeTrack?.albumId == item?.id
+                              ) {
+                                await onAlbumClick(
+                                  activeTrack?.albumId,
+                                  activeTrack?.album,
+                                  true,
+                                  activeTrack,
+                                  activeTrackPosition,
+                                  playbackState === State.Playing,
+                                );
+                              } else {
+                                await onAlbumClick(item?.id, item?.title);
+                              }
+                            }
+                          }
+                        : e => {}
+                    }>
                     <View>
                       <Text style={style.songTitle}>
                         {item?.id}
@@ -814,33 +927,7 @@ export const GurukulConnect = ({
                       <Text style={style.songArtist}>{item?.description}</Text>
                     </View>
                     {item.is_multiple === true ? (
-                      <View
-                        onTouchEnd={async () => {
-                          if (item?.id && item?.title) {
-                            if (
-                              activeTrack &&
-                              activeTrackPosition &&
-                              activeTrack?.album &&
-                              activeTrack?.albumId !== null &&
-                              activeTrack?.albumId !== undefined &&
-                              activeTrack?.albumId == item?.id
-                            ) {
-                              await onAlbumClick(
-                                activeTrack?.albumId,
-                                activeTrack?.album,
-                                true,
-                                activeTrack,
-                                activeTrackPosition,
-                                true,
-                              );
-                            } else {
-                              await onAlbumClick(item?.id, item?.title);
-                            }
-                          }
-                        }}
-                        style={{
-                          flexDirection: 'row',
-                        }}>
+                      <View style={{flexDirection: 'row'}}>
                         <View style={{height: 15, width: 15}}>
                           <Image
                             style={{
@@ -878,38 +965,47 @@ export const GurukulConnect = ({
                       <View style={{flexDirection: 'row', gap: 6}}>
                         <View
                           style={{height: 24, width: 24}}
-                          onTouchEnd={async e => {
-                            const newDownLoad: {
-                              index: number;
-                              status: boolean;
-                            }[] = [...isDownloading];
+                          onTouchEnd={
+                            isDownloading?.find(
+                              locitem => locitem.index === item?.id,
+                            )?.status
+                              ? () => {}
+                              : async e => {
+                                  const newDownLoad: {
+                                    index: number;
+                                    status: boolean;
+                                  }[] = [...isDownloading];
 
-                            newDownLoad.push({index: item.id, status: true});
+                                  newDownLoad.push({
+                                    index: item.id,
+                                    status: true,
+                                  });
 
-                            setIsDownLoading(newDownLoad);
+                                  setIsDownLoading(newDownLoad);
 
-                            const res = await downloadSong(
-                              item?.url,
-                              item?.title,
-                            );
+                                  const res = await downloadSong(
+                                    item?.url,
+                                    item?.title,
+                                  );
 
-                            if (res) {
-                              let newDownLoad: {
-                                index: number;
-                                status: boolean;
-                              }[] = [...isDownloading];
-                              const ind = newDownLoad.findIndex(
-                                locitem => locitem.index === item?.id,
-                              );
+                                  if (res) {
+                                    let newDownLoad: {
+                                      index: number;
+                                      status: boolean;
+                                    }[] = [...isDownloading];
+                                    const ind = newDownLoad.findIndex(
+                                      locitem => locitem.index === item?.id,
+                                    );
 
-                              newDownLoad[ind] = {
-                                index: item.id,
-                                status: false,
-                              };
+                                    newDownLoad[ind] = {
+                                      index: item.id,
+                                      status: false,
+                                    };
 
-                              setIsDownLoading(newDownLoad);
-                            }
-                          }}>
+                                    setIsDownLoading(newDownLoad);
+                                  }
+                                }
+                          }>
                           {isDownloading?.find(
                             locitem => locitem.index === item?.id,
                           )?.status ? (
@@ -929,18 +1025,18 @@ export const GurukulConnect = ({
                             />
                           )}
                         </View>
-                        <View
-                          onTouchEnd={async () => {
-                            await handleControl(item?.id);
-                          }}
-                          style={{height: 24, width: 24}}>
-                          {item.id == activeTrack?.id &&
-                          trackPlaying === 'BUFFERING' ? (
-                            <ActivityIndicator
-                              size={25}
-                              color={COLORS.primaryColor}
-                            />
-                          ) : (
+                        {item.id == activeTrack?.id &&
+                        playbackState === State.Buffering ? (
+                          <ActivityIndicator
+                            size={25}
+                            color={COLORS.primaryColor}
+                          />
+                        ) : (
+                          <View
+                            onTouchEnd={async () => {
+                              await handleControl(item?.id);
+                            }}
+                            style={{height: 24, width: 24}}>
                             <Image
                               style={{
                                 width: '100%',
@@ -949,18 +1045,25 @@ export const GurukulConnect = ({
                               }}
                               source={
                                 item?.id == activeTrack?.id &&
-                                trackPlaying === 'PLAYING'
+                                playbackState === State.Playing
                                   ? AllIcons.PauseSong
                                   : AllIcons.PlaySong
                               }
                             />
-                          )}
-                        </View>
+                          </View>
+                        )}
                       </View>
                     )}
                   </View>
                 )}
               />
+            ) : (
+              <View
+                style={{
+                  height: Dimensions.get('window').height * 0.6,
+                }}>
+                <NoData />
+              </View>
             )}
           </View>
         </ScrollView>
@@ -985,7 +1088,7 @@ export const GurukulConnect = ({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           wantResetButton={true}
-          label="G-connect Categories"
+          label="G-Connect Categories"
           wantApplyButton={true}
         />
       </ScreenWrapper>

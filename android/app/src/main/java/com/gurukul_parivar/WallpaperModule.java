@@ -232,7 +232,7 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements  Life
 
         wallpaperManager.suggestDesiredDimensions( screenWidth, screenHeight );
 
-        final float width = wallpaperManager.getDesiredMinimumWidth( ) + 100;
+        final float width = wallpaperManager.getDesiredMinimumWidth( );
         final float height = wallpaperManager.getDesiredMinimumHeight( );
 
         Bitmap wallpaper = Bitmap.createScaledBitmap( bitmap, ( int ) width, ( int ) height, true );

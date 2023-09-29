@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
   Platform,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -53,13 +54,8 @@ export const DailyQuotes = ({
 
   const [itemIndex, setItemIndex] = React.useState(0);
 
-  const [imgLoad, setImgLoad] = React.useState<boolean>(false);
+  const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
-
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
-
-  const [currentImageUri, setCurrentImageUri] = React.useState<string>();
 
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
@@ -78,7 +74,6 @@ export const DailyQuotes = ({
     }
   }, [changeValue, GurukulList]);
 
-  const {width: screenWidth} = Dimensions.get('window');
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -141,16 +136,6 @@ export const DailyQuotes = ({
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
 
-  // React.useEffect(() => {
-  //   if (DailyQuotes) {
-  //     setImgLoad([
-  //       ...DailyQuotes?.map(item => {
-  //         return true;
-  //       }),
-  //     ]);
-  //   }
-  // }, [DailyQuotes]);
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -206,7 +191,7 @@ export const DailyQuotes = ({
           />
         }>
         <View style={[commonStyle.commonContentView, {flex: 1}]}>
-          <View style={{height: '8%', marginBottom: '16%'}}>
+          <View style={{height: 60, marginBottom: '16%'}}>
             <View
               style={{
                 marginTop: '5%',
@@ -258,74 +243,72 @@ export const DailyQuotes = ({
                           marginTop: '3%',
                         }}>
                         <Carousel
-                          contentContainerStyle={{
-                            right: 3,
-                          }}
                           itemWidth={Dimensions.get('window').width * 0.91}
+                          itemGap={10}
                           data={DailyQuotes}
                           onSnapToItem={index => {
                             setItemIndex(index);
                           }}
                           renderItem={({item, index}) => {
                             return (
-                              <>
-                                <View
-                                  style={{
-                                    height: '100%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 20,
+                              <View
+                                style={{
+                                  height: '100%',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  borderRadius: 20,
+                                }}>
+                                <Pressable
+                                  style={{flex: 1, width: '100%'}}
+                                  onPress={() => {
+                                    navigation.navigate('ImageZommer', {
+                                      images: [
+                                        {url: `${BASE_URL}${item.image}`},
+                                      ],
+                                    });
                                   }}>
-                                  <View
-                                    style={{flex: 1, width: '100%'}}
-                                    onTouchEnd={() => {
-                                      setCurrentImageUri(item.image);
-                                      navigation.navigate('zoomImage', {
-                                        image: item.image,
-                                      });
-                                    }}>
-                                    {imgLoad && (
-                                      <ActivityIndicator
-                                        size={30}
-                                        color={COLORS.primaryColor}
-                                        style={{
-                                          position: 'absolute',
-                                          left: 0,
-                                          right: 0,
-                                          top: 0,
-                                          bottom: 0,
-                                        }}
-                                      />
-                                    )}
-                                    <Image
-                                      source={{
-                                        uri: `${BASE_URL}${item.image}`,
+                                  {imgLoad[index] && (
+                                    <ActivityIndicator
+                                      size={30}
+                                      color={COLORS.primaryColor}
+                                      style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        right: 0,
+                                        top: 0,
+                                        bottom: 0,
                                       }}
-                                      style={style.image}
-                                      // onLoad={() => {
-                                      //   let newLoadState = JSON.parse(
-                                      //     JSON.stringify(imgLoad),
-                                      //   );
-                                      //   newLoadState[index] = false;
-                                      //   setImgLoad(newLoadState);
-                                      // }}
-                                      onLoadStart={() => setImgLoad(true)}
-                                      onLoadEnd={() => setImgLoad(false)}
                                     />
-                                  </View>
-                                  <View>
-                                    <Text
-                                      style={style.quote}
-                                      selectable={true}
-                                      onLongPress={() =>
-                                        handleClipBoard(item.quote)
-                                      }
-                                      selectionColor={'red'}>
-                                      {item.quote}
-                                    </Text>
-                                  </View>
+                                  )}
+                                  <Image
+                                    source={{
+                                      uri: `${BASE_URL}${item.image}`,
+                                    }}
+                                    style={style.image}
+                                    onLoadStart={() => {
+                                      let clone = [...imgLoad];
+                                      clone[index] = true;
+                                      setImgLoad(clone);
+                                    }}
+                                    onLoadEnd={() => {
+                                      let clone = [...imgLoad];
+                                      clone[index] = false;
+                                      setImgLoad(clone);
+                                    }}
+                                  />
+                                </Pressable>
+                                <View>
+                                  <Text
+                                    style={style.quote}
+                                    selectable={true}
+                                    onLongPress={() =>
+                                      handleClipBoard(item.quote)
+                                    }
+                                    selectionColor={'red'}>
+                                    {item.quote}
+                                  </Text>
                                 </View>
-                              </>
+                              </View>
                             );
                           }}
                         />
@@ -346,14 +329,12 @@ export const DailyQuotes = ({
           </View>
         </View>
       </ScrollView>
-      <View>
-        <Calendar
-          setCalendarVisible={setCalendarVisible}
-          calendarVisible={calendarVisible}
-          selectedParentDate={selectedDate}
-          setSelectedParentDate={setSelectedDate}
-        />
-      </View>
+      <Calendar
+        setCalendarVisible={setCalendarVisible}
+        calendarVisible={calendarVisible}
+        selectedParentDate={selectedDate}
+        setSelectedParentDate={setSelectedDate}
+      />
       <CustomNavigate
         text={
           selectedDate !== undefined

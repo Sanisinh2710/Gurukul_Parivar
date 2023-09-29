@@ -19,8 +19,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {SET_IMAGES} from '../../../redux/ducks/imageSliderslice';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {SliderGetApi, getUserData} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
@@ -32,10 +30,6 @@ export const HomeScreen = ({
   BottomTabScreenProps<RootBottomTabParamList, 'Home'>,
   NativeStackScreenProps<RootStackParamList>
 >) => {
-  const currentPage = useAppSelector(state => state.sliderPage.currentPage);
-
-  const dashboardImages = useAppSelector(state => state.sliderPage.images);
-
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -45,7 +39,8 @@ export const HomeScreen = ({
   const style = styles();
   const commonStyle = CommonStyle();
 
-  const dispatch = useAppDispatch();
+  const [dashboardImages, setDashboardImages] = React.useState([]);
+
   const onRefresh = async () => {
     setRefreshing(true);
 
@@ -53,7 +48,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
       }
     } catch (error) {
       console.log(error);
@@ -69,7 +64,7 @@ export const HomeScreen = ({
       const res = await SliderGetApi();
 
       if (res.resType === 'SUCCESS') {
-        dispatch(SET_IMAGES({images: res.data.images}));
+        setDashboardImages(res.data.images);
         setLoader(false);
       }
     } catch (error) {
@@ -146,10 +141,10 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {userData.userdata.full_name}
+                {userData?.userdata?.full_name?.split(' ')?.at(0)}
                 <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
                   {' '}
-                  {userData.userdata.id}
+                  {userData?.userdata?.id}
                 </Text>
               </Text>
             </View>
@@ -180,9 +175,7 @@ export const HomeScreen = ({
         contentContainerStyle={{
           paddingBottom: '30%',
         }}>
-        {dashboardImages.length > 0 && (
-          <PagerView images={dashboardImages} currentIndex={currentPage} />
-        )}
+        {dashboardImages.length > 0 && <PagerView images={dashboardImages} />}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (

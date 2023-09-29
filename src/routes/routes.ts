@@ -1,3 +1,4 @@
+import {ImageZoomer} from '../components';
 import {
   CalendarScreen,
   ChangeLanguage,
@@ -136,8 +137,8 @@ export const NativeStackRouteList: Array<{
     component: Status,
   },
   {
-    name: 'zoomImage',
-    component: ZoomImageScreen,
+    name: 'ImageZommer',
+    component: ImageZoomer,
   },
 ];
 

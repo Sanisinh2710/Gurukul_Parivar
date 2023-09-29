@@ -21,11 +21,8 @@ export const LoginFormValidationSchema =
         .trim()
         .required(t('FieldRequiredError.Email'))
         .matches(mailRegex, {message: t('personalInfo.EmailErr')}),
-      password: yup
-        .string()
-        .trim()
-        .required(t('FieldRequiredError.Password'))
-        .matches(passwordRegex, {message: t('loginScreen.PassErr')}),
+      password: yup.string().trim().required(t('FieldRequiredError.Password')),
+      // .matches(passwordRegex, {message: t('loginScreen.PassErr')}),
     });
   };
 

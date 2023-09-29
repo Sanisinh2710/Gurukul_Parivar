@@ -1,4 +1,4 @@
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {
   ImagePickerResponse,
@@ -25,71 +25,116 @@ const requestCameraPermission = async () => {
       console.warn(err);
       return false;
     }
-  } else return true;
+  }
 };
 
 export const captureImage = async (type: MediaType) => {
   let isCameraPermitted = await requestCameraPermission();
   let mainuri: ImagePickerResponse;
 
-  if (isCameraPermitted) {
-    mainuri = await launchCamera(
-      {
-        mediaType: type,
-        maxWidth: 300,
-        maxHeight: 550,
-        quality: 1,
-        videoQuality: 'low',
-        durationLimit: 30, //Video max duration in seconds
-        saveToPhotos: true,
-      },
-      response => {
-        if (response.didCancel) {
-          Alert.alert('User cancelled camera picker');
-        }
-        if (response.errorCode == 'camera_unavailable') {
-          Alert.alert('Camera not available on device');
-        }
-        if (response.errorCode == 'permission') {
-          Alert.alert('Permission not satisfied');
-        }
-        if (response.errorCode == 'others') {
-          Alert.alert(`${response.errorMessage}`);
-        }
-      },
-    );
-    let finaluri: any = mainuri.assets;
+  if (Platform.OS === 'android') {
+    if (isCameraPermitted) {
+      try {
+        mainuri = await launchCamera(
+          {
+            mediaType: type,
+            maxWidth: 300,
+            maxHeight: 550,
+            quality: 1,
+            videoQuality: 'low',
+            durationLimit: 30, //Video max duration in seconds
+            saveToPhotos: true,
+          },
+          response => {
+            if (response.didCancel) {
+              console.log('User cancelled camera picker');
+            }
+            if (response.errorCode == 'camera_unavailable') {
+              console.log('Camera not available on device');
+            }
+            if (response.errorCode == 'permission') {
+              console.log('Permission not satisfied');
+            }
+            if (response.errorCode == 'others') {
+              console.log(`${response.errorMessage}`);
+            }
+          },
+        );
 
-    return finaluri;
+        let finaluri: any = mainuri.assets;
+
+        return finaluri;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  } else {
+    try {
+      mainuri = await launchCamera(
+        {
+          mediaType: type,
+          maxWidth: 300,
+          maxHeight: 550,
+          quality: 1,
+          videoQuality: 'low',
+          durationLimit: 30, //Video max duration in seconds
+          saveToPhotos: true,
+        },
+        response => {
+          if (response.didCancel) {
+            console.log('User cancelled camera picker');
+          }
+          if (response.errorCode == 'camera_unavailable') {
+            console.log('Camera not available on device');
+          }
+          if (response.errorCode == 'permission') {
+            console.log('Permission not satisfied');
+          }
+          if (response.errorCode == 'others') {
+            console.log(`${response.errorMessage}`);
+          }
+        },
+      );
+
+      let finaluri: any = mainuri.assets;
+
+      return finaluri;
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
 export const chooseFile = async (type: MediaType) => {
-  let options = {
-    mediaType: type,
-    maxWidth: 300,
-    maxHeight: 550,
-  };
+  try {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+    };
 
-  let mainuri: ImagePickerResponse;
-  mainuri = await launchImageLibrary(options, response => {
-    if (response.didCancel) {
-      Alert.alert('User cancelled camera picker');
-    }
-    if (response.errorCode == 'camera_unavailable') {
-      Alert.alert('Camera not available on device');
-    }
-    if (response.errorCode == 'permission') {
-      Alert.alert('Permission not satisfied');
-    }
-    if (response.errorCode == 'others') {
-      Alert.alert(`${response.errorMessage}`);
-    }
-  });
+    let mainuri: ImagePickerResponse;
+    mainuri = await launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled camera picker');
+      }
+      if (response.errorCode == 'camera_unavailable') {
+        console.log('Camera not available on device');
+      }
+      if (response.errorCode == 'permission') {
+        console.log('Permission not satisfied');
+      }
+      if (response.errorCode == 'others') {
+        console.log(`${response.errorMessage}`);
+      }
+    });
 
-  let finaluri: any = mainuri.assets;
+    let finaluri: any = mainuri.assets;
 
-  return finaluri;
+    return finaluri;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const isStringArray = (object: any): object is Array<string> => {
@@ -192,56 +237,33 @@ export function getYearsArray() {
   return sort;
 }
 
-export const CustomDateSplitAndFormat = (
-  date: string,
-  fromSplitParameter: string,
-  toSplitParameter: string,
-  format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
-) => {
-  if (format === 'mm/dd/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[0]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+// export const CustomDateSplitAndFormat = (
+//   date: string,
+//   fromSplitParameter: string,
+//   toSplitParameter: string,
+//   format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
+// ) => {
+//   if (format === 'mm/dd/yyyy') {
+//     const newDate = `${
+//       date.split(`${fromSplitParameter}`)[1]
+//     }${toSplitParameter}${
+//       date.split(`${fromSplitParameter}`)[0]
+//     }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
 
-    return newDate;
-  }
-  if (format === 'dd/mm/yyyy') {
-    const newDate = `${
-      date.split(`${fromSplitParameter}`)[0]
-    }${toSplitParameter}${
-      date.split(`${fromSplitParameter}`)[1]
-    }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+//     return newDate;
+//   }
+//   if (format === 'dd/mm/yyyy') {
+//     const newDate = `${
+//       date.split(`${fromSplitParameter}`)[0]
+//     }${toSplitParameter}${
+//       date.split(`${fromSplitParameter}`)[1]
+//     }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
 
-    return newDate;
-  }
-};
-
-// export const checkPermission = async () => {
-//   try {
-//     let deviceVersionInfo = DeviceInfo.getSystemVersion();
-//     let granted = PermissionsAndroid.RESULTS.GRANTED;
-
-//     if (parseInt(deviceVersionInfo) >= 13) {
-//       return granted == PermissionsAndroid.RESULTS.GRANTED;
-//     } else {
-//       granted = await PermissionsAndroid.request(
-//         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-//       );
-//     }
-
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       return granted == PermissionsAndroid.RESULTS.GRANTED;
-//     } else {
-//       Toast.show('Storage Permission Required', 2);
-//     }
-//   } catch (error) {
-//     console.log('Check Permission Error For Music', error);
+//     return newDate;
 //   }
 // };
 
-export const checkPermission = async () => {
+export const checkPermissionOfWritingStorage = async () => {
   try {
     let deviceVersionInfo = DeviceInfo.getSystemVersion();
     let granted = PermissionsAndroid.RESULTS.GRANTED;
@@ -264,59 +286,12 @@ export const checkPermission = async () => {
   }
 };
 
-// export const downloadSong = async (
-//   REMOTE_SONG_URL: string,
-//   songName: string,
-// ) => {
-//   try {
-//     const permissionResponse = await checkPermission();
-//     if (permissionResponse) {
-//       let resType: 'SUCCESS' | 'ERROR';
-//       let date = new Date();
-
-//       let song_URL = REMOTE_SONG_URL;
-
-//       let ext: any = song_URL && getExtention(song_URL);
-//       let songTitle = songName.split(' ').join('_');
-
-//       const {config, fs} = RNFetchBlob;
-//       let MusicDirc = fs.dirs.MusicDir;
-//       let fileName = `/${songTitle}_${Math.floor(
-//         date.getTime() + date.getSeconds() / 2,
-//       )}${ext}`;
-
-//       let options = {
-//         fileCache: false,
-
-//         addAndroidDownloads: {
-//           // Related to the Android only
-//           useDownloadManager: true,
-//           notification: true,
-//           path: MusicDirc + fileName,
-//           description: 'Music',
-//         },
-//       };
-
-//       const response = await RNFetchBlob.config(options).fetch('GET', song_URL);
-//       if (response) {
-//         return (resType = 'SUCCESS');
-//       } else {
-//         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//         return (resType = 'ERROR');
-//         // Handle download failure
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error, 'Song Download');
-//   }
-// };
-
 export const downloadSong = async (
   REMOTE_SONG_URL: string,
   songName: string,
 ) => {
   try {
-    const permissionResponse = await checkPermission();
+    const permissionResponse = await checkPermissionOfWritingStorage();
     if (permissionResponse) {
       let resType: 'SUCCESS' | 'ERROR';
       let date = new Date();
@@ -327,30 +302,53 @@ export const downloadSong = async (
       let songTitle = songName.split(' ').join('_');
 
       const {config, fs} = RNFetchBlob;
-      let MusicDirc = fs.dirs.MusicDir;
-      let fileName = `/${songTitle}_${Math.floor(
+
+      const {MusicDir, DocumentDir} = fs.dirs;
+
+      const aPath = Platform.select({
+        ios: DocumentDir,
+        android: MusicDir,
+      });
+
+      let fileName = `/Gurukul-Parivar/Musics/${songTitle}_${Math.floor(
         date.getTime() + date.getSeconds() / 2,
       )}${ext}`;
 
-      let options = {
-        fileCache: false,
+      const finalPath = aPath + fileName;
 
-        addAndroidDownloads: {
-          // Related to the Android only
-          useDownloadManager: true,
+      let options = Platform.select({
+        ios: {
+          fileCache: true,
+          path: finalPath,
+          // mime: 'application/xlsx',
+          // appendExt: 'xlsx',
+          //path: filePath,
+          //appendExt: fileExt,
           notification: true,
-          path: MusicDirc + fileName,
-          description: 'Music',
         },
-      };
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            // Related to the Android only
+            useDownloadManager: true,
+            notification: true,
+            path: finalPath,
+            description: 'Music',
+          },
+        },
+      });
 
-      const response = await RNFetchBlob.config(options).fetch('GET', song_URL);
-      if (response) {
-        return (resType = 'SUCCESS');
+      if (options) {
+        const response = await config(options).fetch('GET', song_URL);
+        if (response) {
+          return (resType = 'SUCCESS');
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          return (resType = 'ERROR');
+          // Handle download failure
+        }
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return (resType = 'ERROR');
-        // Handle download failure
       }
     }
   } catch (error) {

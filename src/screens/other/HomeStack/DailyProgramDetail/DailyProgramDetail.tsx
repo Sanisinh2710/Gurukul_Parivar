@@ -41,7 +41,7 @@ export const DailyProgramDetail = ({
         scalesPageToFit={Platform.OS === 'ios'}
         source={{
           html: `<html><head>
-          <meta content="width=width, initial-scale=1, maximum-scale=1" name="viewport"></meta>
+          <meta content="width=width, initial-scale=1, maximum-scale=2" name="viewport"></meta>
           <style>body {padding:20px;}</style></head><body>${description}</body></html>`,
         }}
       />

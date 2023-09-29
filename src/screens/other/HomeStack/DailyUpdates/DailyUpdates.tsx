@@ -51,8 +51,6 @@ export const DailyUpdates = ({
               created_at: string | number | Date;
               date: any;
             }) => {
-              console.log(data, 'backend data');
-
               data.description = data.description;
               data.images = data.images;
               data.thumbnail = data.thumbnail;
@@ -63,8 +61,6 @@ export const DailyUpdates = ({
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
               ) {
-                console.log(new Date(data.created_at), '1');
-
                 let time = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(0, 5);
@@ -72,7 +68,6 @@ export const DailyUpdates = ({
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(8, 12);
-
                 data.created_at = `${time}` + ' ' + `${day}`;
               } else if (
                 new Date(data.created_at).getDate() ===
@@ -80,10 +75,11 @@ export const DailyUpdates = ({
               ) {
                 data.created_at = 'Yesterday';
               } else {
-                data.created_at = new Date(data.created_at)
-                  .toUTCString()
-                  .slice(5, 11)
-                  .concat(',');
+                data.created_at =
+                  new Date(data.created_at).getFullYear() ===
+                  new Date().getFullYear()
+                    ? new Date(data.created_at).toUTCString().slice(5, 11)
+                    : new Date(data.created_at).toUTCString().slice(5, 16);
               }
 
               return data;
@@ -134,7 +130,7 @@ export const DailyUpdates = ({
                 .substring(0, 5);
               let day = new Date(data.created_at)
                 .toLocaleTimeString()
-                .substring(9, 12);
+                .substring(8, 12);
 
               data.created_at = `${time}` + ' ' + `${day}`;
             } else if (
@@ -143,10 +139,11 @@ export const DailyUpdates = ({
             ) {
               data.created_at = 'Yesterday';
             } else {
-              data.created_at = new Date(data.created_at)
-                .toUTCString()
-                .slice(5, 11)
-                .concat(',');
+              data.created_at =
+                new Date(data.created_at).getFullYear() ===
+                new Date().getFullYear()
+                  ? new Date(data.created_at).toUTCString().slice(5, 11)
+                  : new Date(data.created_at).toUTCString().slice(5, 16);
             }
 
             return data;
