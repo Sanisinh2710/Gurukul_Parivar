@@ -180,13 +180,13 @@ export const RegisterScreen = ({
                 disabled={disabled}
               />
 
-              <Text style={[style.footerText, {alignSelf: 'center'}]}>
+              <Text
+                style={[style.footerText, {alignSelf: 'center'}]}
+                onPress={() => {
+                  navigation.navigate('Login');
+                }}>
                 {t('loginScreen.AlreadyHaveAc')}{' '}
-                <Text
-                  style={[style.footerRedText]}
-                  onPress={() => {
-                    navigation.navigate('Login');
-                  }}>
+                <Text style={[style.footerRedText]}>
                   {t('common.Signin').toLocaleLowerCase()}
                 </Text>
               </Text>
