@@ -232,6 +232,7 @@ export const FormInput = React.memo(
             editable={editable ?? true}
             inputMode={'email'}
             keyboardType={'email-address'}
+            textContentType={'emailAddress'}
             onFocus={() => setFocused(true)}
             value={value}
             placeholder={placeholder}
@@ -250,6 +251,7 @@ export const FormInput = React.memo(
           <TextInput
             editable={editable ?? true}
             secureTextEntry={passVisible ? false : true}
+            textContentType={'password'}
             onFocus={() => setFocused(true)}
             value={value}
             placeholder={placeholder}

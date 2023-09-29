@@ -8,8 +8,6 @@ import {
   Image,
   View,
 } from 'react-native';
-import {CHANGE_PAGE} from '../../../redux/ducks/imageSliderslice';
-import {useAppDispatch} from '../../../redux/hooks';
 import {COLORS} from '../../../utils';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
@@ -26,8 +24,6 @@ export const PagerView = ({images}: PagerViewProps): React.JSX.Element => {
   const scrollRef = React.useRef<FlatList>(null);
 
   const [imgLoad, setimgLoad] = React.useState<boolean[]>([]);
-
-  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,16 +70,6 @@ export const PagerView = ({images}: PagerViewProps): React.JSX.Element => {
           const x = e.nativeEvent.contentOffset.x;
           if (currentScrollIndex !== parseInt((x / width).toFixed(0))) {
             setCurrentScrollIndex(parseInt((x / width).toFixed(0)));
-          }
-        }}
-        onMomentumScrollEnd={e => {
-          if (width !== null && width !== undefined) {
-            if (
-              currentScrollIndex !== undefined &&
-              currentScrollIndex !== null
-            ) {
-              dispatch(CHANGE_PAGE({nextPage: currentScrollIndex}));
-            }
           }
         }}
         renderItem={({item, index}) => {

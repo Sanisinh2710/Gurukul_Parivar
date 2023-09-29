@@ -498,7 +498,6 @@ export const ProfileSignup = ({
         setwidth(width + 20);
         setFormStep(formStep + 1);
       }
-
       if (typecase === 'skip') {
         let newFormData: typeof formData = JSON.parse(JSON.stringify(formData));
 
