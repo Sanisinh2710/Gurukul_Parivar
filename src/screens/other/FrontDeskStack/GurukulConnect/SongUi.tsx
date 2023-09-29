@@ -36,7 +36,6 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {useAppSelector} from '../../../../redux/hooks';
 import {useTranslation} from 'react-i18next';
-import {Status} from '../Status';
 import {
   GurkulAudioCategoriesGetApi,
   GurkulAudioGetFromCategoriesGetApi,
@@ -44,7 +43,7 @@ import {
 } from '../../../../services';
 import {SongType} from '../../../../types';
 import {BASE_URL} from '@env';
-import { boolean } from 'yup';
+import { AnyAction } from '@reduxjs/toolkit';
 
 type SongUiProp = {
   songData: Array<any>;
@@ -54,11 +53,6 @@ type SongUiProp = {
   navigation: NavigationProp<any>;
   resetTrack?:React.MutableRefObject<boolean>;
   goBack?: () => void;
-  // navigateScreen?: (
-  //   playlistname: string,
-  //   id: number,
-  //   status: 'PLAYING'|'PAUSED' | 'BUFFERING' | 'OTHER',
-  // ) => void;
   setDataToRedux: (de?:boolean) => Promise<void>;
   setAlbumDataToRedux: (id?: number) => Promise<void>;
 };
@@ -70,8 +64,6 @@ export const SongUi = ({
   screenGoToAlbum,
   navigation,
   trackAdd,
-  // navigateScreen,
-  // playListName,
   setDataToRedux,
   setAlbumDataToRedux,
 }: SongUiProp) => {
@@ -99,8 +91,7 @@ export const SongUi = ({
 
   const handleControl = async (itemId: any) => {
     try {
-     
-      
+ 
         if (trackMode.setupMode == 'ALBUM') {
           if(resetTrack!=undefined && resetTrack?.current == false)
           {
@@ -115,11 +106,9 @@ export const SongUi = ({
           }
         }
       
-
       if (trackAdd == true) {
         const queue = await TrackPlayer.getQueue();
         const index = queue.findIndex(item => item.id == itemId);
-        console.log("trackAdd ==",trackAdd, "Index" , index);
         if (activeTrack?.id != itemId) {
           await TrackPlayer.skip(index , 0);
           await TrackPlayer.play();
@@ -260,45 +249,91 @@ export const SongUi = ({
     setRefreshing(false);
   };
 
+  const onBackPress = async () =>{
+    if (trackMode.setupMode == 'ALBUM') {
+      if(selectedItem.length == 0 && screenGoToAlbum !=undefined)
+      {             
+        screenGoToAlbum.current = false;
+        dispatch(
+          UPDATE_SETUP_MODE({
+            setupMode: 'INITIAL',
+            albumName: undefined,
+          }),
+          );
+          await setDataToRedux(true);
+      }
+      else{
+        dispatch(
+          UPDATE_SETUP_MODE({
+            setupMode: 'FILTERED',
+            albumName: undefined,
+          }),
+        );
+      }
+      
+    } else {
+      navigation.goBack();
+      dispatch(
+        SET_ACTIVE_TRACKDATA({
+          activeTrackDataPayload: {
+            track: activeTrack,
+            position: position,
+          },
+        }),
+      );
+    }
+  }
+
+  const removeFilterData = (index:number) =>{
+    let newValues: string[] = JSON.parse(
+      JSON.stringify(selectedItem),
+    );
+    newValues.splice(index, 1);
+    setSelectedItem(newValues);
+  }
+
+  const callDownload = async (index:number,item:any) =>{
+    setLoader({
+      status: true,
+      index: index,
+    });
+    const response = await downloadSong(
+      item.url,
+      item.title,
+    );
+    if (response == 'SUCCESS') {
+      setLoader({
+        status: false,
+        index: index,
+      });
+    } else {
+      setLoader({
+        status: false,
+        index: index,
+      });
+    }
+  }
+
+  const goToAlbum = async (item:AnyAction) =>{
+    dispatch(
+      UPDATE_SETUP_MODE({
+        setupMode: 'ALBUM',
+        albumId: item.id,
+        albumName: item.title,
+      }),
+      );
+      if (resetTrack != undefined) {
+      resetTrack.current = false;
+      }
+      await setAlbumDataToRedux(item.id);
+  }
+
   return (
     <>
       <ScreenHeader
         showLeft={true}
         headerTitleAlign={'left'}
-        leftOnPress={async () => {
-          if (trackMode.setupMode == 'ALBUM') {
-            if(selectedItem.length == 0 && screenGoToAlbum !=undefined)
-            {             
-              screenGoToAlbum.current = false;
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: 'INITIAL',
-                  albumName: undefined,
-                }),
-                );
-                await setDataToRedux(true);
-            }
-            else{
-              dispatch(
-                UPDATE_SETUP_MODE({
-                  setupMode: 'FILTERED',
-                  albumName: undefined,
-                }),
-              );
-            }
-            
-          } else {
-            navigation.goBack();
-            dispatch(
-              SET_ACTIVE_TRACKDATA({
-                activeTrackDataPayload: {
-                  track: activeTrack,
-                  position: position,
-                },
-              }),
-            );
-          }
-        }}
+        leftOnPress={onBackPress}
         headerTitle={
           trackMode.setupMode == 'ALBUM' && trackMode.albumName != undefined
             ? trackMode.albumName
@@ -341,13 +376,7 @@ export const SongUi = ({
                         {categoryList.find(item => item.id === mainitem)?.name}
                       </Text>
                       <View
-                        onTouchEnd={() => {
-                          let newValues: string[] = JSON.parse(
-                            JSON.stringify(selectedItem),
-                          );
-                          newValues.splice(index, 1);
-                          setSelectedItem(newValues);
-                        }}
+                        onTouchEnd={() => removeFilterData(index)}
                         style={style.filterDataCancelImage}>
                         <Image
                           source={AllIcons.RoundCross}
@@ -391,27 +420,7 @@ export const SongUi = ({
                       <>
                         <View
                           style={style.imageView}
-                          onTouchEnd={async () => {
-                            setLoader({
-                              status: true,
-                              index: index,
-                            });
-                            const response = await downloadSong(
-                              item.url,
-                              item.title,
-                            );
-                            if (response == 'SUCCESS') {
-                              setLoader({
-                                status: false,
-                                index: index,
-                              });
-                            } else {
-                              setLoader({
-                                status: false,
-                                index: index,
-                              });
-                            }
-                          }}>
+                          onTouchEnd={() => callDownload(index,item)}>
                           {loader.status && loader.index == index ? (
                             <ActivityIndicator size={20} />
                           ) : (
@@ -422,7 +431,7 @@ export const SongUi = ({
                           )}
                         </View>
                         <View
-                          onTouchEnd={async () => {
+                          onTouchEnd={() => {
                             handleControl(item.id);
                           }}
                           style={style.imageView}>
@@ -440,19 +449,7 @@ export const SongUi = ({
                     ) : (
                       <View
                         style={style.imageView}
-                        onTouchEnd={async () => {
-                          dispatch(
-                            UPDATE_SETUP_MODE({
-                              setupMode: 'ALBUM',
-                              albumId: item.id,
-                              albumName: item.title,
-                            }),
-                            );
-                            if (resetTrack != undefined) {
-                            resetTrack.current = false;
-                            }
-                            await setAlbumDataToRedux(item.id);
-                        }}>
+                        onTouchEnd={() => goToAlbum(item)}>
                         <Image
                           style={style.imageStyle}
                           source={AllIcons.AlbumRightArrow}
