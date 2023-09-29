@@ -1,17 +1,17 @@
 import React from 'react';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import {useColorScheme} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {CustomBottomTabBar, CustomStatusBar, Loader} from '../components';
-import {TOGGLE_THEME} from '../redux/ducks/themeslice';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {isSignedIn} from '../services';
+import { useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CustomBottomTabBar, CustomStatusBar, Loader } from '../components';
+import { TOGGLE_THEME } from '../redux/ducks/themeslice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { isSignedIn } from '../services';
 import {
   RootAuthStackParamList,
   RootBottomTabParamList,

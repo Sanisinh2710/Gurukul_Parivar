@@ -18,6 +18,7 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
+  GUEST_LOGIN_GET_ENDPOINT,
   GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT,
   GURUKUL_AUDIO_GET_ENDPOINT,
   GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
@@ -34,9 +35,9 @@ import {
   SLIDER_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
-import axios, {AxiosResponse} from 'axios';
-import {ApiDateFormat, CustomBackendDateSplitAndFormat} from '../utils';
-import {getBearerToken} from './AuthServices';
+import axios, { AxiosResponse } from 'axios';
+import { ApiDateFormat, CustomBackendDateSplitAndFormat } from '../utils';
+import { getBearerToken } from './AuthServices';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -71,15 +72,15 @@ const apiRequest = async (
       method,
       url: endpoint,
       headers: headers
-        ? {...headers}
+        ? { ...headers }
         : {
             ...(requireBearerToken && {
               Authorization: `Bearer ${getBearerToken().token}`,
             }),
           },
       ...(method === 'get' || method === 'delete'
-        ? {params: requestData}
-        : {data: requestData}),
+        ? { params: requestData }
+        : { data: requestData }),
     });
     return handleApiResponse(response);
   } catch (error: any) {
@@ -103,8 +104,8 @@ export const RegisterApi = async (
     EMAIL_POST_ENDPOINT,
     'post',
     type === 'forgot'
-      ? {email: primary_email, isForgetPassword: true}
-      : {email: primary_email},
+      ? { email: primary_email, isForgetPassword: true }
+      : { email: primary_email },
     {},
     false,
   );
@@ -155,7 +156,7 @@ export const AddressInfoPostApi = async (addressDetails: any) => {
 
 export const DailyQuotesApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  return await apiRequest(DAILY_QUOTES_GET_ENDPOINT, 'get', {date: newDate});
+  return await apiRequest(DAILY_QUOTES_GET_ENDPOINT, 'get', { date: newDate });
 };
 
 export const DailyDarshanApi = async (date: Date, time: string) => {
@@ -226,7 +227,7 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       ? newUserPersonalInfo
       : payloadData;
 
-  const userDataCloneObjFinal = {...finalPayload};
+  const userDataCloneObjFinal = { ...finalPayload };
 
   for (let i in finalPayload) {
     if (
@@ -237,8 +238,6 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
       delete userDataCloneObjFinal[i];
     }
   }
-
-  console.log(userDataCloneObjFinal, 'final payload');
 
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
@@ -286,7 +285,7 @@ export const AddressDeleteApi = async (id: any) => {
 
 export const CalendarGetApi = async (date: Date) => {
   const newDate = date.toLocaleString('en-US', ApiDateFormat);
-  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', {date: newDate});
+  return await apiRequest(CALENDAR_GET_ENDPOINT, 'get', { date: newDate });
 };
 export const SliderGetApi = async () => {
   return await apiRequest(SLIDER_GET_ENDPOINT, 'get');
@@ -340,6 +339,15 @@ export const DailyProgramGetApi = async () => {
 };
 export const GurukulEventGetApi = async () => {
   return apiRequest(GURUKUL_EVENTS_GET_ENDPOINT, 'get');
+};
+export const GuestLoginGetApi = async () => {
+  return apiRequest(
+    GUEST_LOGIN_GET_ENDPOINT,
+    'get',
+    undefined,
+    undefined,
+    false,
+  );
 };
 // All apis are above, below is helper function for used in auth wizard form:---
 

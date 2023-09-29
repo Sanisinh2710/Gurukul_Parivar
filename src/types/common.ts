@@ -1,4 +1,4 @@
-import {Track} from 'react-native-track-player';
+import { Track } from 'react-native-track-player';
 
 export type Theme = {
   isDark: boolean;
@@ -70,7 +70,7 @@ export type GurukulFormValidationSchemaType = {
   gurukulData: SingleGurukulRecType[] | undefined;
 };
 
-export type InitialThemeType = {theme: Theme; themeMode: string};
+export type InitialThemeType = { theme: Theme; themeMode: string };
 
 export type InitialSliderPageType = {
   currentPage: number;
@@ -133,4 +133,28 @@ export type SongType = {
   artist?: string;
   description?: string;
   is_multiple?: boolean;
+};
+
+export type CurrUserDataTypeNested = {
+  id: number | undefined;
+  profile: string | undefined;
+  gender: string | undefined;
+  father_name: string | undefined;
+  dob: string | undefined;
+  blood_group: string | undefined;
+  secondary_contact_cc: string | undefined;
+  secondary_contact: string;
+  is_secondary_contact_wp: boolean | undefined;
+  secondary_email: string | undefined;
+  branch_id: number | undefined;
+  primary_email: string | undefined;
+  full_name: string | undefined;
+  primary_contact_cc: string | undefined;
+  primary_contact: string | undefined;
+  is_primary_contact_wp: boolean | undefined;
+};
+
+export type CurrentUserDataType = {
+  userRole: 'GUEST' | 'USER';
+  currUser: CurrUserDataTypeNested;
 };
