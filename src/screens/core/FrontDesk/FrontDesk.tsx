@@ -160,6 +160,7 @@ export const FrontDeskScreen = ({
                             source={item.image}
                             style={{height: 24, width: 24}}
                           />
+                          
                         </View>
                         <View
                           style={{justifyContent: 'center', marginLeft: '2%'}}>
