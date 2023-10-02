@@ -13,17 +13,17 @@ import {
   View,
 } from 'react-native';
 
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import LottieView from 'lottie-react-native';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {COLORS, CustomFonts} from '../../../utils';
-import {DropDownModel} from '../Modal';
-import {styles} from './style';
+import { AllIcons } from '../../../../assets/icons';
+import { CommonStyle } from '../../../../assets/styles';
+import { COLORS, CustomFonts } from '../../../utils';
+import { DropDownModel } from '../Modal';
+import { styles } from './style';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
@@ -80,7 +80,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       const options = {
         title: 'Share via',
         message: 'Jay Swaminarayana..!',
-        url: base64Image,
+        url: Platform.OS === 'android' ? base64Image : imagePath,
         subject: 'Share Link', // for email
       };
 
@@ -88,30 +88,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
       await Share.open(options);
 
-      // const response = await RNFS.downloadFile({
-      //   fromUrl: REMOTE_IMAGE_PATH!,
-      //   toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
-      // });
-
-      // if ((await response.promise).statusCode === 200) {
-      //   const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
-      //   const fileContent = await RNFS.readFile(imagePath, 'base64');
-      //   const base64Image = `data:image/jpeg;base64,${fileContent}`;
-
-      //   const options = {
-      //     title: 'Share via',
-      //     message: 'Jay Swaminarayana..!',
-      //     url: imagePath,
-      //     subject: 'Share Link', // for email
-      //   };
-
-      //   setIsSharing(false);
-
-      //   await Share.open(options);
-      //   // Handle successful share here
-      // } else {
-      //   // Handle error here
-      // }
       setIsSharing(false);
     } catch (error) {
       setIsSharing(false);
