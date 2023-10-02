@@ -1,6 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { WritableDraft } from 'immer/dist/internal';
-import { CurrUserDataTypeNested, CurrentUserDataType } from '../../types';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {WritableDraft} from 'immer/dist/internal';
+import {CurrUserDataTypeNested, CurrentUserDataType} from '../../types';
 
 let initialState: CurrentUserDataType = {
   userRole: 'GUEST',
@@ -50,7 +50,7 @@ export const userSlice = createSlice({
     },
     REMOVE_USER_DATA: (
       state,
-      action: PayloadAction<{ wantToRemove: boolean }>,
+      action: PayloadAction<{wantToRemove: boolean}>,
     ) => {
       let newdata: WritableDraft<CurrentUserDataType> = JSON.parse(
         JSON.stringify(state),
@@ -64,8 +64,8 @@ export const userSlice = createSlice({
   },
 });
 
-const { actions, reducer } = userSlice;
+const {actions, reducer} = userSlice;
 
-export const { SET_USER_DATA, REMOVE_USER_DATA } = actions;
+export const {SET_USER_DATA, REMOVE_USER_DATA} = actions;
 
 export default reducer;

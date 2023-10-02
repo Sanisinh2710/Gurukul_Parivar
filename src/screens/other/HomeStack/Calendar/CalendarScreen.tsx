@@ -25,7 +25,7 @@ import {
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {COLORS, d, daysArray, options2} from '../../../../utils';
+import {COLORS, d, options2, weekDays} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
@@ -229,7 +229,7 @@ export const CalendarScreen = ({
                           {item.date.split('-')[2]}
                         </Text>
                         <Text style={style.day}>
-                          {daysArray[new Date(item.date).getDay()]}
+                          {weekDays[new Date(item.date).getDay()]}
                         </Text>
                       </View>
                       <View style={style.contentContainer}>
