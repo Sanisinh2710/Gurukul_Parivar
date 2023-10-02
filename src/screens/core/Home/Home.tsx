@@ -136,16 +136,13 @@ export const HomeScreen = ({
         headerTitleAlign={'left'}
         customTitle={
           <View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={style.WelcomeTextContainer}>
               <Text style={style.WelcomeText1}>
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
                 {userData?.userdata?.full_name?.split(' ')?.at(0)}
-                <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
-                  {' '}
-                  {userData?.userdata?.id}
-                </Text>
+                <Text style={style.id}> {userData?.userdata?.id}</Text>
               </Text>
             </View>
             <View>

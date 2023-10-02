@@ -81,5 +81,8 @@ export const styles = () => {
       marginBottom: 57,
       justifyContent: 'center',
     },
+    buttonContainer: {
+      marginTop: 48,
+    },
   });
 };

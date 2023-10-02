@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {CustomFonts} from '../../../utils';
+import {COLORS, CustomFonts} from '../../../utils';
 
 export const styles = () => {
   return StyleSheet.create({
@@ -48,9 +48,18 @@ export const styles = () => {
       marginTop: 14,
     },
 
-    gridItem: {height: '100%', width: '100%'},
-    linearGradientView: {height: '100%', width: '100%'},
-    linearGradientStyle: {flex: 1, borderRadius: 12},
+    gridItem: {
+      height: '100%',
+      width: '100%',
+    },
+    linearGradientView: {
+      height: '100%',
+      width: '100%',
+    },
+    linearGradientStyle: {
+      flex: 1,
+      borderRadius: 12,
+    },
     imageBgStyle: {
       height: '100%',
       width: '100%',
@@ -58,6 +67,13 @@ export const styles = () => {
     },
     contentContainerStyle: {
       paddingBottom: '30%',
+    },
+    WelcomeTextContainer: {
+      flexDirection: 'row',
+    },
+    id: {
+      fontSize: 18,
+      color: COLORS.primaryColor,
     },
   });
 };

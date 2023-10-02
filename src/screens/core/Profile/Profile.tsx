@@ -218,7 +218,7 @@ export const ProfileScreen = ({
             <Text style={style.profileName}>
               {userData?.userdata?.full_name ?? 'YOUR NAME'}
             </Text>
-            <Text style={{color: 'rgba(23,23,23,0.5)'}}>
+            <Text style={style.textColor}>
               {userData?.userdata?.primary_contact_cc?.toString().split('(')[0]}
               {userData?.userdata?.primary_contact}
             </Text>
@@ -252,8 +252,7 @@ export const ProfileScreen = ({
                   <View style={style.languageContainer}>
                     <Text style={style.langText}>{item.language}</Text>
                   </View>
-                  <View
-                    style={{justifyContent: 'center', alignItems: 'flex-end'}}>
+                  <View style={style.rightIcon}>
                     {item.rightIcon && (
                       <Image source={item.rightIcon} style={style.arrow} />
                     )}
@@ -411,15 +410,8 @@ export const ProfileScreen = ({
           modelVisible={viewPhotoModel}
           setModelVisible={setPhotoModel}
           customModelchild={
-            <View
-              style={{
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  height: 250,
-                  width: 250,
-                }}>
+            <View style={style.dropDownView}>
+              <View style={style.dropDownImageContainer}>
                 <Image
                   source={
                     profileImage?.uri != '' &&
@@ -427,11 +419,7 @@ export const ProfileScreen = ({
                       ? {uri: profileImage?.uri}
                       : AllIcons.DummyAvtar
                   }
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 150,
-                  }}
+                  style={style.dropDownImage}
                 />
               </View>
             </View>

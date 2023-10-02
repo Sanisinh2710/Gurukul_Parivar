@@ -80,23 +80,8 @@ export const LoginSuccess = ({
         </View>
       </View>
 
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          height: '30%',
-          zIndex: 1,
-        }}>
-        <Image
-          source={AllImages.Bgimage}
-          style={{
-            width: '100%',
-            opacity: 0.4,
-            height: Dimensions.get('window').height * 0.3,
-            resizeMode: 'cover',
-          }}
-        />
+      <View style={style.imageContainer}>
+        <Image source={AllImages.Bgimage} style={style.image} />
       </View>
     </ScreenWrapper>
   );
