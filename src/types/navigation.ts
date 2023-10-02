@@ -1,6 +1,15 @@
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+type SingleImage = {
+  url: string;
+  width?: number;
+  height?: number;
+  props?: {
+    source?: any;
+  };
+};
+
 export type RootStackParamList = {
   Auth: undefined;
   BottomNavBar: undefined;
@@ -30,11 +39,7 @@ export type RootStackParamList = {
   PaymentMethod: undefined;
   GurukulEvents: undefined;
   QuizHistory: {date: string; id: number};
-  albumSong: {
-    playListName: string;
-    id: number;
-    status: 'PLAYING' | 'PAUSED' | 'BUFFERING' | 'OTHER';
-  };
+  ImageZommer: {images: Array<SingleImage>};
 };
 
 export type RootBottomTabParamList = {
@@ -105,4 +110,9 @@ export type DailyProgramProps = NativeStackScreenProps<
 export type DailyProgramDetailProps = NativeStackScreenProps<
   RootStackParamList,
   'programDetail'
+>;
+
+export type ImageZoomerProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ImageZommer'
 >;

@@ -10,6 +10,12 @@ export const styles = () => {
       ...CustomFonts.header.large36,
       color: 'black',
     },
+    imageView :{
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     images: {
       height: '100%',
       width: '100%',
@@ -30,5 +36,12 @@ export const styles = () => {
       width: '100%',
       justifyContent: 'space-between',
     },
+    activityIndicator :{
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }
   });
 };

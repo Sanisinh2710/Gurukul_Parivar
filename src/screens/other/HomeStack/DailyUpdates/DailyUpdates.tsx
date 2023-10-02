@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -11,18 +11,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AllImages } from '../../../../../assets/images';
-import { CommonStyle } from '../../../../../assets/styles';
+import {AllImages} from '../../../../../assets/images';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   Loader,
   NoData,
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
-import { DailyUpdatesApi } from '../../../../services';
-import { RootStackParamList } from '../../../../types';
-import { COLORS } from '../../../../utils';
-import { styles } from './styles';
+import {DailyUpdatesApi} from '../../../../services';
+import {RootStackParamList} from '../../../../types';
+import {COLORS} from '../../../../utils';
+import {styles} from './styles';
 
 export const DailyUpdates = ({
   navigation,
@@ -56,6 +56,7 @@ export const DailyUpdates = ({
               data.thumbnail = data.thumbnail;
               data.title = data.title;
               data.date = data.created_at;
+
               if (
                 new Date(data.created_at).toLocaleDateString() ===
                 new Date().toLocaleDateString()
@@ -63,10 +64,10 @@ export const DailyUpdates = ({
                 let time = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(0, 5);
+
                 let day = new Date(data.created_at)
                   .toLocaleTimeString()
                   .substring(8, 12);
-
                 data.created_at = `${time}` + ' ' + `${day}`;
               } else if (
                 new Date(data.created_at).getDate() ===
@@ -74,10 +75,11 @@ export const DailyUpdates = ({
               ) {
                 data.created_at = 'Yesterday';
               } else {
-                data.created_at = new Date(data.created_at)
-                  .toUTCString()
-                  .slice(5, 10)
-                  .concat(',');
+                data.created_at =
+                  new Date(data.created_at).getFullYear() ===
+                  new Date().getFullYear()
+                    ? new Date(data.created_at).toUTCString().slice(5, 11)
+                    : new Date(data.created_at).toUTCString().slice(5, 16);
               }
 
               return data;
@@ -102,7 +104,6 @@ export const DailyUpdates = ({
 
     try {
       const res = await DailyUpdatesApi();
-      console.log(res);
 
       if (res.resType === 'SUCCESS') {
         const data = res.data.daily_updates.map(
@@ -129,7 +130,7 @@ export const DailyUpdates = ({
                 .substring(0, 5);
               let day = new Date(data.created_at)
                 .toLocaleTimeString()
-                .substring(9, 12);
+                .substring(8, 12);
 
               data.created_at = `${time}` + ' ' + `${day}`;
             } else if (
@@ -138,10 +139,11 @@ export const DailyUpdates = ({
             ) {
               data.created_at = 'Yesterday';
             } else {
-              data.created_at = new Date(data.created_at)
-                .toUTCString()
-                .slice(5, 11)
-                .concat(',');
+              data.created_at =
+                new Date(data.created_at).getFullYear() ===
+                new Date().getFullYear()
+                  ? new Date(data.created_at).toUTCString().slice(5, 11)
+                  : new Date(data.created_at).toUTCString().slice(5, 16);
             }
            
             return data;
@@ -198,11 +200,7 @@ export const DailyUpdates = ({
                       }}>
                       <View style={style.updateContainer}>
                         <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '20%',
-                          }}>
+                          style={style.updateView}>
                           <View style={style.imageContainer}>
                             <Image
                               source={AllImages.AppLogo}

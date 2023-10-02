@@ -8,7 +8,9 @@ import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
   Linking,
+  Platform,
   ScrollView,
   Text,
   View,
@@ -94,100 +96,103 @@ export const RegisterScreen = ({
         contentContainerStyle={{
           paddingBottom: '5%',
         }}>
-        <View style={commonStyle.commonContentView}>
-          {/* Header:------------------------------------------------------------------------ */}
-          <View key={'LoginFormHeader'} style={style.headerView}>
-            <View style={style.imgLogoView}>
-              <Image source={AllImages.AppLogo} style={style.imgLogo} />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
+          <View style={commonStyle.commonContentView}>
+            {/* Header:------------------------------------------------------------------------ */}
+            <View key={'LoginFormHeader'} style={style.headerView}>
+              <View style={style.imgLogoView}>
+                <Image source={AllImages.AppLogo} style={style.imgLogo} />
+              </View>
+              <View style={style.welcomeTitleView}>
+                <Text style={style.welcomeTitle1Text}>
+                  {t('loginScreen.WelcomeTitle1')}
+                </Text>
+                <Text style={style.welcomeTitle2Text}>
+                  {t('loginScreen.WelcomeTitle2')}
+                </Text>
+                <Text style={style.welcomeSubtitleText}>
+                  {t('loginScreen.RegisterHeaderSubtitle')}
+                </Text>
+              </View>
             </View>
-            <View style={style.welcomeTitleView}>
-              <Text style={style.welcomeTitle1Text}>
-                {t('loginScreen.WelcomeTitle1')}
-              </Text>
-              <Text style={style.welcomeTitle2Text}>
-                {t('loginScreen.WelcomeTitle2')}
-              </Text>
-              <Text style={style.welcomeSubtitleText}>
-                {t('loginScreen.RegisterHeaderSubtitle')}
-              </Text>
-            </View>
-          </View>
 
-          {/* FormInputs:------------------------------------------------------------------------ */}
-          <View key={'LoginFormInputs'} style={style.formInputsView}>
-            <Controller
-              control={control}
-              name="primary_email"
-              render={({field: {onBlur, onChange, value}}) => {
-                return (
-                  <FormInput
-                    type={'email'}
-                    name={'primary_email'}
-                    label={t('loginScreen.EmailLBL')}
-                    placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
-                    value={value}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    editable={true}
-                    error={errors['primary_email']?.message?.toString()}
-                  />
-                );
-              }}
-            />
-          </View>
-
-          {/* LoginFormFooter:------------------------------------------------------------------------ */}
-          <View key={'LoginFormFooter'} style={style.footerView}>
-            <Text style={style.footerText}>
-              {t('loginScreen.FooterText1')}{' '}
-              <Text
-                style={style.footerRedText}
-                onPress={() => Linking.openURL(`${BASE_URL}/term&condition`)}>
-                {t('loginScreen.FT1')}
-              </Text>{' '}
-              {t('loginScreen.FooterText2').split(' ')[0]}
-              <Text
-                style={style.footerRedText}
-                onPress={() => Linking.openURL(`${BASE_URL}/privacy-policy`)}>
-                {' '}
-                {t('loginScreen.FT2')}
-              </Text>{' '}
-              {t('loginScreen.FooterText2')
-                .split(' ')
-                .filter((val: any, index: number) => {
-                  return index !== 0 && val;
-                })
-                .join(' ')}
-            </Text>
-
-            <PrimaryButton
-              title={t('common.Signup')}
-              customWidget={
-                isApiLoading ? (
-                  <>
-                    <ActivityIndicator
-                      size={25}
-                      color={COLORS.darkModetextColor}
+            {/* FormInputs:------------------------------------------------------------------------ */}
+            <View key={'LoginFormInputs'} style={style.formInputsView}>
+              <Controller
+                control={control}
+                name="primary_email"
+                render={({field: {onBlur, onChange, value}}) => {
+                  return (
+                    <FormInput
+                      type={'email'}
+                      name={'primary_email'}
+                      label={t('loginScreen.EmailLBL')}
+                      placeholder={t('loginScreen.EnterYourEmailPlaceholder')}
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      editable={true}
+                      error={errors['primary_email']?.message?.toString()}
                     />
-                  </>
-                ) : undefined
-              }
-              onPress={handleSubmit(onSubmit)}
-              disabled={disabled}
-            />
+                  );
+                }}
+              />
+            </View>
 
-            <Text style={[style.footerText, {alignSelf: 'center'}]}>
-              {t('loginScreen.AlreadyHaveAc')}{' '}
-              <Text
-                style={[style.footerRedText]}
-                onPress={() => {
-                  navigation.navigate('Login');
-                }}>
-                {t('common.Signin').toLocaleLowerCase()}
+            {/* LoginFormFooter:------------------------------------------------------------------------ */}
+            <View key={'LoginFormFooter'} style={style.footerView}>
+              <Text style={style.footerText}>
+                {t('loginScreen.FooterText1')}{' '}
+                <Text
+                  style={style.footerRedText}
+                  onPress={() => Linking.openURL(`${BASE_URL}/term&condition`)}>
+                  {t('loginScreen.FT1')}
+                </Text>{' '}
+                {t('loginScreen.FooterText2').split(' ')[0]}
+                <Text
+                  style={style.footerRedText}
+                  onPress={() => Linking.openURL(`${BASE_URL}/privacy-policy`)}>
+                  {' '}
+                  {t('loginScreen.FT2')}
+                </Text>{' '}
+                {t('loginScreen.FooterText2')
+                  .split(' ')
+                  .filter((val: any, index: number) => {
+                    return index !== 0 && val;
+                  })
+                  .join(' ')}
               </Text>
-            </Text>
+
+              <PrimaryButton
+                title={t('common.Signup')}
+                customWidget={
+                  isApiLoading ? (
+                    <>
+                      <ActivityIndicator
+                        size={25}
+                        color={COLORS.darkModetextColor}
+                      />
+                    </>
+                  ) : undefined
+                }
+                onPress={handleSubmit(onSubmit)}
+                disabled={disabled}
+              />
+
+              <Text style={[style.footerText, {alignSelf: 'center'}]}>
+                {t('loginScreen.AlreadyHaveAc')}{' '}
+                <Text
+                  style={[style.footerRedText]}
+                  onPress={() => {
+                    navigation.navigate('Login');
+                  }}>
+                  {t('common.Signin').toLocaleLowerCase()}
+                </Text>
+              </Text>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     </ScreenWrapper>
   );

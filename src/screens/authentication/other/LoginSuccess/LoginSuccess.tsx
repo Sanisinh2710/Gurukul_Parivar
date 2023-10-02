@@ -16,6 +16,14 @@ export const LoginSuccess = ({
   const style = styles();
   const {t} = useTranslation();
   const type = route.params?.type;
+  
+  const navigateScreen = () =>{
+    type === 'Login'
+    ? navigation.replace('ProfileSignup')
+    : type === 'Profile'
+    ? navigation.replace('BottomNavBar')
+    : navigation.replace('Login');
+  }
 
   return (
     <ScreenWrapper>
@@ -68,13 +76,7 @@ export const LoginSuccess = ({
                 ? t('loginSuccess.ProfileSuccessBTN')
                 : t('loginSuccess.ResetSuccessBTN')
             }
-            onPress={() => {
-              type === 'Login'
-                ? navigation.replace('ProfileSignup')
-                : type === 'Profile'
-                ? navigation.replace('BottomNavBar')
-                : navigation.replace('Login');
-            }}
+            onPress={navigateScreen}
             buttonStyle={{marginTop: 40}}
           />
         </View>

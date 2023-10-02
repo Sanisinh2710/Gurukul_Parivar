@@ -1,12 +1,10 @@
-import {ReactElement} from 'react';
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
-// import {AuthStackNavigator, BottomTabNavigator} from '../routes';
 import {getAuthToken} from '../services';
 
 import {Theme} from '../types';
 import {COLORS} from './colors';
-import {CommingSoon} from '../components';
+
 export const LightTheme: Theme = {
   isDark: false,
   statusBarBackground: COLORS.lightModeStatusBarColor,

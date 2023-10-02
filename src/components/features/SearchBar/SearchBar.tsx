@@ -54,8 +54,9 @@ export const SearchBar = ({
           const filterData = temp.filter((item: any) => {
             return Object.keys(item).some((column: any) => {
               if (
-                column != 'id' &&
-                column != 'url' &&
+                column !== 'url' &&
+                column !== 'album' &&
+                column !== 'albumId' &&
                 item[column]
                   .toString()
                   .toLowerCase()
@@ -87,7 +88,7 @@ export const SearchBar = ({
           placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
           style={[style.formTextInput, {width: '80%'}]}
           onChangeText={val => {
-            return setSearchVal(val);
+            setSearchVal(val);
           }}
         />
       </View>

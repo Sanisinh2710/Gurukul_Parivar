@@ -1,7 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet,Dimensions} from 'react-native';
 import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
+  const {width, height} = Dimensions.get('window');
+
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.medium20,
@@ -34,10 +36,10 @@ export const styles = () => {
       flexDirection: 'row',
     },
     dateContainer: {
-      borderTopLeftRadius: 10,
-      borderBottomLeftRadius: 10,
+      borderTopLeftRadius: 8,
+      borderBottomLeftRadius: 8,
       width: '20%',
-      borderWidth: 1,
+      borderWidth: 0.4,
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
@@ -46,14 +48,50 @@ export const styles = () => {
     },
     contentContainer: {
       width: '80%',
-      borderWidth: 0.25,
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10,
+      borderWidth: 0.4,
+      borderTopRightRadius: 8,
+      borderBottomRightRadius: 8,
       backgroundColor: 'white',
       paddingLeft: '5%',
       borderColor: 'rgba(172, 43, 49, 0.3)',
       justifyContent: 'center',
       height: 64,
     },
+    scrollViewStyle: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    calenderContainer:{
+      height: height * 0.8,
+    },
+    calenderEventView :{
+      height: '25%',
+      marginTop: 10,
+    },
+    eventContentStyle:{
+      gap: 15,
+      marginTop: 10,
+      paddingBottom: 15,
+    },
+    calenderImageContainer :{
+      alignItems: 'center',
+    },
+    calenderImageView :{
+      height: 264,
+      width: 345,
+    },
+    calenderImageStyle:{
+      height: '100%',
+      width: '100%',
+      resizeMode: 'contain',
+    },
+    activityIndicator :{
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }
   });
 };

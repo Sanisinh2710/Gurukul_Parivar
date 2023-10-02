@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
-import {CustomFonts} from '../../../../utils';
+import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
@@ -68,6 +68,15 @@ export const styles = () => {
       marginBottom: 15,
       textAlign: 'center',
     },
+    dropDownContainer: {
+      height: 60,
+      marginBottom: '16%',
+    },
+    dropDownHeading: {
+      ...CustomFonts.body.large14,
+      color: COLORS.lightModetextColor,
+      fontSize: 15,
+    },
     dropdownStyle: {
       marginTop: '2%',
       backgroundColor: 'rgba(172,43,49,0.05)',
@@ -76,5 +85,15 @@ export const styles = () => {
       borderColor: 'rgba(172, 43, 49, 0.1)',
       borderRadius: 12,
     },
+    radioLabelStyle :{
+      borderRadius: 60,
+      height: 40,
+      borderWidth: 0,
+    },
+    imageFlatlistContentStyle:{
+      gap: 15,
+      marginTop: '3%',
+      paddingBottom: '10%',
+    }
   });
 };

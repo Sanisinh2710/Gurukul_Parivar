@@ -1,5 +1,4 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {COLORS} from '../../../utils';
 
 export const style = (currentPage?: number) => {
   return StyleSheet.create({
@@ -40,7 +39,6 @@ export const style = (currentPage?: number) => {
     pagerViewImage: {
       borderRadius: 12,
       marginTop: 24,
-      backgroundColor: COLORS.primaryRippleColor,
       width: Dimensions.get('window').width * 0.86,
       height: '100%',
       resizeMode: 'cover',

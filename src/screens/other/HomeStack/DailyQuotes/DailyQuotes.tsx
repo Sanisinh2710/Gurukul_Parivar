@@ -5,22 +5,23 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Platform,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import Carousel from 'react-native-snap-carousel';
 import {AllIcons} from '../../../../../assets/icons';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   Calendar,
+  Carousel,
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -56,11 +57,6 @@ export const DailyQuotes = ({
   const [imgLoad, setImgLoad] = React.useState<boolean[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
-
-  const [currentImageUri, setCurrentImageUri] = React.useState<string>();
-
   React.useMemo(async () => {
     const response = await GurukulBranchGetApi();
     if (response.resType === 'SUCCESS' && response.data.branches.length > 0) {
@@ -78,7 +74,6 @@ export const DailyQuotes = ({
     }
   }, [changeValue, GurukulList]);
 
-  const {width: screenWidth} = Dimensions.get('window');
   React.useMemo(async () => {
     setLoader(true);
     try {
@@ -141,16 +136,6 @@ export const DailyQuotes = ({
     Toast.show('Quote copied to your Clipborad..!', Toast.SHORT);
   };
 
-  React.useEffect(() => {
-    if (DailyQuotes) {
-      setImgLoad([
-        ...DailyQuotes?.map(item => {
-          return true;
-        }),
-      ]);
-    }
-  }, [DailyQuotes]);
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -176,6 +161,19 @@ export const DailyQuotes = ({
     setRefreshing(false);
   };
 
+  const LoadStart = (index:number) => {
+    let clone = [...imgLoad];
+    clone[index] = true;
+    setImgLoad(clone);
+  }
+  
+  const LoadEnd = (index:number) => {
+      let clone = [...imgLoad];
+      clone[index] = false;
+      setImgLoad(clone);
+
+  }
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -196,11 +194,6 @@ export const DailyQuotes = ({
         overScrollMode="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          // height:
-          //   Data.find((item: any) => item.branch === BranchName) !==
-          //     undefined && Data.length > 0
-          //     ? '100%'
-          //     : '100%',
           height: '100%',
         }}
         refreshControl={
@@ -211,29 +204,18 @@ export const DailyQuotes = ({
           />
         }>
         <View style={[commonStyle.commonContentView, {flex: 1}]}>
-          <View style={{height: '8%', marginBottom: '16%'}}>
+          <View style={style.dropDownContainer}>
             <View
               style={{
                 marginTop: '5%',
               }}>
               <Text
-                style={{
-                  ...CustomFonts.body.large14,
-                  color: COLORS.lightModetextColor,
-                  fontSize: 15,
-                }}>
+                style={style.dropDownHeading}>
                 {t('uploadPhoto.DropdownTitle')}
               </Text>
 
               <View
-                style={{
-                  marginTop: '2%',
-                  backgroundColor: 'rgba(172,43,49,0.05)',
-                  paddingHorizontal: '2%',
-                  borderWidth: 1,
-                  borderColor: 'rgba(172, 43, 49, 0.1)',
-                  borderRadius: 12,
-                }}>
+                style={style.dropDownStyle}>
                 <SimpleDropDown
                   label={t('uploadPhoto.DropdownTitle')}
                   placeholder={t('uploadPhoto.DropdownLable')}
@@ -241,116 +223,97 @@ export const DailyQuotes = ({
                   type={'simple'}
                   value={changeValue}
                   onChange={setChangeValue}
-                  onBlur={function (...event: any[]): void {
-                    throw new Error('Function not implemented.');
-                  }}
-                  setFocused={function (
-                    value: React.SetStateAction<boolean>,
-                  ): void {
-                    throw new Error('Function not implemented.');
-                  }}
+                  onBlur={() => {}}
+                  setFocused={() => {}}
                   wantPlaceholderAsLabelOnModal={true}
                 />
               </View>
             </View>
           </View>
-          {loader ? (
-            <Loader screenHeight={'70%'} />
-          ) : (
-            <>
-              {Data.length > 0 ? (
-                <>
-                  {Data.find((item: any) => item.branch == BranchName) ? (
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '3%',
-                      }}>
-                      <Carousel
-                        sliderWidth={screenWidth}
-                        slideStyle={{
-                          height: Dimensions.get('window').height * 0.6,
-                          borderRadius: 20,
-                        }}
-                        onSnapToItem={index => {
-                          setItemIndex(index);
-                        }}
-                        itemWidth={Dimensions.get('window').width * 0.8}
-                        data={DailyQuotes}
-                        renderItem={({item, index}) => (
-                          <>
-                            <View
-                              style={[
-                                {
-                                  height: '100%',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  borderRadius: 20,
-                                },
-                                imgLoad[index] && {
-                                  backgroundColor: COLORS.primaryRippleColor,
-                                },
-                              ]}>
+          <View style={{flex: 0.85}}>
+            {loader ? (
+              <Loader screenHeight={'100%'} />
+            ) : (
+              <>
+                {Data.length > 0 ? (
+                  <>
+                    {Data.find((item: any) => item.branch == BranchName) ? (
+                      <View
+                        style={style.quoteContainer}>
+                        <Carousel
+                          itemWidth={Dimensions.get('window').width * 0.91}
+                          itemGap={10}
+                          data={DailyQuotes}
+                          onSnapToItem={index => {
+                            setItemIndex(index);
+                          }}
+                          renderItem={({item, index}) => {
+                            return (
                               <View
-                                style={{flex: 1, width: '100%'}}
-                                onTouchEnd={() => {
-                                  setCurrentImageUri(item.image);
-                                  setZoomModalVisiable(true);
-                                }}>
-                                <Image
-                                  source={{
-                                    uri: `${BASE_URL}${item.image}`,
-                                  }}
-                                  style={style.image}
-                                  onLoad={() => {
-                                    let newLoadState = JSON.parse(
-                                      JSON.stringify(imgLoad),
-                                    );
-                                    newLoadState[index] = false;
-                                    setImgLoad(newLoadState);
-                                  }}
-                                />
+                                style={style.carouselView}>
+                                <Pressable
+                                  style={{flex: 1, width: '100%'}}
+                                  onPress={() => {
+                                    navigation.navigate('ImageZommer', {
+                                      images: [
+                                        {url: `${BASE_URL}${item.image}`},
+                                      ],
+                                    });
+                                  }}>
+                                  {imgLoad[index] && (
+                                    <ActivityIndicator
+                                      size={30}
+                                      color={COLORS.primaryColor}
+                                      style={style.activityIndicator}
+                                    />
+                                  )}
+                                  <Image
+                                    source={{
+                                      uri: `${BASE_URL}${item.image}`,
+                                    }}
+                                    style={style.image}
+                                    onLoadStart={() => LoadStart(index)}
+                                    onLoadEnd={() => LoadEnd(index)}
+                                  />
+                                </Pressable>
+                                <View>
+                                  <Text
+                                    style={style.quote}
+                                    selectable={true}
+                                    onLongPress={() =>
+                                      handleClipBoard(item.quote)
+                                    }
+                                    selectionColor={'red'}>
+                                    {item.quote}
+                                  </Text>
+                                </View>
                               </View>
-                              <View>
-                                <Text
-                                  style={style.quote}
-                                  selectable={true}
-                                  onLongPress={() =>
-                                    handleClipBoard(item.quote)
-                                  }
-                                  selectionColor={'red'}>
-                                  {item.quote}
-                                </Text>
-                              </View>
-                            </View>
-                          </>
-                        )}
-                      />
-                      <ShareDownload
-                        wallpaper={Platform.OS === 'android' ? false : false}
-                        imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
-                      />
-                    </View>
-                  ) : (
-                    <NoData />
-                  )}
-                </>
-              ) : (
-                <NoData />
-              )}
-            </>
-          )}
+                            );
+                          }}
+                        />
+                        <ShareDownload
+                          wallpaper={Platform.OS === 'android' ? false : false}
+                          imgURL={`${BASE_URL}${DailyQuotes?.[itemIndex]?.image}`}
+                        />
+                      </View>
+                    ) : (
+                      <NoData />
+                    )}
+                  </>
+                ) : (
+                  <NoData />
+                )}
+              </>
+            )}
+          </View>
         </View>
       </ScrollView>
-      <View>
-        <Calendar
-          setCalendarVisible={setCalendarVisible}
-          calendarVisible={calendarVisible}
-          selectedParentDate={selectedDate}
-          setSelectedParentDate={setSelectedDate}
-        />
-      </View>
+      <Calendar
+        setCalendarVisible={setCalendarVisible}
+        calendarVisible={calendarVisible}
+        selectedParentDate={selectedDate}
+        setSelectedParentDate={setSelectedDate}
+      />
       <CustomNavigate
         text={
           selectedDate !== undefined
@@ -359,11 +322,6 @@ export const DailyQuotes = ({
         }
         handlePrevPress={handlePrev}
         handleNextPress={handleNext}
-      />
-      <ImageZoomer
-        images={[{url: `${BASE_URL}${currentImageUri}`}]}
-        zoomModalVisible={zoomImageModalVisible}
-        setZoomModalVisiable={setZoomModalVisiable}
       />
     </ScreenWrapper>
   );

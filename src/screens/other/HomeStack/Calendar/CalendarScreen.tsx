@@ -3,11 +3,20 @@ import React from 'react';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
-import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
-  ImageZoomer,
   Loader,
   NoData,
   ScreenHeader,
@@ -25,6 +34,10 @@ export const CalendarScreen = ({
   const style = styles();
   const {t} = useTranslation();
   const commonstyle = CommonStyle();
+
+  const {width, height} = Dimensions.get('window');
+
+  const [imgLoad, setimgLoad] = React.useState<boolean>(false);
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [refreshing, setRefreshing] = React.useState(false);
   const [wallpaper, setWallpaper] = React.useState('');
@@ -34,6 +47,7 @@ export const CalendarScreen = ({
   const [sortedData, setSortedData] = React.useState<{[key: string]: any}[]>(
     [],
   );
+
   const [zoomImageModalVisible, setZoomModalVisiable] =
     React.useState<boolean>(false);
   const ref = React.useRef<FlatList>(null);
@@ -73,11 +87,19 @@ export const CalendarScreen = ({
   }, [selectedDate]);
 
   React.useEffect(() => {
-    Data.map(item => setEvents(item.events));
-    Data.length > 0 && setWallpaper(`${BASE_URL}${Data[0].image}`);
+    if (Data.length > 0) {
+      const newData = [...Data];
+      const eventData = newData.map(item => {
+        return item.events;
+      });
+      setEvents(eventData[0]);
+      setWallpaper(`${BASE_URL}${Data[0].image}`);
+    } else {
+      setEvents([]);
+    }
   }, [Data]);
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (todayEvent.length > 0) {
       let sortDate = [...todayEvent];
       let finalSort = sortDate.sort((a, b) => {
@@ -86,6 +108,8 @@ export const CalendarScreen = ({
         return date > date2 ? 1 : date < date2 ? -1 : 0;
       });
       setSortedData(finalSort);
+    } else {
+      setSortedData([]);
     }
   }, [todayEvent]);
   const listIndex = () => {
@@ -94,13 +118,16 @@ export const CalendarScreen = ({
     );
   };
   React.useEffect(() => {
-    if (sortedData.length > 0 && listIndex() !== -1) {
-      ref.current?.scrollToIndex({
-        animated: true,
-        index: listIndex(),
-      });
+    if (sortedData.length > 0 && listIndex() >= 0) {
+      setTimeout(() => {
+        ref.current?.scrollToIndex({
+          animated: true,
+          index: listIndex(),
+        });
+      }, 500);
     }
   }, [sortedData]);
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -129,20 +156,42 @@ export const CalendarScreen = ({
         }}
         headerTitle={t('homeScreen.Calendar')}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1}]}>
+      <ScrollView
+        contentContainerStyle={[
+          commonstyle.commonContentView,
+         style.scrollViewStyle
+        ]}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor, COLORS.green]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        nestedScrollEnabled={true}>
         {loader ? (
           <Loader />
         ) : (Data.length > 0 && Data[0].image !== undefined) ||
           sortedData.length > 0 ? (
-          <View>
+          <View
+            style={[
+             style.calenderContainer,
+              sortedData.length <= 0
+                ? {
+                    justifyContent: 'center',
+                  }
+                : {},
+            ]}>
             {sortedData.length > 0 && (
-              <View style={{height: '28%', top: 20}}>
+              <View
+                style={style.calenderEventView}>
                 <FlatList
                   data={sortedData}
                   ref={ref}
-                  contentContainerStyle={{
-                    gap: 15,
-                  }}
+                  nestedScrollEnabled={true}
+                  contentContainerStyle={style.eventContentStyle}
+                  showsVerticalScrollIndicator={false}
                   getItemLayout={(data, index) => {
                     return {
                       length: 79,
@@ -150,13 +199,6 @@ export const CalendarScreen = ({
                       index,
                     };
                   }}
-                  refreshControl={
-                    <RefreshControl
-                      colors={[COLORS.primaryColor, COLORS.green]}
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                  }
                   renderItem={({item, index}) => (
                     <View
                       key={index.toString()}
@@ -191,37 +233,46 @@ export const CalendarScreen = ({
               </View>
             )}
 
-            <View
-              style={[
-                {marginTop: '25%', alignSelf: 'center'},
-                sortedData.length <= 0 && {
-                  marginTop: '50%',
-                },
-              ]}>
+            {Data.length > 0 && Data[0].image !== undefined && (
               <View
-                onTouchEnd={() => setZoomModalVisiable(true)}
-                style={{
-                  height: 264,
-                  width: 345,
-                  borderRadius: 12,
-                }}>
-                <Image
-                  source={{uri: `${BASE_URL}${Data[0].image}`}}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 12,
-                    resizeMode: 'cover',
+                style={[
+                  style.calenderImageContainer,
+                  sortedData.length <= 0
+                    ? {
+                        justifyContent: 'center',
+                      }
+                    : {
+                        marginTop: '10%',
+                      },
+                ]}>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('ImageZommer', {
+                      images: [{url: `${BASE_URL}${Data[0].image}`}],
+                    });
                   }}
+                  style={style.calenderImageView}>
+                  {imgLoad && (
+                    <ActivityIndicator
+                      size={30}
+                      color={COLORS.primaryColor}
+                      style={style.activityIndicator}
+                    />
+                  )}
+                  <Image
+                    source={{uri: `${BASE_URL}${Data[0].image}`}}
+                    style={style.calenderImageStyle}
+                    onLoadStart={() => setimgLoad(true)}
+                    onLoadEnd={() => setimgLoad(false)}
+                  />
+                </Pressable>
+
+                <ShareDownload
+                  wallpaper={false}
+                  imgURL={wallpaper && wallpaper}
                 />
               </View>
-            </View>
-            <ImageZoomer
-              images={[{url: `${BASE_URL}${Data[0].image}`}]}
-              zoomModalVisible={zoomImageModalVisible}
-              setZoomModalVisiable={setZoomModalVisiable}
-            />
-            <ShareDownload wallpaper={false} imgURL={wallpaper && wallpaper} />
+            )}
           </View>
         ) : (
           <View
@@ -231,7 +282,7 @@ export const CalendarScreen = ({
             <NoData />
           </View>
         )}
-      </View>
+      </ScrollView>
       <CustomNavigate
         handleNextPress={handleNext}
         handlePrevPress={handlePrev}

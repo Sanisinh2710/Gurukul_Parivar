@@ -82,11 +82,7 @@ export type InitialSongsType = {
   activeTrack: Track | undefined;
   activeTrackPosition: number;
   selectedCategories: Array<string>;
-  trackMode : {
-    setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
-    albumId : number | undefined;
-    albumName : string | undefined;
-  }
+  setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
 };
 
 export type PersonalInfoFormValidationSchemaType = {

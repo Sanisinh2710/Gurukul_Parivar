@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ActivityIndicator,
   Animated,
+  Dimensions,
   Easing,
   Image,
   NativeModules,
@@ -38,9 +39,14 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
   const [isSharing, setIsSharing] = React.useState(false);
 
-  const [isDownloading, setIsdownloading] = React.useState(false);
+  const [isDownLoadingForWallPaper, setIsdownloadingforWallpaper] =
+    React.useState(false);
+
+  const [isDownLoading, setIsdownloading] = React.useState(false);
 
   const animationProgress = React.useRef(new Animated.Value(0));
+
+  const {height} = Dimensions.get('window');
 
   const [modalForWallpaper, setModalForWallpaper] =
     React.useState<boolean>(false);
@@ -85,9 +91,16 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }
   };
 
-  const checkPermission = async () => {
+  const checkPermissionOfWritingStorage = async () => {
+    setIsdownloading(true);
     if (Platform.OS === 'ios') {
-      downloadImage();
+      // Implement Downloading logic for photos on ios:-----------------------
+      try {
+        await downloadImage();
+        setModalVisible(!modalVisible);
+      } catch (err) {
+        Toast.show('Download could not happen..', 2);
+      }
     } else {
       try {
         let deviceVersion = DeviceInfo.getSystemVersion();
@@ -101,13 +114,14 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         }
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          downloadImage();
+          await downloadImage();
           setModalVisible(!modalVisible);
         } else {
           Toast.show('Storage Permission Required', 2);
         }
       } catch (err) {}
     }
+    setIsdownloading(false);
   };
 
   const downloadImage = async () => {
@@ -124,23 +138,45 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     // config: To pass the downloading related options
     // fs: Directory path where we want our image to download
     const {config, fs} = RNFetchBlob;
-    let PictureDir = fs.dirs.PictureDir;
-    let options = {
-      fileCache: true,
-      addAndroidDownloads: {
-        // Related to the Android only
-        useDownloadManager: true,
-        notification: true,
-        path:
-          PictureDir +
-          '/image_' +
-          Math.floor(date.getTime() + date.getSeconds() / 2) +
-          ext,
-        description: 'Image',
-      },
-    };
+    const {PictureDir, DocumentDir} = fs.dirs;
 
-    const response = await config(options).fetch('GET', image_URL);
+    const aPath = Platform.select({
+      ios: DocumentDir,
+      android: PictureDir,
+    });
+
+    const finalPath =
+      aPath +
+      '/Gurukul-Parivar/Pictures/images_' +
+      Math.floor(date.getTime() + date.getSeconds() / 2) +
+      '.' +
+      ext;
+
+    let options = Platform.select({
+      ios: {
+        fileCache: true,
+        path: finalPath,
+        // mime: 'application/xlsx',
+        // appendExt: 'xlsx',
+        //path: filePath,
+        //appendExt: fileExt,
+        notification: true,
+      },
+      android: {
+        fileCache: true,
+        addAndroidDownloads: {
+          // Related to the Android only
+          useDownloadManager: true,
+          notification: true,
+          path: finalPath,
+          description: 'Image',
+        },
+      },
+    });
+
+    if (options && image_URL) {
+      const response = await config(options).fetch('GET', image_URL);
+    }
   };
 
   const getExtention = (filename: string) => {
@@ -157,41 +193,34 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     }).start();
   }, [modalVisible]);
 
-  const settingWallPap = async (mode: 'HOME' | 'LOCK' | 'BOTH') => {
-    return new Promise(resolve => {
-      setTimeout(async () => {
-        const result = await WallpaperModule.setAsWallpaper(
+  const setWallPaper = async (mode: 'HOME' | 'LOCK' | 'BOTH') => {
+    setIsdownloadingforWallpaper(true);
+    let resultFetched: boolean = false;
+    try {
+      const result = await new Promise(resolve => {
+        const myresult = WallpaperModule.setAsWallpaper(
           REMOTE_IMAGE_PATH,
           mode,
         );
-        resolve(result);
-      }, 1500);
-    });
-  };
-
-  const setWallPaper = async (mode: 'HOME' | 'LOCK' | 'BOTH') => {
-    setIsdownloading(true);
-    let resultFetched: boolean = false;
-    try {
-      const result = await settingWallPap(mode);
+        resolve(myresult);
+      });
       resultFetched = true;
 
       if (result === 'SUCCESS') {
         Toast.show('Wallpaper set successfully..!', Toast.LONG);
       }
-    } catch (error) {
-      console.log(error, 'wallpaper error');
+    } catch (error: any) {
+      resultFetched = true;
+      Toast.show(error.toString(), Toast.LONG);
     }
     if (resultFetched) {
-      setTimeout(() => {
-        setIsdownloading(false);
-      }, 1500);
+      setIsdownloadingforWallpaper(false);
     }
   };
 
   return (
     <>
-      <View style={[commonStyle.commonContentView, {flex: 1}]}>
+      <View style={[commonStyle.commonContentView]}>
         <View
           style={{
             flexDirection: 'row',
@@ -201,13 +230,17 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           }}>
           {wallpaper === true && (
             <View
-              onTouchEnd={() => setModalForWallpaper(!modalForWallpaper)}
+              onTouchEnd={
+                isDownLoadingForWallPaper
+                  ? () => {}
+                  : () => setModalForWallpaper(!modalForWallpaper)
+              }
               style={[
                 style.iconContainer,
                 {backgroundColor: 'rgba(98, 177, 158, 1)'},
               ]}>
               <>
-                {isDownloading ? (
+                {isDownLoadingForWallPaper ? (
                   <ActivityIndicator
                     size={25}
                     color={COLORS.darkModetextColor}
@@ -245,12 +278,22 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </>
           </View>
           <View
-            onTouchEnd={checkPermission}
+            onTouchEnd={
+              isDownLoading
+                ? () => {}
+                : async () => await checkPermissionOfWritingStorage()
+            }
             style={[
               style.iconContainer,
               {backgroundColor: 'rgba(174, 73, 141, 1)'},
             ]}>
-            <Image source={AllIcons.Download} style={style.icon} />
+            <>
+              {isDownLoading ? (
+                <ActivityIndicator size={25} color={COLORS.darkModetextColor} />
+              ) : (
+                <Image source={AllIcons.Download} style={style.icon} />
+              )}
+            </>
           </View>
         </View>
       </View>
@@ -260,7 +303,10 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           <>
             <View>
               <LottieView
-                style={{height: '80%', alignSelf: 'center'}}
+                style={{
+                  height: height * 0.29,
+                  alignSelf: 'center',
+                }}
                 progress={animationProgress.current}
                 source={require('../../../../assets/animation/downloadDone.json')}
               />
@@ -306,33 +352,34 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       />
 
       <DropDownModel
+        modalHeight={`35%`}
         customModelchild={
           <>
             <Pressable
               onPress={
-                isDownloading
-                  ? () => {}
-                  : async () => {
-                      await setWallPaper('HOME');
+                isDownLoadingForWallPaper
+                  ? e => {}
+                  : e => {
+                      setWallPaper('HOME');
                     }
               }>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>
             </Pressable>
             <Pressable
               onPress={
-                isDownloading
-                  ? () => {}
-                  : async () => {
-                      await setWallPaper('LOCK');
+                isDownLoadingForWallPaper
+                  ? e => {}
+                  : e => {
+                      setWallPaper('LOCK');
                     }
               }>
               <Text style={style.wallpaperText}>Set as a Lock screen</Text>
             </Pressable>
             <Pressable
               onPress={
-                isDownloading
-                  ? () => {}
-                  : async () => {
+                isDownLoadingForWallPaper
+                  ? e => {}
+                  : async e => {
                       await setWallPaper('BOTH');
                     }
               }>
@@ -340,7 +387,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             </Pressable>
           </>
         }
-        modalHeight="30%"
         setModelVisible={setModalForWallpaper}
         type={'none'}
         modelVisible={modalForWallpaper}

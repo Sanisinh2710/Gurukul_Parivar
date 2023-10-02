@@ -14,6 +14,7 @@ export const FormInputStyle = (value?: any) => {
       color: theme.textColor,
       opacity: value ? 1 : 0.5,
       left: -4,
+      height: '100%',
     },
     labelText: {
       ...CustomFonts.body.medium12,

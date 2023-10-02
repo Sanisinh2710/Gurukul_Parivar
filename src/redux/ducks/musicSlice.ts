@@ -2,7 +2,6 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {WritableDraft} from 'immer/dist/internal';
 import {Track} from 'react-native-track-player';
 import {InitialSongsType, SongType} from '../../types';
-import { copyFile } from 'react-native-fs';
 
 let initialState: InitialSongsType = {
   allSongs: [],
@@ -11,11 +10,7 @@ let initialState: InitialSongsType = {
   },
   activeTrackPosition: 0,
   selectedCategories: [],
-  trackMode : {
-    setupMode: 'NONE',
-    albumId : undefined,
-    albumName : undefined,
-  }
+  setupMode: 'NONE',
 };
 
 export const sliderPageSlice = createSlice({
@@ -45,7 +40,7 @@ export const sliderPageSlice = createSlice({
     SET_ACTIVE_TRACKDATA: (
       state,
       action: PayloadAction<{
-        activeTrackDataPayload: {track: Track | undefined; position?: number;};
+        activeTrackDataPayload: {track: Track | undefined; position?: number};
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
@@ -98,25 +93,15 @@ export const sliderPageSlice = createSlice({
       state,
       action: PayloadAction<{
         setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
-        albumId ?: number;
-        albumName ?: string;
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
         JSON.stringify(state),
-      );  
+      );
 
-      const {setupMode , albumId ,albumName} = action.payload;
+      const setupMode = action.payload.setupMode;
 
-      newdata.trackMode.setupMode = setupMode;
-      if(albumId!=undefined)
-      {
-      newdata.trackMode.albumId = albumId
-      }
-      if(albumName != undefined)
-      {
-        newdata.trackMode.albumName = albumName;
-      }
+      newdata.setupMode = setupMode;
 
       return newdata;
     },

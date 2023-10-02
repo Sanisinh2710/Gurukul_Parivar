@@ -79,8 +79,8 @@ android {
         applicationId "com.gurukul_parivar"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.1.0"
+        versionCode 10
+        versionName "1.2.3"
     }
     signingConfigs {
         release{
@@ -117,7 +117,6 @@ dependencies {
     implementation project(':react-native-share')
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
-    implementation 'com.github.yalantis:ucrop:2.2.6'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -130,7 +129,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

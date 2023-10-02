@@ -62,10 +62,10 @@ export const styles = () => {
       marginVertical: '3%',
     },
     dateContainer: {
-      borderTopLeftRadius: 10,
-      borderBottomLeftRadius: 10,
+      borderTopLeftRadius: 8,
+      borderBottomLeftRadius: 8,
       width: '20%',
-      borderWidth: 1,
+      borderWidth: 0.4,
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
@@ -74,9 +74,9 @@ export const styles = () => {
     },
     contentContainer: {
       width: '80%',
-      borderWidth: 0.25,
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10,
+      borderWidth: 0.4,
+      borderTopRightRadius: 8,
+      borderBottomRightRadius: 8,
       backgroundColor: 'white',
       paddingLeft: '5%',
       borderColor: 'rgba(172, 43, 49, 0.3)',
@@ -93,5 +93,10 @@ export const styles = () => {
       fontSize: 16,
       color: 'white',
     },
+    timeContainer :{
+      flexDirection: 'row',
+      width: '70%',
+      gap: 6,
+    }
   });
 };

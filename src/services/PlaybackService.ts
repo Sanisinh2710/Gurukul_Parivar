@@ -23,6 +23,12 @@ export async function setupPlayer() {
         Capability.Pause,
         Capability.SeekTo,
       ],
+      // compactCapabilities: [
+      //   Capability.Play,
+      //   Capability.Pause,
+      //   Capability.SkipToNext,
+      // ],
+      // progressUpdateEventInterval: 2,
     });
 
     isSetup = true;
@@ -43,19 +49,13 @@ export async function addTracks(songs: Array<SongType>) {
   }
 }
 
-export async function resetTracks(){
-  try{
-    await TrackPlayer.reset();
-    return true;
-  }
-  catch(error)
-  {
-    console.log(error,"Reset Error");
-  }
+export async function resetAndAddTracks(songs: Array<SongType>) {
+  await TrackPlayer.reset();
+  await TrackPlayer.add(songs);
+  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
-
-export async function PlaybackService() {
+export const PlaybackService =  async function() {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
     console.log('Event.RemotePause');
     TrackPlayer.pause();
@@ -75,25 +75,6 @@ export async function PlaybackService() {
     console.log('Event.RemotePrevious');
     TrackPlayer.skipToPrevious();
   });
-
-  //   TrackPlayer.addEventListener(Event.RemoteJumpForward, async event => {
-  //     console.log('Event.RemoteJumpForward', event);
-  //     TrackPlayer.seekBy(event.interval);
-  //   });
-
-  //   TrackPlayer.addEventListener(Event.RemoteJumpBackward, async event => {
-  //     console.log('Event.RemoteJumpBackward', event);
-  //     TrackPlayer.seekBy(-event.interval);
-  //   });
-
-  // TrackPlayer.addEventListener(Event.RemoteSeek, event => {
-  //   console.log('Event.RemoteSeek', event);
-  //   TrackPlayer.seekTo(event.position);
-  // });
-
-  // TrackPlayer.addEventListener(Event.RemoteDuck, async event => {
-  //   console.log('Event.RemoteDuck', event);
-  // });
 
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, event => {
     console.log('Event.PlaybackQueueEnded', event);
