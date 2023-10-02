@@ -13,17 +13,17 @@ import {
   View,
 } from 'react-native';
 
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import LottieView from 'lottie-react-native';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
-import { AllIcons } from '../../../../assets/icons';
-import { CommonStyle } from '../../../../assets/styles';
-import { COLORS, CustomFonts } from '../../../utils';
-import { DropDownModel } from '../Modal';
-import { styles } from './style';
+import {AllIcons} from '../../../../assets/icons';
+import {CommonStyle} from '../../../../assets/styles';
+import {COLORS, CustomFonts} from '../../../utils';
+import {DropDownModel} from '../Modal';
+import {styles} from './style';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
