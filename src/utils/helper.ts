@@ -1,5 +1,4 @@
 import {PermissionsAndroid, Platform} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import {
   ImagePickerResponse,
   MediaType,
@@ -270,36 +269,63 @@ export function getYearsArray() {
 //     return newDate;
 //   }
 // };
-
-export const checkPermissionOfWritingStorage = async () => {
+async function hasPermissions() {
   try {
-    let deviceVersionInfo = DeviceInfo.getSystemVersion();
-    let granted = PermissionsAndroid.RESULTS.GRANTED;
+    if (Platform.OS === 'android') {
+      let deviceAPIVersion = Platform.Version;
+      let granted = PermissionsAndroid.RESULTS.GRANTED;
 
-    if (parseInt(deviceVersionInfo) >= 13) {
-      return granted == PermissionsAndroid.RESULTS.GRANTED;
-    } else {
-      granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      );
-    }
+      if (parseInt(deviceAPIVersion.toString()) >= 33) {
+        return granted == PermissionsAndroid.RESULTS.GRANTED;
+      } else {
+        granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+      }
 
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      return granted == PermissionsAndroid.RESULTS.GRANTED;
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      Toast.show('Storage Permission Required', 2);
+      // Write code for ios permissions :--------
+      return true;
     }
   } catch (error) {
     console.log('Check Permission Error For Music', error);
   }
-};
+}
+
+// export const checkPermissionOfWritingStorage = async () => {
+//   try {
+//     let deviceVersionInfo = DeviceInfo.getSystemVersion();
+//     let granted = PermissionsAndroid.RESULTS.GRANTED;
+
+//     if (parseInt(deviceVersionInfo) >= 13) {
+//       return granted == PermissionsAndroid.RESULTS.GRANTED;
+//     } else {
+//       granted = await PermissionsAndroid.request(
+//         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+//       );
+//     }
+
+//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//       return granted == PermissionsAndroid.RESULTS.GRANTED;
+//     } else {
+//       Toast.show('Storage Permission Required', 2);
+//     }
+//   } catch (error) {
+//     console.log('Check Permission Error For Music', error);
+//   }
+// };
 
 export const downloadSong = async (
   REMOTE_SONG_URL: string,
   songName: string,
 ) => {
   try {
-    const permissionResponse = await checkPermissionOfWritingStorage();
+    const permissionResponse = await hasPermissions();
     if (permissionResponse) {
       let resType: 'SUCCESS' | 'ERROR';
       let date = new Date();
@@ -358,9 +384,13 @@ export const downloadSong = async (
       } else {
         return (resType = 'ERROR');
       }
+    } else {
+      Toast.show('Storage Permission Required', 2);
+      return 'ERROR';
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(error, 'Song Download');
+    Toast.show(error.toString(), 2);
   }
 };
 
