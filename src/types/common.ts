@@ -1,4 +1,4 @@
-import { Track } from 'react-native-track-player';
+import {Track} from 'react-native-track-player';
 
 export type Theme = {
   isDark: boolean;
@@ -70,7 +70,7 @@ export type GurukulFormValidationSchemaType = {
   gurukulData: SingleGurukulRecType[] | undefined;
 };
 
-export type InitialThemeType = { theme: Theme; themeMode: string };
+export type InitialThemeType = {theme: Theme; themeMode: string};
 
 export type InitialSliderPageType = {
   currentPage: number;
@@ -86,17 +86,17 @@ export type InitialSongsType = {
 };
 
 export type PersonalInfoFormValidationSchemaType = {
-  gender: string;
+  gender: string | undefined;
   full_name: string;
-  father_name: string;
-  dob: string;
-  blood_group: string;
+  father_name: string | undefined;
+  dob: string | undefined;
+  blood_group: string | undefined;
   emailInfo: {
-    email: string;
+    email?: string | undefined;
     secondary?: boolean | undefined;
   }[];
   mobilenumInfo: {
-    mobilenum: string | undefined;
+    mobilenum?: string | undefined;
     whatsappNum?: boolean | undefined;
     secondary?: boolean | undefined;
     countryCode?: string | undefined;
