@@ -8,16 +8,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {SupportedFormInputTypes} from '../../../types';
-import {COLORS, CustomFonts} from '../../../utils';
-import {RadioLable} from '../Radio';
-import {DatePicker} from './DatePicker';
-import {PhoneDropdownInput} from './PhoneDropdownInput';
-import {PhotoPicker} from './PhotoPicker';
-import {SimpleDropDown} from './SimpleDropDown';
-import {FormInputStyle} from './style';
+import { AllIcons } from '../../../../assets/icons';
+import { useAppSelector } from '../../../redux/hooks';
+import { SupportedFormInputTypes } from '../../../types';
+import { COLORS, CustomFonts } from '../../../utils';
+import { RadioLable } from '../Radio';
+import { DatePicker } from './DatePicker';
+import { PhoneDropdownInput } from './PhoneDropdownInput';
+import { PhotoPicker } from './PhotoPicker';
+import { SimpleDropDown } from './SimpleDropDown';
+import { FormInputStyle } from './style';
 
 export type FormInputProps = {
   type?: SupportedFormInputTypes;
@@ -29,7 +29,7 @@ export type FormInputProps = {
   onBlur: (...event: any[]) => void;
   onChange: (...event: any[]) => void;
   error?: string;
-  state?: {[key: string]: any};
+  state?: { [key: string]: any };
   menuList?: any;
   customProps?: object;
   rightText?: string;
@@ -314,8 +314,8 @@ export const FormInput = React.memo(
                 {(type === 'phone' || type === 'email' || type === 'select') &&
                   rightText && (
                     <Text
-                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
-                      style={[style.labelText, {color: COLORS.primaryColor}]}>
+                      onPress={rightTextOnPress ? rightTextOnPress : () => { }}
+                      style={[style.labelText, { color: COLORS.primaryColor }]}>
                       {rightText}
                     </Text>
                   )}
@@ -334,41 +334,33 @@ export const FormInput = React.memo(
                     alignItems: 'flex-start',
                   },
                   icon &&
-                    type !== 'select' &&
-                    type !== 'date' &&
-                    type !== 'dob' && {
-                      gap: 3,
-                    },
+                  type !== 'select' &&
+                  type !== 'date' &&
+                  type !== 'dob' && {
+                    gap: 3,
+                  },
                 ]}>
                 {type === 'password' ? (
-                  <View style={{width: '90%'}}>{fieldblock}</View>
+                  <View style={{ width: '90%' }}>{fieldblock}</View>
                 ) : icon &&
                   type !== 'select' &&
                   type !== 'date' &&
                   type !== 'dob' ? (
-                  <View style={{width: '90%'}}>{fieldblock}</View>
+                  <View style={{ width: '90%' }}>{fieldblock}</View>
                 ) : (
                   fieldblock
                 )}
                 {type === 'password' ? (
                   <View
-                    style={{
-                      height: '40%',
-                      width: '10%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
+                    style={style.fieldImgView}
                     onTouchEnd={() => setPassVisible(!passVisible)}>
                     <Image
                       source={
                         passVisible ? AllIcons.OpenEye : AllIcons.ClosedEye
                       }
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
+                      style={[style.fieldRightImg, {
                         tintColor: 'rgba(172, 43, 49, 0.5)',
-                      }}
+                      }]}
                     />
                   </View>
                 ) : (
@@ -377,19 +369,10 @@ export const FormInput = React.memo(
                   type !== 'date' &&
                   type !== 'dob' && (
                     <View
-                      style={{
-                        height: '50%',
-                        width: '10%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
+                      style={style.fieldImgView}>
                       <Image
                         source={icon}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
+                        style={style.fieldRightImg}
                       />
                     </View>
                   )
@@ -397,34 +380,14 @@ export const FormInput = React.memo(
               </View>
               {Array.isArray(value) && type === 'multi-select' && (
                 <View
-                  style={{
-                    flexDirection: 'row',
-                    top: 10,
-                    gap: 8,
-                    flexWrap: 'wrap',
-                    marginBottom: '3%',
-                  }}>
+                  style={style.multiSelectMainView}>
                   {value.map((item, index) => {
                     return (
                       <View
                         key={index}
-                        style={{
-                          flexDirection: 'row',
-                          backgroundColor: COLORS.primaryColor,
-                          paddingLeft: 16,
-                          paddingRight: 10,
-                          height: 35,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 60,
-                          gap: 10,
-                        }}>
+                        style={style.multiSelectInnerView}>
                         <Text
-                          style={{
-                            ...CustomFonts.body.large14,
-                            lineHeight: 18.9,
-                            color: COLORS.darkModetextColor,
-                          }}>
+                          style={style.multiSelectTitle}>
                           {item}
                         </Text>
                         <View
@@ -435,19 +398,10 @@ export const FormInput = React.memo(
                             newValues.splice(index, 1);
                             onChange(newValues);
                           }}
-                          style={{
-                            width: 14,
-                            height: 14,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}>
+                          style={style.multiSelectListView}>
                           <Image
                             source={AllIcons.RoundCross}
-                            style={{
-                              flex: 1,
-                              tintColor: COLORS.darkModeIconColor,
-                              resizeMode: 'contain',
-                            }}
+                            style={style.multiSelectRemoveImg}
                           />
                         </View>
                       </View>

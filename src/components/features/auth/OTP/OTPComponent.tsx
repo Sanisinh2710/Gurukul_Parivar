@@ -60,7 +60,7 @@ export const OtpComponent = React.memo(({ num, setNum }: otpTypeProps) => {
   };
 
   return (
-    <View style={{ justifyContent: 'center', gap: 10, flexDirection: 'row' }}>
+    <View style={style.otpMainView}>
       <View style={style.otpWrapper}>
         {num.map((item, index) => (
           <TextInput

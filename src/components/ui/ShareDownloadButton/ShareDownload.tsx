@@ -14,25 +14,26 @@ import {
 } from 'react-native';
 
 import LottieView from 'lottie-react-native';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {COLORS, CustomFonts} from '../../../utils';
-import {DropDownModel} from '../Modal';
-import {styles} from './style';
+import { AllIcons } from '../../../../assets/icons';
+import { CommonStyle } from '../../../../assets/styles';
+import { COLORS, CustomFonts } from '../../../utils';
+import { DropDownModel } from '../Modal';
+import { styles } from './style';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
   wallpaper: boolean;
 };
-export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
-  const {WallpaperModule} = NativeModules;
-  const {t} = useTranslation();
+export const ShareDownload = ({ wallpaper, imgURL }: ShareDownloadProps) => {
+  const { WallpaperModule } = NativeModules;
+  const { t } = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
@@ -46,7 +47,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
   const animationProgress = React.useRef(new Animated.Value(0));
 
-  const {height} = Dimensions.get('window');
+  const { height } = Dimensions.get('window');
 
   const [modalForWallpaper, setModalForWallpaper] =
     React.useState<boolean>(false);
@@ -77,7 +78,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
         setIsSharing(false);
 
-        const shareRes = await Share.open(options);
+        await Share.open(options);
         // Handle successful share here
       } else {
         // Handle error here
@@ -96,7 +97,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     if (Platform.OS === 'ios') {
       // Implement Downloading logic for photos on ios:-----------------------
       try {
-        await downloadImage();
+        await CameraRoll.save(REMOTE_IMAGE_PATH!);
         setModalVisible(!modalVisible);
       } catch (err) {
         Toast.show('Download could not happen..', 2);
@@ -119,7 +120,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         } else {
           Toast.show('Storage Permission Required', 2);
         }
-      } catch (err) {}
+      } catch (err) { }
     }
     setIsdownloading(false);
   };
@@ -137,8 +138,8 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     // Get config and fs from RNFetchBlob
     // config: To pass the downloading related options
     // fs: Directory path where we want our image to download
-    const {config, fs} = RNFetchBlob;
-    const {PictureDir, DocumentDir} = fs.dirs;
+    const { config, fs } = RNFetchBlob;
+    const { PictureDir, DocumentDir } = fs.dirs;
 
     const aPath = Platform.select({
       ios: DocumentDir,
@@ -153,15 +154,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       ext;
 
     let options = Platform.select({
-      ios: {
-        fileCache: true,
-        path: finalPath,
-        // mime: 'application/xlsx',
-        // appendExt: 'xlsx',
-        //path: filePath,
-        //appendExt: fileExt,
-        notification: true,
-      },
       android: {
         fileCache: true,
         addAndroidDownloads: {
@@ -175,7 +167,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     });
 
     if (options && image_URL) {
-      const response = await config(options).fetch('GET', image_URL);
+      await config(options).fetch('GET', image_URL);
     }
   };
 
@@ -222,22 +214,17 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     <>
       <View style={[commonStyle.commonContentView]}>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            gap: 15,
-            marginTop: '5%',
-          }}>
+          style={style.container}>
           {wallpaper === true && (
             <View
               onTouchEnd={
                 isDownLoadingForWallPaper
-                  ? () => {}
+                  ? () => { }
                   : () => setModalForWallpaper(!modalForWallpaper)
               }
               style={[
                 style.iconContainer,
-                {backgroundColor: 'rgba(98, 177, 158, 1)'},
+                { backgroundColor: 'rgba(98, 177, 158, 1)' },
               ]}>
               <>
                 {isDownLoadingForWallPaper ? (
@@ -248,7 +235,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 ) : (
                   <Image
                     source={AllIcons.SetWallPaper}
-                    style={[style.icon, {height: 24, width: 24}]}
+                    style={[style.icon, { height: 24, width: 24 }]}
                   />
                 )}
               </>
@@ -258,13 +245,13 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             onTouchEnd={
               isSharing === false
                 ? async () => {
-                    await onShare();
-                  }
-                : () => {}
+                  await onShare();
+                }
+                : () => { }
             }
             style={[
               style.iconContainer,
-              {backgroundColor: 'rgba(172, 168, 123, 1)'},
+              { backgroundColor: 'rgba(172, 168, 123, 1)' },
             ]}>
             <>
               {isSharing ? (
@@ -272,7 +259,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
               ) : (
                 <Image
                   source={AllIcons.Share}
-                  style={[style.icon, {height: 18, width: 18}]}
+                  style={[style.icon, { height: 18, width: 18 }]}
                 />
               )}
             </>
@@ -280,12 +267,12 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           <View
             onTouchEnd={
               isDownLoading
-                ? () => {}
+                ? () => { }
                 : async () => await checkPermissionOfWritingStorage()
             }
             style={[
               style.iconContainer,
-              {backgroundColor: 'rgba(174, 73, 141, 1)'},
+              { backgroundColor: 'rgba(174, 73, 141, 1)' },
             ]}>
             <>
               {isDownLoading ? (
@@ -312,13 +299,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
               />
             </View>
             <View
-              style={{
-                alignItems: 'center',
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: 80,
-              }}>
+              style={style.successFullTextView}>
               <Text
                 style={{
                   ...CustomFonts.header.medium20,
@@ -358,30 +339,30 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? e => {}
+                  ? e => { }
                   : e => {
-                      setWallPaper('HOME');
-                    }
+                    setWallPaper('HOME');
+                  }
               }>
               <Text style={style.wallpaperText}>Set as a Home screen</Text>
             </Pressable>
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? e => {}
+                  ? e => { }
                   : e => {
-                      setWallPaper('LOCK');
-                    }
+                    setWallPaper('LOCK');
+                  }
               }>
               <Text style={style.wallpaperText}>Set as a Lock screen</Text>
             </Pressable>
             <Pressable
               onPress={
                 isDownLoadingForWallPaper
-                  ? e => {}
+                  ? e => { }
                   : async e => {
-                      await setWallPaper('BOTH');
-                    }
+                    await setWallPaper('BOTH');
+                  }
               }>
               <Text style={style.wallpaperText}>Both</Text>
             </Pressable>

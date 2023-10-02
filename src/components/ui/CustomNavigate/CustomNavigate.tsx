@@ -1,9 +1,8 @@
 import React from 'react';
-import {Image, Pressable, Text, View} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {CustomFonts} from '../../../utils';
-import {styles} from './styles';
+import { Image, Pressable, Text, View } from 'react-native';
+import { AllIcons } from '../../../../assets/icons';
+import { CommonStyle } from '../../../../assets/styles';
+import { styles } from './styles';
 
 type CustomNavigateProps = {
   text: string | number;
@@ -25,36 +24,27 @@ export const CustomNavigate = ({
 
   return (
     <View style={[commonStyle.commonContentView]}>
-      <View style={{justifyContent: 'center'}}>
+      <View style={{ justifyContent: 'center' }}>
         <View style={style.navigationContainer}>
           <Pressable onPress={handlePrevPress}>
             <Image
-              style={{
-                height: 40,
-                width: 40,
-                transform: [{rotate: '90deg'}],
-              }}
+              style={[style.leftRightImgStyle, {
+                transform: [{ rotate: '90deg' }],
+              }]}
               source={AllIcons.RoundedArrow}
             />
           </Pressable>
 
           <Text
-            style={{
-              ...CustomFonts.header.small18,
-              fontSize: 20,
-              color: 'black',
-              alignSelf: 'center',
-            }}>
+            style={style.textStyle}>
             {text}
           </Text>
 
           <Pressable onPress={handleNextPress}>
             <Image
-              style={{
-                height: 40,
-                width: 40,
-                transform: [{rotate: '270deg'}],
-              }}
+              style={[style.leftRightImgStyle, {
+                transform: [{ rotate: '270deg' }],
+              }]}
               source={AllIcons.RoundedArrow}
             />
           </Pressable>

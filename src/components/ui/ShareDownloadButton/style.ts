@@ -39,5 +39,18 @@ export const styles = () => {
       borderBottomColor: 'rgba(23,23,23,0.3)',
       paddingVertical: 15,
     },
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      gap: 15,
+      marginTop: '5%',
+    },
+    successFullTextView: {
+      alignItems: 'center',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 80,
+    },
   });
 };

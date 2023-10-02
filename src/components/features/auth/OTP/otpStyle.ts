@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 import {COLORS} from '../../../../utils';
-import { useAppSelector } from '../../../../redux/hooks';
+import {useAppSelector} from '../../../../redux/hooks';
 
 export const useOtpStyle = () => {
-  const theme = useAppSelector((state)=>state.theme.theme)
+  const theme = useAppSelector(state => state.theme.theme);
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -28,5 +28,6 @@ export const useOtpStyle = () => {
       color: theme.textColor,
       fontSize: 20,
     },
+    otpMainView: {justifyContent: 'center', gap: 10, flexDirection: 'row'},
   });
 };

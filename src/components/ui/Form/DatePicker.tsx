@@ -1,9 +1,9 @@
 import React from 'react';
 
-import {Image, Text, View} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {Calendar} from '../Calendar';
-import {FormInputStyle} from './style';
+import { Image, Text, View } from 'react-native';
+import { AllIcons } from '../../../../assets/icons';
+import { Calendar } from '../Calendar';
+import { FormInputStyle } from './style';
 
 type DatePickerProps = {
   value: any;
@@ -51,14 +51,12 @@ export const DatePicker = React.memo(
     React.useEffect(() => {
       if (selectedDate && focused) {
         onChange(
-          `${
-            selectedDate.getDate().toString().length <= 1
-              ? '0' + selectedDate.getDate().toString()
-              : selectedDate.getDate().toString()
-          }/${
-            (selectedDate.getMonth() + 1).toString().length <= 1
-              ? '0' + (selectedDate.getMonth() + 1).toString()
-              : (selectedDate.getMonth() + 1).toString()
+          `${selectedDate.getDate().toString().length <= 1
+            ? '0' + selectedDate.getDate().toString()
+            : selectedDate.getDate().toString()
+          }/${(selectedDate.getMonth() + 1).toString().length <= 1
+            ? '0' + (selectedDate.getMonth() + 1).toString()
+            : (selectedDate.getMonth() + 1).toString()
           }/${selectedDate.getFullYear()}`,
         );
       }
@@ -67,13 +65,7 @@ export const DatePicker = React.memo(
     return (
       <>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%',
-          }}
+          style={style.datePickerMainView}
           onTouchEnd={() => {
             setCalendarVisible(!calendarVisible);
             setFocused(!calendarVisible);
@@ -84,25 +76,13 @@ export const DatePicker = React.memo(
               : value}
           </Text>
           <View
-            style={[
-              {
-                width: 30,
-                height: 30,
-                overflow: 'hidden',
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-            ]}>
+            style={style.datePickerDateImg}>
             <Image
-              style={{
-                flex: 1,
-                resizeMode: 'contain',
-              }}
+              style={style.rightSideImgStyle}
               source={customIcon || AllIcons.Calendar}
             />
           </View>
         </View>
-
         <Calendar
           type={type}
           calendarVisible={calendarVisible}

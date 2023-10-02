@@ -9,6 +9,7 @@ export const styles = () => {
       color: 'black',
       lineHeight: 27,
     },
+    mainWrapperStyle: {flex: 1, justifyContent: 'center', gap: 50},
     soon: {
       alignSelf: 'center',
       marginVertical: '3%',
@@ -25,5 +26,12 @@ export const styles = () => {
       lineHeight: 18,
       fontSize: 16,
     },
+    commingSoonImgstyle: {
+      width: 213,
+      height: 87,
+      alignSelf: 'center',
+      resizeMode: 'contain',
+    },
+    primaryButtonStyle: {paddingHorizontal: 20, flex: 0.2},
   });
 };

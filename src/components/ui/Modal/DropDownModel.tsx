@@ -1,10 +1,8 @@
 import React from 'react';
-
-import {useTranslation} from 'react-i18next';
-import {Dimensions, FlatList, Modal, Text, TextInput, View} from 'react-native';
-
-import {Image} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, FlatList, Modal, Text, TextInput, View } from 'react-native';
+import { Image } from 'react-native';
+import { AllIcons } from '../../../../assets/icons';
 import {
   COLORS,
   CustomFonts,
@@ -13,8 +11,8 @@ import {
   isString,
   isStringArray,
 } from '../../../utils';
-import {PrimaryButton} from '../Buttons';
-import {ModalStyle} from './style';
+import { PrimaryButton } from '../Buttons';
+import { ModalStyle } from './style';
 
 type DropDownModelProps = {
   modelVisible: boolean;
@@ -56,9 +54,9 @@ export const DropDownModel = React.memo(
   }: DropDownModelProps) => {
     const style = ModalStyle(modalHeight);
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
-    const {width, height} = Dimensions.get('window');
+    const { width, height } = Dimensions.get('window');
 
     const touchY = React.useRef<any>();
 
@@ -173,12 +171,7 @@ export const DropDownModel = React.memo(
                 <View>
                   {wantResetButton ? (
                     <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginBottom: '3%',
-                      }}>
+                      style={style.resetBtnView}>
                       <Text style={style.modelLabelText}>{label}</Text>
                       <Text
                         style={style.modelValueResetText}
@@ -211,7 +204,7 @@ export const DropDownModel = React.memo(
                         value={searchvalue}
                         placeholder={t('common.Search')}
                         placeholderTextColor={COLORS.lightModetextColor}
-                        style={[style.formTextInput, {width: '80%'}]}
+                        style={[style.formTextInput, { width: '80%' }]}
                         onChangeText={val => {
                           setSearch(val);
                         }}
@@ -226,14 +219,11 @@ export const DropDownModel = React.memo(
                       keyboardShouldPersistTaps="handled"
                       contentContainerStyle={[
                         style.modelFlatListContainerStyle,
-                        {
-                          paddingBottom: '40%',
-                        },
                       ]}
                       showsHorizontalScrollIndicator={false}
                       showsVerticalScrollIndicator={false}
                       data={wantSearchBar ? searchedData : inputList}
-                      renderItem={({item, index}: any) => {
+                      renderItem={({ item, index }: any) => {
                         return (
                           <View
                             onTouchEnd={() => {
@@ -357,15 +347,15 @@ export const DropDownModel = React.memo(
                               },
                               isString(item)
                                 ? type === 'radio' &&
-                                  selectedItem?.includes(item) &&
-                                  item.includes(selectedItem) && {
-                                    backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                                  }
+                                selectedItem?.includes(item) &&
+                                item.includes(selectedItem) && {
+                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                }
                                 : type === 'radio' &&
-                                  selectedItem === item?.id &&
-                                  item?.name.includes(selectedItem) && {
-                                    backgroundColor: 'rgba(172, 43, 49, 0.1)',
-                                  },
+                                selectedItem === item?.id &&
+                                item?.name.includes(selectedItem) && {
+                                  backgroundColor: 'rgba(172, 43, 49, 0.1)',
+                                },
                             ]}>
                             <Text
                               style={[
@@ -385,9 +375,9 @@ export const DropDownModel = React.memo(
                                     type === 'multi-select' &&
                                     (selectedItem.includes(item) ||
                                       local.includes(item)))) &&
-                                  type !== 'radio' && {
-                                    color: COLORS.primaryColor,
-                                  },
+                                type !== 'radio' && {
+                                  color: COLORS.primaryColor,
+                                },
 
                                 ((isObject(item) &&
                                   selectedItem === item?.id) ||
@@ -398,9 +388,9 @@ export const DropDownModel = React.memo(
                                     type === 'multi-select' &&
                                     (selectedItem.includes(item?.id) ||
                                       local.includes(item?.id)))) &&
-                                  type !== 'radio' && {
-                                    color: COLORS.primaryColor,
-                                  },
+                                type !== 'radio' && {
+                                  color: COLORS.primaryColor,
+                                },
                               ]}>
                               {isString(item) ? item : item?.name}
                             </Text>
@@ -412,7 +402,7 @@ export const DropDownModel = React.memo(
                                   (type === 'multi-select' &&
                                     (selectedItem.includes(item) ||
                                       local.includes(item)))) &&
-                                type !== 'radio' ? (
+                                  type !== 'radio' ? (
                                   <View style={style.iconView}>
                                     <Image
                                       source={AllIcons.RoundCheckedCircle}
@@ -447,11 +437,11 @@ export const DropDownModel = React.memo(
                                   )
                                 )
                               ) : (selectedItem === item?.id ||
-                                  (type === 'phone' &&
-                                    item?.name.includes(selectedItem)) ||
-                                  (type === 'multi-select' &&
-                                    (selectedItem.includes(item?.id) ||
-                                      local.includes(item?.id)))) &&
+                                (type === 'phone' &&
+                                  item?.name.includes(selectedItem)) ||
+                                (type === 'multi-select' &&
+                                  (selectedItem.includes(item?.id) ||
+                                    local.includes(item?.id)))) &&
                                 type !== 'radio' ? (
                                 <View style={style.iconView}>
                                   <Image

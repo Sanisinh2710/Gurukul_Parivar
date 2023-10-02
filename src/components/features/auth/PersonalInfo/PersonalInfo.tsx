@@ -9,7 +9,6 @@ import {
   PersonalInfoFormValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
-import { COLORS, CustomFonts } from '../../../../utils';
 import { PersonalInfoFormValidationSchema } from '../../../../validations';
 import { FormInput, Loader, PrimaryButton, SecondaryButton } from '../../../ui';
 import { PersonalInfoStyle } from './styles';
@@ -467,22 +466,11 @@ export const PersonalInfo = React.memo(
                         }}
                       />
                       <View
-                        style={{
-
-
-                          flexDirection: 'row',
-                          gap: 10,
-                          marginVertical: '5%',
-                        }}>
+                        style={personalInfoStyle.checkBoxOuterView}>
                         <View
-                          style={{
-                            height: 20,
-                            width: 20,
-                            alignItems: 'center',
-                            borderRadius: 5,
-                            borderColor: COLORS.primaryColor,
+                          style={[personalInfoStyle.checkBoxMainView, {
                             borderWidth: checkedArray[mainindex] ? 0 : 1,
-                          }}
+                          }]}
                           onTouchEnd={() => {
                             let newArr = JSON.parse(
                               JSON.stringify(checkedArray),
@@ -497,21 +485,12 @@ export const PersonalInfo = React.memo(
                           {checkedArray[mainindex] ? (
                             <Image
                               source={AllIcons.Checkbox}
-                              style={{
-                                height: '100%',
-                                width: '100%',
-                              }}
+                              style={personalInfoStyle.commonBtnStyle}
                             />
                           ) : null}
                         </View>
                         <Text
-                          style={{
-                            ...CustomFonts.body.medium12,
-                            fontSize: 14,
-                            fontWeight: '400',
-                            lineHeight: 18.9,
-                            color: COLORS.lightModetextColor,
-                          }}>
+                          style={personalInfoStyle.whatsappTxtStyle}>
                           {t('personalInfo.MobileFieldCheckbox')}
                         </Text>
                       </View>
