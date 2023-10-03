@@ -752,6 +752,70 @@ export const GurukulConnect = ({
     setLoader(false);
   };
 
+  const downloadPress = async (item: any) => {
+    if (isDownloading?.find(locitem => locitem.index === item?.id)?.status) {
+      return;
+    } else {
+      const newDownLoad: {
+        index: number;
+        status: boolean;
+      }[] = [...isDownloading];
+
+      newDownLoad.push({
+        index: item.id,
+        status: true,
+      });
+
+      setIsDownLoading(newDownLoad);
+
+      const res = await downloadSong(item?.url, item?.title);
+
+      if (res) {
+        let newDownLoad: {
+          index: number;
+          status: boolean;
+        }[] = [...isDownloading];
+        const ind = newDownLoad.findIndex(
+          locitem => locitem.index === item?.id,
+        );
+
+        newDownLoad[ind] = {
+          index: item.id,
+          status: false,
+        };
+        setIsDownLoading(newDownLoad);
+      }
+    }
+  };
+
+  const onAlbumPress = async (item :any) => {
+    if (item.is_multiple) {
+      if (item?.id && item?.title) {
+        if (
+          activeTrack &&
+          activeTrackPosition &&
+          activeTrack?.album &&
+          activeTrack?.albumId !== null &&
+          activeTrack?.albumId !== undefined &&
+          activeTrack?.albumId == item?.id
+        ) {
+          await onAlbumClick(
+            activeTrack?.albumId,
+            activeTrack?.album,
+            true,
+            activeTrack,
+            activeTrackPosition,
+            playbackState === State.Playing,
+          );
+        } else {
+          await onAlbumClick(item?.id, item?.title);
+        }
+      }
+    } else {
+      return;
+    }
+  };
+
   if (isPlayerReady === false || loader || filtering || isSearching) {
     return <Loader screenHeight={'100%'} />;
   } else {
@@ -781,10 +845,7 @@ export const GurukulConnect = ({
           overScrollMode="always"
           contentContainerStyle={[
             commonStyle.commonContentView,
-            {
-              paddingBottom: '20%',
-              marginTop: '3%',
-            },
+            style.scrollViewContent,
           ]}
           nestedScrollEnabled={true}
           refreshControl={
@@ -806,15 +867,11 @@ export const GurukulConnect = ({
           {Array.isArray(selectedItem) &&
             selectedItem.length > 0 &&
             setupMode !== 'ALBUM' && (
-              <View
-                style={style.filterDataContainer}>
+              <View style={style.filterDataContainer}>
                 {selectedItem.map((mainitem, index) => {
                   return (
-                    <View
-                      key={index}
-                      style={style.filterDataView}>
-                      <Text
-                        style={style.filterDataText}>
+                    <View key={index} style={style.filterDataView}>
+                      <Text style={style.filterDataText}>
                         {categoryList.find(item => item.id === mainitem)?.name}
                       </Text>
                       <View
@@ -864,33 +921,7 @@ export const GurukulConnect = ({
                             : 'rgba(172, 43, 49, 0.3)',
                       },
                     ]}
-                    onTouchEnd={
-                      item.is_multiple
-                        ? async e => {
-                            if (item?.id && item?.title) {
-                              if (
-                                activeTrack &&
-                                activeTrackPosition &&
-                                activeTrack?.album &&
-                                activeTrack?.albumId !== null &&
-                                activeTrack?.albumId !== undefined &&
-                                activeTrack?.albumId == item?.id
-                              ) {
-                                await onAlbumClick(
-                                  activeTrack?.albumId,
-                                  activeTrack?.album,
-                                  true,
-                                  activeTrack,
-                                  activeTrackPosition,
-                                  playbackState === State.Playing,
-                                );
-                              } else {
-                                await onAlbumClick(item?.id, item?.title);
-                              }
-                            }
-                          }
-                        : e => {}
-                    }>
+                    onTouchEnd={() => onAlbumPress(item)}>
                     <View>
                       <Text style={style.songTitle}>
                         {item?.id}
@@ -900,20 +931,16 @@ export const GurukulConnect = ({
                       <Text style={style.songArtist}>{item?.description}</Text>
                     </View>
                     {item.is_multiple === true ? (
-                      <View style={{flexDirection: 'row'}}>
-                        <View style={{height: 15, width: 15}}>
+                      <View style={style.albumView}>
+                        <View style={style.albumIconView}>
                           <Image
-                            style={[style.imageStyle , {
-                              transform : [{rotate : '270deg'}]
-                            }]}
+                            style={[style.imageStyle, style.albumIconRotate]}
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
-                        <View style={{height: 15, width: 15, marginLeft: -7}}>
+                        <View style={[style.albumIconView, {marginLeft: -7}]}>
                           <Image
-                             style={[style.imageStyle , {
-                              transform : [{rotate : '270deg'}]
-                            }]}
+                            style={[style.imageStyle, style.albumIconRotate]}
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
@@ -922,47 +949,7 @@ export const GurukulConnect = ({
                       <View style={style.imageContainer}>
                         <View
                           style={style.imageView}
-                          onTouchEnd={
-                            isDownloading?.find(
-                              locitem => locitem.index === item?.id,
-                            )?.status
-                              ? () => {}
-                              : async e => {
-                                  const newDownLoad: {
-                                    index: number;
-                                    status: boolean;
-                                  }[] = [...isDownloading];
-
-                                  newDownLoad.push({
-                                    index: item.id,
-                                    status: true,
-                                  });
-
-                                  setIsDownLoading(newDownLoad);
-
-                                  const res = await downloadSong(
-                                    item?.url,
-                                    item?.title,
-                                  );
-
-                                  if (res) {
-                                    let newDownLoad: {
-                                      index: number;
-                                      status: boolean;
-                                    }[] = [...isDownloading];
-                                    const ind = newDownLoad.findIndex(
-                                      locitem => locitem.index === item?.id,
-                                    );
-
-                                    newDownLoad[ind] = {
-                                      index: item.id,
-                                      status: false,
-                                    };
-
-                                    setIsDownLoading(newDownLoad);
-                                  }
-                                }
-                          }>
+                          onTouchEnd={() => downloadPress(item)}>
                           {isDownloading?.find(
                             locitem => locitem.index === item?.id,
                           )?.status ? (
@@ -988,7 +975,7 @@ export const GurukulConnect = ({
                             onTouchEnd={async () => {
                               await handleControl(item?.id);
                             }}
-                            style={{height: 24, width: 24}}>
+                            style={style.songPlayPauseView}>
                             <Image
                               style={style.imageStyle}
                               source={
@@ -1006,10 +993,7 @@ export const GurukulConnect = ({
                 )}
               />
             ) : (
-              <View
-                style={{
-                  height: Dimensions.get('window').height * 0.6,
-                }}>
+              <View style={style.noDataView}>
                 <NoData />
               </View>
             )}
@@ -1023,7 +1007,7 @@ export const GurukulConnect = ({
                 activeTrack={activeTrack}
                 position={position}
                 duration={duration}
-              />   
+              />
             </View>
           )}
         </>

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet,Dimensions} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../../utils';
 
@@ -6,6 +6,10 @@ export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
+    scrollViewContent :{
+      paddingBottom: '20%',
+      marginTop: '3%',
+    },
     modelSearchView: {
       width: '100%',
       flexDirection: 'row',
@@ -169,6 +173,15 @@ export const styles = () => {
       flex: 1,
       tintColor: COLORS.primaryColor,
       resizeMode: 'contain',
+    },
+    albumView :{ flexDirection: 'row' },
+    albumIconView :{ height: 15, width: 15 },
+    albumIconRotate :{
+      transform : [{rotate : '270deg'}]
+    },
+    songPlayPauseView :{ height: 24, width: 24 },
+    noDataView :{
+      height: Dimensions.get('window').height * 0.6,
     }
   });
 };

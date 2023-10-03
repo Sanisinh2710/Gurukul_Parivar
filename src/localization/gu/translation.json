@@ -3,6 +3,8 @@
     "common": {
       "Signin": "સાઇન ઇન કરો",
       "Signup": "સાઇન અપ કરો",
+      "OR": "અથવા",
+      "ContinueAsGuest": "ગેસ્ટ લૉગિન",
       "Search": "શોધો",
       "SearchSpeech": "ભાષણ શોધો",
       "Reset": "રીસેટ",

@@ -91,7 +91,7 @@ export const GurukulEvents = ({
         }}
         headerTitle={'Gurukul Events'}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1, marginTop: '3%'}]}>
+      <View style={[commonstyle.commonContentView,style.wrapperView]}>
         {loader ? (
           <Loader />
         ) : (
@@ -113,7 +113,7 @@ export const GurukulEvents = ({
                 // value={searchvalue}
                 placeholder={t('common.Search')}
                 placeholderTextColor={COLORS.lightModetextColor}
-                style={[style.formTextInput, {width: '80%'}]}
+                style={[style.formTextInput]}
                 onChangeText={val => {
                   searchEvent(val.trim());
                 }}
@@ -146,7 +146,7 @@ export const GurukulEvents = ({
                 );
               })
             ) : (
-              <View style={{height: Dimensions.get('window').height * 0.65}}>
+              <View style={style.noDataView}>
                 <NoData />
               </View>
             )}

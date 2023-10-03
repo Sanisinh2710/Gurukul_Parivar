@@ -1,17 +1,17 @@
 import React from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {FlatList, Image, ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { AllIcons } from '../../../../../assets/icons';
 import {
   PersonalInfoFormValidationSchemaType,
   SupportedFormInputTypes,
 } from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
-import {PersonalInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+import { COLORS, CustomFonts } from '../../../../utils';
+import { PersonalInfoFormValidationSchema } from '../../../../validations';
+import { FormInput, Loader, PrimaryButton, SecondaryButton } from '../../../ui';
 
 type PersonalInfoProps = {
   isParentLoading: boolean;
@@ -38,7 +38,7 @@ export const PersonalInfo = React.memo(
     rightButtonProps,
     onSubmitEvent,
   }: PersonalInfoProps): React.JSX.Element => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
@@ -54,8 +54,6 @@ export const PersonalInfo = React.memo(
         }),
       ] || [false],
     );
-
-    console.log(initialValues, 'intial personal in fo');
 
     const [isArraySet, setIsArrayset] = React.useState(false);
 
@@ -75,8 +73,8 @@ export const PersonalInfo = React.memo(
         placeholder: '',
         type: 'radio',
         menuList: [
-          {name: 'Male', icon: AllIcons.Male},
-          {name: 'Female', icon: AllIcons.Female},
+          { name: 'Male', icon: AllIcons.Male },
+          { name: 'Female', icon: AllIcons.Female },
         ],
         customProps: {
           showHeading: true,
@@ -128,7 +126,7 @@ export const PersonalInfo = React.memo(
       handleSubmit,
       getValues,
       setValue,
-      formState: {errors},
+      formState: { errors },
     } = useForm<PersonalInfoFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(PersonalInfoFormValidationSchema()),
@@ -227,7 +225,6 @@ export const PersonalInfo = React.memo(
     }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      console.log(data, 'on right click');
       if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
@@ -301,14 +298,14 @@ export const PersonalInfo = React.memo(
               <FlatList
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{gap: 15}}
+                contentContainerStyle={{ gap: 15 }}
                 data={[...PerosnalInfoForm1InputList]}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   return (
                     <Controller
                       control={control}
                       name={item.name}
-                      render={({field: {onChange, onBlur, value}}) => {
+                      render={({ field: { onChange, onBlur, value } }) => {
                         return (
                           <FormInput
                             icon={item.icon}
@@ -330,13 +327,17 @@ export const PersonalInfo = React.memo(
                   );
                 }}
               />
-              <View style={{gap: 15, marginTop: '5%'}}>
+              <View style={{ gap: 15, marginTop: '5%' }}>
                 {emailfield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          style={{
+                            height: 30,
+                            width: 30,
+                            alignSelf: 'flex-end',
+                          }}
                           onTouchEnd={() => emailremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
@@ -350,7 +351,7 @@ export const PersonalInfo = React.memo(
                       <Controller
                         control={control}
                         name={`emailInfo.${mainindex}.email`}
-                        render={({field: {onChange, onBlur, value}}) => {
+                        render={({ field: { onChange, onBlur, value } }) => {
                           return (
                             <FormInput
                               type={'email'}
@@ -396,7 +397,11 @@ export const PersonalInfo = React.memo(
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{height: 30, width: 30, alignSelf: 'flex-end'}}
+                          style={{
+                            height: 30,
+                            width: 30,
+                            alignSelf: 'flex-end',
+                          }}
                           onTouchEnd={() => mobileremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
@@ -410,7 +415,7 @@ export const PersonalInfo = React.memo(
                       <Controller
                         control={control}
                         name={`mobilenumInfo.${mainindex}.mobilenum`}
-                        render={({field: {onChange, onBlur, value}}) => {
+                        render={({ field: { onChange, onBlur, value } }) => {
                           return (
                             <FormInput
                               type={'phone'}
@@ -552,7 +557,7 @@ export const PersonalInfo = React.memo(
                       : t('common.Save&Next')
                   }
                   onPress={handleSubmit(onSubmit)}
-                  buttonStyle={{width: '47%'}}
+                  buttonStyle={{ width: '47%' }}
                 />
               </View>
             </>

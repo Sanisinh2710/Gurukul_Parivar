@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {BASE_URL} from '@env';
-import {useTranslation} from 'react-i18next';
-import {View} from 'react-native';
+import { BASE_URL } from '@env';
+import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../../assets/styles';
+import { CommonStyle } from '../../../../../assets/styles';
 import {
   AdressInfo,
   EduBusinessInfo,
@@ -13,6 +13,8 @@ import {
   ScreenHeader,
   ScreenWrapper,
 } from '../../../../components';
+import { SET_USER_DATA } from '../../../../redux/ducks/userSlice';
+import { useAppDispatch } from '../../../../redux/hooks';
 import {
   AddressInfoPostApi,
   CallBackButtonAxiosGetForWizardFormEdit,
@@ -21,11 +23,10 @@ import {
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
   getAuthToken,
-  setUserData,
   setUserProfilingDone,
 } from '../../../../services';
-import {ProfileSignupEditProps} from '../../../../types';
-import {CustomLocalDateSplitAndFormat, isString} from '../../../../utils';
+import { ProfileSignupEditProps } from '../../../../types';
+import { CustomLocalDateSplitAndFormat, isString } from '../../../../utils';
 
 export const ProfileSignupWithEdit = ({
   route,
@@ -33,7 +34,7 @@ export const ProfileSignupWithEdit = ({
 }: ProfileSignupEditProps): React.JSX.Element => {
   const commonStyle = CommonStyle();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const paramsFormstep = route.params?.formStep;
 
@@ -52,7 +53,9 @@ export const ProfileSignupWithEdit = ({
 
   const [isParentLoading, setIsParentLoading] = React.useState(false);
 
-  const [formData, setFormData] = React.useState<{[key: string]: any}>({
+  const dispatch = useAppDispatch();
+
+  const [formData, setFormData] = React.useState<{ [key: string]: any }>({
     completeProfile: {
       profile: '',
       branch_id: null,
@@ -64,7 +67,7 @@ export const ProfileSignupWithEdit = ({
       dob: '',
       blood_group: '',
       emailInfo: [
-        {email: getAuthToken().loginData.primary_email, secondary: false},
+        { email: getAuthToken().loginData.primary_email, secondary: false },
       ],
       mobilenumInfo: [
         {
@@ -273,14 +276,12 @@ export const ProfileSignupWithEdit = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            const setuserdataresponse = setUserData(finalData);
+            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
 
-            if (setuserdataresponse === 'SUCCESS') {
-              const setuserprofileDone = setUserProfilingDone(true);
-              if (setuserprofileDone === 'SUCCESS') {
-                setwidth(width + 25);
-                setFormStep(formStep + 1);
-              }
+            const setuserprofileDone = setUserProfilingDone(true);
+            if (setuserprofileDone === 'SUCCESS') {
+              setwidth(width + 25);
+              setFormStep(formStep + 1);
             }
           }
         } else {
@@ -431,18 +432,17 @@ export const ProfileSignupWithEdit = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            const setuserdataresponse = setUserData(finalData);
+            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
 
-            if (setuserdataresponse === 'SUCCESS') {
-              const setuserprofileDone = setUserProfilingDone(true);
-              if (setuserprofileDone === 'SUCCESS') {
-                //After successfull save and exit:-
-                // navigation.goBack();
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'BottomNavBar'}],
-                });
-              }
+            const setuserprofileDone = setUserProfilingDone(true);
+            if (setuserprofileDone === 'SUCCESS') {
+              //After successfull save and exit:-
+              // navigation.goBack();
+              // navigation.reset({
+              //   index: 0,
+              //   routes: [{name: 'BottomNavBar'}],
+              // });
+              navigation.goBack();
             }
           }
         } else {
@@ -630,7 +630,7 @@ export const ProfileSignupWithEdit = ({
           />
         ) : formStep === 2 ? (
           <AdressInfo
-            initialValues={{address_details: [...formData.address_details]}}
+            initialValues={{ address_details: [...formData.address_details] }}
             formData={formData}
             setFormData={setFormData}
             onSubmitEvent={submitButton}

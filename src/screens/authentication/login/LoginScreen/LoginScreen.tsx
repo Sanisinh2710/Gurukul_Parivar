@@ -24,21 +24,24 @@ import {
   PrimaryButton,
   ScreenWrapper,
 } from '../../../../components';
+import {SET_USER_DATA} from '../../../../redux/ducks/userSlice';
+import {useAppDispatch} from '../../../../redux/hooks';
 import {
+  GuestLoginGetApi,
   LoginApi,
   PersonalInfoGetDetailsApi,
   getAuthCredentialsForAutoFill,
   isProfilingDone,
   setAuthCredentialsForAutoFill,
   setAuthToken,
-  setUserData,
 } from '../../../../services';
 import {storage} from '../../../../storage';
 import {
+  CurrUserDataTypeNested,
   LoginFormValidationSchemaType,
   LoginScreenProps,
 } from '../../../../types';
-import {COLORS, CustomFonts, Languages} from '../../../../utils';
+import {COLORS, Languages} from '../../../../utils';
 import {LoginFormValidationSchema} from '../../../../validations';
 import {LoginScreenstyle} from './style';
 
@@ -62,7 +65,11 @@ export const LoginScreen = ({
   const [language, setLanguage] = React.useState(Languages.gu);
 
   const [remeberMe, setRememberMe] = React.useState(
-    getAuthCredentialsForAutoFill().resType === 'SUCCESS' ? true : false,
+    getAuthCredentialsForAutoFill().resType === 'SUCCESS' &&
+      getAuthCredentialsForAutoFill().userdata.email !== '' &&
+      getAuthCredentialsForAutoFill().userdata.password !== ''
+      ? true
+      : false,
   );
 
   const {
@@ -78,6 +85,8 @@ export const LoginScreen = ({
     resolver: yupResolver(LoginFormValidationSchema()),
     mode: 'onChange',
   });
+
+  const dispatch = useAppDispatch();
 
   React.useMemo(() => {
     setIsloading(true);
@@ -160,8 +169,8 @@ export const LoginScreen = ({
       if (response.resType === 'SUCCESS') {
         const resType = setAuthToken({
           primary_email: data.email,
-          token: response.data.token,
-          is_profile_updated: true,
+          token: response?.data?.token,
+          is_profile_updated: response?.data?.is_profile_updated,
         });
         if (resType === 'SUCCESS') {
           const isProfileSignupDone = isProfilingDone();
@@ -181,13 +190,10 @@ export const LoginScreen = ({
 
                 finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-                const setuserdataresponse = setUserData(finalData);
-
-                if (setuserdataresponse === 'SUCCESS') {
-                  navigation.replace('BottomNavBar');
-                }
+                dispatch(SET_USER_DATA({userData: finalData, role: 'USER'}));
+                navigation.replace('BottomNavBar');
               } else {
-                navigation.replace('ProfileSignup');
+                navigation.replace('Success', {type: 'Login'});
               }
             } else {
               setIsApiloading(false);
@@ -207,19 +213,58 @@ export const LoginScreen = ({
     [],
   );
 
+  const remeberMeOnPress = () => {
+    setRememberMe(!remeberMe);
+  };
+
+  const forgotPassOnPress = () => {
+    // Redirect to forgetOtp screen:----------
+    navigation.navigate('ForgotPassword');
+  };
+
+  const signUpOnPress = () => {
+    navigation.navigate('Register');
+  };
+
+  const continueGuestOnPress = async () => {
+    setIsloading(true);
+
+    const response = await GuestLoginGetApi();
+    if (response.resType === 'SUCCESS') {
+      const resType = setAuthToken({
+        primary_email: '',
+        token: response?.data?.token,
+        is_profile_updated: true,
+      });
+
+      if (resType === 'SUCCESS') {
+        dispatch(
+          SET_USER_DATA({
+            userData: {} as CurrUserDataTypeNested,
+            role: 'GUEST',
+          }),
+        );
+        navigation.replace('BottomNavBar');
+      } else {
+        Toast.show(resType, 2);
+      }
+    } else {
+      Toast.show(response.message, 2);
+    }
+
+    setIsloading(false);
+  };
+
   if (isLoading) {
     return <Loader />;
   } else {
     return (
       <ScreenWrapper>
         <ScrollView
-          keyboardDismissMode="on-drag"
-          automaticallyAdjustKeyboardInsets={true}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: '5%',
-          }}>
+          contentContainerStyle={style.loginContainerStyle}>
           <KeyboardAvoidingView
+            keyboardVerticalOffset={-150}
             behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
             <View style={commonStyle.commonContentView}>
               {/* Header:------------------------------------------------------------------------ */}
@@ -284,61 +329,26 @@ export const LoginScreen = ({
               </View>
               <View style={style.FooterInputs}>
                 <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 5,
-                  }}>
-                  <View
-                    onTouchEnd={() => {
-                      setRememberMe(!remeberMe);
-                    }}>
+                  style={style.rememberMeViewStyle}
+                  onTouchEnd={remeberMeOnPress}>
+                  <View>
                     {remeberMe ? (
-                      <View
-                        style={{
-                          width: 16,
-                          height: 16,
-                          alignItems: 'center',
-                        }}>
+                      <View style={style.filledBoxView}>
                         <Image
                           source={AllIcons.CheckBoxOutline}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'contain',
-                          }}
+                          style={style.filledBoxTick}
                         />
                       </View>
                     ) : (
-                      <View
-                        style={{
-                          width: 16,
-                          height: 16,
-                          borderRadius: 4,
-                          borderColor: COLORS.primaryColor,
-                          borderWidth: 1,
-                        }}
-                      />
+                      <View style={style.emptyBoxView} />
                     )}
                   </View>
 
-                  <Text
-                    style={{
-                      ...CustomFonts.body.regular14,
-                      color: 'rgba(63, 63, 63, 1)',
-                    }}>
+                  <Text style={style.rememeberMeText}>
                     {t('loginScreen.RememberMe')}
                   </Text>
                 </View>
-                <Text
-                  onPress={() => {
-                    // Redirect to forgetOtp screen:----------
-                    navigation.navigate('ForgotPassword');
-                  }}
-                  style={{
-                    ...CustomFonts.body.regular14,
-                    color: COLORS.primaryColor,
-                  }}>
+                <Text onPress={forgotPassOnPress} style={style.forgotPassText}>
                   {t('ForgotPassword.ForgotPassword')}
                 </Text>
               </View>
@@ -360,16 +370,22 @@ export const LoginScreen = ({
                   onPress={handleSubmit(onSubmit)}
                   disabled={disabled}
                 />
-                <Text style={[style.footerText, {alignSelf: 'center'}]}>
-                  {t('loginScreen.DontHaveAc')}{' '}
-                  <Text
-                    style={[style.footerRedText]}
-                    onPress={() => {
-                      navigation.navigate('Register');
-                    }}>
-                    {t('common.Signup').toLocaleLowerCase()}
+                <View style={[style.footerTextsView]}>
+                  <Text style={[style.footerText1]} onPress={signUpOnPress}>
+                    {t('loginScreen.DontHaveAc')}{' '}
+                    <Text style={[style.footerRedText]}>
+                      {t('common.Signup').toLocaleLowerCase()}
+                    </Text>
                   </Text>
-                </Text>
+
+                  <Text style={[style.footerText2]}>{t('common.OR')}</Text>
+
+                  <Text
+                    style={[style.footerText3]}
+                    onPress={continueGuestOnPress}>
+                    {t('common.ContinueAsGuest')}
+                  </Text>
+                </View>
 
                 {/* <Text style={style.footerText}>
                 {t('loginScreen.FooterText1')}{' '}

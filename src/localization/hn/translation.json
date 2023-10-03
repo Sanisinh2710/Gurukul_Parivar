@@ -3,6 +3,8 @@
     "common": {
       "Signin": "दाखिल करें",
       "Signup": "साइन अप करें",
+      "OR": "या",
+      "ContinueAsGuest": "गेस्ट लॉग-इन",
       "Search": "खोजे",
       "SearchSpeech": "भाषण खोजे",
       "Reset": "रीसेट",
