@@ -1,20 +1,14 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useTranslation} from 'react-i18next';
+import {RootStackParamList} from '@types';
 import {View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {styles} from './styles';
 
 export const DailyQuiz = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  const {t, i18n} = useTranslation();
-  const style = styles();
-
   const commonstyle = CommonStyle();
 
   return (

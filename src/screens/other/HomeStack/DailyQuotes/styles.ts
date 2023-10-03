@@ -1,25 +1,22 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../../redux/hooks';
-import {CustomFonts} from '../../../../utils';
+import {CustomFonts} from '@utils';
+import {StyleSheet} from 'react-native';
 
 export const styles = () => {
-  const theme = useAppSelector(state => state.theme.theme);
-
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.large36,
       color: 'black',
     },
     image: {
-      resizeMode:'contain',
-      height:'100%',
+      resizeMode: 'contain',
+      height: '100%',
       width: '100%',
     },
-    quote:{
+    quote: {
       ...CustomFonts.body.large14,
-      fontSize:16,
+      fontSize: 16,
       color: 'black',
-      lineHeight:20,
-    }
+      lineHeight: 20,
+    },
   });
 };

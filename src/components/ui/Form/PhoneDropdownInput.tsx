@@ -1,11 +1,11 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {DropDownModel} from '@components';
+import {useAppSelector} from '@redux/hooks';
+import {AllCountryCodes, countries} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, TextInput, View} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {AllCountryCodes, countries} from '../../../utils';
-import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
 type PhoneDropdownInputProps = {

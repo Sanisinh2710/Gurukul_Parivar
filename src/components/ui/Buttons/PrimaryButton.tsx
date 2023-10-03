@@ -1,8 +1,8 @@
 import React from 'react';
 
+import {useAppSelector} from '@redux/hooks';
+import {COLORS} from '@utils';
 import {Pressable, Text, TouchableOpacity, View} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
-import {COLORS} from '../../../utils';
 import {ButtonStyles} from './style';
 
 type Props = {

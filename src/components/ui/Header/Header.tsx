@@ -1,4 +1,10 @@
 import React from 'react';
+
+import {AllIcons} from '@assets';
+import {RoundedIcon} from '@components';
+import {useAppSelector} from '@redux/hooks';
+import {Theme} from '@types';
+import {COLORS, CustomFonts} from '@utils';
 import {
   Dimensions,
   Image,
@@ -7,11 +13,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {Theme} from '../../../types';
-import {COLORS, CustomFonts} from '../../../utils';
-import {RoundedIcon} from '../RoundedIcon';
 
 type ScreenHeaderProps = {
   headerTitle?: string;

@@ -1,8 +1,8 @@
+import {AllImages} from '@assets';
+import {Theme} from '@types';
 import React from 'react';
 import {ImageBackground, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {AllImages} from '../../../../assets/images';
-import {Theme} from '../../../types';
 import {style} from './style';
 
 type CustomStatusBarProps = {

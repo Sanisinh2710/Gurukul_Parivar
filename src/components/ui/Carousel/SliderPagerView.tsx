@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {BASE_URL} from '@env';
+import {COLORS} from '@utils';
 import {
   ActivityIndicator,
   Dimensions,
@@ -8,7 +9,6 @@ import {
   Image,
   View,
 } from 'react-native';
-import {COLORS} from '../../../utils';
 import {Snail} from './SnailIndicator';
 import {style} from './styles';
 

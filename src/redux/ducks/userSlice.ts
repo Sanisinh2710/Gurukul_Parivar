@@ -1,6 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {CurrUserDataTypeNested, CurrentUserDataType} from '@types';
 import {WritableDraft} from 'immer/dist/internal';
-import {CurrUserDataTypeNested, CurrentUserDataType} from '../../types';
 
 let initialState: CurrentUserDataType = {
   userRole: 'GUEST',

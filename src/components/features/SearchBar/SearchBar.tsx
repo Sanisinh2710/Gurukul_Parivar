@@ -1,9 +1,9 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {isObjectArray, isStringArray} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {Image, StyleProp, TextInput, View, ViewStyle} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {isObjectArray, isStringArray} from '../../../utils';
 import {styles} from './style';
 
 type SearchBarPropType = {

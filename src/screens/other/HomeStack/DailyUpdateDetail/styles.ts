@@ -1,5 +1,5 @@
+import {CustomFonts} from '@utils';
 import {StyleSheet} from 'react-native';
-import {CustomFonts} from '../../../../utils';
 
 export const styles = () => {
   return StyleSheet.create({

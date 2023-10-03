@@ -1,4 +1,7 @@
 import React from 'react';
+
+import {AllIcons} from '@assets';
+import {COLORS, months, weekDays} from '@utils';
 import {
   Image,
   Modal,
@@ -9,8 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {COLORS, months, weekDays} from '../../../utils';
 
 const minAllowedDOBDate = new Date();
 minAllowedDOBDate.setFullYear(minAllowedDOBDate.getFullYear() - 18);

@@ -1,10 +1,6 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import Toast from 'react-native-simple-toast';
-import { CommonStyle } from '../../../../../assets/styles';
+import {CommonStyle} from '@assets';
 import {
   AdressInfo,
   EduBusinessInfo,
@@ -12,9 +8,10 @@ import {
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
-} from '../../../../components';
-import { SET_USER_DATA } from '../../../../redux/ducks/userSlice';
-import { useAppDispatch } from '../../../../redux/hooks';
+} from '@components';
+import {BASE_URL} from '@env';
+import {SET_USER_DATA} from '@redux/ducks/userSlice';
+import {useAppDispatch} from '@redux/hooks';
 import {
   AddressInfoPostApi,
   CallBackButtonAxiosGetForWizardFormEdit,
@@ -24,9 +21,12 @@ import {
   PersonalInfoSaveDetailsApi,
   getAuthToken,
   setUserProfilingDone,
-} from '../../../../services';
-import { ProfileSignupEditProps } from '../../../../types';
-import { CustomLocalDateSplitAndFormat, isString } from '../../../../utils';
+} from '@services';
+import {ProfileSignupEditProps} from '@types';
+import {CustomLocalDateSplitAndFormat, isString} from '@utils';
+import {useTranslation} from 'react-i18next';
+import {View} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 export const ProfileSignupWithEdit = ({
   route,
@@ -34,7 +34,7 @@ export const ProfileSignupWithEdit = ({
 }: ProfileSignupEditProps): React.JSX.Element => {
   const commonStyle = CommonStyle();
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   const paramsFormstep = route.params?.formStep;
 
@@ -55,7 +55,7 @@ export const ProfileSignupWithEdit = ({
 
   const dispatch = useAppDispatch();
 
-  const [formData, setFormData] = React.useState<{ [key: string]: any }>({
+  const [formData, setFormData] = React.useState<{[key: string]: any}>({
     completeProfile: {
       profile: '',
       branch_id: null,
@@ -67,7 +67,7 @@ export const ProfileSignupWithEdit = ({
       dob: '',
       blood_group: '',
       emailInfo: [
-        { email: getAuthToken().loginData.primary_email, secondary: false },
+        {email: getAuthToken().loginData.primary_email, secondary: false},
       ],
       mobilenumInfo: [
         {
@@ -276,7 +276,7 @@ export const ProfileSignupWithEdit = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
+            dispatch(SET_USER_DATA({userData: finalData, role: 'USER'}));
 
             const setuserprofileDone = setUserProfilingDone(true);
             if (setuserprofileDone === 'SUCCESS') {
@@ -432,7 +432,7 @@ export const ProfileSignupWithEdit = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
+            dispatch(SET_USER_DATA({userData: finalData, role: 'USER'}));
 
             const setuserprofileDone = setUserProfilingDone(true);
             if (setuserprofileDone === 'SUCCESS') {
@@ -630,7 +630,7 @@ export const ProfileSignupWithEdit = ({
           />
         ) : formStep === 2 ? (
           <AdressInfo
-            initialValues={{ address_details: [...formData.address_details] }}
+            initialValues={{address_details: [...formData.address_details]}}
             formData={formData}
             setFormData={setFormData}
             onSubmitEvent={submitButton}

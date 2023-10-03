@@ -1,24 +1,20 @@
 import React from 'react';
 
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
+import {AllIcons, AllImages, CommonStyle} from '@assets';
 import {
-  DropDownModel,
   Loader,
   NoData,
   PrimaryButton,
   ScreenHeader,
   ScreenWrapper,
-} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
+} from '@components';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailyQuizGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {CustomFonts} from '@utils';
+import {useTranslation} from 'react-i18next';
+import {Dimensions, Image, ScrollView, Text, View} from 'react-native';
 import {styles} from './styles';
-import {DailyQuizGetApi} from '../../../../services';
-import {BASE_URL} from '@env';
-import {CustomFonts} from '../../../../utils';
 
 export const DailyQuiz = ({
   navigation,

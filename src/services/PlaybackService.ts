@@ -1,10 +1,10 @@
+import {SongType} from '@types';
 import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
   Event,
   RepeatMode,
 } from 'react-native-track-player';
-import {SongType} from '../types';
 
 export async function setupPlayer() {
   let isSetup = false;
@@ -50,7 +50,7 @@ export async function resetAndAddTracks(songs: Array<SongType>) {
   await TrackPlayer.setRepeatMode(RepeatMode.Queue);
 }
 
-export const PlaybackService =  async function() {
+export const PlaybackService = async function () {
   TrackPlayer.addEventListener(Event.RemotePause, () => {
     console.log('Event.RemotePause');
     TrackPlayer.pause();
@@ -74,4 +74,4 @@ export const PlaybackService =  async function() {
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, event => {
     console.log('Event.PlaybackQueueEnded', event);
   });
-}
+};

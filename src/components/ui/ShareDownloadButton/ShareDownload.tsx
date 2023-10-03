@@ -13,16 +13,15 @@ import {
   View,
 } from 'react-native';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {DropDownModel} from '@components';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import {COLORS, CustomFonts} from '@utils';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {COLORS, CustomFonts} from '../../../utils';
-import {DropDownModel} from '../Modal';
 import {styles} from './style';
 
 type ShareDownloadProps = {
@@ -57,38 +56,26 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const onShare = async () => {
     setIsSharing(true);
     try {
-      await downloadImage(true);
-      let ext: any = REMOTE_IMAGE_PATH && getExtention(REMOTE_IMAGE_PATH);
-      ext = '.' + ext[0];
+      const sharedPath = await downloadImage(true);
 
       const {fs} = RNFetchBlob;
 
-      const {PictureDir, DocumentDir} = fs.dirs;
+      const imagePath = sharedPath;
+      if (imagePath) {
+        const fileContent = await fs.readFile(imagePath, 'base64');
+        const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
-      const aPath = Platform.select({
-        ios: DocumentDir,
-        android: PictureDir,
-      });
+        const options = {
+          title: 'Share via',
+          message: 'Jay Swaminarayana..!',
+          url: Platform.OS === 'android' ? base64Image : imagePath,
+          subject: 'Share Link', // for email
+        };
 
-      const storedImageForSharePath =
-        aPath + '/Gurukul-Parivar/Pictures/imageshare' + ext;
+        setIsSharing(false);
 
-      const imagePath = storedImageForSharePath;
-      const fileContent = await fs.readFile(imagePath, 'base64');
-      const base64Image = `data:image/jpeg;base64,${fileContent}`;
-
-      const options = {
-        title: 'Share via',
-        message: 'Jay Swaminarayana..!',
-        url: Platform.OS === 'android' ? base64Image : imagePath,
-        subject: 'Share Link', // for email
-      };
-
-      setIsSharing(false);
-
-      await Share.open(options);
-
-      setIsSharing(false);
+        await Share.open(options);
+      }
     } catch (error) {
       setIsSharing(false);
 
@@ -202,7 +189,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     setIsdownloading(false);
   };
 
-  const downloadImage = async (forShare?: boolean) => {
+  const downloadImage = async (wantPath?: boolean) => {
     // Main function to download the image
 
     // To add the time suffix in filename
@@ -223,12 +210,11 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       android: PictureDir,
     });
 
-    const finalPath = forShare
-      ? aPath + '/Gurukul-Parivar/Pictures/imageshare' + ext
-      : aPath +
-        '/Gurukul-Parivar/Pictures/images_' +
-        Math.floor(date.getTime() + date.getSeconds() / 2) +
-        ext;
+    const finalPath =
+      aPath +
+      '/Gurukul-Parivar/Pictures/images_' +
+      Math.floor(date.getTime() + date.getSeconds() / 2) +
+      ext;
 
     let options = Platform.select({
       ios: {
@@ -256,6 +242,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       const response = await config(options).fetch('GET', image_URL);
       if (Platform.OS === 'ios') {
         await CameraRoll.save(response.data, {type: 'auto'});
+      }
+      if (wantPath) {
+        return finalPath;
       }
     }
   };

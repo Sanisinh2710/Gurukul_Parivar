@@ -4,13 +4,9 @@ import MusicReducer from './ducks/musicSlice';
 import ThemeReducer from './ducks/themeslice';
 import CurrentUserReducer from './ducks/userSlice';
 
+import {reduxStorage} from '@storage';
+import {CurrentUserDataType, InitialSongsType, InitialThemeType} from '@types';
 import {PersistConfig, persistReducer} from 'redux-persist';
-import {reduxStorage} from '../storage';
-import {
-  CurrentUserDataType,
-  InitialSongsType,
-  InitialThemeType,
-} from '../types';
 
 const themePersistConfig: PersistConfig<InitialThemeType> = {
   key: 'myTheme',

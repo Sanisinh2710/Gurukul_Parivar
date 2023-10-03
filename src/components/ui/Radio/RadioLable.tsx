@@ -1,3 +1,4 @@
+import {COLORS} from '@utils';
 import React from 'react';
 import {
   Dimensions,
@@ -8,7 +9,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {COLORS} from '../../../utils';
 import {genstyle} from './style';
 
 interface Props {

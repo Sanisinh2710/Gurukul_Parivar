@@ -1,7 +1,5 @@
 import React, {ErrorInfo, ReactNode} from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {NoData} from '../../ui';
 import {ErrorFunc} from './ErrorFunc';
 interface Props {
   children: ReactNode;

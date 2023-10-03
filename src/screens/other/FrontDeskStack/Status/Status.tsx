@@ -1,19 +1,14 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailyQuizStatusApi} from '@services';
+import {RootStackParamList} from '@types';
+import {CustomFonts} from '@utils';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import * as Progress from 'react-native-progress';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {CustomFonts, QuizStatus} from '../../../../utils';
 import {styles} from './styles';
-import {DailyQuizStatusApi} from '../../../../services';
 
 export const Status = ({
   navigation,

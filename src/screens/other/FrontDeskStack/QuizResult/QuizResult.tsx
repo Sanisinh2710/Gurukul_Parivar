@@ -1,18 +1,14 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {CommonStyle} from '@assets';
+import {PrimaryButton, ScreenHeader, ScreenWrapper} from '@components';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@types';
+import {CustomFonts} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RootAuthStackParamList, RootStackParamList} from '../../../../types';
-import {styles} from './styles';
 import * as Progress from 'react-native-progress';
-import {CustomFonts} from '../../../../utils';
+import {styles} from './styles';
 
 export const QuizResult = ({
   route,

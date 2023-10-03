@@ -1,6 +1,11 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {Loader, PagerView, ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {SliderGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, FrontDesk} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   FlatList,
@@ -11,17 +16,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {
-  Loader,
-  PagerView,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../components';
-import {SliderGetApi} from '../../../services';
-import {RootStackParamList} from '../../../types';
-import {COLORS, FrontDesk} from '../../../utils';
 import {styles} from './styles';
 
 export const FrontDeskScreen = ({

@@ -1,8 +1,14 @@
 import React from 'react';
 
+import {AllImages, CommonStyle} from '@assets';
+import {FormInput, PrimaryButton, ScreenWrapper} from '@components';
 import {BASE_URL} from '@env';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RegisterApi} from '@services';
+import {EmailValidationSchemaType, RootAuthStackParamList} from '@types';
+import {COLORS} from '@utils';
+import {EmailValidationSchema} from '@validations';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -16,16 +22,6 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
-import {FormInput, PrimaryButton, ScreenWrapper} from '../../../../components';
-import {RegisterApi} from '../../../../services';
-import {
-  EmailValidationSchemaType,
-  RootAuthStackParamList,
-} from '../../../../types';
-import {COLORS} from '../../../../utils';
-import {EmailValidationSchema} from '../../../../validations';
 import {RegisterScreenstyle} from './style';
 
 export const RegisterScreen = ({

@@ -1,7 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {InitialThemeType} from '@types';
+import {DarkTheme, LightTheme} from '@utils';
 import {WritableDraft} from 'immer/dist/internal';
-import {InitialThemeType} from '../../types';
-import {DarkTheme, LightTheme} from '../../utils';
 
 let initialState: InitialThemeType = {
   theme: LightTheme,

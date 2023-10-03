@@ -1,11 +1,6 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { useTranslation } from 'react-i18next';
-import { Dimensions, View } from 'react-native';
-import * as Progress from 'react-native-progress';
-import Toast from 'react-native-simple-toast';
-import { CommonStyle } from '../../../../assets/styles';
+import {CommonStyle} from '@assets';
 import {
   AdressInfo,
   CompleteYourProfile,
@@ -14,9 +9,10 @@ import {
   PersonalInfo,
   ScreenHeader,
   ScreenWrapper,
-} from '../../../components';
-import { SET_USER_DATA } from '../../../redux/ducks/userSlice';
-import { useAppDispatch } from '../../../redux/hooks';
+} from '@components';
+import {BASE_URL} from '@env';
+import {SET_USER_DATA} from '@redux/ducks/userSlice';
+import {useAppDispatch} from '@redux/hooks';
 import {
   AddressInfoPostApi,
   CallBackButtonAxiosGetForWizardFormSignup,
@@ -26,13 +22,13 @@ import {
   PersonalInfoSaveDetailsApi,
   getAuthToken,
   setUserProfilingDone,
-} from '../../../services';
-import { ProfileSignupProps } from '../../../types';
-import {
-  COLORS,
-  CustomLocalDateSplitAndFormat,
-  isString,
-} from '../../../utils';
+} from '@services';
+import {ProfileSignupProps} from '@types';
+import {COLORS, CustomLocalDateSplitAndFormat, isString} from '@utils';
+import {useTranslation} from 'react-i18next';
+import {Dimensions, View} from 'react-native';
+import * as Progress from 'react-native-progress';
+import Toast from 'react-native-simple-toast';
 
 export const ProfileSignup = ({
   navigation,
@@ -41,7 +37,7 @@ export const ProfileSignup = ({
 
   const [width, setwidth] = React.useState(20);
 
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   const [formStep, setFormStep] = React.useState(1);
 
@@ -49,7 +45,7 @@ export const ProfileSignup = ({
 
   const dispatch = useAppDispatch();
 
-  const [formData, setFormData] = React.useState<{ [key: string]: any }>({
+  const [formData, setFormData] = React.useState<{[key: string]: any}>({
     completeProfile: {
       profile: '',
       branch_id: null,
@@ -61,7 +57,7 @@ export const ProfileSignup = ({
       dob: '',
       blood_group: '',
       emailInfo: [
-        { email: getAuthToken().loginData.primary_email, secondary: false },
+        {email: getAuthToken().loginData.primary_email, secondary: false},
       ],
       mobilenumInfo: [
         {
@@ -279,7 +275,7 @@ export const ProfileSignup = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
+            dispatch(SET_USER_DATA({userData: finalData, role: 'USER'}));
 
             // if (setuserdataresponse === 'SUCCESS') {
             // If want to set userProfilingdone status = true on next button of personal info then uncomment this
@@ -440,11 +436,11 @@ export const ProfileSignup = ({
 
             finalData.profile = `${BASE_URL}${backenduserresponse.data.personal_details?.profile}`;
 
-            dispatch(SET_USER_DATA({ userData: finalData, role: 'USER' }));
+            dispatch(SET_USER_DATA({userData: finalData, role: 'USER'}));
 
             const setuserprofileDone = setUserProfilingDone(true);
             if (setuserprofileDone === 'SUCCESS') {
-              navigation.navigate('Success', { type: 'Profile' });
+              navigation.navigate('Success', {type: 'Profile'});
             }
           }
         } else {
@@ -531,7 +527,7 @@ export const ProfileSignup = ({
             setuserprofileDone === 'SUCCESS' &&
             response.resType === 'SUCCESS'
           ) {
-            navigation.navigate('Success', { type: 'Profile' });
+            navigation.navigate('Success', {type: 'Profile'});
           } else {
             Toast.show(response.message, Toast.SHORT);
           }
@@ -545,7 +541,7 @@ export const ProfileSignup = ({
           setFormData(newFormData);
           const setuserprofileDone = setUserProfilingDone(true);
           if (setuserprofileDone === 'SUCCESS') {
-            navigation.navigate('Success', { type: 'Profile' });
+            navigation.navigate('Success', {type: 'Profile'});
           }
         }
       }
@@ -623,7 +619,7 @@ export const ProfileSignup = ({
           />
         ) : formStep === 3 ? (
           <AdressInfo
-            initialValues={{ address_details: [...formData.address_details] }}
+            initialValues={{address_details: [...formData.address_details]}}
             formData={formData}
             setFormData={setFormData}
             onSubmitEvent={submitButton}

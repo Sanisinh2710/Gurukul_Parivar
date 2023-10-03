@@ -11,8 +11,8 @@ import {
   View,
 } from 'react-native';
 
-import {Image} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
+import {AllIcons} from '@assets';
+import {PrimaryButton} from '@components';
 import {
   COLORS,
   CustomFonts,
@@ -20,8 +20,8 @@ import {
   isObjectArray,
   isString,
   isStringArray,
-} from '../../../utils';
-import {PrimaryButton} from '../Buttons';
+} from '@utils';
+import {Image} from 'react-native';
 import {ModalStyle} from './style';
 
 type DropDownModelProps = {

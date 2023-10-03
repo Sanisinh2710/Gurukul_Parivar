@@ -1,8 +1,7 @@
-import {AllIcons} from '../../assets/icons';
-import {AllImages} from '../../assets/images';
+import {AllIcons, AllImages} from '@assets';
 
-import {Theme} from '../types';
-import {COLORS} from './colors';
+import {Theme} from '@types';
+import {COLORS} from '@utils';
 
 export const LightTheme: Theme = {
   isDark: false,

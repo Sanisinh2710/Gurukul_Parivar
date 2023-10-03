@@ -1,9 +1,9 @@
 import React from 'react';
 
 import {Slider} from '@miblanchard/react-native-slider';
+import {CustomFonts} from '@utils';
 import {StyleSheet, Text, View} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
-import {CustomFonts} from '../../../utils';
 
 const format = (time: number) => {
   return new Date(time * 1000)

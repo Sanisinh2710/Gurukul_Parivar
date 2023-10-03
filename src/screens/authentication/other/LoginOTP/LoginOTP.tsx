@@ -1,5 +1,16 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {
+  OtpComponent,
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
+import {RegisterApi, VerifyOTPApi, setAuthToken} from '@services';
+import {storage} from '@storage';
+import {LoginOtpScreenProps} from '@types';
+import {COLORS} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -12,18 +23,6 @@ import {
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import Toast from 'react-native-simple-toast';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  OtpComponent,
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RegisterApi, VerifyOTPApi, setAuthToken} from '../../../../services';
-import {storage} from '../../../../storage';
-import {LoginOtpScreenProps} from '../../../../types';
-import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 const staticSeconds = 120;

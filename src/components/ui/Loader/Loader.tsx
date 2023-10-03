@@ -1,3 +1,4 @@
+import {useAppSelector} from '@redux/hooks';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -7,7 +8,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
 
 type LoaderProps = {
   screenHeight?: DimensionValue;

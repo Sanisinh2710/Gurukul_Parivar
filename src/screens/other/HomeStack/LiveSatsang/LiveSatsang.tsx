@@ -1,6 +1,11 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {Calendar, NoData, ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailySatsangApi} from '@services';
+import {RootAuthStackParamList} from '@types';
+import {COLORS, CustomFonts, d, options} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -13,17 +18,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Calendar,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {DailySatsangApi} from '../../../../services';
-import {RootAuthStackParamList} from '../../../../types';
-import {COLORS, CustomFonts, d, options} from '../../../../utils';
 
 export const LiveSatsang = ({
   navigation,

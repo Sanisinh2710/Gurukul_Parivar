@@ -1,14 +1,14 @@
 import React from 'react';
 
+import {FormInput, Loader, PrimaryButton} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {GurukulBranchGetApi} from '@services';
+import {CompleteProfileFormValidationSchemaType} from '@types';
+import {CompleteProfileFormValidationSchema} from '@validations';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {GurukulBranchGetApi} from '../../../../services';
-import {CompleteProfileFormValidationSchemaType} from '../../../../types';
-import {CompleteProfileFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton} from '../../../ui';
 import {styles} from './styles';
 
 export const CompleteYourProfile = React.memo(

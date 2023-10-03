@@ -1,6 +1,21 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {
+  FormInput,
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {SetPasswordApi, getAuthToken, isProfilingDone} from '@services';
+import {
+  ResetPasswordProps,
+  ResetPasswordValidationSchemaType,
+  SupportedFormInputTypes,
+} from '@types';
+import {COLORS} from '@utils';
+import {ResetPasswordValidationSchema} from '@validations';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -12,25 +27,6 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  FormInput,
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {
-  SetPasswordApi,
-  getAuthToken,
-  isProfilingDone,
-} from '../../../../services';
-import {
-  ResetPasswordProps,
-  ResetPasswordValidationSchemaType,
-  SupportedFormInputTypes,
-} from '../../../../types';
-import {COLORS} from '../../../../utils';
-import {ResetPasswordValidationSchema} from '../../../../validations';
 import {ResetPasswordstyle} from './style';
 
 export const ResetPassword = ({

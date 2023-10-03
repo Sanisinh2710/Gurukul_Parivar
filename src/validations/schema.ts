@@ -1,5 +1,3 @@
-import {useTranslation} from 'react-i18next';
-import * as yup from 'yup';
 import {
   AddressFormValidationSchemaType,
   CompleteProfileFormValidationSchemaType,
@@ -9,8 +7,10 @@ import {
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
   ResetPasswordValidationSchemaType,
-} from '../types';
-import {mailRegex, nameRegex, passwordRegex, phoneRegex} from '../utils';
+} from '@types';
+import {mailRegex, nameRegex, passwordRegex, phoneRegex} from '@utils';
+import {useTranslation} from 'react-i18next';
+import * as yup from 'yup';
 
 export const LoginFormValidationSchema =
   (): yup.ObjectSchema<LoginFormValidationSchemaType> => {

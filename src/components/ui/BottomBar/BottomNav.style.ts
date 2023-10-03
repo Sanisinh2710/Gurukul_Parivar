@@ -1,5 +1,5 @@
+import {Theme} from '@types';
 import {Dimensions, StyleSheet} from 'react-native';
-import {Theme} from '../../../types';
 
 export const BottomNavStyle = (theme?: Theme) =>
   StyleSheet.create({

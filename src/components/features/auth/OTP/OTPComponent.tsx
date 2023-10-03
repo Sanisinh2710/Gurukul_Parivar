@@ -1,7 +1,7 @@
 import React from 'react';
 
+import {COLORS} from '@utils';
 import {TextInput, View} from 'react-native';
-import {COLORS} from '../../../../utils';
 import {useOtpStyle} from './otpStyle';
 
 type otpTypeProps = {

@@ -1,9 +1,37 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { useFocusEffect } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
+import {AllIcons, CommonStyle} from '@assets';
+import {
+  DropDownModel,
+  Loader,
+  MusicPlayer,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+  SearchBar,
+} from '@components';
+import {BASE_URL} from '@env';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {
+  ADD_UPDATE_CATEGORIES,
+  ADD_UPDATE_SONGS,
+  SET_ACTIVE_TRACKDATA,
+  UPDATE_SETUP_MODE,
+} from '@redux/ducks/musicSlice';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {
+  GurkulAudioCategoriesGetApi,
+  GurkulAudioGetApi,
+  GurkulAudioGetFromCategoriesGetApi,
+  GurkulMultipleAudioGetApi,
+  addTracks,
+  resetAndAddTracks,
+  setupPlayer,
+} from '@services';
+import {RootStackParamList, SongType} from '@types';
+import {COLORS, CustomFonts, downloadSong, isString} from '@utils';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
@@ -25,37 +53,8 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { batch } from 'react-redux';
-import { AllIcons } from '../../../../../assets/icons';
-import { CommonStyle } from '../../../../../assets/styles';
-import {
-  DropDownModel,
-  Loader,
-  MusicPlayer,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-  SearchBar,
-} from '../../../../components';
-import {
-  ADD_UPDATE_CATEGORIES,
-  ADD_UPDATE_SONGS,
-  SET_ACTIVE_TRACKDATA,
-  UPDATE_SETUP_MODE,
-} from '../../../../redux/ducks/musicSlice';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import {
-  GurkulAudioCategoriesGetApi,
-  GurkulAudioGetApi,
-  GurkulAudioGetFromCategoriesGetApi,
-  GurkulMultipleAudioGetApi,
-  addTracks,
-  resetAndAddTracks,
-  setupPlayer,
-} from '../../../../services';
-import { RootStackParamList, SongType } from '../../../../types';
-import { COLORS, CustomFonts, downloadSong, isString } from '../../../../utils';
-import { styles } from './styles';
+import {batch} from 'react-redux';
+import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
   try {
@@ -86,7 +85,7 @@ export const GurukulConnect = ({
 }: NativeStackScreenProps<RootStackParamList>) => {
   const commonStyle = CommonStyle();
   const style = styles();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
 
   const [loader, setLoader] = React.useState<boolean>(false);
@@ -94,7 +93,7 @@ export const GurukulConnect = ({
   const [filtering, setFiltering] = React.useState<boolean>(false);
 
   const [isDownloading, setIsDownLoading] = React.useState<
-    { index: number; status: boolean }[]
+    {index: number; status: boolean}[]
   >([]);
 
   const [wantNewSong, setWantNewSongs] = React.useState<boolean>(false);
@@ -123,7 +122,7 @@ export const GurukulConnect = ({
 
   const playbackState = usePlaybackState();
 
-  const { position, duration } = useProgress();
+  const {position, duration} = useProgress();
 
   const trackPosition = React.useMemo(() => {
     return position;
@@ -164,7 +163,7 @@ export const GurukulConnect = ({
 
         await addTracks([...Songs.filter(item => item.is_multiple === false)]);
 
-        dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+        dispatch(ADD_UPDATE_SONGS({songs: Songs}));
         setSearchData(Songs);
 
         const playingTrack = await TrackPlayer.getTrack(0);
@@ -276,7 +275,7 @@ export const GurukulConnect = ({
 
       if (res.resType === 'SUCCESS') {
         await setup(res.data.gurukul_audios);
-        dispatch(UPDATE_SETUP_MODE({ setupMode: 'INITIAL' }));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
       } else {
         Toast.show(res.message, 2);
       }
@@ -320,8 +319,8 @@ export const GurukulConnect = ({
       }
 
       batch(() => {
-        dispatch(ADD_UPDATE_CATEGORIES({ categories: selectedItem }));
-        dispatch(UPDATE_SETUP_MODE({ setupMode: 'FILTERED' }));
+        dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'FILTERED'}));
       });
     }
     if (selectedItem.length <= 0) {
@@ -336,8 +335,8 @@ export const GurukulConnect = ({
         }
 
         batch(() => {
-          dispatch(ADD_UPDATE_CATEGORIES({ categories: selectedItem }));
-          dispatch(UPDATE_SETUP_MODE({ setupMode: 'INITIAL' }));
+          dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
         });
       }
     }
@@ -501,7 +500,7 @@ export const GurukulConnect = ({
                 }
 
                 batch(() => {
-                  dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+                  dispatch(ADD_UPDATE_SONGS({songs: Songs}));
                   dispatch(
                     UPDATE_SETUP_MODE({
                       setupMode:
@@ -595,7 +594,7 @@ export const GurukulConnect = ({
             ...Songs.filter(item => item.is_multiple === false),
           ]);
 
-          dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+          dispatch(ADD_UPDATE_SONGS({songs: Songs}));
           setSearchData(Songs);
         } else {
           Toast.show(res.message, 2);
@@ -615,7 +614,7 @@ export const GurukulConnect = ({
               },
             }),
           );
-          dispatch(UPDATE_SETUP_MODE({ setupMode: setupMode }));
+          dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
         });
       } else {
         dispatch(
@@ -690,7 +689,7 @@ export const GurukulConnect = ({
             ]);
 
             if (wantToResetMenuSongList) {
-              dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
               setSearchData(Songs);
             }
           }
@@ -748,7 +747,7 @@ export const GurukulConnect = ({
         }
       }
     }
-    dispatch(UPDATE_SETUP_MODE({ setupMode: 'ALBUM' }));
+    dispatch(UPDATE_SETUP_MODE({setupMode: 'ALBUM'}));
     setLoader(false);
   };
 
@@ -873,7 +872,7 @@ export const GurukulConnect = ({
                 contentContainerStyle={{
                   paddingBottom: activeTrack ? '40%' : 0,
                 }}
-                renderItem={({ item, index }) => (
+                renderItem={({item, index}) => (
                   <View
                     key={index}
                     style={[
@@ -927,8 +926,8 @@ export const GurukulConnect = ({
                       <Text style={style.songArtist}>{item?.description}</Text>
                     </View>
                     {item.is_multiple === true ? (
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={{ height: 15, width: 15 }}>
+                      <View style={{flexDirection: 'row'}}>
+                        <View style={{height: 15, width: 15}}>
                           <Image
                             style={{
                               width: '100%',
@@ -944,7 +943,7 @@ export const GurukulConnect = ({
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
-                        <View style={{ height: 15, width: 15, marginLeft: -7 }}>
+                        <View style={{height: 15, width: 15, marginLeft: -7}}>
                           <Image
                             style={{
                               width: '100%',
@@ -962,9 +961,9 @@ export const GurukulConnect = ({
                         </View>
                       </View>
                     ) : (
-                      <View style={{ flexDirection: 'row', gap: 6 }}>
+                      <View style={{flexDirection: 'row', gap: 6}}>
                         <View
-                          style={{ height: 24, width: 24 }}
+                          style={{height: 24, width: 24}}
                           onTouchEnd={
                             isDownloading?.find(
                               locitem => locitem.index === item?.id,
@@ -1036,7 +1035,7 @@ export const GurukulConnect = ({
                             onTouchEnd={async () => {
                               await handleControl(item?.id);
                             }}
-                            style={{ height: 24, width: 24 }}>
+                            style={{height: 24, width: 24}}>
                             <Image
                               style={{
                                 width: '100%',

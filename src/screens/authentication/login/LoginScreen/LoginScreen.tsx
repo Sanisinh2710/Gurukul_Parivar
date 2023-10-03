@@ -1,7 +1,34 @@
 import React from 'react';
 
+import {AllIcons, AllImages, CommonStyle} from '@assets';
+import {
+  DropDownModel,
+  FormInput,
+  Loader,
+  PrimaryButton,
+  ScreenWrapper,
+} from '@components';
 import {BASE_URL} from '@env';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {SET_USER_DATA} from '@redux/ducks/userSlice';
+import {useAppDispatch} from '@redux/hooks';
+import {
+  GuestLoginGetApi,
+  LoginApi,
+  PersonalInfoGetDetailsApi,
+  getAuthCredentialsForAutoFill,
+  isProfilingDone,
+  setAuthCredentialsForAutoFill,
+  setAuthToken,
+} from '@services';
+import {storage} from '@storage';
+import {
+  CurrUserDataTypeNested,
+  LoginFormValidationSchemaType,
+  LoginScreenProps,
+} from '@types';
+import {COLORS, Languages} from '@utils';
+import {LoginFormValidationSchema} from '@validations';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -14,35 +41,6 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {AllIcons} from '../../../../../assets/icons';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  DropDownModel,
-  FormInput,
-  Loader,
-  PrimaryButton,
-  ScreenWrapper,
-} from '../../../../components';
-import {SET_USER_DATA} from '../../../../redux/ducks/userSlice';
-import {useAppDispatch} from '../../../../redux/hooks';
-import {
-  GuestLoginGetApi,
-  LoginApi,
-  PersonalInfoGetDetailsApi,
-  getAuthCredentialsForAutoFill,
-  isProfilingDone,
-  setAuthCredentialsForAutoFill,
-  setAuthToken,
-} from '../../../../services';
-import {storage} from '../../../../storage';
-import {
-  CurrUserDataTypeNested,
-  LoginFormValidationSchemaType,
-  LoginScreenProps,
-} from '../../../../types';
-import {COLORS, Languages} from '../../../../utils';
-import {LoginFormValidationSchema} from '../../../../validations';
 import {LoginScreenstyle} from './style';
 
 export const LoginScreen = ({

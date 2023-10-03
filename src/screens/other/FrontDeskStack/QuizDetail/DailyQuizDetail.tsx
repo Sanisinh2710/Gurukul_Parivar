@@ -1,21 +1,16 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {Loader, PrimaryButton, ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, CustomFonts} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Pressable, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, CustomFonts, Quiz} from '../../../../utils';
 import {styles} from './styles';
-import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '../../../../services';
+
 export const DailyQuizDetail = ({
   route,
   navigation,

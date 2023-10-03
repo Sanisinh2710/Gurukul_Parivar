@@ -1,7 +1,19 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {
+  CustomNavigate,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+} from '@components';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CalendarGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, d, options2, weekDays} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -14,18 +26,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  CustomNavigate,
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-  ShareDownload,
-} from '../../../../components';
-import {CalendarGetApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, d, options2, weekDays} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({

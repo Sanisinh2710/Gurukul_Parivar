@@ -1,7 +1,18 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {
+  Carousel,
+  CarouselRef,
+  CustomNavigate,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+} from '@components';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@types';
+import {COLORS} from '@utils';
 import {
   ActivityIndicator,
   Dimensions,
@@ -10,17 +21,6 @@ import {
   Pressable,
   View,
 } from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Carousel,
-  CarouselRef,
-  CustomNavigate,
-  ScreenHeader,
-  ScreenWrapper,
-  ShareDownload,
-} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyDarshanDetail = ({
