@@ -1,5 +1,6 @@
-import {ControlCentre, SongInfo, SongProgress} from '@components';
 import React from 'react';
+
+import {ControlCentre, SongInfo, SongProgress} from '@components';
 import {State, Track} from 'react-native-track-player';
 
 type MusicPlayerProps = {

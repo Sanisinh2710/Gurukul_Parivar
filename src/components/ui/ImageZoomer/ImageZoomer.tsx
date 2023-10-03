@@ -1,5 +1,6 @@
-import {ImageZoomerProps} from '@types';
 import React from 'react';
+
+import {ImageZoomerProps} from '@types';
 import {ActivityIndicator} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 

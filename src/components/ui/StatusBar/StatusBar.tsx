@@ -1,6 +1,7 @@
+import React from 'react';
+
 import {AllImages} from '@assets';
 import {Theme} from '@types';
-import React from 'react';
 import {ImageBackground, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {style} from './style';

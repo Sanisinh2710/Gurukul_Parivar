@@ -1,6 +1,7 @@
+import React from 'react';
+
 import {AllIcons} from '@assets';
 import {COLORS} from '@utils';
-import React from 'react';
 import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
 import TrackPlayer, {State} from 'react-native-track-player';
 

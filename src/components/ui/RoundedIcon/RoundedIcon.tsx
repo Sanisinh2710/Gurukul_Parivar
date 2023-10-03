@@ -1,5 +1,6 @@
-import {COLORS} from '@utils';
 import React from 'react';
+
+import {COLORS} from '@utils';
 import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
 
 type RoundedIconProps = {
