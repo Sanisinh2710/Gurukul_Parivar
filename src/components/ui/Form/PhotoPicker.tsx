@@ -21,36 +21,37 @@ export const PhotoPicker = React.memo(
     setFocused,
   }: PhotoPickerProps): React.JSX.Element => {
     const style = FormInputStyle();
+
+    const handleUploadPhoto = () => {
+      Alert.alert('Select profile picture', '', [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'Choose from gallery',
+          onPress: async () => {
+            let path = await chooseFile('photo');
+            if (path) {
+              onChange(path);
+            }
+          },
+        },
+        {
+          text: 'Capture your photo',
+          onPress: async () => {
+            let path = await captureImage('photo');
+            if (path) {
+              onChange(path);
+            }
+          },
+        },
+      ]);
+    };
+
     return (
-      <View
-        style={style.photoMainView}
-        onTouchEnd={() => {
-          Alert.alert('Select profile picture', '', [
-            {
-              text: 'Cancel',
-              onPress: () => {},
-              style: 'cancel',
-            },
-            {
-              text: 'Choose from gallery',
-              onPress: async () => {
-                let path = await chooseFile('photo');
-                if (path) {
-                  onChange(path);
-                }
-              },
-            },
-            {
-              text: 'Capture your photo',
-              onPress: async () => {
-                let path = await captureImage('photo');
-                if (path) {
-                  onChange(path);
-                }
-              },
-            },
-          ]);
-        }}>
+      <View style={style.photoMainView} onTouchEnd={() => handleUploadPhoto()}>
         <View style={style.photOutSideView}>
           <View style={style.photoView}>
             {value ? (

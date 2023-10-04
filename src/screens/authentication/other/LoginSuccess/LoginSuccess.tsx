@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {useTranslation} from 'react-i18next';
-import {Dimensions, Image, Text, View} from 'react-native';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
-import {PrimaryButton, ScreenWrapper} from '../../../../components';
-import {LoginSuccessStackScreenProps} from '../../../../types';
-import {styles} from './styles';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, Image, Text, View } from 'react-native';
+import { AllImages } from '../../../../../assets/images';
+import { CommonStyle } from '../../../../../assets/styles';
+import { PrimaryButton, ScreenWrapper } from '../../../../components';
+import { LoginSuccessStackScreenProps } from '../../../../types';
+import { styles } from './styles';
 
 export const LoginSuccess = ({
   navigation,
@@ -14,7 +14,7 @@ export const LoginSuccess = ({
 }: LoginSuccessStackScreenProps) => {
   const commonStyle = CommonStyle();
   const style = styles();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const type = route.params?.type;
 
   return (
@@ -32,15 +32,15 @@ export const LoginSuccess = ({
         <View style={style.logoView}>
           <Image
             source={type !== 'Pass' ? AllImages.GurukulLogo : AllImages.Reset}
-            style={[style.logo, type === 'Pass' && {height: 64, width: 64}]}
+            style={[style.logo, type === 'Pass' && { height: 64, width: 64 }]}
           />
         </View>
-        <Text style={[style.title, type === 'Pass' && {fontSize: 24}]}>
+        <Text style={[style.title, type === 'Pass' && { fontSize: 24 }]}>
           {type === 'Login'
             ? t('loginSuccess.LoginSuccess')
             : type === 'Profile'
-            ? t('loginSuccess.ProfileSuccess')
-            : t('loginSuccess.ResetSuccess')}
+              ? t('loginSuccess.ProfileSuccess')
+              : t('loginSuccess.ResetSuccess')}
         </Text>
         <View style={style.subtitleView}>
           {type !== 'Pass' ? (
@@ -51,31 +51,31 @@ export const LoginSuccess = ({
           <Text
             style={[
               style.subtitle,
-              {textAlign: 'center'},
+              { textAlign: 'center' },
               // type === 'Pass' && {fontSize: 18},
             ]}>
             {type === 'Login'
               ? t('loginSuccess.SuccessSubtitle2')
               : type === 'Profile'
-              ? t('loginSuccess.ProfileSuccessSubtitle2')
-              : t('loginSuccess.ResetSuccessSubtitle')}
+                ? t('loginSuccess.ProfileSuccessSubtitle2')
+                : t('loginSuccess.ResetSuccessSubtitle')}
           </Text>
           <PrimaryButton
             title={
               type === 'Login'
                 ? t('loginSuccess.LoginSuccessBTN')
                 : type === 'Profile'
-                ? t('loginSuccess.ProfileSuccessBTN')
-                : t('loginSuccess.ResetSuccessBTN')
+                  ? t('loginSuccess.ProfileSuccessBTN')
+                  : t('loginSuccess.ResetSuccessBTN')
             }
             onPress={() => {
               type === 'Login'
                 ? navigation.replace('ProfileSignup')
                 : type === 'Profile'
-                ? navigation.replace('BottomNavBar')
-                : navigation.replace('Login');
+                  ? navigation.replace('BottomNavBar')
+                  : navigation.replace('Login');
             }}
-            buttonStyle={{marginTop: 40}}
+            buttonStyle={{ marginTop: 40 }}
           />
         </View>
       </View>

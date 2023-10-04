@@ -1,21 +1,21 @@
 import React from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { Alert, FlatList, Image, ScrollView, Text, View } from 'react-native';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { AllIcons } from '../../../../../assets/icons';
-import { AddressDeleteApi, GetCountriesApi } from '../../../../services';
+import {AllIcons} from '../../../../../assets/icons';
+import {AddressDeleteApi, GetCountriesApi} from '../../../../services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
   UserAddress,
 } from '../../../../types';
-import { COLORS } from '../../../../utils';
-import { AddressFormValidationSchema } from '../../../../validations';
-import { FormInput, Loader, PrimaryButton, SecondaryButton } from '../../../ui';
-import { styles } from './style';
+import {COLORS} from '../../../../utils';
+import {AddressFormValidationSchema} from '../../../../validations';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+import {styles} from './style';
 
 type AddressInfoProps = {
   initialValues: AddressFormValidationSchemaType;
@@ -42,9 +42,9 @@ type AddressInfoProps = {
 };
 
 const TypeAddress = (t: any) => [
-  { name: t('addressInfo.HomeField'), id: 'Home' },
-  { name: t('addressInfo.NativeField'), id: 'Native' },
-  { name: t('addressInfo.Work/BusinessField'), id: 'Work/Business' },
+  {name: t('addressInfo.HomeField'), id: 'Home'},
+  {name: t('addressInfo.NativeField'), id: 'Native'},
+  {name: t('addressInfo.Work/BusinessField'), id: 'Work/Business'},
 ];
 
 export const AdressInfo = React.memo(
@@ -56,7 +56,7 @@ export const AdressInfo = React.memo(
     setFormData,
     onSubmitEvent,
   }: AddressInfoProps): React.JSX.Element => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const style = styles();
 
     const [loader, setLoader] = React.useState<boolean>(false);
@@ -91,61 +91,61 @@ export const AdressInfo = React.memo(
       required: boolean;
       wantPlaceholderAsLabelOnModal?: boolean;
     }[] = [
-        {
-          name: 'country_id',
-          lable: t('addressInfo.CountryLbl'),
-          placeholder: t('addressInfo.CountryPlaceHolder'),
-          type: 'select',
-          menuList: countries,
-          required: true,
-          wantPlaceholderAsLabelOnModal: true,
+      {
+        name: 'country_id',
+        lable: t('addressInfo.CountryLbl'),
+        placeholder: t('addressInfo.CountryPlaceHolder'),
+        type: 'select',
+        menuList: countries,
+        required: true,
+        wantPlaceholderAsLabelOnModal: true,
+      },
+      {
+        name: 'address',
+        lable: t('addressInfo.AddressLbl'),
+        placeholder: t('addressInfo.AddressPlaceholder'),
+        type: 'text',
+        required: true,
+      },
+      {
+        name: 'pincode',
+        lable: t('addressInfo.PincodeLbl'),
+        placeholder: t('addressInfo.PincodePlaceholder'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'city',
+        lable: t('addressInfo.CityVillageLbl'),
+        placeholder: t('addressInfo.CityVillagePlaceholder'),
+        type: 'text',
+        required: true,
+      },
+      {
+        name: 'address_type',
+        lable: t('addressInfo.TypeofaddressLbl'),
+        placeholder: '',
+        type: 'radio',
+        menuList: TypeAddress(t),
+        customProps: {
+          wantFullSpace: false,
+          customStyle: {height: 35, borderWidth: 0, borderRadius: 60},
         },
-        {
-          name: 'address',
-          lable: t('addressInfo.AddressLbl'),
-          placeholder: t('addressInfo.AddressPlaceholder'),
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'pincode',
-          lable: t('addressInfo.PincodeLbl'),
-          placeholder: t('addressInfo.PincodePlaceholder'),
-          type: 'number',
-          required: true,
-        },
-        {
-          name: 'city',
-          lable: t('addressInfo.CityVillageLbl'),
-          placeholder: t('addressInfo.CityVillagePlaceholder'),
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'address_type',
-          lable: t('addressInfo.TypeofaddressLbl'),
-          placeholder: '',
-          type: 'radio',
-          menuList: TypeAddress(t),
-          customProps: {
-            wantFullSpace: false,
-            customStyle: { height: 35, borderWidth: 0, borderRadius: 60 },
-          },
-          required: true,
-        },
-      ];
+        required: true,
+      },
+    ];
 
     const {
       control,
       handleSubmit,
-      formState: { errors },
+      formState: {errors},
     } = useForm<AddressFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(AddressFormValidationSchema()),
       mode: 'onBlur',
     });
 
-    const { fields, append, remove, replace } = useFieldArray({
+    const {fields, append, remove, replace} = useFieldArray({
       control,
       name: 'address_details',
     });
@@ -225,6 +225,69 @@ export const AdressInfo = React.memo(
       onSubmitEvent(initialValues.address_details, 'skip');
     };
 
+    const handleRemoveAddress = (mainindex: any) => {
+      if (
+        initialValues?.address_details?.[mainindex]?.id !== undefined &&
+        initialValues?.address_details?.[mainindex]?.id !== null &&
+        initialValues?.address_details?.[mainindex]?.id !== ''
+      ) {
+        Alert.alert('Are you sure you want to delete this address..?', '', [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const response = await AddressDeleteApi(
+                initialValues?.address_details?.[mainindex]?.id,
+              );
+
+              if (response.resType === 'SUCCESS') {
+                remove(mainindex);
+                const newForm = JSON.parse(JSON.stringify(formData));
+
+                newForm.address_details.splice(mainindex, 1);
+                setFormData(newForm);
+
+                Toast.show('Addres deleted successfully', Toast.SHORT);
+              } else {
+                Toast.show(response.message, Toast.SHORT);
+              }
+            },
+          },
+        ]);
+      } else {
+        remove(mainindex);
+      }
+    };
+
+    const onclickCheckBox = (mainindex: any) => {
+      let newArr = JSON.parse(JSON.stringify(checkedArray));
+
+      let returnArr = newArr.map((item: any, index: number) => {
+        return mainindex === index ? !item : false;
+      });
+
+      setCheckedArray(returnArr);
+    };
+
+    const addAdress = () => {
+      append({
+        country_id: '',
+        address: '',
+        pincode: '',
+        city: '',
+        address_type: '',
+        is_preferred_communication: false,
+      });
+
+      let newArr = JSON.parse(JSON.stringify(checkedArray));
+      newArr.push(false);
+      setCheckedArray(newArr);
+    };
+
     return (
       <View>
         {loader ? (
@@ -240,58 +303,7 @@ export const AdressInfo = React.memo(
                   {mainindex >= 1 && (
                     <View
                       style={style.cancelImgView}
-                      onTouchEnd={() => {
-                        if (
-                          initialValues?.address_details?.[mainindex]?.id !==
-                          undefined &&
-                          initialValues?.address_details?.[mainindex]?.id !==
-                          null &&
-                          initialValues?.address_details?.[mainindex]?.id !== ''
-                        ) {
-                          Alert.alert(
-                            'Are you sure you want to delete this address..?',
-                            '',
-                            [
-                              {
-                                text: 'Cancel',
-                                onPress: () => { },
-                                style: 'cancel',
-                              },
-                              {
-                                text: 'OK',
-                                onPress: async () => {
-                                  const response = await AddressDeleteApi(
-                                    initialValues?.address_details?.[mainindex]
-                                      ?.id,
-                                  );
-
-                                  if (response.resType === 'SUCCESS') {
-                                    remove(mainindex);
-                                    const newForm = JSON.parse(
-                                      JSON.stringify(formData),
-                                    );
-
-                                    newForm.address_details.splice(
-                                      mainindex,
-                                      1,
-                                    );
-                                    setFormData(newForm);
-
-                                    Toast.show(
-                                      'Addres deleted successfully',
-                                      Toast.SHORT,
-                                    );
-                                  } else {
-                                    Toast.show(response.message, Toast.SHORT);
-                                  }
-                                },
-                              },
-                            ],
-                          );
-                        } else {
-                          remove(mainindex);
-                        }
-                      }}>
+                      onTouchEnd={() => handleRemoveAddress(mainindex)}>
                       <Image source={AllIcons.Cancel} style={style.cancelImg} />
                     </View>
                   )}
@@ -304,12 +316,12 @@ export const AdressInfo = React.memo(
                     ]}
                     showsVerticalScrollIndicator={false}
                     data={addressFormInputList}
-                    renderItem={({ item, index }) => (
+                    renderItem={({item, index}) => (
                       <View>
                         <Controller
                           control={control}
                           name={`address_details.${mainindex}.${item.name}`}
-                          render={({ field: { onBlur, onChange, value } }) => {
+                          render={({field: {onBlur, onChange, value}}) => {
                             return (
                               <FormInput
                                 menuList={item.menuList}
@@ -339,21 +351,9 @@ export const AdressInfo = React.memo(
                             <View
                               style={[
                                 style.checkboxInnerView,
-                                { borderWidth: checkedArray[mainindex] ? 0 : 1 },
+                                {borderWidth: checkedArray[mainindex] ? 0 : 1},
                               ]}
-                              onTouchEnd={() => {
-                                let newArr = JSON.parse(
-                                  JSON.stringify(checkedArray),
-                                );
-
-                                let returnArr = newArr.map(
-                                  (item: any, index: number) => {
-                                    return mainindex === index ? !item : false;
-                                  },
-                                );
-
-                                setCheckedArray(returnArr);
-                              }}>
+                              onTouchEnd={() => onclickCheckBox(mainindex)}>
                               {checkedArray[mainindex] ? (
                                 <Image
                                   source={AllIcons.Checkbox}
@@ -374,20 +374,7 @@ export const AdressInfo = React.memo(
             })}
             <SecondaryButton
               title={t('common.AddAddress')}
-              onPress={() => {
-                append({
-                  country_id: '',
-                  address: '',
-                  pincode: '',
-                  city: '',
-                  address_type: '',
-                  is_preferred_communication: false,
-                });
-
-                let newArr = JSON.parse(JSON.stringify(checkedArray));
-                newArr.push(false);
-                setCheckedArray(newArr);
-              }}
+              onPress={() => addAdress()}
               buttonColor={'transparent'}
               titleColor={COLORS.primaryColor}
               borderColor={COLORS.primaryColor}

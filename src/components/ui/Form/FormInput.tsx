@@ -8,16 +8,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { useAppSelector } from '../../../redux/hooks';
-import { SupportedFormInputTypes } from '../../../types';
-import { COLORS, CustomFonts } from '../../../utils';
-import { RadioLable } from '../Radio';
-import { DatePicker } from './DatePicker';
-import { PhoneDropdownInput } from './PhoneDropdownInput';
-import { PhotoPicker } from './PhotoPicker';
-import { SimpleDropDown } from './SimpleDropDown';
-import { FormInputStyle } from './style';
+import {AllIcons} from '../../../../assets/icons';
+import {useAppSelector} from '../../../redux/hooks';
+import {SupportedFormInputTypes} from '../../../types';
+import {COLORS, CustomFonts} from '../../../utils';
+import {RadioLable} from '../Radio';
+import {DatePicker} from './DatePicker';
+import {PhoneDropdownInput} from './PhoneDropdownInput';
+import {PhotoPicker} from './PhotoPicker';
+import {SimpleDropDown} from './SimpleDropDown';
+import {FormInputStyle} from './style';
 
 export type FormInputProps = {
   type?: SupportedFormInputTypes;
@@ -29,7 +29,7 @@ export type FormInputProps = {
   onBlur: (...event: any[]) => void;
   onChange: (...event: any[]) => void;
   error?: string;
-  state?: { [key: string]: any };
+  state?: {[key: string]: any};
   menuList?: any;
   customProps?: object;
   rightText?: string;
@@ -314,8 +314,8 @@ export const FormInput = React.memo(
                 {(type === 'phone' || type === 'email' || type === 'select') &&
                   rightText && (
                     <Text
-                      onPress={rightTextOnPress ? rightTextOnPress : () => { }}
-                      style={[style.labelText, { color: COLORS.primaryColor }]}>
+                      onPress={rightTextOnPress ? rightTextOnPress : () => {}}
+                      style={[style.labelText, {color: COLORS.primaryColor}]}>
                       {rightText}
                     </Text>
                   )}
@@ -334,19 +334,19 @@ export const FormInput = React.memo(
                     alignItems: 'flex-start',
                   },
                   icon &&
-                  type !== 'select' &&
-                  type !== 'date' &&
-                  type !== 'dob' && {
-                    gap: 3,
-                  },
+                    type !== 'select' &&
+                    type !== 'date' &&
+                    type !== 'dob' && {
+                      gap: 3,
+                    },
                 ]}>
                 {type === 'password' ? (
-                  <View style={{ width: '90%' }}>{fieldblock}</View>
+                  <View style={{width: '90%'}}>{fieldblock}</View>
                 ) : icon &&
                   type !== 'select' &&
                   type !== 'date' &&
                   type !== 'dob' ? (
-                  <View style={{ width: '90%' }}>{fieldblock}</View>
+                  <View style={{width: '90%'}}>{fieldblock}</View>
                 ) : (
                   fieldblock
                 )}
@@ -358,9 +358,12 @@ export const FormInput = React.memo(
                       source={
                         passVisible ? AllIcons.OpenEye : AllIcons.ClosedEye
                       }
-                      style={[style.fieldRightImg, {
-                        tintColor: 'rgba(172, 43, 49, 0.5)',
-                      }]}
+                      style={[
+                        style.fieldRightImg,
+                        {
+                          tintColor: 'rgba(172, 43, 49, 0.5)',
+                        },
+                      ]}
                     />
                   </View>
                 ) : (
@@ -368,28 +371,18 @@ export const FormInput = React.memo(
                   type !== 'select' &&
                   type !== 'date' &&
                   type !== 'dob' && (
-                    <View
-                      style={style.fieldImgView}>
-                      <Image
-                        source={icon}
-                        style={style.fieldRightImg}
-                      />
+                    <View style={style.fieldImgView}>
+                      <Image source={icon} style={style.fieldRightImg} />
                     </View>
                   )
                 )}
               </View>
               {Array.isArray(value) && type === 'multi-select' && (
-                <View
-                  style={style.multiSelectMainView}>
+                <View style={style.multiSelectMainView}>
                   {value.map((item, index) => {
                     return (
-                      <View
-                        key={index}
-                        style={style.multiSelectInnerView}>
-                        <Text
-                          style={style.multiSelectTitle}>
-                          {item}
-                        </Text>
+                      <View key={index} style={style.multiSelectInnerView}>
+                        <Text style={style.multiSelectTitle}>{item}</Text>
                         <View
                           onTouchEnd={() => {
                             let newValues: string[] = JSON.parse(

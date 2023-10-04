@@ -1,9 +1,9 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { isObjectArray } from '../../../utils';
-import { DropDownModel } from '../Modal';
-import { FormInputStyle } from './style';
+import {Image, Text, View} from 'react-native';
+import {AllIcons} from '../../../../assets/icons';
+import {isObjectArray} from '../../../utils';
+import {DropDownModel} from '../Modal';
+import {FormInputStyle} from './style';
 
 type SimpleDropdownProps = {
   type: 'phone' | 'radio' | 'multi-select' | 'simple' | 'none';
@@ -56,10 +56,10 @@ export const SimpleDropDown = React.memo(
                 value === null
                 ? placeholder
                 : value && isObjectArray(dropDownList)
-                  ? dropDownList?.find(
+                ? dropDownList?.find(
                     (item: any) => parseInt(item.id) === parseInt(value),
                   )?.name
-                  : value
+                : value
               : placeholder}
           </Text>
           <View
