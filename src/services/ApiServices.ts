@@ -87,7 +87,7 @@ const apiRequest = async (
     return {
       resType: 'ERROR',
       data: [],
-      message: error.toString(),
+      message: 'Something went wrong!',
     };
   }
 };

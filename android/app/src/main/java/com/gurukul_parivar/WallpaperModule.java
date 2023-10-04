@@ -104,7 +104,7 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     public void setOnHomeScreenWallPaper ( Bitmap bitmap ) throws Exception {
         try {
             Bitmap wallpaper = getCroppedBitmap ( bitmap );
-            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ) {
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT <= Build.VERSION_CODES.R ) {
                 wallpaperManager.setBitmap ( wallpaper , null , true , WallpaperManager.FLAG_SYSTEM );
             } else {
                 throw new Exception ( "This feature is not available currently on your device..!" );
@@ -117,7 +117,7 @@ public class WallpaperModule extends ReactContextBaseJavaModule implements Lifec
     public void setOnLockScreenWallPaper ( Bitmap bitmap ) throws Exception {
         try {
             Bitmap wallpaper = getCroppedBitmap ( bitmap );
-            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ) {
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT <= Build.VERSION_CODES.R ) {
                 wallpaperManager.setBitmap ( wallpaper , null , true , WallpaperManager.FLAG_LOCK );
             } else {
                 throw new Exception ( "This feature is not available currently on your device..!" );
