@@ -19,7 +19,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AllIcons} from '../../../../assets/icons';
 import {CommonStyle} from '../../../../assets/styles';
 import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {SliderGetApi, getUserData} from '../../../services';
+import {useAppSelector} from '../../../redux/hooks';
+import {SliderGetApi} from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {COLORS, HomeGrid} from '../../../utils';
 import {styles} from './styles';
@@ -72,9 +73,7 @@ export const HomeScreen = ({
     }
   }, []);
 
-  const userData = React.useMemo(() => {
-    return getUserData();
-  }, []);
+  const userData = useAppSelector(state => state.currUser.currUser);
 
   const onBackPress = () => {
     Alert.alert(t('common.AppName'), t('common.AppExitMsg'), [
@@ -141,8 +140,8 @@ export const HomeScreen = ({
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
-                {userData?.userdata?.full_name?.split(' ')?.at(0)}
-                <Text style={style.id}> {userData?.userdata?.id}</Text>
+                {userData?.full_name?.split(' ')?.at(0)}
+                <Text style={style.id}> {userData?.id}</Text>
               </Text>
             </View>
             <View>

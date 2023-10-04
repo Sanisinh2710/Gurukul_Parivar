@@ -62,9 +62,9 @@ export const FrontDeskScreen = ({
       case 'connect':
         navigation.navigate('GurukulConnect');
         break;
-      // case 'quiz':
-      //   navigation.navigate('dailyQuiz');
-      //   break;
+      case 'quiz':
+        navigation.navigate('dailyQuiz');
+        break;
       // case 'donation':
       //   navigation.navigate('donation');
       //   break;

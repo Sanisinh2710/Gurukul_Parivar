@@ -62,48 +62,40 @@ export const Status = ({
               let marks = item.score / 100;
               return (
                 <>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('QuizHistory', {
-                        date: item.created_at,
-                        id: item.quiz_id,
-                      });
-                    }}>
-                    <View style={style.container}>
-                      <View style={{marginLeft: 20, justifyContent: 'center'}}>
-                        <Text
-                          style={{
-                            ...CustomFonts.body.medium12,
-                            fontSize: 16,
-                            color: 'black',
-                          }}>
-                          {item.created_at}
-                        </Text>
-                      </View>
-                      <View>
-                        <Progress.Circle
-                          size={40}
-                          indeterminate={false}
-                          animated={true}
-                          progress={marks}
-                          color={
-                            item.score >= 51
-                              ? 'rgba(0, 166, 88, 1)'
-                              : 'rgba(255, 48, 48, 1)'
-                          }
-                          borderWidth={0}
-                          unfilledColor={'rgba(230, 230, 230, 1)'}
-                          thickness={5}
-                          showsText={true}
-                          fill={'none'}
-                          textStyle={style.progressText}
-                          formatText={() => {
-                            return <Text>{Math.floor(marks * 100)}</Text>;
-                          }}
-                        />
-                      </View>
+                  <View style={style.container}>
+                    <View style={{marginLeft: 20, justifyContent: 'center'}}>
+                      <Text
+                        style={{
+                          ...CustomFonts.body.medium12,
+                          fontSize: 16,
+                          color: 'black',
+                        }}>
+                        {item.date}
+                      </Text>
                     </View>
-                  </TouchableOpacity>
+                    <View>
+                      <Progress.Circle
+                        size={40}
+                        indeterminate={false}
+                        animated={true}
+                        progress={marks}
+                        color={
+                          item.score >= 51
+                            ? 'rgba(0, 166, 88, 1)'
+                            : 'rgba(255, 48, 48, 1)'
+                        }
+                        borderWidth={0}
+                        unfilledColor={'rgba(230, 230, 230, 1)'}
+                        thickness={5}
+                        showsText={true}
+                        fill={'none'}
+                        textStyle={style.progressText}
+                        formatText={() => {
+                          return <Text>{Math.floor(marks * 100)}</Text>;
+                        }}
+                      />
+                    </View>
+                  </View>
                 </>
               );
             }}

@@ -86,17 +86,17 @@ export type InitialSongsType = {
 };
 
 export type PersonalInfoFormValidationSchemaType = {
-  gender: string;
+  gender: string | undefined;
   full_name: string;
-  father_name: string;
-  dob: string;
-  blood_group: string;
+  father_name: string | undefined;
+  dob: string | undefined;
+  blood_group: string | undefined;
   emailInfo: {
-    email: string;
+    email?: string | undefined;
     secondary?: boolean | undefined;
   }[];
   mobilenumInfo: {
-    mobilenum: string | undefined;
+    mobilenum?: string | undefined;
     whatsappNum?: boolean | undefined;
     secondary?: boolean | undefined;
     countryCode?: string | undefined;
@@ -133,4 +133,28 @@ export type SongType = {
   artist?: string;
   description?: string;
   is_multiple?: boolean;
+};
+
+export type CurrUserDataTypeNested = {
+  id: number | undefined;
+  profile: string | undefined;
+  gender: string | undefined;
+  father_name: string | undefined;
+  dob: string | undefined;
+  blood_group: string | undefined;
+  secondary_contact_cc: string | undefined;
+  secondary_contact: string;
+  is_secondary_contact_wp: boolean | undefined;
+  secondary_email: string | undefined;
+  branch_id: number | undefined;
+  primary_email: string | undefined;
+  full_name: string | undefined;
+  primary_contact_cc: string | undefined;
+  primary_contact: string | undefined;
+  is_primary_contact_wp: boolean | undefined;
+};
+
+export type CurrentUserDataType = {
+  userRole: 'GUEST' | 'USER';
+  currUser: CurrUserDataTypeNested;
 };

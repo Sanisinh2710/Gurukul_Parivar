@@ -1,6 +1,5 @@
 import {AllIcons} from '../../assets/icons';
 import {AllImages} from '../../assets/images';
-import {getAuthToken} from '../services';
 
 import {Theme} from '../types';
 import {COLORS} from './colors';
@@ -332,12 +331,12 @@ export const FrontDesk = (t: any) => {
       id: 'event',
       imageBG: 'rgba(174, 73, 141, 0.1)',
     },
-    // {
-    //   image: AllIcons.Star,
-    //   title: t('frontDesk.Quiz'),
-    //   id: 'quiz',
-    //   imageBG: 'rgba(60, 42, 152, 0.1)',
-    // },
+    {
+      image: AllIcons.Star,
+      title: t('frontDesk.Quiz'),
+      id: 'quiz',
+      imageBG: 'rgba(60, 42, 152, 0.1)',
+    },
     // {
     //   image: AllIcons.Donation,
     //   title: t('frontDesk.Donation'),
@@ -382,44 +381,86 @@ export const HomeGrid = (t: any) => {
     },
   ];
 };
-export const EditProfileList = (t: any, i18n: any) => {
-  return [
-    {
-      image: AllIcons.ProfileUser,
-      name: t('myProfile.Edit'),
-      rightIcon: AllIcons.RightArrow,
-      id: 'user',
-    },
-    // {
-    //   image: AllIcons.MultiUser,
-    //   name: t('myProfile.Family'),
-    //   rightIcon: AllIcons.RightArrow,
-    //   id: 'family',
-    // },
-    {
-      image: AllIcons.Translation,
-      name: t('myProfile.Language'),
-      rightIcon: AllIcons.RightArrow,
-      language: i18n.language.toLocaleUpperCase(),
-      id: 'translation',
-    },
-    // {
-    //   image: AllIcons.Question,
-    //   name: t('myProfile.Help'),
-    //   rightIcon: AllIcons.RightArrow,
-    //   id: 'help',
-    // },
-    // {
-    //   image: AllIcons.Edit,
-    //   name: t('myProfile.Feedback'),
-    //   id: 'feedback',
-    // },
-    {
-      image: AllIcons.Logout,
-      name: t('myProfile.Logout'),
-      id: 'logout',
-    },
-  ];
+export const EditProfileList = (
+  t: any,
+  i18n: any,
+  userRole?: 'GUEST' | 'USER',
+) => {
+  return userRole === 'USER'
+    ? [
+        {
+          image: AllIcons.ProfileUser,
+          name: t('myProfile.Edit'),
+          rightIcon: AllIcons.RightArrow,
+          id: 'user',
+        },
+        // {
+        //   image: AllIcons.MultiUser,
+        //   name: t('myProfile.Family'),
+        //   rightIcon: AllIcons.RightArrow,
+        //   id: 'family',
+        // },
+        {
+          image: AllIcons.Translation,
+          name: t('myProfile.Language'),
+          rightIcon: AllIcons.RightArrow,
+          language: i18n.language.toLocaleUpperCase(),
+          id: 'translation',
+        },
+        // {
+        //   image: AllIcons.Question,
+        //   name: t('myProfile.Help'),
+        //   rightIcon: AllIcons.RightArrow,
+        //   id: 'help',
+        // },
+        // {
+        //   image: AllIcons.Edit,
+        //   name: t('myProfile.Feedback'),
+        //   id: 'feedback',
+        // },
+        {
+          image: AllIcons.Logout,
+          name: t('myProfile.Logout'),
+          id: 'logout',
+        },
+      ]
+    : [
+        // {
+        //   image: AllIcons.ProfileUser,
+        //   name: t('myProfile.Edit'),
+        //   rightIcon: AllIcons.RightArrow,
+        //   id: 'user',
+        // },
+        // {
+        //   image: AllIcons.MultiUser,
+        //   name: t('myProfile.Family'),
+        //   rightIcon: AllIcons.RightArrow,
+        //   id: 'family',
+        // },
+        {
+          image: AllIcons.Translation,
+          name: t('myProfile.Language'),
+          rightIcon: AllIcons.RightArrow,
+          language: i18n.language.toLocaleUpperCase(),
+          id: 'translation',
+        },
+        // {
+        //   image: AllIcons.Question,
+        //   name: t('myProfile.Help'),
+        //   rightIcon: AllIcons.RightArrow,
+        //   id: 'help',
+        // },
+        // {
+        //   image: AllIcons.Edit,
+        //   name: t('myProfile.Feedback'),
+        //   id: 'feedback',
+        // },
+        // {
+        //   image: AllIcons.Logout,
+        //   name: t('myProfile.Logout'),
+        //   id: 'logout',
+        // },
+      ];
 };
 
 export const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -464,7 +505,6 @@ export const ApiDateFormat: Intl.DateTimeFormatOptions = {
   day: '2-digit',
 };
 
-export const daysArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const monthsArray = [
   'Jan',
   'Feb',
@@ -533,84 +573,4 @@ export const OccupationList = [
   'Doctor',
   'Private Job',
   'Other',
-];
-
-export const IntialValuesForFormdataAuth = {
-  completeProfile: {
-    profile: '',
-    branch_id: null,
-  },
-  personalInfo: {
-    gender: '',
-    full_name: '',
-    father_name: '',
-    dob: '',
-    blood_group: '',
-    emailInfo: [
-      {email: getAuthToken().loginData.primary_email, secondary: false},
-    ],
-    mobilenumInfo: [
-      {
-        mobilenum: '',
-        secondary: false,
-        whatsappNum: false,
-        countryCode: '',
-      },
-    ],
-  },
-  address_details: [
-    {
-      country_id: '',
-      address: '',
-      pincode: '',
-      city: '',
-      address_type: '',
-      is_preferred_communication: true,
-    },
-  ],
-  edu_businessInfo: {
-    education: '',
-    occupation: '',
-    occupation_type: '',
-    skills: [],
-    other: '',
-  },
-  gurukulInfo: {
-    exGurukulStudent: 'No',
-    gurukulData: [
-      {
-        branch_id: '',
-        attend: '',
-        standard_from: '',
-        standard_to: '',
-        ssc_year: '',
-        hsc_year: '',
-        known_saint: '',
-        known_haribhakta: '',
-        RelativeOfSaint: 'No',
-        FromFamily: '',
-        saint_from_family: '',
-        relation: '',
-      },
-    ],
-  },
-};
-export const GurukulEventsList = [
-  {date: '29', title: 'Art Extravaganza', content: 'Time: 10:00 AM - 4:00 PM'},
-  {date: '05', title: 'Guru Purnima 2023', content: 'Time: 10:00 AM - 4:00 PM'},
-  {
-    date: '24',
-    title: 'Cultural Diversity Day',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
-  {
-    date: '21',
-    title: 'Shrimad Bhagwat Katha',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
-  {
-    date: '19',
-    title: 'Annual Talent Show',
-    content: 'Time: 10:00 AM - 4:00 PM',
-  },
 ];

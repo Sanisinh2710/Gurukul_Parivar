@@ -26,12 +26,10 @@ import {
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
-  QuizHistory,
   QuizResult,
   RegisterScreen,
   ResetPassword,
   Status,
-  ZoomImageScreen,
 } from '../screens';
 import {
   RootAuthStackParamList,
@@ -68,10 +66,7 @@ export const NativeStackRouteList: Array<{
     name: 'ProfileEdit',
     component: ProfileSignupWithEdit,
   },
-  {
-    name: 'QuizHistory',
-    component: QuizHistory,
-  },
+
   {
     name: 'QuizResult',
     component: QuizResult,

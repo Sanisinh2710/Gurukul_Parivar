@@ -31,7 +31,7 @@ export type RootStackParamList = {
   program: undefined;
   programDetail: {title: string; description: string} | undefined;
   dailyQuiz: undefined;
-  dailyQuizDetail: {id: number};
+  dailyQuizDetail: undefined;
   albumSong: {playListName: string; id: number};
   donation: undefined;
   QuizResult: {marks: number};
@@ -39,7 +39,6 @@ export type RootStackParamList = {
   ProfileEdit: {formStep: number} | undefined;
   PaymentMethod: undefined;
   GurukulEvents: undefined;
-  QuizHistory: {date: string; id: number};
   ImageZommer: {images: Array<SingleImage>};
 };
 

@@ -18,6 +18,7 @@ import {
   EDUCATION_INFO_POST_ENDPOINT,
   EMAIL_POST_ENDPOINT,
   GET_COUNTRIES_ENDPOINT,
+  GUEST_LOGIN_GET_ENDPOINT,
   GURUKUL_AUDIO_CATEGORIES_GET_ENDPOINT,
   GURUKUL_AUDIO_GET_ENDPOINT,
   GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT,
@@ -48,6 +49,7 @@ const handleApiResponse = (response: AxiosResponse<any, any>) => {
     resType: response.data.status === 'success' ? 'SUCCESS' : 'ERROR',
     data: response.data.data,
     message: response.data.message,
+    statusCode: response.data.code,
   };
   return data;
 };
@@ -83,10 +85,12 @@ const apiRequest = async (
     });
     return handleApiResponse(response);
   } catch (error: any) {
+    console.log(error, 'ERROR');
     return {
       resType: 'ERROR',
       data: [],
       message: error.toString(),
+      statusCode: 400,
     };
   }
 };
@@ -238,8 +242,6 @@ export const PersonalInfoSaveDetailsApi = async (userPersonalInfo: any) => {
     }
   }
 
-  console.log(userDataCloneObjFinal, 'final payload');
-
   return await apiRequest(
     PERSONAL_INFO_POST_ENDPOINT,
     'post',
@@ -340,6 +342,15 @@ export const DailyProgramGetApi = async () => {
 };
 export const GurukulEventGetApi = async () => {
   return apiRequest(GURUKUL_EVENTS_GET_ENDPOINT, 'get');
+};
+export const GuestLoginGetApi = async () => {
+  return apiRequest(
+    GUEST_LOGIN_GET_ENDPOINT,
+    'get',
+    undefined,
+    undefined,
+    false,
+  );
 };
 // All apis are above, below is helper function for used in auth wizard form:---
 

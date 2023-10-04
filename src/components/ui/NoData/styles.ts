@@ -15,7 +15,7 @@ export const styles = () => {
       color: 'rgba(23,23,23,0.5)',
       lineHeight: 25,
       textAlign: 'center',
-      top: 8,
+      marginTop: 8,
     },
   });
 };

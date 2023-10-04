@@ -10,6 +10,7 @@ export const LoginScreenstyle = () => {
       gap: 10,
       marginTop: '5%',
     },
+    loginContainerStyle: {paddingBottom: '5%'},
     imgLogoView: {
       width: 130,
       height: 130,
@@ -48,10 +49,14 @@ export const LoginScreenstyle = () => {
       color: theme.textColor,
     },
     footerView: {
-      marginTop: 32,
-      gap: 15,
+      marginTop: 26,
+      gap: 13,
     },
-    footerText: {
+    footerTextsView: {
+      gap: 13,
+      alignItems: 'center',
+    },
+    footerText1: {
       ...CustomFonts.body.large14,
       lineHeight: 20,
       color: theme.textColor,
@@ -59,11 +64,55 @@ export const LoginScreenstyle = () => {
     footerRedText: {
       color: theme.primary,
     },
+    footerText2: {
+      ...CustomFonts.body.large14,
+      fontSize: 15,
+      lineHeight: 20,
+      color: theme.textColor,
+    },
+    footerText3: {
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      lineHeight: 20,
+      textDecorationLine: 'underline',
+      textDecorationStyle: 'double',
+      color: theme.primary,
+    },
     FooterInputs: {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 15,
       justifyContent: 'space-between',
+    },
+    rememberMeViewStyle: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+    },
+    filledBoxView: {
+      width: 16,
+      height: 16,
+      alignItems: 'center',
+    },
+    filledBoxTick: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+    },
+    emptyBoxView: {
+      width: 16,
+      height: 16,
+      borderRadius: 4,
+      borderColor: theme.primary,
+      borderWidth: 1,
+    },
+    rememeberMeText: {
+      ...CustomFonts.body.regular14,
+      color: 'rgba(63, 63, 63, 1)',
+    },
+    forgotPassText: {
+      ...CustomFonts.body.regular14,
+      color: theme.primary,
     },
   });
 };

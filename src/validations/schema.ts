@@ -113,34 +113,36 @@ export const PersonalInfoFormValidationSchema =
           }),
         )
         .required(),
-      mobilenumInfo: yup.array().of(
-        yup.object().shape({
-          mobilenum: yup
-            .string()
-            .trim()
-            .test({
-              name: 'mobilenum',
-              skipAbsent: true,
-              test(value, err) {
-                if (value === '' || value === undefined) {
-                  return true;
-                } else if (!value?.match(phoneRegex)) {
-                  return err.createError({
-                    message: t('common.MobileErr'),
-                  });
-                } else {
-                  return true;
-                }
-              },
-            }),
-          // .required(t('FieldRequiredError.MobileNumber'))
-          // .matches(phoneRegex, {message: t('common.MobileErr')}),
-          whatsappNum: yup.boolean(),
-          secondary: yup.boolean(),
-          countryCode: yup.string(),
-        }),
-      ),
-      // .required(),
+      mobilenumInfo: yup
+        .array()
+        .of(
+          yup.object().shape({
+            mobilenum: yup
+              .string()
+              .trim()
+              .test({
+                name: 'mobilenum',
+                skipAbsent: true,
+                test(value, err) {
+                  if (value === '' || value === undefined) {
+                    return true;
+                  } else if (!value?.match(phoneRegex)) {
+                    return err.createError({
+                      message: t('common.MobileErr'),
+                    });
+                  } else {
+                    return true;
+                  }
+                },
+              }),
+            // .required(t('FieldRequiredError.MobileNumber'))
+            // .matches(phoneRegex, {message: t('common.MobileErr')}),
+            whatsappNum: yup.boolean(),
+            secondary: yup.boolean(),
+            countryCode: yup.string(),
+          }),
+        )
+        .required(),
     });
   };
 

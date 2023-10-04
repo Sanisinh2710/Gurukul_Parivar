@@ -15,31 +15,29 @@ export const NoData = React.memo(
     const style = styles();
     const {t} = useTranslation();
     return (
-      <>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <View
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <View
+          style={{
+            width: '70%',
+            height: '40%',
+            alignSelf: 'center',
+          }}>
+          <Image
+            source={AllImages.NoData}
             style={{
-              width: '70%',
-              height: '40%',
-              alignSelf: 'center',
-            }}>
-            <Image
-              source={AllImages.NoData}
-              style={{
-                width: '100%',
-                height: '100%',
-                resizeMode: 'contain',
-              }}
-            />
-          </View>
-          <View style={{alignItems: 'center'}}>
-            <Text style={style.NoDataTitle}>{title ?? t('NoData.Title')}</Text>
-            <Text style={style.NoDataContent}>
-              {content ?? t('NoData.Content')}
-            </Text>
-          </View>
+              width: '100%',
+              height: '100%',
+              resizeMode: 'contain',
+            }}
+          />
         </View>
-      </>
+        <View style={{alignItems: 'center'}}>
+          <Text style={style.NoDataTitle}>{title ?? t('NoData.Title')}</Text>
+          <Text style={style.NoDataContent}>
+            {content ?? t('NoData.Content')}
+          </Text>
+        </View>
+      </View>
     );
   },
 );

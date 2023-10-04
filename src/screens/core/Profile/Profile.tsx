@@ -27,13 +27,13 @@ import {
   ScreenWrapper,
   SecondaryButton,
 } from '../../../components';
+import {REMOVE_USER_DATA, SET_USER_DATA} from '../../../redux/ducks/userSlice';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {
   DeleteMydataApi,
   PersonalInfoGetDetailsApi,
   PersonalInfoSaveDetailsApi,
-  getUserData,
   removeAuthToken,
-  setUserData,
 } from '../../../services';
 import {RootBottomTabParamList, RootStackParamList} from '../../../types';
 import {
@@ -61,23 +61,26 @@ export const ProfileScreen = ({
 
   const {height} = Dimensions.get('screen');
 
+  const userData = useAppSelector(state => state.currUser.currUser);
+  const userRole = useAppSelector(state => state.currUser.userRole);
+
   const ProfileList = React.useMemo(() => {
-    return EditProfileList(t, i18n);
+    return EditProfileList(t, i18n, userRole);
   }, [t, i18n]);
 
-  const userData = React.useMemo(() => {
-    return getUserData();
-  }, []);
+  const dispatch = useAppDispatch();
 
-  const [profileImage, setProfileImage] = React.useState<{[key: string]: any}>({
-    uri: userData?.userdata?.profile ?? 'null',
+  const [profileImage, setProfileImage] = React.useState<{
+    [key: string]: any;
+  }>({
+    uri: userData?.profile ?? 'null',
     name: '',
     type: '',
   });
 
   const userProfileUpdate = async (selectedImage: any) => {
-    if (userData.resType == 'SUCCESS') {
-      const userDataClone = JSON.parse(JSON.stringify(userData.userdata));
+    if (userData) {
+      const userDataClone = JSON.parse(JSON.stringify(userData));
       userDataClone.profile = selectedImage;
       userDataClone.dob = CustomBackendDateSplitAndFormat(
         userDataClone.dob,
@@ -100,9 +103,9 @@ export const ProfileScreen = ({
         if (response.resType == 'SUCCESS') {
           const personalInfo = updatedReponse.data.personal_details;
           personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
-          const updateResult = setUserData(personalInfo);
-          if (updateResult == 'SUCCESS')
-            Toast.show('Profile Image Updated Successfully', Toast.LONG);
+
+          dispatch(SET_USER_DATA({userData: personalInfo, role: 'USER'}));
+          Toast.show('Profile Image Updated Successfully', Toast.LONG);
         }
       } else {
         Toast.show(`Image Couldn't Get Updated`, Toast.LONG);
@@ -173,6 +176,7 @@ export const ProfileScreen = ({
         break;
     }
   };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -198,7 +202,10 @@ export const ProfileScreen = ({
         ]}
         showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
-          <View onTouchEnd={() => setProfileModel(true)}>
+          <View
+            onTouchEnd={
+              userRole === 'USER' ? () => setProfileModel(true) : () => {}
+            }>
             <View style={style.imageView}>
               <Image
                 source={
@@ -210,17 +217,26 @@ export const ProfileScreen = ({
                 style={style.imageStyle}
               />
             </View>
-            <View style={style.pictureUpdateIconView}>
-              <Image source={AllIcons.Camera} style={style.pictureUpdateIcon} />
-            </View>
+            {userRole === 'USER' && (
+              <View style={style.pictureUpdateIconView}>
+                <Image
+                  source={AllIcons.Camera}
+                  style={style.pictureUpdateIcon}
+                />
+              </View>
+            )}
           </View>
           <View style={style.userNameView}>
             <Text style={style.profileName}>
-              {userData?.userdata?.full_name ?? 'YOUR NAME'}
+              {userRole === 'GUEST'
+                ? 'GUEST USER'
+                : userData?.full_name ?? 'YOUR NAME'}
             </Text>
             <Text style={style.textColor}>
-              {userData?.userdata?.primary_contact_cc?.toString().split('(')[0]}
-              {userData?.userdata?.primary_contact}
+              {userData?.primary_contact
+                ? userData?.primary_contact_cc?.toString().split('(')[0]
+                : ''}
+              {userData?.primary_contact}
             </Text>
             {/* <View style={style.familyIdView}>
               <Text style={style.familyIdText}>{t('myProfile.ID')}:148410</Text>
@@ -263,10 +279,21 @@ export const ProfileScreen = ({
           })}
         </View>
         <PrimaryButton
-          title={t('DeleteModel.DltBtn')}
+          title={
+            userRole === 'GUEST' ? t('common.Signin') : t('DeleteModel.DltBtn')
+          }
           onPress={() => {
-            setModelType('deleteAcc');
-            setModelVisible(!modelVisible);
+            if (userRole === 'GUEST') {
+              dispatch(REMOVE_USER_DATA({wantToRemove: true}));
+              const resRemoveAuthToken = removeAuthToken();
+
+              if (resRemoveAuthToken === 'SUCCESS') {
+                navigation.replace('Auth');
+              }
+            } else {
+              setModelType('deleteAcc');
+              setModelVisible(!modelVisible);
+            }
           }}
           buttonColor={'rgba(172, 43, 49, 0.1)'}
           titleColor={COLORS.primaryColor}
@@ -347,6 +374,7 @@ export const ProfileScreen = ({
                           const response = await DeleteMydataApi();
 
                           if (response.resType === 'SUCCESS') {
+                            dispatch(REMOVE_USER_DATA({wantToRemove: true}));
                             const resRemoveAuthToken = removeAuthToken();
 
                             if (resRemoveAuthToken === 'SUCCESS') {
