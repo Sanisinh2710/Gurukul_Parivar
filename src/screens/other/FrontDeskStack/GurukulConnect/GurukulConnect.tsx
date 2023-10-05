@@ -59,7 +59,6 @@ import {styles} from './styles';
 async function handleControl(wantToPlayItemId: any) {
   try {
     const allTracks = await TrackPlayer.getQueue();
-
     const skipToIndex = allTracks.findIndex(
       item => item?.id === wantToPlayItemId,
     );
@@ -175,7 +174,7 @@ export const GurukulConnect = ({
             activeTrack &&
             activeTrackPosition &&
             setupMode !== 'ALBUM' &&
-            setupMode !== 'FILTERED' &&
+            // setupMode !== 'FILTERED' &&
             newQueue.findIndex((item: any) => item.id === activeTrack?.id) >= 0
           ) {
             await TrackPlayer.skip(
@@ -532,7 +531,22 @@ export const GurukulConnect = ({
           setLoader(false);
         }, 500);
       } else {
-        navigation.goBack();
+        dispatch(
+          SET_ACTIVE_TRACKDATA({
+            activeTrackDataPayload: {
+              track: activeTrack,
+              position:
+                playbackState === State.Playing ||
+                playbackState === State.Paused ||
+                playbackState === State.Stopped
+                  ? trackPosition
+                  : activeTrackPosition,
+            },
+          }),
+        );
+        setTimeout(() => {
+          navigation.goBack();
+        }, 300);
       }
     } else {
       navigation.goBack();
@@ -605,17 +619,63 @@ export const GurukulConnect = ({
       const playingTrack = await TrackPlayer.getTrack(0);
 
       if (playingTrack !== null) {
-        batch(() => {
-          dispatch(
-            SET_ACTIVE_TRACKDATA({
-              activeTrackDataPayload: {
-                track: playingTrack,
-                position: 0,
-              },
-            }),
+        const newQueue = await TrackPlayer.getQueue();
+
+        if (
+          activeTrack &&
+          activeTrackPosition &&
+          setupMode !== 'ALBUM' &&
+          setupMode !== 'FILTERED' &&
+          newQueue.findIndex((item: any) => item.id === activeTrack?.id) >= 0
+        ) {
+          await TrackPlayer.skip(
+            newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+            playbackState === State.Playing ||
+              playbackState === State.Paused ||
+              playbackState === State.Stopped
+              ? trackPosition
+              : activeTrackPosition,
           );
-          dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
-        });
+          const currentTrackDuration = await TrackPlayer.getDuration();
+
+          await TrackPlayer.updateMetadataForTrack(
+            newQueue.findIndex((item: any) => item.id === activeTrack?.id),
+            {
+              title: activeTrack?.title,
+              artist: activeTrack?.artist,
+              duration: currentTrackDuration,
+            },
+          );
+
+          batch(() => {
+            dispatch(
+              SET_ACTIVE_TRACKDATA({
+                activeTrackDataPayload: {
+                  track: activeTrack,
+                  position:
+                    playbackState === State.Playing ||
+                    playbackState === State.Paused ||
+                    playbackState === State.Stopped
+                      ? trackPosition
+                      : activeTrackPosition,
+                },
+              }),
+            );
+            dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
+          });
+        } else {
+          batch(() => {
+            dispatch(
+              SET_ACTIVE_TRACKDATA({
+                activeTrackDataPayload: {
+                  track: playingTrack,
+                  position: 0,
+                },
+              }),
+            );
+            dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
+          });
+        }
       } else {
         dispatch(
           SET_ACTIVE_TRACKDATA({
@@ -983,8 +1043,8 @@ export const GurukulConnect = ({
                                   setIsDownLoading(newDownLoad);
 
                                   const res = await downloadSong(
-                                    item?.url,
-                                    item?.title,
+                                    item?.url.toString(),
+                                    item?.title!,
                                   );
 
                                   if (res) {

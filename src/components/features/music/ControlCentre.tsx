@@ -23,7 +23,11 @@ export const ControlCentre = ({
     const currentTrack = await TrackPlayer.getCurrentTrack();
 
     if (currentTrack !== null) {
-      if (playback === State.Paused || playback === State.Ready) {
+      if (
+        playback === State.Paused ||
+        playback === State.Ready ||
+        playback === State.Stopped
+      ) {
         await TrackPlayer.play();
       } else {
         await TrackPlayer.pause();
@@ -32,58 +36,56 @@ export const ControlCentre = ({
   };
 
   return (
-    <>
-      <View style={style.trackForwardControl}>
-        <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
-          <Image
-            style={{width: '100%', height: '100%'}}
-            source={AllIcons.ForwardControl}
-          />
-        </View>
-        {playbackState === State.Buffering ? (
-          <ActivityIndicator size={40} color={COLORS.primaryColor} />
-        ) : (
-          <View
-            onTouchEnd={() => togglePlayback(playbackState)}
-            style={{
-              height: 40,
-              width: 40,
-              borderRadius: 40,
-              shadowColor: '#3dadfc',
-              shadowOffset: {
-                width: 0,
-                height: 12,
-              },
-              shadowOpacity: 0.15,
-              shadowRadius: 13.84,
-              elevation: 7,
-            }}>
-            <Image
-              style={{width: '100%', height: '100%'}}
-              source={
-                playbackState === State.Playing
-                  ? AllIcons.TrackPause
-                  : AllIcons.TrackPlay
-              }
-            />
-          </View>
-        )}
-
-        <View
-          onTouchEnd={performSkipToNext}
-          style={[
-            style.forwardImage,
-            {
-              transform: [{rotate: '180deg'}],
-            },
-          ]}>
-          <Image
-            style={{width: '100%', height: '100%'}}
-            source={AllIcons.ForwardControl}
-          />
-        </View>
+    <View style={style.trackForwardControl}>
+      <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
+        <Image
+          style={{width: '100%', height: '100%'}}
+          source={AllIcons.ForwardControl}
+        />
       </View>
-    </>
+      {playbackState === State.Buffering ? (
+        <ActivityIndicator size={40} color={COLORS.primaryColor} />
+      ) : (
+        <View
+          onTouchEnd={() => togglePlayback(playbackState)}
+          style={{
+            height: 40,
+            width: 40,
+            borderRadius: 40,
+            shadowColor: '#3dadfc',
+            shadowOffset: {
+              width: 0,
+              height: 12,
+            },
+            shadowOpacity: 0.15,
+            shadowRadius: 13.84,
+            elevation: 7,
+          }}>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={
+              playbackState === State.Playing
+                ? AllIcons.TrackPause
+                : AllIcons.TrackPlay
+            }
+          />
+        </View>
+      )}
+
+      <View
+        onTouchEnd={performSkipToNext}
+        style={[
+          style.forwardImage,
+          {
+            transform: [{rotate: '180deg'}],
+          },
+        ]}>
+        <Image
+          style={{width: '100%', height: '100%'}}
+          source={AllIcons.ForwardControl}
+        />
+      </View>
+    </View>
   );
 };
 

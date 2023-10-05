@@ -81,6 +81,8 @@ export type InitialSongsType = {
   allSongs: Array<SongType> | Array<Track> | any;
   activeTrack: Track | undefined;
   activeTrackPosition: number;
+  activeTrackDuration: number;
+  activeTrackStatus: 'NONE' | 'PLAYING' | 'PAUSED' | 'STOPPED';
   selectedCategories: Array<string>;
   setupMode: 'INITIAL' | 'FILTERED' | 'ALBUM' | 'NONE';
 };

@@ -9,6 +9,8 @@ let initialState: InitialSongsType = {
     url: '',
   },
   activeTrackPosition: 0,
+  activeTrackDuration: 0,
+  activeTrackStatus: 'NONE',
   selectedCategories: [],
   setupMode: 'NONE',
 };
@@ -40,18 +42,30 @@ export const sliderPageSlice = createSlice({
     SET_ACTIVE_TRACKDATA: (
       state,
       action: PayloadAction<{
-        activeTrackDataPayload: {track: Track | undefined; position?: number};
+        activeTrackDataPayload: {
+          track: Track | undefined;
+          position?: number;
+          duration?: number;
+          trackStatus?: 'NONE' | 'PLAYING' | 'PAUSED' | 'STOPPED';
+        };
       }>,
     ) => {
       let newdata: WritableDraft<InitialSongsType> = JSON.parse(
         JSON.stringify(state),
       );
 
-      const {track, position} = action.payload.activeTrackDataPayload;
+      const {track, position, duration, trackStatus} =
+        action.payload.activeTrackDataPayload;
 
       newdata.activeTrack = track;
       if (position) {
         newdata.activeTrackPosition = position;
+      }
+      if (duration) {
+        newdata.activeTrackDuration = duration;
+      }
+      if (trackStatus) {
+        newdata.activeTrackStatus = trackStatus;
       }
 
       return newdata;
