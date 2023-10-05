@@ -56,25 +56,33 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const onShare = async () => {
     setIsSharing(true);
     try {
-      const sharedPath = await downloadImage(true);
+      const granted =
+        Platform.OS === 'android' ? await hasAndroidPermission() : true;
 
-      const {fs} = RNFetchBlob;
+      if (granted) {
+        const sharedPath = await downloadImage(true);
 
-      const imagePath = sharedPath;
-      if (imagePath) {
-        const fileContent = await fs.readFile(imagePath, 'base64');
-        const base64Image = `data:image/jpeg;base64,${fileContent}`;
+        const {fs} = RNFetchBlob;
 
-        const options = {
-          title: 'Share via',
-          message: 'Jay Swaminarayana..!',
-          url: Platform.OS === 'android' ? base64Image : imagePath,
-          subject: 'Share Link', // for email
-        };
+        const imagePath = sharedPath;
+        if (imagePath) {
+          const fileContent = await fs.readFile(imagePath, 'base64');
+          const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
+          const options = {
+            title: 'Share via',
+            message: 'Jay Swaminarayana..!',
+            url: Platform.OS === 'android' ? base64Image : imagePath,
+            subject: 'Share Link', // for email
+          };
+
+          setIsSharing(false);
+
+          await Share.open(options);
+        }
+      } else {
         setIsSharing(false);
-
-        await Share.open(options);
+        Toast.show('Storage Permission Required', 2);
       }
     } catch (error) {
       setIsSharing(false);
@@ -86,20 +94,13 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   async function hasAndroidPermission() {
     const getCheckPermissionPromise = async () => {
       if (parseInt(Platform.Version.toString()) >= 33) {
-        const [
-          hasReadMediaImagesPermission,
-          hasWriteExternalStoragePermission,
-        ] = await Promise.all([
+        const [hasReadMediaImagesPermission] = await Promise.all([
           PermissionsAndroid.check(
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
           ),
-          PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          ),
         ]);
-        return (
-          hasReadMediaImagesPermission && hasWriteExternalStoragePermission
-        );
+
+        return hasReadMediaImagesPermission;
       } else {
         const [
           hasReadExternalStoragePermission,
