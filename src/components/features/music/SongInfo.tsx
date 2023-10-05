@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
-import { Track } from 'react-native-track-player';
-import { CustomFonts } from '../../../utils';
+import {CustomFonts} from '@utils';
+import {StyleSheet, Text, View} from 'react-native';
+import {Track} from 'react-native-track-player';
 
 type SongInfoProps = {
   track: Track;

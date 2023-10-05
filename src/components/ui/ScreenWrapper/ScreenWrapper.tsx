@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { ImageBackground } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AllImages } from '../../../../assets/images';
-import { CommonStyle } from '../../../../assets/styles';
+import {AllImages, CommonStyle} from '@assets';
+import {ImageBackground} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type ScreenWrapperProps = {
   children: React.JSX.Element | React.JSX.Element[];

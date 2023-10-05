@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { useTranslation } from 'react-i18next';
-import { Image, StyleProp, TextInput, View, ViewStyle } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { isObjectArray, isStringArray } from '../../../utils';
-import { styles } from './style';
+import {AllIcons} from '@assets';
+import {isObjectArray, isStringArray} from '@utils';
+import {useTranslation} from 'react-i18next';
+import {Image, StyleProp, TextInput, View, ViewStyle} from 'react-native';
+import {styles} from './style';
 
 type SearchBarPropType = {
   dataForSearch: Array<object>;
@@ -77,7 +77,6 @@ export const SearchBar = ({
   }, [searchVal]);
 
   return (
-
     <View style={[style.modelSearchView, searchBarstyle]}>
       <View style={style.iconView}>
         <Image source={AllIcons.Search} style={style.iconStyle} />

@@ -1,6 +1,11 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
 import {BASE_URL} from '@env';
+import {DailyProgramGetApi} from '@services';
+import {DailyProgramProps} from '@types';
+import {COLORS, CustomFonts} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   Dimensions,
@@ -11,16 +16,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {DailyProgramGetApi} from '../../../../services';
-import {DailyProgramProps} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
 
 export const DailyProgram = ({
   navigation,

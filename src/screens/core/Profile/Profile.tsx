@@ -1,10 +1,35 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
+import {AllIcons, CommonStyle} from '@assets';
+import {
+  DropDownModel,
+  PrimaryButton,
+  RoundedIcon,
+  ScreenHeader,
+  ScreenWrapper,
+  SecondaryButton,
+} from '@components';
+import {BASE_URL} from '@env';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {REMOVE_USER_DATA, SET_USER_DATA} from '@redux/ducks/userSlice';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {
+  DeleteMydataApi,
+  PersonalInfoGetDetailsApi,
+  PersonalInfoSaveDetailsApi,
+  removeAuthToken,
+} from '@services';
+import {RootBottomTabParamList, RootStackParamList} from '@types';
+import {
+  COLORS,
+  CustomBackendDateSplitAndFormat,
+  EditProfileList,
+  captureImage,
+  chooseFile,
+} from '@utils';
+import {useTranslation} from 'react-i18next';
 import {
   Dimensions,
   Image,
@@ -17,36 +42,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
-import { AllIcons } from '../../../../assets/icons';
-import { CommonStyle } from '../../../../assets/styles';
-import {
-  DropDownModel,
-  PrimaryButton,
-  RoundedIcon,
-  ScreenHeader,
-  ScreenWrapper,
-  SecondaryButton,
-} from '../../../components';
-import {
-  REMOVE_USER_DATA,
-  SET_USER_DATA,
-} from '../../../redux/ducks/userSlice';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import {
-  DeleteMydataApi,
-  PersonalInfoGetDetailsApi,
-  PersonalInfoSaveDetailsApi,
-  removeAuthToken,
-} from '../../../services';
-import { RootBottomTabParamList, RootStackParamList } from '../../../types';
-import {
-  COLORS,
-  CustomBackendDateSplitAndFormat,
-  EditProfileList,
-  captureImage,
-  chooseFile,
-} from '../../../utils';
-import { styles } from './styles';
+import {styles} from './styles';
 
 export const ProfileScreen = ({
   navigation,
@@ -58,11 +54,11 @@ export const ProfileScreen = ({
   const [viewPhotoModel, setPhotoModel] = React.useState(false);
   const [modalType, setModelType] = React.useState('');
   const [profileModel, setProfileModel] = React.useState(false);
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const style = styles();
   const commonStyle = CommonStyle();
 
-  const { height } = Dimensions.get('screen');
+  const {height} = Dimensions.get('screen');
 
   const userData = useAppSelector(state => state.currUser.currUser);
   const userRole = useAppSelector(state => state.currUser.userRole);
@@ -92,7 +88,7 @@ export const ProfileScreen = ({
         'mm/dd/yyyy',
       );
 
-      const userDataCloneObj = { ...userDataClone };
+      const userDataCloneObj = {...userDataClone};
 
       for (let i in userDataClone) {
         if (userDataCloneObj[i] === null || userDataCloneObj[i] === undefined) {
@@ -109,7 +105,7 @@ export const ProfileScreen = ({
           const personalInfo = updatedReponse.data.personal_details;
           personalInfo.profile = `${BASE_URL}${personalInfo.profile}`;
 
-          dispatch(SET_USER_DATA({ userData: personalInfo, role: 'USER' }));
+          dispatch(SET_USER_DATA({userData: personalInfo, role: 'USER'}));
           Toast.show('Profile Image Updated Successfully', Toast.LONG);
         }
       } else {
@@ -206,7 +202,7 @@ export const ProfileScreen = ({
       <ScrollView
         contentContainerStyle={[
           commonStyle.commonContentView,
-          { paddingBottom: '25%' },
+          {paddingBottom: '25%'},
         ]}
         showsVerticalScrollIndicator={false}>
         <View style={style.imageContainer}>
@@ -214,33 +210,33 @@ export const ProfileScreen = ({
             onTouchEnd={
               userRole === 'USER' ? () => setProfileModel(true) : () => {}
             }>
-            <View style={{ height: 64, width: 64 }}>
+            <View style={{height: 64, width: 64}}>
               <Image
                 source={
                   profileImage?.uri != '' &&
                   !profileImage?.uri?.includes('null')
-                    ? { uri: profileImage?.uri }
+                    ? {uri: profileImage?.uri}
                     : AllIcons.DummyAvtar
                 }
-                style={{ height: '100%', width: '100%', borderRadius: 50 }}
+                style={{height: '100%', width: '100%', borderRadius: 50}}
               />
             </View>
             {userRole === 'USER' && (
               <View style={style.pictureUpdateIcon}>
                 <Image
                   source={AllIcons.Camera}
-                  style={{ height: 20, width: 20 }}
+                  style={{height: 20, width: 20}}
                 />
               </View>
             )}
           </View>
-          <View style={{ justifyContent: 'center', marginLeft: '5%' }}>
+          <View style={{justifyContent: 'center', marginLeft: '5%'}}>
             <Text style={style.profileName}>
               {userRole === 'GUEST'
                 ? 'GUEST USER'
                 : userData?.full_name ?? 'YOUR NAME'}
             </Text>
-            <Text style={{ color: 'rgba(23,23,23,0.5)' }}>
+            <Text style={{color: 'rgba(23,23,23,0.5)'}}>
               {userData?.primary_contact
                 ? userData?.primary_contact_cc?.toString().split('(')[0]
                 : ''}
@@ -263,18 +259,18 @@ export const ProfileScreen = ({
                 <View
                   style={[
                     style.listView,
-                    { borderBottomWidth: item.name === 'Logout' ? 0 : 1 },
+                    {borderBottomWidth: item.name === 'Logout' ? 0 : 1},
                   ]}>
                   <RoundedIcon
                     icon={item.image}
                     onPress={() => {}}
-                    imageStyle={{ width: 20, height: 20 }}
+                    imageStyle={{width: 20, height: 20}}
                   />
-                  <View style={{ justifyContent: 'center', marginLeft: '5%' }}>
+                  <View style={{justifyContent: 'center', marginLeft: '5%'}}>
                     <Text style={style.listName}>{item.name} </Text>
                   </View>
                   <View style={style.languageContainer}>
-                    <Text style={{ color: COLORS.primaryColor, fontSize: 14 }}>
+                    <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
                       {item.language}
                     </Text>
                   </View>
@@ -286,7 +282,7 @@ export const ProfileScreen = ({
                     {item.rightIcon && (
                       <Image
                         source={item.rightIcon}
-                        style={{ height: 24, width: 24 }}
+                        style={{height: 24, width: 24}}
                       />
                     )}
                   </View>
@@ -301,7 +297,7 @@ export const ProfileScreen = ({
           }
           onPress={() => {
             if (userRole === 'GUEST') {
-              dispatch(REMOVE_USER_DATA({ wantToRemove: true }));
+              dispatch(REMOVE_USER_DATA({wantToRemove: true}));
               const resRemoveAuthToken = removeAuthToken();
 
               if (resRemoveAuthToken === 'SUCCESS') {
@@ -315,7 +311,7 @@ export const ProfileScreen = ({
           buttonColor={'rgba(172, 43, 49, 0.1)'}
           titleColor={COLORS.primaryColor}
           buttonStyle={style.btnStyle}
-          textStyle={{ fontSize: 16 }}
+          textStyle={{fontSize: 16}}
         />
         <DropDownModel
           type={'none'}
@@ -335,7 +331,7 @@ export const ProfileScreen = ({
                 alignItems: 'center',
                 marginTop: '5%',
               }}>
-              <View style={{ height: 80, width: 80 }}>
+              <View style={{height: 80, width: 80}}>
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
                   locations={[0, 1]}
@@ -391,7 +387,7 @@ export const ProfileScreen = ({
                           const response = await DeleteMydataApi();
 
                           if (response.resType === 'SUCCESS') {
-                            dispatch(REMOVE_USER_DATA({ wantToRemove: true }));
+                            dispatch(REMOVE_USER_DATA({wantToRemove: true}));
                             const resRemoveAuthToken = removeAuthToken();
 
                             if (resRemoveAuthToken === 'SUCCESS') {
@@ -400,7 +396,7 @@ export const ProfileScreen = ({
                           }
                         }
                   }
-                  buttonStyle={{ width: '42%' }}
+                  buttonStyle={{width: '42%'}}
                   title={
                     modalType === 'logout'
                       ? t('LogoutModel.LogoutBtn')
@@ -416,12 +412,12 @@ export const ProfileScreen = ({
           modelVisible={profileModel}
           setModelVisible={setProfileModel}
           customModelchild={
-            <View style={{ justifyContent: 'center' }}>
+            <View style={{justifyContent: 'center'}}>
               <Pressable
                 onPress={() => {
                   handleProfile('gallery');
                 }}
-                style={{ justifyContent: 'center' }}>
+                style={{justifyContent: 'center'}}>
                 <Text style={style.pictureUpdateText}>Upload From Gallery</Text>
               </Pressable>
               <Pressable
@@ -468,7 +464,7 @@ export const ProfileScreen = ({
                   source={
                     profileImage?.uri != '' &&
                     !profileImage?.uri?.includes('null')
-                      ? { uri: profileImage?.uri }
+                      ? {uri: profileImage?.uri}
                       : AllIcons.DummyAvtar
                   }
                   style={{

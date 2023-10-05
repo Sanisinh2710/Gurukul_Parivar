@@ -1,7 +1,8 @@
 import React from 'react';
+
+import {AllIcons} from '@assets';
+import {captureImage, chooseFile, isString} from '@utils';
 import {Alert, Image, Text, View} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {captureImage, chooseFile, isString} from '../../../utils';
 import {FormInputStyle} from './style';
 
 type PhotoPickerProps = {

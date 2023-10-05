@@ -1,5 +1,16 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {
+  DatePicker,
+  PhoneDropdownInput,
+  PhotoPicker,
+  RadioLable,
+  SimpleDropDown,
+} from '@components';
+import {useAppSelector} from '@redux/hooks';
+import {SupportedFormInputTypes} from '@types';
+import {COLORS, CustomFonts} from '@utils';
 import {
   Image,
   Keyboard,
@@ -8,15 +19,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {useAppSelector} from '../../../redux/hooks';
-import {SupportedFormInputTypes} from '../../../types';
-import {COLORS, CustomFonts} from '../../../utils';
-import {RadioLable} from '../Radio';
-import {DatePicker} from './DatePicker';
-import {PhoneDropdownInput} from './PhoneDropdownInput';
-import {PhotoPicker} from './PhotoPicker';
-import {SimpleDropDown} from './SimpleDropDown';
 import {FormInputStyle} from './style';
 
 export type FormInputProps = {

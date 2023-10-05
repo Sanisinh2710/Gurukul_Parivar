@@ -1,19 +1,20 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {ScrollView, Text, TextInput, View} from 'react-native';
-import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../../assets/styles';
+
+import {CommonStyle} from '@assets';
 import {
   PrimaryButton,
   RadioLable,
   ScreenHeader,
   ScreenWrapper,
   SimpleDropDown,
-} from '../../../../components';
-import {GurukulBranchGetApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, CustomFonts} from '../../../../utils';
+} from '@components';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {GurukulBranchGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, CustomFonts} from '@utils';
+import {useTranslation} from 'react-i18next';
+import {ScrollView, Text, TextInput, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
 
 export const DonationScreen = ({

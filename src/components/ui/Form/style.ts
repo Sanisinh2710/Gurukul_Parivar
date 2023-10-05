@@ -1,9 +1,10 @@
+import {useAppSelector} from '@redux/hooks';
+import {RootState} from '@redux/store';
+import {COLORS, CustomFonts} from '@utils';
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '../../../redux/hooks';
-import {COLORS, CustomFonts} from '../../../utils';
 
 export const FormInputStyle = (value?: any) => {
-  const theme = useAppSelector(state => state.theme.theme);
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
 
   return StyleSheet.create({
     formTextInput: {

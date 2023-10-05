@@ -1,6 +1,17 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {
+  FormInput,
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {RegisterApi} from '@services';
+import {EmailValidationSchemaType, ForgotPasswordProps} from '@types';
+import {COLORS} from '@utils';
+import {EmailValidationSchema} from '@validations';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {
@@ -11,20 +22,6 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  FormInput,
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RegisterApi} from '../../../../services';
-import {
-  EmailValidationSchemaType,
-  ForgotPasswordProps,
-} from '../../../../types';
-import {COLORS} from '../../../../utils';
-import {EmailValidationSchema} from '../../../../validations';
 import {ForgotPasswordstyle} from './style';
 
 export const ForgotPassword = ({

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { CommonStyle } from '../../../../assets/styles';
-import { styles } from './styles';
+
+import {AllIcons, CommonStyle} from '@assets';
+import {CustomFonts} from '@utils';
+import {Image, Pressable, Text, View} from 'react-native';
+import {styles} from './styles';
 
 type CustomNavigateProps = {
   text: string | number;

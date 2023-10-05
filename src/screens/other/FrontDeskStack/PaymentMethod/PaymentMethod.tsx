@@ -1,16 +1,12 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
+
+import {CommonStyle} from '@assets';
+import {PrimaryButton, ScreenHeader, ScreenWrapper} from '@components';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@types';
+import {COLORS, Payment} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  PrimaryButton,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, Payment} from '../../../../utils';
 import {styles} from './styles';
 
 export const PaymentMethod = ({

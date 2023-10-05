@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
 import {
   BottomTabDescriptorMap,
   BottomTabNavigationEventMap,
@@ -10,13 +11,12 @@ import {
   ParamListBase,
   TabNavigationState,
 } from '@react-navigation/native';
-import { Image, Pressable, Text, View } from 'react-native';
-import { EdgeInsets } from 'react-native-safe-area-context';
-import { AllIcons } from '../../../../assets/icons';
-import { useAppSelector } from '../../../redux/hooks';
-import { Theme } from '../../../types';
-import { CustomFonts } from '../../../utils';
-import { BottomNavStyle } from './BottomNav.style';
+import {useAppSelector} from '@redux/hooks';
+import {Theme} from '@types';
+import {CustomFonts} from '@utils';
+import {Image, Pressable, Text, View} from 'react-native';
+import {EdgeInsets} from 'react-native-safe-area-context';
+import {BottomNavStyle} from './BottomNav.style';
 
 export const CustomBottomTabBar = React.memo(
   ({

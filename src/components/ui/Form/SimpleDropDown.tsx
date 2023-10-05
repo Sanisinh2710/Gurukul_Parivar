@@ -1,8 +1,9 @@
 import React from 'react';
+
+import {AllIcons} from '@assets';
+import {DropDownModel} from '@components';
+import {isObjectArray} from '@utils';
 import {Image, Text, View} from 'react-native';
-import {AllIcons} from '../../../../assets/icons';
-import {isObjectArray} from '../../../utils';
-import {DropDownModel} from '../Modal';
 import {FormInputStyle} from './style';
 
 type SimpleDropdownProps = {

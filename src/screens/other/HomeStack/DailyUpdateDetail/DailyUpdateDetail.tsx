@@ -1,7 +1,11 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {ScreenHeader, ScreenWrapper} from '@components';
 import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@types';
+import {COLORS, options} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -13,10 +17,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdateDetail = ({

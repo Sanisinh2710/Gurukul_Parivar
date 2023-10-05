@@ -1,16 +1,16 @@
 import React from 'react';
 
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {FlatList, ScrollView, View} from 'react-native';
 import {
   EduBusinessInfoValidationSchemaType,
   SupportedFormInputTypes,
-} from '../../../../types';
-import {OccupationList, skillsList} from '../../../../utils';
-import {EduBusinessInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+} from '@types';
+import {OccupationList, skillsList} from '@utils';
+import {EduBusinessInfoFormValidationSchema} from '@validations';
+import {Controller, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {FlatList, ScrollView, View} from 'react-native';
 import {styles} from './style';
 
 type EduBusinessInfoProps = {

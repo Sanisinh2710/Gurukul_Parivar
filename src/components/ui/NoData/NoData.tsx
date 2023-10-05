@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useTranslation } from 'react-i18next';
-import { Image, Text, View } from 'react-native';
-import { AllImages } from '../../../../assets/images';
-import { styles } from './styles';
+import {AllImages} from '@assets';
+import {useTranslation} from 'react-i18next';
+import {Image, Text, View} from 'react-native';
+import {styles} from './styles';
 
 type NoDataProps = {
   title?: string;

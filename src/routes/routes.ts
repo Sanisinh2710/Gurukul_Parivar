@@ -1,4 +1,5 @@
-import {ImageZoomer} from '../components';
+import {ImageZoomer} from '@components';
+import {AuthStackNavigator, BottomTabNavigator} from '@routes';
 import {
   CalendarScreen,
   ChangeLanguage,
@@ -31,13 +32,12 @@ import {
   RegisterScreen,
   ResetPassword,
   Status,
-} from '../screens';
+} from '@screens';
 import {
   RootAuthStackParamList,
   RootBottomTabParamList,
   RootStackParamList,
-} from '../types';
-import {AuthStackNavigator, BottomTabNavigator} from './Routes';
+} from '@types';
 
 export const NativeStackRouteList: Array<{
   name: keyof RootStackParamList;

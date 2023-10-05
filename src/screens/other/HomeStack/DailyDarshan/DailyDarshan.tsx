@@ -1,8 +1,22 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
+import {AllIcons, CommonStyle} from '@assets';
+import {
+  Calendar,
+  CustomNavigate,
+  Loader,
+  NoData,
+  RadioLable,
+  ScreenHeader,
+  ScreenWrapper,
+  SimpleDropDown,
+} from '@components';
+import {BASE_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailyDarshanApi, GurukulBranchGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, CustomFonts, d, options} from '@utils';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -13,30 +27,12 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { AllIcons } from '../../../../../assets/icons';
-import { CommonStyle } from '../../../../../assets/styles';
-import {
-  Calendar,
-  CustomNavigate,
-  Loader,
-  NoData,
-  RadioLable,
-  ScreenHeader,
-  ScreenWrapper,
-  SimpleDropDown,
-} from '../../../../components';
-import {
-  DailyDarshanApi,
-  GurukulBranchGetApi,
-} from '../../../../services/ApiServices';
-import { RootStackParamList } from '../../../../types';
-import { COLORS, CustomFonts, d, options } from '../../../../utils';
-import { styles } from './styles';
+import {styles} from './styles';
 
 const TimeArray = (t: any) => [
-  { name: t('DailyDarshan.All'), id: 'both' },
-  { name: t('DailyDarshan.Morning'), id: 'Morning' },
-  { name: t('DailyDarshan.Evening'), id: 'Evening' },
+  {name: t('DailyDarshan.All'), id: 'both'},
+  {name: t('DailyDarshan.Morning'), id: 'Morning'},
+  {name: t('DailyDarshan.Evening'), id: 'Evening'},
 ];
 
 export const DailyDarshan = ({
@@ -46,14 +42,14 @@ export const DailyDarshan = ({
   const commonStyle = CommonStyle();
   const [selectedDate, setSelectedDate] = React.useState<Date>(d);
   const [loader, setLoader] = React.useState<boolean>(false);
-  const [Data, setData] = React.useState<{ [key: string]: any }[]>([]);
+  const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [changeValue, setChangeValue] = React.useState();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   const [selectedItem, setselectedItem] = React.useState(t('DailyDarshan.All'));
-  const [GurukulList, setGurukulList] = React.useState<
-    { [key: string]: any }[]
-  >([]);
+  const [GurukulList, setGurukulList] = React.useState<{[key: string]: any}[]>(
+    [],
+  );
   const [BranchName, setBranchName] = React.useState();
   const [DarshanImages, setDarshanImages] = React.useState([]);
   const [DarshanThumbImages, setDarshanThumbImages] = React.useState([]);
@@ -199,7 +195,7 @@ export const DailyDarshan = ({
             onRefresh={onRefresh}
           />
         }>
-        <View style={{ height: 60, marginBottom: '16%' }}>
+        <View style={{height: 60, marginBottom: '16%'}}>
           <View
             style={{
               marginTop: '5%',
@@ -280,7 +276,7 @@ export const DailyDarshan = ({
                   marginTop: '3%',
                   paddingBottom: '10%',
                 }}
-                renderItem={({ item, index }) => {
+                renderItem={({item, index}) => {
                   return (
                     <TouchableOpacity
                       activeOpacity={0.8}

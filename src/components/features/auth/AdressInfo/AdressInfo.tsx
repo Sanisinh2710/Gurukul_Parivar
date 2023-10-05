@@ -1,20 +1,20 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
-import Toast from 'react-native-simple-toast';
-import {AllIcons} from '../../../../../assets/icons';
-import {AddressDeleteApi, GetCountriesApi} from '../../../../services';
+import {AddressDeleteApi, GetCountriesApi} from '@services';
 import {
   AddressFormValidationSchemaType,
   SupportedFormInputTypes,
   UserAddress,
-} from '../../../../types';
-import {COLORS} from '../../../../utils';
-import {AddressFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+} from '@types';
+import {COLORS} from '@utils';
+import {AddressFormValidationSchema} from '@validations';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
 import {styles} from './style';
 
 type AddressInfoProps = {

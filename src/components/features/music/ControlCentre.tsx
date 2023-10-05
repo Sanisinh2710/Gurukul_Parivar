@@ -1,8 +1,9 @@
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
-import TrackPlayer, { State } from 'react-native-track-player';
-import { AllIcons } from '../../../../assets/icons';
-import { COLORS } from '../../../utils';
+
+import {AllIcons} from '@assets';
+import {COLORS} from '@utils';
+import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
+import TrackPlayer, {State} from 'react-native-track-player';
 
 const performSkipToNext = async () => {
   await TrackPlayer.skipToNext();

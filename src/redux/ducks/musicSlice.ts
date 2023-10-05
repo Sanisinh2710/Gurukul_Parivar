@@ -1,7 +1,7 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {InitialSongsType, SongType} from '@types';
 import {WritableDraft} from 'immer/dist/internal';
 import {Track} from 'react-native-track-player';
-import {InitialSongsType, SongType} from '../../types';
 
 let initialState: InitialSongsType = {
   allSongs: [],

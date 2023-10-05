@@ -1,5 +1,5 @@
+import {COLORS, CustomFonts} from '@utils';
 import {StyleSheet} from 'react-native';
-import {COLORS, CustomFonts} from '../../../utils';
 
 export const styles = () => {
   return StyleSheet.create({
@@ -32,6 +32,6 @@ export const styles = () => {
       alignSelf: 'center',
       resizeMode: 'contain',
     },
-    primaryButtonStyle: {paddingHorizontal: 20, flex: 0.2},
+    primaryButtonStyle: {paddingHorizontal: 20, flex: 0.2}, 
   });
 };

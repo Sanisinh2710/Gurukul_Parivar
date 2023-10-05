@@ -1,8 +1,23 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {
+  Calendar,
+  Carousel,
+  CustomNavigate,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+  ShareDownload,
+  SimpleDropDown,
+} from '@components';
 import {BASE_URL} from '@env';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {DailyQuotesApi, GurukulBranchGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, CustomFonts, d, options} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -16,22 +31,6 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Calendar,
-  Carousel,
-  CustomNavigate,
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-  ShareDownload,
-  SimpleDropDown,
-} from '../../../../components';
-import {DailyQuotesApi, GurukulBranchGetApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, CustomFonts, d, options} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyQuotes = ({

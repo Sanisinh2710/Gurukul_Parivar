@@ -35,9 +35,9 @@ import {
   SLIDER_GET_ENDPOINT,
   VERIFY_POST_ENDPONT,
 } from '@env';
+import {getBearerToken} from '@services';
+import {ApiDateFormat, CustomBackendDateSplitAndFormat} from '@utils';
 import axios, {AxiosResponse} from 'axios';
-import {ApiDateFormat, CustomBackendDateSplitAndFormat} from '../utils';
-import {getBearerToken} from './AuthServices';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -87,7 +87,7 @@ const apiRequest = async (
     return {
       resType: 'ERROR',
       data: [],
-      message: 'Something went wrong..!',
+      message: 'Something went wrong!',
     };
   }
 };

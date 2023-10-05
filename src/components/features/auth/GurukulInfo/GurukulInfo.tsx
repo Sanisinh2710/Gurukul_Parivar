@@ -1,23 +1,23 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {FormInput, Loader, PrimaryButton, RadioLable} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {FlatList, Image, ScrollView, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {
   GurukulBranchGetApi,
   SaintFromFamilyGetApi,
   SaintNameGetApi,
-} from '../../../../services';
+} from '@services';
 import {
   GurukulFormValidationSchemaType,
   SingleGurukulRecType,
   SupportedFormInputTypes,
-} from '../../../../types';
-import {getYearsArray} from '../../../../utils';
-import {GurukulFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, RadioLable} from '../../../ui';
+} from '@types';
+import {getYearsArray} from '@utils';
+import {GurukulFormValidationSchema} from '@validations';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ScrollView, View} from 'react-native';
 import {styles} from './style';
 
 type GurukulInfoProps = {

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../../../utils';
-import { ButtonStyles } from './style';
+import {COLORS} from '@utils';
+import {Pressable, Text, TouchableOpacity, View} from 'react-native';
+import {ButtonStyles} from './style';
 
 type Props = {
   title: string;

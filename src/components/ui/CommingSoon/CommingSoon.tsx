@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { CompositeScreenProps } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Image, Text, View } from 'react-native';
-import { AllImages } from '../../../../assets/images';
-import { CommonStyle } from '../../../../assets/styles';
-import { RootBottomTabParamList, RootStackParamList } from '../../../types';
-import { PrimaryButton } from '../Buttons';
-import { ScreenWrapper } from '../ScreenWrapper';
-import { styles } from './styles';
+import {AllImages, CommonStyle} from '@assets';
+import {PrimaryButton, ScreenWrapper} from '@components';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootBottomTabParamList, RootStackParamList} from '@types';
+import {Image, Text, View} from 'react-native';
+import {styles} from './styles';
 
 export const CommingSoon = ({
   navigation,

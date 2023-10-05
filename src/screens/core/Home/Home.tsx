@@ -1,8 +1,14 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {PagerView, ScreenHeader, ScreenWrapper} from '@components';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useAppSelector} from '@redux/hooks';
+import {SliderGetApi} from '@services';
+import {RootBottomTabParamList, RootStackParamList} from '@types';
+import {COLORS, HomeGrid} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   Alert,
@@ -16,13 +22,6 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {PagerView, ScreenHeader, ScreenWrapper} from '../../../components';
-import {useAppSelector} from '../../../redux/hooks';
-import {SliderGetApi} from '../../../services';
-import {RootBottomTabParamList, RootStackParamList} from '../../../types';
-import {COLORS, HomeGrid} from '../../../utils';
 import {styles} from './styles';
 
 export const HomeScreen = ({

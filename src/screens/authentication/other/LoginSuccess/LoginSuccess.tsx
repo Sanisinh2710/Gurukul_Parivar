@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, Text, View } from 'react-native';
-import { AllImages } from '../../../../../assets/images';
-import { CommonStyle } from '../../../../../assets/styles';
-import { PrimaryButton, ScreenWrapper } from '../../../../components';
-import { LoginSuccessStackScreenProps } from '../../../../types';
-import { styles } from './styles';
+import {AllImages, CommonStyle} from '@assets';
+import {PrimaryButton, ScreenWrapper} from '@components';
+import {LoginSuccessStackScreenProps} from '@types';
+import {useTranslation} from 'react-i18next';
+import {Dimensions, Image, Text, View} from 'react-native';
+import {styles} from './styles';
 
 export const LoginSuccess = ({
   navigation,

@@ -1,4 +1,6 @@
 import React from 'react';
+
+import {COLORS} from '@utils';
 import {
   Dimensions,
   DimensionValue,
@@ -8,8 +10,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { COLORS } from '../../../utils';
-import { genstyle } from './style';
+import {genstyle} from './style';
 
 interface Props {
   heading?: string;

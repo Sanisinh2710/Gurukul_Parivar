@@ -2,6 +2,11 @@ import React from 'react';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+import {AllImages, CommonStyle} from '@assets';
+import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
+import {DailyUpdatesApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   FlatList,
@@ -11,17 +16,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AllImages} from '../../../../../assets/images';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {DailyUpdatesApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {COLORS} from '../../../../utils';
 import {styles} from './styles';
 
 export const DailyUpdates = ({

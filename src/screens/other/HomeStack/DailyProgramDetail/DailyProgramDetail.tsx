@@ -1,8 +1,9 @@
 import React from 'react';
+
+import {ScreenHeader, ScreenWrapper} from '@components';
+import {DailyProgramDetailProps} from '@types';
 import {Linking, Platform} from 'react-native';
 import WebView from 'react-native-webview';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {DailyProgramDetailProps} from '../../../../types';
 
 export const DailyProgramDetail = ({
   route,

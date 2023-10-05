@@ -13,19 +13,16 @@ import {
   View,
 } from 'react-native';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {DropDownModel} from '@components';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import {COLORS, CustomFonts} from '@utils';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
-import DeviceInfo from 'react-native-device-info';
-import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
-import {AllIcons} from '../../../../assets/icons';
-import {CommonStyle} from '../../../../assets/styles';
-import {COLORS, CustomFonts} from '../../../utils';
-import {DropDownModel} from '../Modal';
 import {styles} from './style';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
 type ShareDownloadProps = {
   imgURL: string | undefined;
@@ -59,38 +56,96 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const onShare = async () => {
     setIsSharing(true);
     try {
-      const response = await RNFS.downloadFile({
-        fromUrl: REMOTE_IMAGE_PATH!,
-        toFile: `${RNFS.DocumentDirectoryPath}/tempImage.jpg`,
-      });
+      const sharedPath = await downloadImage(true);
 
-      if ((await response.promise).statusCode === 200) {
-        const imagePath = `${RNFS.DocumentDirectoryPath}/tempImage.jpg`;
-        const fileContent = await RNFS.readFile(imagePath, 'base64');
+      const {fs} = RNFetchBlob;
+
+      const imagePath = sharedPath;
+      if (imagePath) {
+        const fileContent = await fs.readFile(imagePath, 'base64');
         const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
         const options = {
           title: 'Share via',
-          message: 'Check out this awesome app!',
-          url: base64Image,
+          message: 'Jay Swaminarayana..!',
+          url: Platform.OS === 'android' ? base64Image : imagePath,
           subject: 'Share Link', // for email
         };
 
         setIsSharing(false);
 
         await Share.open(options);
-        // Handle successful share here
-      } else {
-        // Handle error here
       }
-      setIsSharing(false);
     } catch (error) {
       setIsSharing(false);
 
-      // Handle error here
       console.log(error);
     }
   };
+
+  async function hasAndroidPermission() {
+    const getCheckPermissionPromise = async () => {
+      if (parseInt(Platform.Version.toString()) >= 33) {
+        const [hasReadMediaImagesPermission] = await Promise.all([
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          ),
+        ]);
+        return hasReadMediaImagesPermission;
+      } else {
+        const [
+          hasReadExternalStoragePermission,
+          hasWriteExternalStoragePermission,
+        ] = await Promise.all([
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          ),
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          ),
+        ]);
+
+        return (
+          hasReadExternalStoragePermission && hasWriteExternalStoragePermission
+        );
+      }
+    };
+
+    const hasPermission = await getCheckPermissionPromise();
+    if (hasPermission) {
+      return true;
+    } else {
+      const getRequestPermissionPromise = async () => {
+        if (parseInt(Platform.Version.toString()) >= 33) {
+          const statuses = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          ]);
+          return (
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] ===
+              PermissionsAndroid.RESULTS.GRANTED
+          );
+        } else {
+          const statuses = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          ]);
+
+          return (
+            statuses[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] ===
+              PermissionsAndroid.RESULTS.GRANTED
+          );
+        }
+      };
+      const requestedStatus = await getRequestPermissionPromise();
+
+      return requestedStatus;
+    }
+  }
 
   const checkPermissionOfWritingStorage = async () => {
     setIsdownloading(true);
@@ -104,17 +159,18 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       }
     } else {
       try {
-        let deviceVersion = DeviceInfo.getSystemVersion();
-        let granted = PermissionsAndroid.RESULTS.DENIED;
-        if (parseInt(deviceVersion) >= 13) {
-          granted = PermissionsAndroid.RESULTS.GRANTED;
-        } else {
-          granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          );
-        }
+        // let deviceVersion = DeviceInfo.getSystemVersion();
+        const granted = await hasAndroidPermission();
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // if (parseInt(deviceVersion) >= 13) {
+        //   granted = PermissionsAndroid.RESULTS.GRANTED;
+        // } else {
+        //   granted = await PermissionsAndroid.request(
+        //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        //   );
+        // }
+
+        if (granted) {
           await downloadImage();
           setModalVisible(!modalVisible);
         } else {
@@ -125,7 +181,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     setIsdownloading(false);
   };
 
-  const downloadImage = async () => {
+  const downloadImage = async (wantPath?: boolean) => {
     // Main function to download the image
 
     // To add the time suffix in filename
@@ -150,7 +206,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       aPath +
       '/Gurukul-Parivar/Pictures/images_' +
       Math.floor(date.getTime() + date.getSeconds() / 2) +
-      '.' +
       ext;
 
     let options = Platform.select({
@@ -167,7 +222,13 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     });
 
     if (options && image_URL) {
-      await config(options).fetch('GET', image_URL);
+      const response = await config(options).fetch('GET', image_URL);
+      if (Platform.OS === 'ios') {
+        await CameraRoll.save(response.data, {type: 'auto'});
+      }
+      if (wantPath) {
+        return finalPath;
+      }
     }
   };
 

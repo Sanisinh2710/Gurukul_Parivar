@@ -1,6 +1,11 @@
 import React from 'react';
 
+import {AllIcons, CommonStyle} from '@assets';
+import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {GurukulEventGetApi} from '@services';
+import {RootStackParamList} from '@types';
+import {COLORS, monthsArray} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   Dimensions,
@@ -11,17 +16,6 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
-import {CommonStyle} from '../../../../../assets/styles';
-import {
-  Loader,
-  NoData,
-  ScreenHeader,
-  ScreenWrapper,
-} from '../../../../components';
-import {GurukulEventGetApi} from '../../../../services';
-import {RootStackParamList} from '../../../../types';
-import {COLORS, monthsArray} from '../../../../utils';
 import {styles} from './styles';
 
 export const GurukulEvents = ({

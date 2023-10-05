@@ -1,4 +1,4 @@
-import { storage } from '../storage';
+import {storage} from '@storage';
 
 export const isSignedIn = () => {
   let isAuthenticated = false;
@@ -61,7 +61,7 @@ export const getAuthToken = () => {
   } catch (error) {
     resType = 'ERROR';
   }
-  return { resType, loginData };
+  return {resType, loginData};
 };
 
 export const removeAuthToken = () => {
@@ -152,7 +152,7 @@ export const getBearerToken = () => {
   } catch (error) {
     resType = 'ERROR';
   }
-  return { resType, token };
+  return {resType, token};
 };
 
 // export const setUserData = (userdata: any) => {
@@ -216,5 +216,5 @@ export const getAuthCredentialsForAutoFill = () => {
   } catch (error) {
     resType = 'ERROR';
   }
-  return { resType, userdata };
+  return {resType, userdata};
 };

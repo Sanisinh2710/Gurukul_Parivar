@@ -1,16 +1,17 @@
 import React from 'react';
 
+import {AllIcons} from '@assets';
+import {FormInput, Loader, PrimaryButton, SecondaryButton} from '@components';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {FlatList, Image, ScrollView, Text, View} from 'react-native';
-import {AllIcons} from '../../../../../assets/icons';
 import {
   PersonalInfoFormValidationSchemaType,
   SupportedFormInputTypes,
-} from '../../../../types';
-import {PersonalInfoFormValidationSchema} from '../../../../validations';
-import {FormInput, Loader, PrimaryButton, SecondaryButton} from '../../../ui';
+} from '@types';
+import {COLORS, CustomFonts} from '@utils';
+import {PersonalInfoFormValidationSchema} from '@validations';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import {PersonalInfoStyle} from './styles';
 
 type PersonalInfoProps = {
@@ -39,9 +40,7 @@ export const PersonalInfo = React.memo(
     onSubmitEvent,
   }: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-
     const personalInfoStyle = PersonalInfoStyle();
-
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
     const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =

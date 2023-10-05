@@ -1,6 +1,6 @@
+import {useAppSelector} from '@redux/hooks';
+import {COLORS} from '@utils';
 import {StyleSheet} from 'react-native';
-import {COLORS} from '../../../../utils';
-import {useAppSelector} from '../../../../redux/hooks';
 
 export const useOtpStyle = () => {
   const theme = useAppSelector(state => state.theme.theme);

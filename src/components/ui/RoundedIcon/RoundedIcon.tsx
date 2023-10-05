@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, ImageStyle, StyleProp, View, ViewStyle } from 'react-native';
-import { COLORS } from '../../../utils';
+
+import {COLORS} from '@utils';
+import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
 import { styles } from './style';
 
 type RoundedIconProps = {
@@ -19,7 +20,6 @@ export const RoundedIcon = React.memo(
     imageStyle,
     bgColor,
   }: RoundedIconProps): React.JSX.Element => {
-
     const style = styles();
     return (
       <View

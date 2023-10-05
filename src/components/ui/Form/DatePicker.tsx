@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Image, Text, View } from 'react-native';
-import { AllIcons } from '../../../../assets/icons';
-import { Calendar } from '../Calendar';
-import { FormInputStyle } from './style';
+import {AllIcons} from '@assets';
+import {Calendar} from '@components';
+import {Image, Text, View} from 'react-native';
+import {FormInputStyle} from './style';
 
 type DatePickerProps = {
   value: any;

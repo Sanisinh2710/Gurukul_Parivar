@@ -1,11 +1,11 @@
 import React from 'react';
 
+import {CommonStyle} from '@assets';
+import {ScreenHeader, ScreenWrapper} from '@components';
+import {EditProfileProps} from '@types';
+import {MyProfileData} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, Text, View} from 'react-native';
-import {CommonStyle} from '../../../../../assets/styles';
-import {ScreenHeader, ScreenWrapper} from '../../../../components';
-import {EditProfileProps} from '../../../../types';
-import {MyProfileData} from '../../../../utils';
 import {styles} from './styles';
 
 export const EditProfile = ({navigation}: EditProfileProps) => {
