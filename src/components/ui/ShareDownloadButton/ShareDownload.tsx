@@ -232,7 +232,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         addAndroidDownloads: {
           // Related to the Android only
           useDownloadManager: true,
-          notification: true,
+          notification: wantPath ? false : true,
           path: finalPath,
           description: 'Image',
         },
