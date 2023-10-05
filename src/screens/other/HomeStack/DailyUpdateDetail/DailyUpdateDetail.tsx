@@ -31,6 +31,15 @@ export const DailyUpdateDetail = ({
 
   const [imgLoad, setimgLoad] = React.useState<boolean>(false);
 
+  const navigateScreen = (index:number) =>{
+    navigation.navigate('dailyDarshanDetail', {
+      date: new Date(Data.date).toLocaleString('en-US', options),
+      data: Data.images,
+      totalImages: Data.images.length,
+      currentImageIndex: index,
+    })
+  }
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -72,19 +81,12 @@ export const DailyUpdateDetail = ({
             <ActivityIndicator
               size={30}
               color={COLORS.primaryColor}
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-              }}
+              style={style.activityIndicator}
             />
           )}
           <Image
             source={{uri: `${BASE_URL}/${Data.thumbnail[0]}`}}
             style={style.image}
-            resizeMode="contain"
             onLoadStart={() => setimgLoad(true)}
             onLoadEnd={() => setimgLoad(false)}
           />
@@ -99,40 +101,21 @@ export const DailyUpdateDetail = ({
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={true}
-            contentContainerStyle={{
-              gap: 10,
-              marginTop: 10,
-            }}
+            contentContainerStyle={style.flatListContentStyle}
             data={Data.thumbnail}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate('dailyDarshanDetail', {
-                    date: new Date(Data.date).toLocaleString('en-US', options),
-                    data: Data.images,
-                    totalImages: Data.images.length,
-                    currentImageIndex: index,
-                  })
-                }>
+                onPress={() =>navigateScreen(index)}>
                 {item && (
                   <View
-                    style={{
-                      height: 95,
-                      width: 100,
-                      borderRadius: 8,
-                    }}>
+                    style={style.horizontalImageContainer}>
                     <Image
                       source={{
                         uri: `${BASE_URL}/${item}`,
                       }}
                       key={index}
-                      style={{
-                        height: 95,
-                        width: 100,
-                        borderRadius: 8,
-                        resizeMode: 'cover',
-                      }}
+                      style={style.horizontalImageStyle}
                     />
                   </View>
                 )}

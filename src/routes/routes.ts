@@ -30,6 +30,7 @@ import {
   RegisterScreen,
   ResetPassword,
   Status,
+  AlbumSong,
 } from '../screens';
 import {
   RootAuthStackParamList,
@@ -188,3 +189,5 @@ export const NativeBottomRouteList: Array<{
     component: ProfileScreen,
   },
 ];
+
+export {AuthStackNavigator};

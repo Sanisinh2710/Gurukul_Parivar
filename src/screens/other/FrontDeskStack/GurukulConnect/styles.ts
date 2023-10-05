@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet,Dimensions} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../../utils';
 
@@ -6,6 +6,10 @@ export const styles = () => {
   const theme = useAppSelector(state => state.theme.theme);
 
   return StyleSheet.create({
+    scrollViewContent :{
+      paddingBottom: '20%',
+      marginTop: '3%',
+    },
     modelSearchView: {
       width: '100%',
       flexDirection: 'row',
@@ -55,6 +59,20 @@ export const styles = () => {
       borderRadius: 8,
       padding: 15,
       alignItems: 'center',
+    },
+    imageContainer: {
+      flexDirection: 'row',
+      gap: 6,
+    },
+    imageView: {
+      height: 24,
+      width: 24,
+    },
+    imageStyle: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+      tintColor: COLORS.primaryColor,
     },
     songTitle: {
       ...CustomFonts.body.large14,
@@ -124,5 +142,46 @@ export const styles = () => {
       color: '#171717',
       lineHeight: 16,
     },
+    filterDataContainer: {
+      flexDirection: 'row',
+      gap: 8,
+      flexWrap: 'wrap',
+      marginVertical: '1.5%',
+    },
+    filterDataView: {
+      flexDirection: 'row',
+      backgroundColor: COLORS.primaryLightColor,
+      paddingLeft: 16,
+      paddingRight: 10,
+      height: 35,
+      alignItems: 'center',
+      borderRadius: 60,
+      gap: 10,
+    },
+    filterDataText:{
+      ...CustomFonts.body.large14,
+      fontSize: 16,
+      color: COLORS.black,
+    },
+    filterDataCancelImage:{
+      width: 14,
+      height: 14,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    filterImageStyle:{
+      flex: 1,
+      tintColor: COLORS.primaryColor,
+      resizeMode: 'contain',
+    },
+    albumView :{ flexDirection: 'row' },
+    albumIconView :{ height: 15, width: 15 },
+    albumIconRotate :{
+      transform : [{rotate : '270deg'}]
+    },
+    songPlayPauseView :{ height: 24, width: 24 },
+    noDataView :{
+      height: Dimensions.get('window').height * 0.6,
+    }
   });
 };

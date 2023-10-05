@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { BASE_URL } from '@env';
-import { useFocusEffect } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
+import {BASE_URL} from '@env';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
@@ -25,9 +25,9 @@ import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { batch } from 'react-redux';
-import { AllIcons } from '../../../../../assets/icons';
-import { CommonStyle } from '../../../../../assets/styles';
+import {batch} from 'react-redux';
+import {AllIcons} from '../../../../../assets/icons';
+import {CommonStyle} from '../../../../../assets/styles';
 import {
   DropDownModel,
   Loader,
@@ -43,7 +43,7 @@ import {
   SET_ACTIVE_TRACKDATA,
   UPDATE_SETUP_MODE,
 } from '../../../../redux/ducks/musicSlice';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../../../redux/hooks';
 import {
   GurkulAudioCategoriesGetApi,
   GurkulAudioGetApi,
@@ -53,9 +53,9 @@ import {
   resetAndAddTracks,
   setupPlayer,
 } from '../../../../services';
-import { RootStackParamList, SongType } from '../../../../types';
-import { COLORS, CustomFonts, downloadSong, isString } from '../../../../utils';
-import { styles } from './styles';
+import {RootStackParamList, SongType} from '../../../../types';
+import {COLORS, CustomFonts, downloadSong, isString} from '../../../../utils';
+import {styles} from './styles';
 
 async function handleControl(wantToPlayItemId: any) {
   try {
@@ -86,7 +86,7 @@ export const GurukulConnect = ({
 }: NativeStackScreenProps<RootStackParamList>) => {
   const commonStyle = CommonStyle();
   const style = styles();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [isPlayerReady, setIsPlayerReady] = React.useState(false);
 
   const [loader, setLoader] = React.useState<boolean>(false);
@@ -94,7 +94,7 @@ export const GurukulConnect = ({
   const [filtering, setFiltering] = React.useState<boolean>(false);
 
   const [isDownloading, setIsDownLoading] = React.useState<
-    { index: number; status: boolean }[]
+    {index: number; status: boolean}[]
   >([]);
 
   const [wantNewSong, setWantNewSongs] = React.useState<boolean>(false);
@@ -123,7 +123,7 @@ export const GurukulConnect = ({
 
   const playbackState = usePlaybackState();
 
-  const { position, duration } = useProgress();
+  const {position, duration} = useProgress();
 
   const trackPosition = React.useMemo(() => {
     return position;
@@ -164,7 +164,7 @@ export const GurukulConnect = ({
 
         await addTracks([...Songs.filter(item => item.is_multiple === false)]);
 
-        dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+        dispatch(ADD_UPDATE_SONGS({songs: Songs}));
         setSearchData(Songs);
 
         const playingTrack = await TrackPlayer.getTrack(0);
@@ -276,7 +276,7 @@ export const GurukulConnect = ({
 
       if (res.resType === 'SUCCESS') {
         await setup(res.data.gurukul_audios);
-        dispatch(UPDATE_SETUP_MODE({ setupMode: 'INITIAL' }));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
       } else {
         Toast.show(res.message, 2);
       }
@@ -320,8 +320,8 @@ export const GurukulConnect = ({
       }
 
       batch(() => {
-        dispatch(ADD_UPDATE_CATEGORIES({ categories: selectedItem }));
-        dispatch(UPDATE_SETUP_MODE({ setupMode: 'FILTERED' }));
+        dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+        dispatch(UPDATE_SETUP_MODE({setupMode: 'FILTERED'}));
       });
     }
     if (selectedItem.length <= 0) {
@@ -336,8 +336,8 @@ export const GurukulConnect = ({
         }
 
         batch(() => {
-          dispatch(ADD_UPDATE_CATEGORIES({ categories: selectedItem }));
-          dispatch(UPDATE_SETUP_MODE({ setupMode: 'INITIAL' }));
+          dispatch(ADD_UPDATE_CATEGORIES({categories: selectedItem}));
+          dispatch(UPDATE_SETUP_MODE({setupMode: 'INITIAL'}));
         });
       }
     }
@@ -501,7 +501,7 @@ export const GurukulConnect = ({
                 }
 
                 batch(() => {
-                  dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+                  dispatch(ADD_UPDATE_SONGS({songs: Songs}));
                   dispatch(
                     UPDATE_SETUP_MODE({
                       setupMode:
@@ -595,7 +595,7 @@ export const GurukulConnect = ({
             ...Songs.filter(item => item.is_multiple === false),
           ]);
 
-          dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+          dispatch(ADD_UPDATE_SONGS({songs: Songs}));
           setSearchData(Songs);
         } else {
           Toast.show(res.message, 2);
@@ -615,7 +615,7 @@ export const GurukulConnect = ({
               },
             }),
           );
-          dispatch(UPDATE_SETUP_MODE({ setupMode: setupMode }));
+          dispatch(UPDATE_SETUP_MODE({setupMode: setupMode}));
         });
       } else {
         dispatch(
@@ -690,7 +690,7 @@ export const GurukulConnect = ({
             ]);
 
             if (wantToResetMenuSongList) {
-              dispatch(ADD_UPDATE_SONGS({ songs: Songs }));
+              dispatch(ADD_UPDATE_SONGS({songs: Songs}));
               setSearchData(Songs);
             }
           }
@@ -748,8 +748,72 @@ export const GurukulConnect = ({
         }
       }
     }
-    dispatch(UPDATE_SETUP_MODE({ setupMode: 'ALBUM' }));
+    dispatch(UPDATE_SETUP_MODE({setupMode: 'ALBUM'}));
     setLoader(false);
+  };
+
+  const downloadPress = async (item: any) => {
+    if (isDownloading?.find(locitem => locitem.index === item?.id)?.status) {
+      return;
+    } else {
+      const newDownLoad: {
+        index: number;
+        status: boolean;
+      }[] = [...isDownloading];
+
+      newDownLoad.push({
+        index: item.id,
+        status: true,
+      });
+
+      setIsDownLoading(newDownLoad);
+
+      const res = await downloadSong(item?.url, item?.title);
+
+      if (res) {
+        let newDownLoad: {
+          index: number;
+          status: boolean;
+        }[] = [...isDownloading];
+        const ind = newDownLoad.findIndex(
+          locitem => locitem.index === item?.id,
+        );
+
+        newDownLoad[ind] = {
+          index: item.id,
+          status: false,
+        };
+        setIsDownLoading(newDownLoad);
+      }
+    }
+  };
+
+  const onAlbumPress = async (item :any) => {
+    if (item.is_multiple) {
+      if (item?.id && item?.title) {
+        if (
+          activeTrack &&
+          activeTrackPosition &&
+          activeTrack?.album &&
+          activeTrack?.albumId !== null &&
+          activeTrack?.albumId !== undefined &&
+          activeTrack?.albumId == item?.id
+        ) {
+          await onAlbumClick(
+            activeTrack?.albumId,
+            activeTrack?.album,
+            true,
+            activeTrack,
+            activeTrackPosition,
+            playbackState === State.Playing,
+          );
+        } else {
+          await onAlbumClick(item?.id, item?.title);
+        }
+      }
+    } else {
+      return;
+    }
   };
 
   if (isPlayerReady === false || loader || filtering || isSearching) {
@@ -781,10 +845,7 @@ export const GurukulConnect = ({
           overScrollMode="always"
           contentContainerStyle={[
             commonStyle.commonContentView,
-            {
-              paddingBottom: '20%',
-              marginTop: '3%',
-            },
+            style.scrollViewContent,
           ]}
           nestedScrollEnabled={true}
           refreshControl={
@@ -806,33 +867,11 @@ export const GurukulConnect = ({
           {Array.isArray(selectedItem) &&
             selectedItem.length > 0 &&
             setupMode !== 'ALBUM' && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 8,
-                  flexWrap: 'wrap',
-                  marginVertical: '1.5%',
-                }}>
+              <View style={style.filterDataContainer}>
                 {selectedItem.map((mainitem, index) => {
                   return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'row',
-                        backgroundColor: COLORS.primaryLightColor,
-                        paddingLeft: 16,
-                        paddingRight: 10,
-                        height: 35,
-                        alignItems: 'center',
-                        borderRadius: 60,
-                        gap: 10,
-                      }}>
-                      <Text
-                        style={{
-                          ...CustomFonts.body.large14,
-                          fontSize: 16,
-                          color: COLORS.black,
-                        }}>
+                    <View key={index} style={style.filterDataView}>
+                      <Text style={style.filterDataText}>
                         {categoryList.find(item => item.id === mainitem)?.name}
                       </Text>
                       <View
@@ -843,19 +882,10 @@ export const GurukulConnect = ({
                           newValues.splice(index, 1);
                           setSelectedItem(newValues);
                         }}
-                        style={{
-                          width: 14,
-                          height: 14,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
+                        style={style.filterDataCancelImage}>
                         <Image
                           source={AllIcons.RoundCross}
-                          style={{
-                            flex: 1,
-                            tintColor: COLORS.primaryColor,
-                            resizeMode: 'contain',
-                          }}
+                          style={style.filterImageStyle}
                         />
                       </View>
                     </View>
@@ -873,7 +903,7 @@ export const GurukulConnect = ({
                 contentContainerStyle={{
                   paddingBottom: activeTrack ? '40%' : 0,
                 }}
-                renderItem={({ item, index }) => (
+                renderItem={({item, index}) => (
                   <View
                     key={index}
                     style={[
@@ -891,33 +921,7 @@ export const GurukulConnect = ({
                             : 'rgba(172, 43, 49, 0.3)',
                       },
                     ]}
-                    onTouchEnd={
-                      item.is_multiple
-                        ? async e => {
-                            if (item?.id && item?.title) {
-                              if (
-                                activeTrack &&
-                                activeTrackPosition &&
-                                activeTrack?.album &&
-                                activeTrack?.albumId !== null &&
-                                activeTrack?.albumId !== undefined &&
-                                activeTrack?.albumId == item?.id
-                              ) {
-                                await onAlbumClick(
-                                  activeTrack?.albumId,
-                                  activeTrack?.album,
-                                  true,
-                                  activeTrack,
-                                  activeTrackPosition,
-                                  playbackState === State.Playing,
-                                );
-                              } else {
-                                await onAlbumClick(item?.id, item?.title);
-                              }
-                            }
-                          }
-                        : e => {}
-                    }>
+                    onTouchEnd={() => onAlbumPress(item)}>
                     <View>
                       <Text style={style.songTitle}>
                         {item?.id}
@@ -927,85 +931,25 @@ export const GurukulConnect = ({
                       <Text style={style.songArtist}>{item?.description}</Text>
                     </View>
                     {item.is_multiple === true ? (
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={{ height: 15, width: 15 }}>
+                      <View style={style.albumView}>
+                        <View style={style.albumIconView}>
                           <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              resizeMode: 'contain',
-                              tintColor: COLORS.primaryColor,
-                              transform: [
-                                {
-                                  rotate: '270deg',
-                                },
-                              ],
-                            }}
+                            style={[style.imageStyle, style.albumIconRotate]}
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
-                        <View style={{ height: 15, width: 15, marginLeft: -7 }}>
+                        <View style={[style.albumIconView, {marginLeft: -7}]}>
                           <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              resizeMode: 'contain',
-                              tintColor: COLORS.primaryColor,
-                              transform: [
-                                {
-                                  rotate: '270deg',
-                                },
-                              ],
-                            }}
+                            style={[style.imageStyle, style.albumIconRotate]}
                             source={AllIcons.ChevronArrowDown}
                           />
                         </View>
                       </View>
                     ) : (
-                      <View style={{ flexDirection: 'row', gap: 6 }}>
+                      <View style={style.imageContainer}>
                         <View
-                          style={{ height: 24, width: 24 }}
-                          onTouchEnd={
-                            isDownloading?.find(
-                              locitem => locitem.index === item?.id,
-                            )?.status
-                              ? () => {}
-                              : async e => {
-                                  const newDownLoad: {
-                                    index: number;
-                                    status: boolean;
-                                  }[] = [...isDownloading];
-
-                                  newDownLoad.push({
-                                    index: item.id,
-                                    status: true,
-                                  });
-
-                                  setIsDownLoading(newDownLoad);
-
-                                  const res = await downloadSong(
-                                    item?.url,
-                                    item?.title,
-                                  );
-
-                                  if (res) {
-                                    let newDownLoad: {
-                                      index: number;
-                                      status: boolean;
-                                    }[] = [...isDownloading];
-                                    const ind = newDownLoad.findIndex(
-                                      locitem => locitem.index === item?.id,
-                                    );
-
-                                    newDownLoad[ind] = {
-                                      index: item.id,
-                                      status: false,
-                                    };
-
-                                    setIsDownLoading(newDownLoad);
-                                  }
-                                }
-                          }>
+                          style={style.imageView}
+                          onTouchEnd={() => downloadPress(item)}>
                           {isDownloading?.find(
                             locitem => locitem.index === item?.id,
                           )?.status ? (
@@ -1015,12 +959,7 @@ export const GurukulConnect = ({
                             />
                           ) : (
                             <Image
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                resizeMode: 'contain',
-                                tintColor: COLORS.primaryColor,
-                              }}
+                              style={style.imageStyle}
                               source={AllIcons.DownloadSong}
                             />
                           )}
@@ -1036,13 +975,9 @@ export const GurukulConnect = ({
                             onTouchEnd={async () => {
                               await handleControl(item?.id);
                             }}
-                            style={{ height: 24, width: 24 }}>
+                            style={style.songPlayPauseView}>
                             <Image
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                resizeMode: 'contain',
-                              }}
+                              style={style.imageStyle}
                               source={
                                 item?.id == activeTrack?.id &&
                                 playbackState === State.Playing
@@ -1058,10 +993,7 @@ export const GurukulConnect = ({
                 )}
               />
             ) : (
-              <View
-                style={{
-                  height: Dimensions.get('window').height * 0.6,
-                }}>
+              <View style={style.noDataView}>
                 <NoData />
               </View>
             )}

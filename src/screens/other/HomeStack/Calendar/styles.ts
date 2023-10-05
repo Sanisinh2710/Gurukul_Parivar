@@ -1,7 +1,9 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {COLORS, CustomFonts} from '../../../../utils';
 
 export const styles = () => {
+  const {width, height} = Dimensions.get('window');
+
   return StyleSheet.create({
     title: {
       ...CustomFonts.header.medium20,
@@ -29,9 +31,6 @@ export const styles = () => {
       lineHeight: 18.9,
     },
     textBoxContainer: {
-      // borderRadius: 8,
-      // borderWidth: 0.4,
-      // borderColor: 'rgba(172, 43, 49, 0.3)',
       width: '100%',
       height: 64,
       flexDirection: 'row',
@@ -57,6 +56,42 @@ export const styles = () => {
       borderColor: 'rgba(172, 43, 49, 0.3)',
       justifyContent: 'center',
       height: 64,
+    },
+    scrollViewStyle: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    calenderContainer: {
+      height: height * 0.8,
+    },
+    calenderEventView: {
+      height: '25%',
+      marginTop: 10,
+    },
+    eventContentStyle: {
+      gap: 15,
+      marginTop: 10,
+      paddingBottom: 15,
+    },
+    calenderImageContainer: {
+      alignItems: 'center',
+    },
+    calenderImageView: {
+      height: 264,
+      width: 345,
+    },
+    calenderImageStyle: {
+      height: '100%',
+      width: '100%',
+      resizeMode: 'contain',
+    },
+    activityIndicator: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
     },
   });
 };

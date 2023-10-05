@@ -85,7 +85,7 @@ export const DailyUpdates = ({
               return data;
             },
           );
-
+          console.log(data,"This is data")
           setData(data);
           setLoader(false);
         }, 200);
@@ -145,7 +145,7 @@ export const DailyUpdates = ({
                   ? new Date(data.created_at).toUTCString().slice(5, 11)
                   : new Date(data.created_at).toUTCString().slice(5, 16);
             }
-
+           
             return data;
           },
         );
@@ -158,7 +158,7 @@ export const DailyUpdates = ({
 
     setRefreshing(false);
   };
-
+  
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -200,11 +200,7 @@ export const DailyUpdates = ({
                       }}>
                       <View style={style.updateContainer}>
                         <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '20%',
-                          }}>
+                          style={style.updateView}>
                           <View style={style.imageContainer}>
                             <Image
                               source={AllImages.AppLogo}

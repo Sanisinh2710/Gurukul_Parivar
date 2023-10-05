@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {useAppSelector} from '../../../../redux/hooks';
 import {COLORS, CustomFonts} from '../../../../utils';
 
@@ -11,6 +11,7 @@ export const styles = () => {
       fontSize: 24,
       color: 'black',
     },
+    wrapperView: {flex: 1, marginTop: '3%'},
     modelSearchView: {
       width: '100%',
       flexDirection: 'row',
@@ -39,7 +40,7 @@ export const styles = () => {
       ...CustomFonts.body.large14,
       fontSize: 16,
       fontWeight: '400',
-      width: '100%',
+      width: '80%',
       color: COLORS.lightModetextColor,
       opacity: 1,
       marginLeft: 8,
@@ -92,6 +93,14 @@ export const styles = () => {
       ...CustomFonts.body.small10,
       fontSize: 16,
       color: 'white',
+    },
+    timeContainer: {
+      flexDirection: 'row',
+      width: '70%',
+      gap: 6,
+    },
+    noDataView: {
+      height: Dimensions.get('window').height * 0.65,
     },
   });
 };

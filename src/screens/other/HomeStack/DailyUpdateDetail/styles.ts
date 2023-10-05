@@ -33,5 +33,27 @@ export const styles = () => {
       height: 350,
       marginTop: '3%',
     },
+    flatListContentStyle:{
+      gap: 10,
+      marginTop: 10,
+    },
+    horizontalImageContainer:{
+      height: 95,
+      width: 100,
+      borderRadius: 8,
+    },
+    horizontalImageStyle :{
+      height: 95,
+      width: 100,
+      borderRadius: 8,
+      resizeMode: 'cover',
+    },
+    activityIndicator :{
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }
   });
 };

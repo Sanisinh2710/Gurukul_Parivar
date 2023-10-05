@@ -24,6 +24,7 @@ import {
 import {DailySatsangApi} from '../../../../services';
 import {RootAuthStackParamList} from '../../../../types';
 import {COLORS, CustomFonts, d, options} from '../../../../utils';
+import { styles } from './styles';
 
 export const LiveSatsang = ({
   navigation,
@@ -34,6 +35,7 @@ export const LiveSatsang = ({
   const [Data, setData] = React.useState<{[key: string]: any}[]>([]);
   const [loader, setLoader] = React.useState<boolean>(false);
   const commonstyle = CommonStyle();
+  const style = styles();
 
   const [playing, setPlaying] = React.useState(false);
   const [videoLoad, setVideoLoad] = React.useState(false);
@@ -107,15 +109,9 @@ export const LiveSatsang = ({
       />
       <View style={[commonstyle.commonContentView]}>
         <View
-          style={{
-            marginTop: '3%',
-            gap: 10,
-          }}>
+          style={style.satsangContainer}>
           <Text
-            style={{
-              fontSize: 20,
-              color: COLORS.black,
-            }}>
+            style={style.satsangHeading}>
             {t('common.YouTubeLiveKatha')}
           </Text>
 
@@ -130,22 +126,12 @@ export const LiveSatsang = ({
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
                       visible={refreshing ? !refreshing : !loader}
-                      style={{
-                        height: 30,
-                        width: '50%',
-                        borderRadius: 12,
-                        marginTop: 10,
-                      }}
+                      style={style.shimmerTitleStyle}
                     />
                     <ShimmerPlaceHolder
                       LinearGradient={LinearGradient}
                       visible={refreshing ? !refreshing : !loader}
-                      style={{
-                        height: 200,
-                        width: '100%',
-                        borderRadius: 12,
-                        marginTop: 10,
-                      }}
+                      style={style.shimmerVideoStyle}
                     />
                   </View>
                 );
@@ -165,27 +151,15 @@ export const LiveSatsang = ({
                 contentContainerStyle={{paddingBottom: '50%'}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
-                  <View style={{marginVertical: '3%', gap: 15}}>
+                  <View style={style.videoContainer}>
                     <View
-                      style={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
+                      style={style.videoTitleView}>
                       <Text
-                        style={{
-                          ...CustomFonts.body.large14,
-                          fontSize: 18,
-                          color: COLORS.black,
-                        }}>
+                        style={style.videoTitle}>
                         {item.title}
                       </Text>
                       <Text
-                        style={{
-                          ...CustomFonts.body.large14,
-                          fontSize: 18,
-                          color: COLORS.black,
-                        }}>
+                        style={style.videoTitle}>
                         {new Date(item.created_at).toLocaleString(
                           'en-US',
                           options,
@@ -195,14 +169,7 @@ export const LiveSatsang = ({
                     <View>
                       {videoLoad === false && (
                         <View
-                          style={{
-                            position: 'absolute',
-                            justifyContent: 'center',
-                            left: 0,
-                            right: 0,
-                            flex: 1,
-                            height: 200,
-                          }}>
+                          style={style.videoLoader}>
                           <ActivityIndicator
                             size={30}
                             color={COLORS.primaryColor}
@@ -227,7 +194,7 @@ export const LiveSatsang = ({
               />
             </>
           ) : (
-            <View style={{width: '100%', height: '90%'}}>
+            <View style={style.noDataView}>
               <NoData />
             </View>
           )}

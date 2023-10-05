@@ -159,7 +159,7 @@ export const CalendarScreen = ({
       <ScrollView
         contentContainerStyle={[
           commonstyle.commonContentView,
-          {flex: 1, alignItems: 'center', justifyContent: 'center'},
+          style.scrollViewStyle,
         ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -176,9 +176,7 @@ export const CalendarScreen = ({
           sortedData.length > 0 ? (
           <View
             style={[
-              {
-                height: height * 0.8,
-              },
+              style.calenderContainer,
               sortedData.length <= 0
                 ? {
                     justifyContent: 'center',
@@ -186,20 +184,12 @@ export const CalendarScreen = ({
                 : {},
             ]}>
             {sortedData.length > 0 && (
-              <View
-                style={{
-                  height: '25%',
-                  marginTop: 10,
-                }}>
+              <View style={style.calenderEventView}>
                 <FlatList
                   data={sortedData}
                   ref={ref}
                   nestedScrollEnabled={true}
-                  contentContainerStyle={{
-                    gap: 15,
-                    marginTop: 10,
-                    paddingBottom: 15,
-                  }}
+                  contentContainerStyle={style.eventContentStyle}
                   showsVerticalScrollIndicator={false}
                   getItemLayout={(data, index) => {
                     return {
@@ -245,9 +235,7 @@ export const CalendarScreen = ({
             {Data.length > 0 && Data[0].image !== undefined && (
               <View
                 style={[
-                  {
-                    alignItems: 'center',
-                  },
+                  style.calenderImageContainer,
                   sortedData.length <= 0
                     ? {
                         justifyContent: 'center',
@@ -262,30 +250,17 @@ export const CalendarScreen = ({
                       images: [{url: `${BASE_URL}${Data[0].image}`}],
                     });
                   }}
-                  style={{
-                    height: 264,
-                    width: 345,
-                  }}>
+                  style={style.calenderImageView}>
                   {imgLoad && (
                     <ActivityIndicator
                       size={30}
                       color={COLORS.primaryColor}
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                      }}
+                      style={style.activityIndicator}
                     />
                   )}
                   <Image
                     source={{uri: `${BASE_URL}${Data[0].image}`}}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      resizeMode: 'contain',
-                    }}
+                    style={style.calenderImageStyle}
                     onLoadStart={() => setimgLoad(true)}
                     onLoadEnd={() => setimgLoad(false)}
                   />

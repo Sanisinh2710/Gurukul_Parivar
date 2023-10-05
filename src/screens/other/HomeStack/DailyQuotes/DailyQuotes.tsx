@@ -161,6 +161,19 @@ export const DailyQuotes = ({
     setRefreshing(false);
   };
 
+  const LoadStart = (index:number) => {
+    let clone = [...imgLoad];
+    clone[index] = true;
+    setImgLoad(clone);
+  }
+  
+  const LoadEnd = (index:number) => {
+      let clone = [...imgLoad];
+      clone[index] = false;
+      setImgLoad(clone);
+
+  }
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -191,29 +204,18 @@ export const DailyQuotes = ({
           />
         }>
         <View style={[commonStyle.commonContentView, {flex: 1}]}>
-          <View style={{height: 60, marginBottom: '16%'}}>
+          <View style={style.dropDownContainer}>
             <View
               style={{
                 marginTop: '5%',
               }}>
               <Text
-                style={{
-                  ...CustomFonts.body.large14,
-                  color: COLORS.lightModetextColor,
-                  fontSize: 15,
-                }}>
+                style={style.dropDownHeading}>
                 {t('uploadPhoto.DropdownTitle')}
               </Text>
 
               <View
-                style={{
-                  marginTop: '2%',
-                  backgroundColor: 'rgba(172,43,49,0.05)',
-                  paddingHorizontal: '2%',
-                  borderWidth: 1,
-                  borderColor: 'rgba(172, 43, 49, 0.1)',
-                  borderRadius: 12,
-                }}>
+                style={style.dropDownStyle}>
                 <SimpleDropDown
                   label={t('uploadPhoto.DropdownTitle')}
                   placeholder={t('uploadPhoto.DropdownLable')}
@@ -237,11 +239,7 @@ export const DailyQuotes = ({
                   <>
                     {Data.find((item: any) => item.branch == BranchName) ? (
                       <View
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginTop: '3%',
-                        }}>
+                        style={style.quoteContainer}>
                         <Carousel
                           itemWidth={Dimensions.get('window').width * 0.91}
                           itemGap={10}
@@ -252,12 +250,7 @@ export const DailyQuotes = ({
                           renderItem={({item, index}) => {
                             return (
                               <View
-                                style={{
-                                  height: '100%',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  borderRadius: 20,
-                                }}>
+                                style={style.carouselView}>
                                 <Pressable
                                   style={{flex: 1, width: '100%'}}
                                   onPress={() => {
@@ -271,13 +264,7 @@ export const DailyQuotes = ({
                                     <ActivityIndicator
                                       size={30}
                                       color={COLORS.primaryColor}
-                                      style={{
-                                        position: 'absolute',
-                                        left: 0,
-                                        right: 0,
-                                        top: 0,
-                                        bottom: 0,
-                                      }}
+                                      style={style.activityIndicator}
                                     />
                                   )}
                                   <Image
@@ -285,16 +272,8 @@ export const DailyQuotes = ({
                                       uri: `${BASE_URL}${item.image}`,
                                     }}
                                     style={style.image}
-                                    onLoadStart={() => {
-                                      let clone = [...imgLoad];
-                                      clone[index] = true;
-                                      setImgLoad(clone);
-                                    }}
-                                    onLoadEnd={() => {
-                                      let clone = [...imgLoad];
-                                      clone[index] = false;
-                                      setImgLoad(clone);
-                                    }}
+                                    onLoadStart={() => LoadStart(index)}
+                                    onLoadEnd={() => LoadEnd(index)}
                                   />
                                 </Pressable>
                                 <View>

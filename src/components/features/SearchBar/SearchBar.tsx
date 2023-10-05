@@ -11,7 +11,7 @@ type SearchBarPropType = {
   setSearchData: React.Dispatch<React.SetStateAction<any>>;
   placeholder?: string;
   searchBarstyle?: StyleProp<ViewStyle>;
-  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const SearchBar = ({
@@ -26,6 +26,7 @@ export const SearchBar = ({
   const [searchVal, setSearchVal] = React.useState('');
   const {t} = useTranslation();
 
+  
   React.useEffect(() => {
     const data = setTimeout(() => {
       if (isStringArray(dataForSearch)) {
@@ -44,12 +45,11 @@ export const SearchBar = ({
           });
           setSearchData(filterData);
         } else {
-          setSearchData(temp);
+          setSearchData(dataForSearch);
         }
       }
       if (isObjectArray(dataForSearch)) {
         let temp = [...dataForSearch];
-
         if (searchVal !== null && searchVal !== undefined && searchVal !== '') {
           const filterData = temp.filter((item: any) => {
             return Object.keys(item).some((column: any) => {
@@ -69,7 +69,7 @@ export const SearchBar = ({
           });
           setSearchData(filterData);
         } else {
-          setSearchData(temp);
+          setSearchData(dataForSearch);
         }
       }
     }, 800);
