@@ -36,39 +36,33 @@ export const ControlCentre = ({
   };
 
   return (
-    <>
-      <View style={style.trackForwardControl}>
-        <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
-          <Image
-            style={style.commomImgStyle}
-            source={AllIcons.ForwardControl}
-          />
-        </View>
-        {playbackState === State.Buffering ? (
-          <ActivityIndicator size={40} color={COLORS.primaryColor} />
-        ) : (
-          <View
-            onTouchEnd={() => togglePlayback(playbackState)}
-            style={style.playBtnView}>
-            <Image
-              style={style.commomImgStyle}
-              source={
-                playbackState === State.Playing
-                  ? AllIcons.TrackPause
-                  : AllIcons.TrackPlay
-              }
-            />
-          </View>
-        )}
-
-        <View onTouchEnd={performSkipToNext} style={style.forwardImage}>
-          <Image
-            style={style.commomImgStyle}
-            source={AllIcons.ForwardControl}
-          />
-        </View>
+    <View style={style.trackForwardControl}>
+      <View
+        onTouchEnd={performSkipToPrevious}
+        style={[style.forwardImage, {transform: [{rotate: '360deg'}]}]}>
+        <Image style={style.commomImgStyle} source={AllIcons.ForwardControl} />
       </View>
-    </>
+      {playbackState === State.Buffering ? (
+        <ActivityIndicator size={40} color={COLORS.primaryColor} />
+      ) : (
+        <View
+          onTouchEnd={() => togglePlayback(playbackState)}
+          style={style.playBtnView}>
+          <Image
+            style={style.commomImgStyle}
+            source={
+              playbackState === State.Playing
+                ? AllIcons.TrackPause
+                : AllIcons.TrackPlay
+            }
+          />
+        </View>
+      )}
+
+      <View onTouchEnd={performSkipToNext} style={style.forwardImage}>
+        <Image style={style.commomImgStyle} source={AllIcons.ForwardControl} />
+      </View>
+    </View>
   );
 };
 

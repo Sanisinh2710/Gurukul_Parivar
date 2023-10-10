@@ -180,5 +180,8 @@ export const styles = () => {
     noDataView: {
       height: Dimensions.get('window').height * 0.6,
     },
+    titleDescViewContainer: {
+      width: '80%',
+    },
   });
 };

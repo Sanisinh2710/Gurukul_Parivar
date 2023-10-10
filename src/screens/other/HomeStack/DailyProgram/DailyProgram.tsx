@@ -95,26 +95,26 @@ export const DailyProgram = ({
             data={DailyProgramData}
             renderItem={({item, index}) => {
               return (
-                <>
-                  <Pressable
-                    onPress={() => navigateScreen(item)}
-                    android_ripple={{
-                      color: COLORS.primaryRippleColor,
-                      foreground: true,
-                    }}
-                    key={item.title + index}
-                    style={style.listContainer}>
-                    <View style={style.listContentView}>
-                      <View style={style.listImageView}>
-                        <Image
-                          source={{uri: `${BASE_URL}${item.image}`}}
-                          style={style.imageStyle}
-                        />
-                      </View>
-                      <Text style={style.listTextStyle}>{item.title}</Text>
+                <Pressable
+                  onPress={() => navigateScreen(item)}
+                  android_ripple={{
+                    color: COLORS.primaryRippleColor,
+                    foreground: true,
+                  }}
+                  key={item.title + index}
+                  style={style.listContainer}>
+                  <View style={style.listContentView}>
+                    <View style={style.listImageView}>
+                      <Image
+                        source={{uri: `${BASE_URL}${item.image}`}}
+                        style={style.imageStyle}
+                      />
                     </View>
-                  </Pressable>
-                </>
+                    <Text style={style.listTextStyle} numberOfLines={2}>
+                      {item.title}
+                    </Text>
+                  </View>
+                </Pressable>
               );
             }}
           />

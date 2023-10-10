@@ -979,13 +979,15 @@ export const GurukulConnect = ({
                       },
                     ]}
                     onTouchEnd={() => onAlbumPress(item)}>
-                    <View>
-                      <Text style={style.songTitle}>
+                    <View style={style.titleDescViewContainer}>
+                      <Text style={style.songTitle} numberOfLines={1}>
                         {item?.id}
                         {'. '}
                         {item?.title}
                       </Text>
-                      <Text style={style.songArtist}>{item?.description}</Text>
+                      <Text style={style.songArtist} numberOfLines={1}>
+                        {item?.description}
+                      </Text>
                     </View>
                     {item.is_multiple === true ? (
                       <View style={style.albumView}>

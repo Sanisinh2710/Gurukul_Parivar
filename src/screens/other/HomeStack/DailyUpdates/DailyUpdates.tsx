@@ -79,7 +79,6 @@ export const DailyUpdates = ({
               return data;
             },
           );
-          console.log(data, 'This is data');
           setData(data);
           setLoader(false);
         }, 200);

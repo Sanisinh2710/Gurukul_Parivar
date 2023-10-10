@@ -189,11 +189,7 @@ export const DailyDarshan = ({
         contentContainerStyle={[
           commonStyle.commonContentView,
           {
-            height:
-              Data.find(item => item.branch === BranchName) !== undefined &&
-              DarshanThumbImages.length > 0
-                ? 'auto'
-                : '100%',
+            height: '100%',
           },
         ]}
         nestedScrollEnabled={true}
@@ -239,14 +235,7 @@ export const DailyDarshan = ({
         />
 
         {loader ? (
-          <Loader
-            screenHeight={
-              Data.find(item => item.branch === BranchName) !== undefined &&
-              DarshanThumbImages.length > 0
-                ? '100%'
-                : '70%'
-            }
-          />
+          <Loader screenHeight={'70%'} />
         ) : (
           <View
             style={{

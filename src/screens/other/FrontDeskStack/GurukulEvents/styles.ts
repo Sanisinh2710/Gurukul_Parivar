@@ -79,6 +79,7 @@ export const styles = () => {
       borderBottomRightRadius: 8,
       backgroundColor: 'white',
       paddingLeft: '5%',
+      paddingRight: '2%',
       borderColor: 'rgba(172, 43, 49, 0.3)',
       justifyContent: 'center',
     },
