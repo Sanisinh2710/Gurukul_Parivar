@@ -11,83 +11,82 @@ type Props = {
   disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
-  buttonStyle?: { [key: string]: any };
-  textStyle?: { [key: string]: any };
+  buttonStyle?: {[key: string]: any};
+  textStyle?: {[key: string]: any};
   customWidget?: React.JSX.Element;
 };
-export const PrimaryButton = React.memo(
-  ({
-    title,
-    onPress,
-    buttonColor,
-    titleColor,
-    buttonStyle,
-    textStyle,
-    disabled,
-    customWidget,
-  }: Props) => {
-    const theme = useAppSelector(state => state.theme.theme);
+export const PrimaryButton = ({
+  title,
+  onPress,
+  buttonColor,
+  titleColor,
+  buttonStyle,
+  textStyle,
+  disabled,
+  customWidget,
+}: Props) => {
+  const theme = useAppSelector(state => state.theme.theme);
 
-    const styles = ButtonStyles();
+  const styles = ButtonStyles();
 
-    return (
-      <View
-        onTouchEnd={disabled ? () => { } : onPress}
-        style={{
-          ...styles.container,
-          ...buttonStyle,
-        }}>
-        {disabled ? (
-          <TouchableOpacity
-            activeOpacity={1}
-            style={[
-              styles.pressableButtonstyle,
-              {
-                backgroundColor: '#D28F90',
-              },
-            ]}>
-            {customWidget ? (
-              customWidget
-            ) : (
-              <Text
-                style={{
-                  ...styles.titleText,
-                  ...textStyle,
-                  color: titleColor || COLORS.darkModetextColor,
-                }}>
-                {title}
-              </Text>
-            )}
-          </TouchableOpacity>
-        ) : (
-          <Pressable
-            android_ripple={{
-              color: COLORS.primaryRippleColor,
-              foreground: true,
-            }}
-            style={[
-              styles.pressableButtonstyle,
-              {
-                backgroundColor: buttonColor || theme.primary,
-              },
-            ]}>
-            {customWidget ? (
-              customWidget
-            ) : (
-              <Text
-                style={{
-                  ...styles.titleText,
-                  ...textStyle,
-                  marginTop: 'auto',
-                  marginBottom: 'auto',
-                  color: titleColor || COLORS.darkModetextColor,
-                }}>
-                {title}
-              </Text>
-            )}
-          </Pressable>
-        )}
-      </View>
-    );
-  },
-);
+  return (
+    <Pressable
+      onPress={disabled ? () => {} : onPress}
+      style={{
+        ...styles.container,
+        ...buttonStyle,
+      }}>
+      {disabled ? (
+        <TouchableOpacity
+          activeOpacity={1}
+          style={[
+            styles.pressableButtonstyle,
+            {
+              backgroundColor: '#D28F90',
+            },
+          ]}>
+          {customWidget ? (
+            customWidget
+          ) : (
+            <Text
+              style={{
+                ...styles.titleText,
+                ...textStyle,
+                color: titleColor || COLORS.darkModetextColor,
+              }}>
+              {title}
+            </Text>
+          )}
+        </TouchableOpacity>
+      ) : (
+        <Pressable
+          onPress={disabled ? () => {} : onPress}
+          android_ripple={{
+            color: COLORS.primaryRippleColor,
+            foreground: true,
+          }}
+          style={[
+            styles.pressableButtonstyle,
+            {
+              backgroundColor: buttonColor || theme.primary,
+            },
+          ]}>
+          {customWidget ? (
+            customWidget
+          ) : (
+            <Text
+              style={{
+                ...styles.titleText,
+                ...textStyle,
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                color: titleColor || COLORS.darkModetextColor,
+              }}>
+              {title}
+            </Text>
+          )}
+        </Pressable>
+      )}
+    </Pressable>
+  );
+};

@@ -24,6 +24,7 @@ export const App = () => {
         await PermissionsAndroid.requestMultiple([
           'android.permission.CAMERA',
           'android.permission.READ_EXTERNAL_STORAGE',
+          'android.permission.READ_MEDIA_IMAGES',
           'android.permission.WRITE_EXTERNAL_STORAGE',
         ]);
       }

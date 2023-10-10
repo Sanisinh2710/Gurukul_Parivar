@@ -8,26 +8,31 @@ export const styles = () => {
       color: 'black',
     },
     imageContainer: {
-      height: 48,
-      width: 48,
+      height: 98,
+      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 12,
       marginHorizontal: 8,
+      backgroundColor: '#ffffff',
     },
     listTitle: {
+      marginTop: '10%',
       ...CustomFonts.header.medium20,
       fontSize: 16,
       color: 'black',
+      textAlign: 'center',
     },
-    flatListContainer: {
+
+    boxView: {
       flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    boxViewInnerView: {
+      width: '33.33%',
+      marginVertical: 25,
       alignItems: 'center',
-      marginVertical: '2.5%',
-      marginHorizontal: '2%',
-      borderRadius: 12,
-      height: 64,
-      backgroundColor: '#ffffff',
+      paddingHorizontal: '5%',
     },
   });
 };

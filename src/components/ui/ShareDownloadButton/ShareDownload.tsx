@@ -56,25 +56,33 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   const onShare = async () => {
     setIsSharing(true);
     try {
-      const sharedPath = await downloadImage(true);
+      const granted =
+        Platform.OS === 'android' ? await hasAndroidPermission() : true;
 
-      const {fs} = RNFetchBlob;
+      if (granted) {
+        const sharedPath = await downloadImage(true);
 
-      const imagePath = sharedPath;
-      if (imagePath) {
-        const fileContent = await fs.readFile(imagePath, 'base64');
-        const base64Image = `data:image/jpeg;base64,${fileContent}`;
+        const {fs} = RNFetchBlob;
 
-        const options = {
-          title: 'Share via',
-          message: 'Jay Swaminarayana..!',
-          url: Platform.OS === 'android' ? base64Image : imagePath,
-          subject: 'Share Link', // for email
-        };
+        const imagePath = sharedPath;
+        if (imagePath) {
+          const fileContent = await fs.readFile(imagePath, 'base64');
+          const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
+          const options = {
+            title: 'Share via',
+            message: 'Jay Swaminarayana..!',
+            url: Platform.OS === 'android' ? base64Image : imagePath,
+            subject: 'Share Link', // for email
+          };
+
+          setIsSharing(false);
+
+          await Share.open(options);
+        }
+      } else {
         setIsSharing(false);
-
-        await Share.open(options);
+        Toast.show('Storage Permission Required', 2);
       }
     } catch (error) {
       setIsSharing(false);
@@ -91,6 +99,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
           ),
         ]);
+
         return hasReadMediaImagesPermission;
       } else {
         const [
@@ -214,7 +223,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         addAndroidDownloads: {
           // Related to the Android only
           useDownloadManager: true,
-          notification: true,
+          notification: wantPath ? false : true,
           path: finalPath,
           description: 'Image',
         },
