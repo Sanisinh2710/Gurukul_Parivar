@@ -101,20 +101,16 @@ export const HomeScreen = ({
 
   const ExitCallBack = React.useCallback(() => {
     // Add Event Listener for hardwareBackPress
-    Platform.OS === 'android'
-      ? BackHandler.addEventListener('hardwareBackPress', onBackPress)
-      : navigation.addListener('beforeRemove', onBackPress);
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
     return () => {
       // Once the Screen gets blur Remove Event Listener
 
-      Platform.OS === 'android'
-        ? BackHandler.removeEventListener('hardwareBackPress', onBackPress)
-        : navigation.removeListener('beforeRemove', onBackPress);
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     };
   }, [onBackPress]);
 
-  useFocusEffect(ExitCallBack);
+  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
 
   const handlePress = (val: string) => {
     switch (val) {
