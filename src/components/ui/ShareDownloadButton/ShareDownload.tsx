@@ -217,6 +217,15 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       ext;
 
     let options = Platform.select({
+      ios: {
+        fileCache: true,
+        path: finalPath,
+        // mime: 'application/xlsx',
+        // appendExt: 'xlsx',
+        //path: filePath,
+        //appendExt: fileExt,
+        notification: true,
+      },
       android: {
         fileCache: true,
         addAndroidDownloads: {
