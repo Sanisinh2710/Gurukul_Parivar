@@ -90,6 +90,7 @@ const apiRequest = async (
       resType: 'ERROR',
       data: [],
       message: 'Something went wrong!',
+      statusCode: 400,
     };
   }
 };

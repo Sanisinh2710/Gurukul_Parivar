@@ -3,7 +3,15 @@ import React from 'react';
 import {AllIcons} from '@assets';
 import {isObjectArray, isStringArray} from '@utils';
 import {useTranslation} from 'react-i18next';
-import {Image, StyleProp, TextInput, View, ViewStyle} from 'react-native';
+import {
+  ColorValue,
+  Image,
+  StyleProp,
+  TextInput,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {styles} from './style';
 
 type SearchBarPropType = {
@@ -11,7 +19,9 @@ type SearchBarPropType = {
   setSearchData: React.Dispatch<React.SetStateAction<any>>;
   placeholder?: string;
   searchBarstyle?: StyleProp<ViewStyle>;
+  searchTextStyle?: StyleProp<TextStyle>;
   setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
+  placeholderTextColor?: ColorValue;
 };
 
 export const SearchBar = ({
@@ -20,6 +30,8 @@ export const SearchBar = ({
   placeholder,
   searchBarstyle,
   setIsSearching,
+  searchTextStyle,
+  placeholderTextColor,
 }: SearchBarPropType): React.JSX.Element => {
   const style = styles();
 
@@ -76,15 +88,17 @@ export const SearchBar = ({
   }, [searchVal]);
 
   return (
-    <View style={[style.modelSearchView, searchBarstyle]}>
+    <View style={[searchBarstyle ? searchBarstyle : style.modelSearchView]}>
       <View style={style.iconView}>
         <Image source={AllIcons.Search} style={style.iconStyle} />
       </View>
       <TextInput
         value={searchVal}
         placeholder={placeholder ? placeholder : t('common.Search')}
-        placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
-        style={style.formTextInput}
+        placeholderTextColor={
+          placeholderTextColor ? placeholderTextColor : 'rgba(23, 23, 23, 0.3)'
+        }
+        style={[style.formTextInput, searchTextStyle]}
         onChangeText={val => {
           setSearchVal(val);
         }}

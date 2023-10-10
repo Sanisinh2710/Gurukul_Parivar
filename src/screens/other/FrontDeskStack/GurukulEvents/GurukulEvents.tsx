@@ -43,21 +43,25 @@ export const GurukulEvents = ({
   const commonstyle = CommonStyle();
 
   const searchEvent = (val: string) => {
-    if (val) {
-      setSearchListData(
-        EventData.filter((item: any) => {
-          return (
-            item?.title?.toLowerCase()?.includes(val?.toLowerCase()) ||
-            new Date(item?.date)?.getDate()?.toString().includes(val) ||
-            monthsArray[new Date(item?.date).getMonth()]
-              ?.toLocaleLowerCase()
-              .includes(val.toLocaleLowerCase())
-          );
-        }),
-      );
-    } else {
-      setSearchListData(EventData);
-    }
+    const timer = setTimeout(() => {
+      if (val) {
+        setSearchListData(
+          EventData.filter((item: any) => {
+            return (
+              item?.title?.toLowerCase()?.includes(val?.toLowerCase()) ||
+              new Date(item?.date)?.getDate()?.toString().includes(val) ||
+              monthsArray[new Date(item?.date).getMonth()]
+                ?.toLocaleLowerCase()
+                .includes(val.toLocaleLowerCase())
+            );
+          }),
+        );
+      } else {
+        setSearchListData(EventData);
+      }
+    }, 800);
+
+    return () => clearTimeout(timer);
   };
 
   const getAndSetEventData = async () => {
@@ -133,6 +137,7 @@ export const GurukulEvents = ({
                 }}
               />
             </View>
+
             {searchListData.length > 0 ? (
               searchListData.map((item, index) => {
                 return (
