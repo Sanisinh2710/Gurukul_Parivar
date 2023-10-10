@@ -225,6 +225,69 @@ export const AdressInfo = React.memo(
       onSubmitEvent(initialValues.address_details, 'skip');
     };
 
+    const handleRemoveAddress = (mainindex: any) => {
+      if (
+        initialValues?.address_details?.[mainindex]?.id !== undefined &&
+        initialValues?.address_details?.[mainindex]?.id !== null &&
+        initialValues?.address_details?.[mainindex]?.id !== ''
+      ) {
+        Alert.alert('Are you sure you want to delete this address..?', '', [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const response = await AddressDeleteApi(
+                initialValues?.address_details?.[mainindex]?.id,
+              );
+
+              if (response.resType === 'SUCCESS') {
+                remove(mainindex);
+                const newForm = JSON.parse(JSON.stringify(formData));
+
+                newForm.address_details.splice(mainindex, 1);
+                setFormData(newForm);
+
+                Toast.show('Addres deleted successfully', Toast.SHORT);
+              } else {
+                Toast.show(response.message, Toast.SHORT);
+              }
+            },
+          },
+        ]);
+      } else {
+        remove(mainindex);
+      }
+    };
+
+    const onclickCheckBox = (mainindex: any) => {
+      let newArr = JSON.parse(JSON.stringify(checkedArray));
+
+      let returnArr = newArr.map((item: any, index: number) => {
+        return mainindex === index ? !item : false;
+      });
+
+      setCheckedArray(returnArr);
+    };
+
+    const addAdress = () => {
+      append({
+        country_id: '',
+        address: '',
+        pincode: '',
+        city: '',
+        address_type: '',
+        is_preferred_communication: false,
+      });
+
+      let newArr = JSON.parse(JSON.stringify(checkedArray));
+      newArr.push(false);
+      setCheckedArray(newArr);
+    };
+
     return (
       <View>
         {loader ? (
@@ -240,58 +303,7 @@ export const AdressInfo = React.memo(
                   {mainindex >= 1 && (
                     <View
                       style={style.cancelImgView}
-                      onTouchEnd={() => {
-                        if (
-                          initialValues?.address_details?.[mainindex]?.id !==
-                            undefined &&
-                          initialValues?.address_details?.[mainindex]?.id !==
-                            null &&
-                          initialValues?.address_details?.[mainindex]?.id !== ''
-                        ) {
-                          Alert.alert(
-                            'Are you sure you want to delete this address..?',
-                            '',
-                            [
-                              {
-                                text: 'Cancel',
-                                onPress: () => {},
-                                style: 'cancel',
-                              },
-                              {
-                                text: 'OK',
-                                onPress: async () => {
-                                  const response = await AddressDeleteApi(
-                                    initialValues?.address_details?.[mainindex]
-                                      ?.id,
-                                  );
-
-                                  if (response.resType === 'SUCCESS') {
-                                    remove(mainindex);
-                                    const newForm = JSON.parse(
-                                      JSON.stringify(formData),
-                                    );
-
-                                    newForm.address_details.splice(
-                                      mainindex,
-                                      1,
-                                    );
-                                    setFormData(newForm);
-
-                                    Toast.show(
-                                      'Addres deleted successfully',
-                                      Toast.SHORT,
-                                    );
-                                  } else {
-                                    Toast.show(response.message, Toast.SHORT);
-                                  }
-                                },
-                              },
-                            ],
-                          );
-                        } else {
-                          remove(mainindex);
-                        }
-                      }}>
+                      onTouchEnd={() => handleRemoveAddress(mainindex)}>
                       <Image source={AllIcons.Cancel} style={style.cancelImg} />
                     </View>
                   )}
@@ -341,19 +353,7 @@ export const AdressInfo = React.memo(
                                 style.checkboxInnerView,
                                 {borderWidth: checkedArray[mainindex] ? 0 : 1},
                               ]}
-                              onTouchEnd={() => {
-                                let newArr = JSON.parse(
-                                  JSON.stringify(checkedArray),
-                                );
-
-                                let returnArr = newArr.map(
-                                  (item: any, index: number) => {
-                                    return mainindex === index ? !item : false;
-                                  },
-                                );
-
-                                setCheckedArray(returnArr);
-                              }}>
+                              onTouchEnd={() => onclickCheckBox(mainindex)}>
                               {checkedArray[mainindex] ? (
                                 <Image
                                   source={AllIcons.Checkbox}
@@ -374,20 +374,7 @@ export const AdressInfo = React.memo(
             })}
             <SecondaryButton
               title={t('common.AddAddress')}
-              onPress={() => {
-                append({
-                  country_id: '',
-                  address: '',
-                  pincode: '',
-                  city: '',
-                  address_type: '',
-                  is_preferred_communication: false,
-                });
-
-                let newArr = JSON.parse(JSON.stringify(checkedArray));
-                newArr.push(false);
-                setCheckedArray(newArr);
-              }}
+              onPress={() => addAdress()}
               buttonColor={'transparent'}
               titleColor={COLORS.primaryColor}
               borderColor={COLORS.primaryColor}

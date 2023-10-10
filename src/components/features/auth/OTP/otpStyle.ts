@@ -28,5 +28,6 @@ export const useOtpStyle = () => {
       color: theme.textColor,
       fontSize: 20,
     },
+    otpMainView: {justifyContent: 'center', gap: 10, flexDirection: 'row'},
   });
 };

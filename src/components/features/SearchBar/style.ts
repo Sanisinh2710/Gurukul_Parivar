@@ -38,7 +38,7 @@ export const styles = () => {
       ...CustomFonts.body.large14,
       fontSize: 16,
       fontWeight: '400',
-      width: '100%',
+      width: '80%',
       color: COLORS.lightModetextColor,
       opacity: 1,
       marginLeft: 8,

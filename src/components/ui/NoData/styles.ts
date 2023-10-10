@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 
 export const styles = () => {
   return StyleSheet.create({
+    noDataWrapper: {flex: 1, justifyContent: 'center'},
     NoDataTitle: {
       ...CustomFonts.header.medium20,
       fontSize: 20,
@@ -15,7 +16,16 @@ export const styles = () => {
       color: 'rgba(23,23,23,0.5)',
       lineHeight: 25,
       textAlign: 'center',
-      top: 8,
+    },
+    noDataImgView: {
+      width: '70%',
+      height: '40%',
+      alignSelf: 'center',
+    },
+    noDataImg: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
     },
   });
 };

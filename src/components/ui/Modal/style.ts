@@ -74,6 +74,7 @@ export const ModalStyle = (modalHeight: any) => {
     modelFlatListContainerStyle: {
       paddingTop: 30,
       gap: 25,
+      paddingBottom: '40%',
     },
     modelMenuView: {
       flexDirection: 'row',
@@ -99,6 +100,12 @@ export const ModalStyle = (modalHeight: any) => {
       width: '100%',
       height: '100%',
       resizeMode: 'contain',
+    },
+    resetBtnView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: '3%',
     },
   });
 };

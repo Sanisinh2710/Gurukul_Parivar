@@ -17,7 +17,7 @@ interface Props {
   showHeading: boolean;
   value: string;
   onChange: (...event: any[]) => void;
-  list: {name: string; icon?: any; id?: any}[];
+  list: { name: string; icon?: any; id?: any }[];
   wantFullSpace?: boolean;
   customStyle?: StyleProp<ViewStyle>;
   dailyQuiz?: boolean;
@@ -63,8 +63,8 @@ export const RadioLable = ({
             [
               style.innerView,
               wantFullSpace
-                ? {justifyContent: 'space-between'}
-                : {gap: 10, flexWrap: 'wrap'},
+                ? { justifyContent: 'space-between' }
+                : { gap: 10, flexWrap: 'wrap' },
             ],
           ],
           dailyQuiz && {
@@ -77,13 +77,13 @@ export const RadioLable = ({
             style={[
               style.itemView,
               value === item.name
-                ? {backgroundColor: COLORS.primaryColor}
-                : {backgroundColor: COLORS.primaryLightColor},
+                ? { backgroundColor: COLORS.primaryColor }
+                : { backgroundColor: COLORS.primaryLightColor },
               !item.icon && {
                 justifyContent: 'center',
                 alignItems: 'center',
               },
-              wantFullSpace && {width: itemWidth},
+              wantFullSpace && { width: itemWidth },
               customStyle,
             ]}
             key={item.name}
@@ -92,7 +92,7 @@ export const RadioLable = ({
               <View
                 style={[
                   style.icon,
-                  {alignItems: 'center', justifyContent: 'center'},
+                  { alignItems: 'center', justifyContent: 'center' },
                 ]}>
                 <Image
                   source={item.icon}
@@ -103,8 +103,8 @@ export const RadioLable = ({
                       resizeMode: 'contain',
                     },
                     value === item.name
-                      ? {tintColor: '#FFFFFF'}
-                      : {tintColor: COLORS.primaryColor},
+                      ? { tintColor: '#FFFFFF' }
+                      : { tintColor: COLORS.primaryColor },
                   ]}
                 />
               </View>
@@ -114,8 +114,8 @@ export const RadioLable = ({
               style={[
                 style.lable,
                 value === item.name
-                  ? {color: COLORS.white}
-                  : {color: COLORS.black},
+                  ? { color: COLORS.white }
+                  : { color: COLORS.black },
               ]}>
               {item.name}
             </Text>

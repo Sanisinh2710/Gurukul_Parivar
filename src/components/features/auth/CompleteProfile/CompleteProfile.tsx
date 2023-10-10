@@ -12,8 +12,8 @@ import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
 
 export const CompleteYourProfile = React.memo(
-  ({isParentLoading, initialValues, onSubmitEvent}: any) => {
-    const {t} = useTranslation();
+  ({ isParentLoading, initialValues, onSubmitEvent }: any) => {
+    const { t } = useTranslation();
     const style = styles();
 
     const [isLoading, setIsLoading] = React.useState(false);
@@ -69,7 +69,7 @@ export const CompleteYourProfile = React.memo(
       control,
       setValue,
       handleSubmit,
-      formState: {errors},
+      formState: { errors },
     } = useForm<CompleteProfileFormValidationSchemaType>({
       defaultValues: initialValues,
       resolver: yupResolver(CompleteProfileFormValidationSchema()),
@@ -117,7 +117,7 @@ export const CompleteYourProfile = React.memo(
               <Controller
                 control={control}
                 name={completeProfileInputList.profilePic.name}
-                render={({field: {onBlur, onChange, value}}) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                   return (
                     <FormInput
                       type={completeProfileInputList.profilePic.type}
@@ -150,7 +150,7 @@ export const CompleteYourProfile = React.memo(
                 <Controller
                   control={control}
                   name={completeProfileInputList.gurukulName.name}
-                  render={({field: {onBlur, onChange, value}}) => {
+                  render={({ field: { onBlur, onChange, value } }) => {
                     return (
                       <View style={style.formInputView}>
                         <FormInput

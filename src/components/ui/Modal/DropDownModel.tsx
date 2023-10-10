@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {useTranslation} from 'react-i18next';
 import {
   Dimensions,
@@ -253,12 +252,7 @@ export const DropDownModel = React.memo((props: DropDownModelProps) => {
               <View>
                 {wantResetButton ? (
                   <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '3%',
-                    }}>
+                  style={style.resetBtnView}>
                     <Text style={style.modelLabelText}>{label}</Text>
                     <Text
                       style={style.modelValueResetText}

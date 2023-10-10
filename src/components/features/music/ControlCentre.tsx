@@ -36,56 +36,39 @@ export const ControlCentre = ({
   };
 
   return (
-    <View style={style.trackForwardControl}>
-      <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
-        <Image
-          style={{width: '100%', height: '100%'}}
-          source={AllIcons.ForwardControl}
-        />
-      </View>
-      {playbackState === State.Buffering ? (
-        <ActivityIndicator size={40} color={COLORS.primaryColor} />
-      ) : (
-        <View
-          onTouchEnd={() => togglePlayback(playbackState)}
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 40,
-            shadowColor: '#3dadfc',
-            shadowOffset: {
-              width: 0,
-              height: 12,
-            },
-            shadowOpacity: 0.15,
-            shadowRadius: 13.84,
-            elevation: 7,
-          }}>
+    <>
+      <View style={style.trackForwardControl}>
+        <View onTouchEnd={performSkipToPrevious} style={style.forwardImage}>
           <Image
-            style={{width: '100%', height: '100%'}}
-            source={
-              playbackState === State.Playing
-                ? AllIcons.TrackPause
-                : AllIcons.TrackPlay
-            }
+            style={style.commomImgStyle}
+            source={AllIcons.ForwardControl}
           />
         </View>
-      )}
+        {playbackState === State.Buffering ? (
+          <ActivityIndicator size={40} color={COLORS.primaryColor} />
+        ) : (
+          <View
+            onTouchEnd={() => togglePlayback(playbackState)}
+            style={style.playBtnView}>
+            <Image
+              style={style.commomImgStyle}
+              source={
+                playbackState === State.Playing
+                  ? AllIcons.TrackPause
+                  : AllIcons.TrackPlay
+              }
+            />
+          </View>
+        )}
 
-      <View
-        onTouchEnd={performSkipToNext}
-        style={[
-          style.forwardImage,
-          {
-            transform: [{rotate: '180deg'}],
-          },
-        ]}>
-        <Image
-          style={{width: '100%', height: '100%'}}
-          source={AllIcons.ForwardControl}
-        />
+        <View onTouchEnd={performSkipToNext} style={style.forwardImage}>
+          <Image
+            style={style.commomImgStyle}
+            source={AllIcons.ForwardControl}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -100,5 +83,23 @@ const style = StyleSheet.create({
   forwardImage: {
     width: 17,
     height: 17,
+    transform: [{rotate: '180deg'}],
+  },
+  commomImgStyle: {
+    width: '100%',
+    height: '100%',
+  },
+  playBtnView: {
+    height: 40,
+    width: 40,
+    borderRadius: 40,
+    shadowColor: '#3dadfc',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 13.84,
+    elevation: 7,
   },
 });

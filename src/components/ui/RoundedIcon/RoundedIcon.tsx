@@ -2,6 +2,7 @@ import React from 'react';
 
 import {COLORS} from '@utils';
 import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
+import { styles } from './style';
 
 type RoundedIconProps = {
   icon: any;
@@ -19,29 +20,21 @@ export const RoundedIcon = React.memo(
     imageStyle,
     bgColor,
   }: RoundedIconProps): React.JSX.Element => {
+    const style = styles();
     return (
       <View
         onTouchEnd={onPress}
         style={[
+          style.container,
           {
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 60,
             backgroundColor: bgColor || COLORS.primaryLightColor,
-            height: 40,
-            width: 40,
           },
           containerStyle,
         ]}>
         <Image
           source={icon}
           style={[
-            {
-              height: 24,
-              width: 24,
-              resizeMode: 'contain',
-            },
+            style.roundIconImg,
             imageStyle,
           ]}
         />

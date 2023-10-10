@@ -45,13 +45,7 @@ export const SimpleDropDown = React.memo(
     return (
       <>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%',
-          }}
+          style={style.simpleDropDownMianView}
           onTouchEnd={() => {
             setModelVisible(!modelVisible);
           }}>
@@ -71,13 +65,7 @@ export const SimpleDropDown = React.memo(
           </Text>
           <View
             style={[
-              {
-                width: 30,
-                height: 30,
-                overflow: 'hidden',
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
+              style.rightSideImgView,
               modelVisible && {
                 transform: [
                   {
@@ -87,15 +75,11 @@ export const SimpleDropDown = React.memo(
               },
             ]}>
             <Image
-              style={{
-                flex: 1,
-                resizeMode: 'contain',
-              }}
+              style={style.rightSideImgStyle}
               source={customIcon || AllIcons.RoundedArrow}
             />
           </View>
         </View>
-
         <DropDownModel
           modelVisible={modelVisible}
           setModelVisible={setModelVisible}

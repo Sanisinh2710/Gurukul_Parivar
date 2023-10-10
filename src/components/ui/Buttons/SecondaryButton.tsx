@@ -11,8 +11,8 @@ type Props = {
   disabled?: boolean;
   buttonColor?: string;
   titleColor?: string;
-  buttonStyle?: {[key: string]: any};
-  textStyle?: {[key: string]: any};
+  buttonStyle?: { [key: string]: any };
+  textStyle?: { [key: string]: any };
 };
 export const SecondaryButton = React.memo(
   ({
@@ -29,7 +29,7 @@ export const SecondaryButton = React.memo(
 
     return (
       <View
-        onTouchEnd={disabled ? () => {} : onPress}
+        onTouchEnd={disabled ? () => { } : onPress}
         style={[
           {
             ...styles.container,

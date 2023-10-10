@@ -77,21 +77,19 @@ export const SearchBar = ({
   }, [searchVal]);
 
   return (
-    <>
-      <View style={[style.modelSearchView, searchBarstyle]}>
-        <View style={style.iconView}>
-          <Image source={AllIcons.Search} style={style.iconStyle} />
-        </View>
-        <TextInput
-          value={searchVal}
-          placeholder={placeholder ? placeholder : t('common.Search')}
-          placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
-          style={[style.formTextInput, {width: '80%'}]}
-          onChangeText={val => {
-            setSearchVal(val);
-          }}
-        />
+    <View style={[style.modelSearchView, searchBarstyle]}>
+      <View style={style.iconView}>
+        <Image source={AllIcons.Search} style={style.iconStyle} />
       </View>
-    </>
+      <TextInput
+        value={searchVal}
+        placeholder={placeholder ? placeholder : t('common.Search')}
+        placeholderTextColor={'rgba(23, 23, 23, 0.3)'}
+        style={style.formTextInput}
+        onChangeText={val => {
+          setSearchVal(val);
+        }}
+      />
+    </View>
   );
 };

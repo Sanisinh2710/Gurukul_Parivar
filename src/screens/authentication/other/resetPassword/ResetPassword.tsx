@@ -35,7 +35,7 @@ export const ResetPassword = ({
 }: ResetPasswordProps): React.JSX.Element => {
   const reset_pass = route.params?.reset_pass;
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const commonStyle = CommonStyle();
 
@@ -49,7 +49,7 @@ export const ResetPassword = ({
     control,
     watch,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(ResetPasswordValidationSchema()),
     mode: 'onChange',
@@ -62,21 +62,21 @@ export const ResetPassword = ({
     type: SupportedFormInputTypes;
     required: boolean;
   }[] = [
-    {
-      name: 'password',
-      lable: t('ResetPassword.PasswordLbl'),
-      placeholder: t('ResetPassword.PasswordLblPlaceholder'),
-      type: 'password',
-      required: true,
-    },
-    {
-      name: 'confirm_password',
-      lable: t('ResetPassword.ConfirmPasswordLbl'),
-      placeholder: t('ResetPassword.ConfirmPasswordPlaceholder'),
-      type: 'password',
-      required: true,
-    },
-  ];
+      {
+        name: 'password',
+        lable: t('ResetPassword.PasswordLbl'),
+        placeholder: t('ResetPassword.PasswordLblPlaceholder'),
+        type: 'password',
+        required: true,
+      },
+      {
+        name: 'confirm_password',
+        lable: t('ResetPassword.ConfirmPasswordLbl'),
+        placeholder: t('ResetPassword.ConfirmPasswordPlaceholder'),
+        type: 'password',
+        required: true,
+      },
+    ];
 
   React.useEffect(() => {
     if (
@@ -96,16 +96,16 @@ export const ResetPassword = ({
     const response = await SetPasswordApi(data.password);
 
     if (response.resType === 'SUCCESS') {
-      const {resType} = getAuthToken();
+      const { resType } = getAuthToken();
 
       if (resType === 'SUCCESS') {
         const isProfileSignupDone = isProfilingDone();
         setIsApiloading(false);
 
         if (isProfileSignupDone === 'ERROR') {
-          navigation.replace('Success', {type: 'Login'});
+          navigation.replace('Success', { type: 'Login' });
         } else {
-          navigation.replace('Success', {type: 'Pass'});
+          navigation.replace('Success', { type: 'Pass' });
         }
       } else {
         setIsApiloading(false);
@@ -145,12 +145,12 @@ export const ResetPassword = ({
 
           <FlatList
             data={ResetPasswordInputList}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <View key={index} style={style.formInputsView}>
                 <Controller
                   control={control}
                   name={item.name}
-                  render={({field: {onBlur, onChange, value}}) => {
+                  render={({ field: { onBlur, onChange, value } }) => {
                     return (
                       <FormInput
                         type={item.type}

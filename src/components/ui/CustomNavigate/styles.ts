@@ -14,5 +14,15 @@ export const styles = () => {
       justifyContent: 'space-between',
       marginBottom: '2%',
     },
+    leftRightImgStyle: {
+      height: 40,
+      width: 40,
+    },
+    textStyle: {
+      ...CustomFonts.header.small18,
+      fontSize: 20,
+      color: 'black',
+      alignSelf: 'center',
+    },
   });
 };

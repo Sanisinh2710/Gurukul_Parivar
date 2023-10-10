@@ -354,23 +354,18 @@ export const FormInput = React.memo(
                 )}
                 {type === 'password' ? (
                   <View
-                    style={{
-                      height: '40%',
-                      width: '10%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
+                    style={style.fieldImgView}
                     onTouchEnd={() => setPassVisible(!passVisible)}>
                     <Image
                       source={
                         passVisible ? AllIcons.OpenEye : AllIcons.ClosedEye
                       }
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'contain',
-                        tintColor: 'rgba(172, 43, 49, 0.5)',
-                      }}
+                      style={[
+                        style.fieldRightImg,
+                        {
+                          tintColor: 'rgba(172, 43, 49, 0.5)',
+                        },
+                      ]}
                     />
                   </View>
                 ) : (
@@ -378,57 +373,18 @@ export const FormInput = React.memo(
                   type !== 'select' &&
                   type !== 'date' &&
                   type !== 'dob' && (
-                    <View
-                      style={{
-                        height: '50%',
-                        width: '10%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={icon}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
+                    <View style={style.fieldImgView}>
+                      <Image source={icon} style={style.fieldRightImg} />
                     </View>
                   )
                 )}
               </View>
               {Array.isArray(value) && type === 'multi-select' && (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    top: 10,
-                    gap: 8,
-                    flexWrap: 'wrap',
-                    marginBottom: '3%',
-                  }}>
+                <View style={style.multiSelectMainView}>
                   {value.map((item, index) => {
                     return (
-                      <View
-                        key={index}
-                        style={{
-                          flexDirection: 'row',
-                          backgroundColor: COLORS.primaryColor,
-                          paddingLeft: 16,
-                          paddingRight: 10,
-                          height: 35,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 60,
-                          gap: 10,
-                        }}>
-                        <Text
-                          style={{
-                            ...CustomFonts.body.large14,
-                            lineHeight: 18.9,
-                            color: COLORS.darkModetextColor,
-                          }}>
-                          {item}
-                        </Text>
+                      <View key={index} style={style.multiSelectInnerView}>
+                        <Text style={style.multiSelectTitle}>{item}</Text>
                         <View
                           onTouchEnd={() => {
                             let newValues: string[] = JSON.parse(
@@ -437,19 +393,10 @@ export const FormInput = React.memo(
                             newValues.splice(index, 1);
                             onChange(newValues);
                           }}
-                          style={{
-                            width: 14,
-                            height: 14,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}>
+                          style={style.multiSelectListView}>
                           <Image
                             source={AllIcons.RoundCross}
-                            style={{
-                              flex: 1,
-                              tintColor: COLORS.darkModeIconColor,
-                              resizeMode: 'contain',
-                            }}
+                            style={style.multiSelectRemoveImg}
                           />
                         </View>
                       </View>

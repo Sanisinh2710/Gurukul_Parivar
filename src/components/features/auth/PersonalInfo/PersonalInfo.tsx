@@ -12,6 +12,7 @@ import {PersonalInfoFormValidationSchema} from '@validations';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
+import {PersonalInfoStyle} from './styles';
 
 type PersonalInfoProps = {
   isParentLoading: boolean;
@@ -39,7 +40,7 @@ export const PersonalInfo = React.memo(
     onSubmitEvent,
   }: PersonalInfoProps): React.JSX.Element => {
     const {t} = useTranslation();
-
+    const personalInfoStyle = PersonalInfoStyle();
     const [primarycountryCodeSelect, setPrimaryCountryCodeSelect] =
       React.useState('');
     const [secondarycountryCodeSelect, setSecondaryCountryCodeSelect] =
@@ -54,6 +55,8 @@ export const PersonalInfo = React.memo(
         }),
       ] || [false],
     );
+
+    console.log(initialValues, 'intial personal in fo');
 
     const [isArraySet, setIsArrayset] = React.useState(false);
 
@@ -225,6 +228,7 @@ export const PersonalInfo = React.memo(
     }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
+      console.log(data, 'on right click');
       if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',
@@ -281,6 +285,14 @@ export const PersonalInfo = React.memo(
       }
     };
 
+    const onClickCheckBox = (mainindex: any) => {
+      let newArr = JSON.parse(JSON.stringify(checkedArray));
+      let returnArr = newArr.map((item: any, index: number) => {
+        return mainindex === index ? !item : false;
+      });
+      setCheckedArray(returnArr);
+    };
+
     return (
       <>
         {isParentLoading || localLoading ? (
@@ -290,10 +302,7 @@ export const PersonalInfo = React.memo(
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled={true}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: '30%',
-              flexGrow: 1,
-            }}>
+            contentContainerStyle={personalInfoStyle.mainScrollviewContainer}>
             <>
               <FlatList
                 scrollEnabled={false}
@@ -327,24 +336,17 @@ export const PersonalInfo = React.memo(
                   );
                 }}
               />
-              <View style={{gap: 15, marginTop: '5%'}}>
+              <View style={personalInfoStyle.emailFieldMainView}>
                 {emailfield.map((mainitem, mainindex) => {
                   return (
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{
-                            height: 30,
-                            width: 30,
-                            alignSelf: 'flex-end',
-                          }}
+                          style={personalInfoStyle.removeImgView}
                           onTouchEnd={() => emailremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
+                            style={personalInfoStyle.removeImgStyle}
                           />
                         </View>
                       )}
@@ -397,18 +399,11 @@ export const PersonalInfo = React.memo(
                     <View key={mainitem.id}>
                       {mainindex >= 1 && (
                         <View
-                          style={{
-                            height: 30,
-                            width: 30,
-                            alignSelf: 'flex-end',
-                          }}
+                          style={personalInfoStyle.removeImgView}
                           onTouchEnd={() => mobileremove(mainindex)}>
                           <Image
                             source={AllIcons.Cancel}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                            }}
+                            style={personalInfoStyle.removeImgStyle}
                           />
                         </View>
                       )}
@@ -477,68 +472,31 @@ export const PersonalInfo = React.memo(
                           );
                         }}
                       />
-                      <View
-                        style={{
-                          marginTop: '5%',
-                        }}>
+                      <View style={personalInfoStyle.checkBoxOuterView}>
                         <View
-                          style={{
-                            flexDirection: 'row',
-                            gap: 10,
-                            marginBottom: '5%',
-                          }}>
-                          <View
-                            style={{
-                              height: 20,
-                              width: 20,
-                              alignItems: 'center',
-                              borderRadius: 5,
-                              borderColor: COLORS.primaryColor,
+                          style={[
+                            personalInfoStyle.checkBoxMainView,
+                            {
                               borderWidth: checkedArray[mainindex] ? 0 : 1,
-                            }}
-                            onTouchEnd={() => {
-                              let newArr = JSON.parse(
-                                JSON.stringify(checkedArray),
-                              );
-                              let returnArr = newArr.map(
-                                (item: any, index: number) => {
-                                  return mainindex === index ? !item : false;
-                                },
-                              );
-                              setCheckedArray(returnArr);
-                            }}>
-                            {checkedArray[mainindex] ? (
-                              <Image
-                                source={AllIcons.Checkbox}
-                                style={{
-                                  height: '100%',
-                                  width: '100%',
-                                }}
-                              />
-                            ) : null}
-                          </View>
-                          <Text
-                            style={{
-                              ...CustomFonts.body.medium12,
-                              fontSize: 14,
-                              fontWeight: '400',
-                              lineHeight: 18.9,
-                              color: COLORS.lightModetextColor,
-                            }}>
-                            {t('personalInfo.MobileFieldCheckbox')}
-                          </Text>
+                            },
+                          ]}
+                          onTouchEnd={() => onClickCheckBox(mainindex)}>
+                          {checkedArray[mainindex] ? (
+                            <Image
+                              source={AllIcons.Checkbox}
+                              style={personalInfoStyle.commonBtnStyle}
+                            />
+                          ) : null}
                         </View>
+                        <Text style={personalInfoStyle.whatsappTxtStyle}>
+                          {t('personalInfo.MobileFieldCheckbox')}
+                        </Text>
                       </View>
                     </View>
                   );
                 })}
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: '5%',
-                }}>
+              <View style={personalInfoStyle.bottomBtnView}>
                 <SecondaryButton
                   title={
                     leftButtonProps
@@ -546,9 +504,7 @@ export const PersonalInfo = React.memo(
                       : t('common.Save&Exit')
                   }
                   onPress={handleSubmit(leftOnSubmit)}
-                  buttonStyle={{
-                    width: '47%',
-                  }}
+                  buttonStyle={personalInfoStyle.commonBtnStyle}
                 />
                 <PrimaryButton
                   title={
@@ -557,7 +513,7 @@ export const PersonalInfo = React.memo(
                       : t('common.Save&Next')
                   }
                   onPress={handleSubmit(onSubmit)}
-                  buttonStyle={{width: '47%'}}
+                  buttonStyle={personalInfoStyle.commonBtnStyle}
                 />
               </View>
             </>

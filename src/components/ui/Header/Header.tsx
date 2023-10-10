@@ -46,18 +46,18 @@ export const ScreenHeader = React.memo(
             ? style(theme).commonHeaderBarAndroid
             : style(theme).commonHeaderBarIOS,
         ]}>
-        <View style={[style(theme).commonHeaderBarContent, {width: '100%'}]}>
+        <View style={[style(theme).commonHeaderBarContent, { width: '100%' }]}>
           <View
-            onTouchEnd={leftOnPress ? leftOnPress : () => {}}
+            onTouchEnd={leftOnPress ? leftOnPress : () => { }}
             style={{
               width:
                 showLeft === false && !headerRight
                   ? '0%'
                   : headerTitleAlign === 'left' && showLeft === false
-                  ? '0%'
-                  : showLeft === false && headerRight
-                  ? '11.5%'
-                  : '11.5%',
+                    ? '0%'
+                    : showLeft === false && headerRight
+                      ? '11.5%'
+                      : '11.5%',
               height: 40,
               overflow: 'hidden',
               alignItems: 'center',
@@ -65,46 +65,28 @@ export const ScreenHeader = React.memo(
             }}>
             {showLeft && !headerLeft && (
               <View
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 60,
-                  backgroundColor: COLORS.leftArrowBg,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+                style={style(theme).headerLeftView}>
                 <View
-                  style={{
-                    width: 24,
-                    height: 24,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                  style={style(theme).headerLeftImgView}>
                   <Image
                     source={AllIcons.ArrowSimpleLeft}
-                    style={{
-                      flex: 1,
-                      width: '100%',
-                      height: '100%',
-                      resizeMode: 'contain',
-                    }}
+                    style={style(theme).headerLeftImg}
                   />
                 </View>
               </View>
             )}
             {showLeft && headerLeft && <View>{headerLeft}</View>}
           </View>
-
           <View
             style={[
               {
                 width: showLeft
                   ? '76%'
                   : !headerRight
-                  ? '100%'
-                  : headerTitleAlign === 'left'
-                  ? '88%'
-                  : '76%',
+                    ? '100%'
+                    : headerTitleAlign === 'left'
+                      ? '88%'
+                      : '76%',
                 justifyContent:
                   headerTitleAlign === 'center' ? 'center' : 'flex-start',
                 alignItems: 'center',
@@ -125,7 +107,7 @@ export const ScreenHeader = React.memo(
                 )}
               </>
             ) : headerTitle ? (
-              <Text style={[style(theme).commonHeaderText, {paddingLeft: 0}]}>
+              <Text style={[style(theme).commonHeaderText, { paddingLeft: 0 }]}>
                 {headerTitle}
               </Text>
             ) : (
@@ -134,12 +116,7 @@ export const ScreenHeader = React.memo(
           </View>
 
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              width: '12%',
-              alignItems: 'center',
-            }}>
+            style={style(theme).headerRightImgView}>
             {headerRight && (
               <RoundedIcon
                 icon={headerRight.icon}
@@ -156,12 +133,10 @@ export const ScreenHeader = React.memo(
 const style = (theme?: Theme) => {
   return StyleSheet.create({
     commonHeaderBarAndroid: {
-      // backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
     },
     commonHeaderBarIOS: {
-      // backgroundColor: theme?.headerBarBackground,
       paddingHorizontal: 20,
       marginTop: '5%',
     },
@@ -177,10 +152,31 @@ const style = (theme?: Theme) => {
       fontSize: 18,
       paddingLeft: '3%',
     },
-    commonBackIconStyle: {
-      //   fontSize: 30,
-      //   marginLeft: -30,
-      //   paddingLeft: 20,
+    headerLeftView: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 60,
+      backgroundColor: COLORS.leftArrowBg,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
+    headerLeftImgView: {
+      width: 24,
+      height: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    headerLeftImg: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
+    },
+    headerRightImgView: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      width: '12%',
+      alignItems: 'center',
+    }
   });
 };

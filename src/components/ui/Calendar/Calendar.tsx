@@ -99,8 +99,7 @@ export const Calendar = ({
   const saveDate = () => {
     setSelectedParentDate(
       new Date(
-        `${selectedDate.getFullYear()}-${
-          selectedDate.getMonth() + 1
+        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1
         }-${selectedDate.getDate()}`,
       ),
     );
@@ -140,26 +139,26 @@ export const Calendar = ({
               ? type === 'dob'
                 ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate
-                  ? () => {}
+                  ? () => { }
                   : () => {
-                      handleDateSelect(
-                        new Date(`${currentYear}-${currentMonth + 1}-${day}`),
-                      );
-                    }
-                : () => {
                     handleDateSelect(
                       new Date(`${currentYear}-${currentMonth + 1}-${day}`),
                     );
                   }
-              : () => {}
+                : () => {
+                  handleDateSelect(
+                    new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                  );
+                }
+              : () => { }
           }
           style={[
             styles.dayContainer,
             new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
               minAllowedDOBDate && type === 'dob'
               ? {
-                  backgroundColor: 'rgba(202, 204, 203,0.2)',
-                }
+                backgroundColor: 'rgba(202, 204, 203,0.2)',
+              }
               : selectedDate.getDate() === day && styles.selectedDateItem,
           ]}>
           <>
@@ -169,11 +168,11 @@ export const Calendar = ({
                 new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate && type === 'dob'
                   ? {
-                      color: 'rgba(202, 204, 203,1)',
-                    }
+                    color: 'rgba(202, 204, 203,1)',
+                  }
                   : selectedDate.getDate() === day && {
-                      color: COLORS.darkModetextColor,
-                    },
+                    color: COLORS.darkModetextColor,
+                  },
               ]}>
               {day ? day : ''}
             </Text>
@@ -240,59 +239,33 @@ export const Calendar = ({
           <View style={styles.header}>
             <TouchableOpacity
               onPress={handleOpenYearModal}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
+              style={styles.headerInnerView}>
               <Text style={styles.monthText}>
                 {months[currentMonth]} {currentYear}
               </Text>
               <View
-                style={{
-                  width: 15,
-                  height: 15,
-                  marginLeft: 8,
-                }}>
+                style={styles.yearRightArrowView}>
                 <Image
                   source={AllIcons.ChevronArrowDown}
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    height: '100%',
-                    tintColor: COLORS.primaryColor,
-                    resizeMode: 'contain',
-                    transform: [
-                      {
-                        rotate: '270deg',
-                      },
-                    ],
-                  }}
+                  style={styles.yearRightArrowImg}
                 />
               </View>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
+            <View style={styles.leftRightArrowView}>
               <TouchableOpacity onPress={handlePreviousMonth}>
                 <Text style={styles.monthArrow}>
                   <View
-                    style={{
-                      width: 18,
-                      height: 18,
-                      marginLeft: 8,
-                    }}>
+                    style={styles.arrowCommonView}>
                     <Image
                       source={AllIcons.ChevronArrowDown}
-                      style={{
-                        flex: 1,
-                        width: '100%',
-                        height: '100%',
-                        tintColor: COLORS.primaryColor,
-                        resizeMode: 'contain',
+                      style={[styles.arrowImg,
+                      {
                         transform: [
                           {
                             rotate: '90deg',
                           },
                         ],
-                      }}
+                      }]}
                     />
                   </View>
                 </Text>
@@ -300,25 +273,17 @@ export const Calendar = ({
               <TouchableOpacity onPress={handleNextMonth}>
                 <Text style={styles.monthArrow}>
                   <View
-                    style={{
-                      width: 18,
-                      height: 18,
-                      marginLeft: 8,
-                    }}>
+                    style={styles.arrowCommonView}>
                     <Image
                       source={AllIcons.ChevronArrowDown}
-                      style={{
-                        flex: 1,
-                        width: '100%',
-                        height: '100%',
-                        tintColor: COLORS.primaryColor,
-                        resizeMode: 'contain',
+                      style={[styles.arrowImg,
+                      {
                         transform: [
                           {
                             rotate: '270deg',
                           },
                         ],
-                      }}
+                      }]}
                     />
                   </View>
                 </Text>
@@ -343,23 +308,9 @@ export const Calendar = ({
             android_ripple={{
               color: COLORS.primaryRippleColor,
             }}
-            style={{
-              top: 20,
-              right: 10,
-              bottom: 0,
-              width: '23%',
-              height: '10%',
-              backgroundColor: COLORS.primaryColor,
-              alignItems: 'center',
-              alignSelf: 'flex-end',
-              justifyContent: 'center',
-              borderRadius: 10,
-            }}>
+            style={styles.saveBtn}>
             <Text
-              style={{
-                fontSize: 16,
-                color: COLORS.darkModetextColor,
-              }}>
+              style={styles.saveBtnTxt}>
               SAVE
             </Text>
           </Pressable>
@@ -368,15 +319,7 @@ export const Calendar = ({
             <Modal visible={isModalVisible} transparent animationType="fade">
               <View style={styles.modal} onTouchEnd={handleCloseYearModal}>
                 <View
-                  style={{
-                    width: '50%',
-                    height: '40%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 20,
-                    backgroundColor: COLORS.lightModeBackgroundColor,
-                    padding: '5%',
-                  }}
+                  style={styles.selectYearTxtView}
                   onTouchEnd={e => {
                     e.stopPropagation();
                   }}>
@@ -388,16 +331,7 @@ export const Calendar = ({
                   </ScrollView>
                   <TouchableOpacity
                     onPress={handleCloseYearModal}
-                    style={{
-                      width: '50%',
-                      height: '14%',
-                      backgroundColor: COLORS.primaryColor,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 10,
-                      top: 10,
-                      alignSelf: 'center',
-                    }}>
+                    style={styles.cancelBtnView}>
                     <Text style={styles.modalCancel}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
@@ -427,6 +361,77 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     borderRadius: 8,
+  },
+  headerInnerView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  yearRightArrowView: {
+    width: 15,
+    height: 15,
+    marginLeft: 8,
+  },
+  yearRightArrowImg: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    tintColor: COLORS.primaryColor,
+    resizeMode: 'contain',
+    transform: [
+      {
+        rotate: '270deg',
+      },
+    ],
+  },
+  leftRightArrowView: { flexDirection: 'row', gap: 20, alignItems: 'center' },
+  arrowCommonView: {
+    width: 18,
+    height: 18,
+    marginLeft: 8,
+  },
+  arrowImg: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    tintColor: COLORS.primaryColor,
+    resizeMode: 'contain',
+  },
+  saveBtn: {
+    top: 20,
+    right: 10,
+    bottom: 0,
+    width: '23%',
+    height: '10%',
+    backgroundColor: COLORS.primaryColor,
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  saveBtnTxt: {
+    fontSize: 16,
+    color: COLORS.darkModetextColor,
+  },
+  selectYearTxtView: {
+    width: '50%',
+    height: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    backgroundColor: COLORS.lightModeBackgroundColor,
+    padding: '5%',
+  },
+
+  cancelBtnView: {
+    width: '50%',
+    height: '14%',
+    backgroundColor: COLORS.primaryColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    top: 10,
+    alignSelf: 'center',
   },
   selectedDateItem: {
     borderRadius: 100,

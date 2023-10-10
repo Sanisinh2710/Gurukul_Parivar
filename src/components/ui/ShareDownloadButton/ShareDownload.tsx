@@ -160,7 +160,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
     if (Platform.OS === 'ios') {
       // Implement Downloading logic for photos on ios:-----------------------
       try {
-        await downloadImage();
+        await CameraRoll.save(REMOTE_IMAGE_PATH!);
         setModalVisible(!modalVisible);
       } catch (err) {
         Toast.show('Download could not happen..', 2);
@@ -217,15 +217,6 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
       ext;
 
     let options = Platform.select({
-      ios: {
-        fileCache: true,
-        path: finalPath,
-        // mime: 'application/xlsx',
-        // appendExt: 'xlsx',
-        //path: filePath,
-        //appendExt: fileExt,
-        notification: true,
-      },
       android: {
         fileCache: true,
         addAndroidDownloads: {
@@ -291,13 +282,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
   return (
     <>
       <View style={[commonStyle.commonContentView]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            gap: 15,
-            marginTop: '5%',
-          }}>
+        <View style={style.container}>
           {wallpaper === true && (
             <View
               onTouchEnd={
@@ -381,14 +366,7 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
                 source={require('../../../../assets/animation/downloadDone.json')}
               />
             </View>
-            <View
-              style={{
-                alignItems: 'center',
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: 80,
-              }}>
+            <View style={style.successFullTextView}>
               <Text
                 style={{
                   ...CustomFonts.header.medium20,

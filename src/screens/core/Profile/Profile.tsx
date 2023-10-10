@@ -97,6 +97,8 @@ export const ProfileScreen = ({
       }
       const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
 
+      console.log(userDataCloneObj);
+
       if (response.resType == 'SUCCESS') {
         const updatedReponse = await PersonalInfoGetDetailsApi();
         if (response.resType == 'SUCCESS') {
@@ -134,6 +136,9 @@ export const ProfileScreen = ({
     switch (val) {
       case 'gallery':
         let pathGallery = await chooseFile('photo');
+
+        console.log(pathGallery);
+
         if (pathGallery) {
           userProfileUpdate({
             uri: pathGallery[0].uri,
@@ -325,7 +330,8 @@ export const ProfileScreen = ({
               contentContainerStyle={{
                 alignItems: 'center',
                 marginTop: '5%',
-              }}>
+              }}
+              onTouchEnd={e => e.stopPropagation()}>
               <View style={{height: 80, width: 80}}>
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}

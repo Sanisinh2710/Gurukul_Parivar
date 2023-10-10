@@ -8,7 +8,7 @@ type otpTypeProps = {
   num: string[];
   setNum: React.Dispatch<React.SetStateAction<string[]>>;
 };
-export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
+export const OtpComponent = React.memo(({ num, setNum }: otpTypeProps) => {
   const style = useOtpStyle();
   const [focus, setFocus] = React.useState(false);
   const refs = React.useRef<Array<TextInput | null>>([]);
@@ -23,16 +23,16 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
         refs.current[i]?.setNativeProps(
           num.length === 6
             ? {
-                maxLength: 1,
-                style: {
-                  borderColor: COLORS.primaryColor,
-                },
-              }
-            : {
-                style: {
-                  borderColor: COLORS.primaryColor,
-                },
+              maxLength: 1,
+              style: {
+                borderColor: COLORS.primaryColor,
               },
+            }
+            : {
+              style: {
+                borderColor: COLORS.primaryColor,
+              },
+            },
         );
       } else {
         refs.current[i]?.setNativeProps({
@@ -60,7 +60,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
   };
 
   return (
-    <View style={{justifyContent: 'center', gap: 10, flexDirection: 'row'}}>
+    <View style={style.otpMainView}>
       <View style={style.otpWrapper}>
         {num.map((item, index) => (
           <TextInput
@@ -70,7 +70,7 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
               return (
                 num[index] === '' &&
                 refs.current[index]?.setNativeProps({
-                  style: {borderColor: 'rgba(172, 43, 49, 0.18)'},
+                  style: { borderColor: 'rgba(172, 43, 49, 0.18)' },
                 })
               );
             }}
@@ -82,10 +82,10 @@ export const OtpComponent = React.memo(({num, setNum}: otpTypeProps) => {
             ref={el => (refs.current[index] = el)}
             style={
               refs.current[index]?.isFocused()
-                ? [style.textInput, {borderColor: COLORS.primaryColor}]
+                ? [style.textInput, { borderColor: COLORS.primaryColor }]
                 : [style.textInput]
             }
-            onKeyPress={({nativeEvent}) => {
+            onKeyPress={({ nativeEvent }) => {
               if (nativeEvent.key === 'Backspace') {
                 changeFocus(index - 1);
               } else {

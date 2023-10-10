@@ -22,18 +22,13 @@ export const CommingSoon = ({
       <View
         style={[
           CommonStyles.commonContentView,
-          {flex: 1, justifyContent: 'center', gap: 50},
+          style.mainWrapperStyle,
         ]}>
         <View>
           <View>
             <Image
               source={AllImages.CommingSoon}
-              style={{
-                width: 213,
-                height: 87,
-                alignSelf: 'center',
-                resizeMode: 'contain',
-              }}
+              style={style.commingSoonImgstyle}
             />
           </View>
           <View>
@@ -50,7 +45,7 @@ export const CommingSoon = ({
         <PrimaryButton
           title={'Go to Home Page'}
           onPress={() => navigation.goBack()}
-          buttonStyle={{paddingHorizontal: 20, flex: 0.2}}
+          buttonStyle={style.primaryButtonStyle}
         />
       </View>
     </ScreenWrapper>
