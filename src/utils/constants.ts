@@ -1,7 +1,7 @@
 import {AllIcons, AllImages} from '@assets';
 
 import {Theme} from '@types';
-import {COLORS} from '@utils';
+import {COLORS} from './colors';
 
 export const LightTheme: Theme = {
   isDark: false,

@@ -1,6 +1,8 @@
-import {EnglishJSON, GujaratiJSON, HindiJSON} from '@localization';
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
+import {EnglishJSON} from './en';
+import {GujaratiJSON} from './gu';
+import {HindiJSON} from './hn';
 
 export const defaultNS = 'translation';
 
