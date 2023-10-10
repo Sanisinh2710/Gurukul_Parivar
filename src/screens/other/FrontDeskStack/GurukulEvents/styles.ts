@@ -57,12 +57,14 @@ export const styles = () => {
       lineHeight: 22.9,
     },
     textBoxContainer: {
+      // backgroundColor: 'yellow',
+      height: 'auto',
       width: '100%',
-      height: 70,
       flexDirection: 'row',
       marginVertical: '3%',
     },
     dateContainer: {
+      padding: 8,
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
       width: '20%',
@@ -70,7 +72,7 @@ export const styles = () => {
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
-      height: 70,
+      height: 'auto',
       backgroundColor: COLORS.primaryColor,
     },
     contentContainer: {
@@ -82,7 +84,6 @@ export const styles = () => {
       paddingLeft: '5%',
       borderColor: 'rgba(172, 43, 49, 0.3)',
       justifyContent: 'center',
-      height: 70,
     },
     date: {
       ...CustomFonts.header.medium20,
@@ -98,6 +99,47 @@ export const styles = () => {
       flexDirection: 'row',
       width: '70%',
       gap: 6,
+    },
+    dropDownView: {
+      alignItems: 'center',
+      backgroundColor: COLORS.lightModeBackgroundColor,
+      height: 'auto',
+      width: '85%',
+      borderRadius: 10,
+    },
+    dropDownImageContainer: {
+      width: '100%',
+    },
+    modalDateContainer: {
+      backgroundColor: COLORS.primaryColor,
+      borderTopEndRadius: 10,
+      borderTopStartRadius: 10,
+      height: 60,
+      justifyContent: 'center',
+      paddingHorizontal: 15,
+    },
+    modalDateText: {
+      ...CustomFonts.header.medium20,
+      color: COLORS.darkModetextColor,
+    },
+    modalTitleContainer: {
+      paddingHorizontal: 15,
+      marginVertical: 15,
+    },
+    modalTitle: {
+      ...CustomFonts.header.small18,
+      fontSize: 18,
+      textAlign: 'justify',
+      color: COLORS.black,
+    },
+    modalTimeContainer: {
+      paddingHorizontal: 15,
+      marginBottom: 10,
+    },
+    modalTime: {
+      ...CustomFonts.header.medium20,
+      fontSize: 20,
+      color: COLORS.primaryColor,
     },
     noDataView: {
       height: Dimensions.get('window').height * 0.65,

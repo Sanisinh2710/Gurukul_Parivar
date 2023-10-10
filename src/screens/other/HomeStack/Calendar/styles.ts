@@ -93,5 +93,46 @@ export const styles = () => {
       top: 0,
       bottom: 0,
     },
+    dropDownView: {
+      alignItems: 'center',
+      backgroundColor: COLORS.lightModeBackgroundColor,
+      height: 'auto',
+      width: '85%',
+      borderRadius: 10,
+    },
+    dropDownImageContainer: {
+      width: '100%',
+    },
+    modalDateContainer: {
+      backgroundColor: COLORS.primaryColor,
+      borderTopEndRadius: 10,
+      borderTopStartRadius: 10,
+      height: 60,
+      justifyContent: 'center',
+      paddingHorizontal: 15,
+    },
+    modalDateText: {
+      ...CustomFonts.header.medium20,
+      color: COLORS.darkModetextColor,
+    },
+    modalTitleContainer: {
+      paddingHorizontal: 15,
+      marginVertical: 15,
+    },
+    modalTitle: {
+      ...CustomFonts.header.small18,
+      fontSize: 18,
+      textAlign: 'justify',
+      color: COLORS.black,
+    },
+    modalTimeContainer: {
+      paddingHorizontal: 15,
+      marginBottom: 10,
+    },
+    modalTime: {
+      ...CustomFonts.body.large14,
+      fontSize: 18,
+      color: '#3A3B3C',
+    },
   });
 };

@@ -17,6 +17,7 @@ import {
 import {CommonStyle} from '../../../../../assets/styles';
 import {
   CustomNavigate,
+  DropDownModel,
   Loader,
   NoData,
   ScreenHeader,
@@ -25,7 +26,14 @@ import {
 } from '../../../../components';
 import {CalendarGetApi} from '../../../../services';
 import {RootStackParamList} from '../../../../types';
-import {COLORS, d, options2, weekDays} from '../../../../utils';
+import {
+  COLORS,
+  d,
+  options,
+  options2,
+  options3,
+  weekDays,
+} from '../../../../utils';
 import {styles} from './styles';
 
 export const CalendarScreen = ({
@@ -47,9 +55,11 @@ export const CalendarScreen = ({
   const [sortedData, setSortedData] = React.useState<{[key: string]: any}[]>(
     [],
   );
+  const [viewEventModal, setEventModal] = React.useState(false);
+  const [currentModalData, setCurrentModalData] = React.useState<{
+    [key: string]: any;
+  }>();
 
-  const [zoomImageModalVisible, setZoomModalVisiable] =
-    React.useState<boolean>(false);
   const ref = React.useRef<FlatList>(null);
   const getPreviousDate = () => {
     const previousDate = new Date(selectedDate);
@@ -145,6 +155,14 @@ export const CalendarScreen = ({
 
     setRefreshing(false);
   };
+  const setModalData = (item: any) => {
+    setEventModal(true);
+    setCurrentModalData({
+      date: new Date(item.date).toLocaleDateString('en-in', options3),
+      title: item.title,
+      description: item.description,
+    });
+  };
 
   return (
     <ScreenWrapper>
@@ -199,7 +217,8 @@ export const CalendarScreen = ({
                     };
                   }}
                   renderItem={({item, index}) => (
-                    <View
+                    <Pressable
+                      onPress={() => setModalData(item)}
                       key={index.toString()}
                       style={[
                         style.textBoxContainer,
@@ -223,10 +242,14 @@ export const CalendarScreen = ({
                         </Text>
                       </View>
                       <View style={style.contentContainer}>
-                        <Text style={style.content1}>{item.title}</Text>
-                        <Text style={style.content2}>{item.description}</Text>
+                        <Text style={style.content1} numberOfLines={1}>
+                          {item.title}
+                        </Text>
+                        <Text style={style.content2} numberOfLines={2}>
+                          {item.description}
+                        </Text>
                       </View>
-                    </View>
+                    </Pressable>
                   )}
                 />
               </View>
@@ -288,6 +311,34 @@ export const CalendarScreen = ({
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         text={selectedDate.toLocaleDateString('en-US', options2)}
+      />
+      <DropDownModel
+        viewPhoto={true}
+        modelVisible={viewEventModal}
+        setModelVisible={setEventModal}
+        customModelchild={
+          currentModalData && (
+            <View style={style.dropDownView}>
+              <View style={style.dropDownImageContainer}>
+                <View style={style.modalDateContainer}>
+                  <Text style={style.modalDateText}>
+                    {currentModalData.date}
+                  </Text>
+                </View>
+                <View style={style.modalTitleContainer}>
+                  <Text style={style.modalTitle}>{currentModalData.title}</Text>
+                </View>
+                <View style={style.modalTimeContainer}>
+                  <Text style={style.modalTime}>
+                    {currentModalData.description}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )
+        }
+        type={'simple'}
+        modalHeight={'40%'}
       />
     </ScreenWrapper>
   );
