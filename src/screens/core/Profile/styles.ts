@@ -74,9 +74,6 @@ export const styles = () => {
     },
     modalbtn: {
       width: '42%',
-      // borderWidth: 1,
-      // borderColor: 'rgba(172,43,49,0.3)',
-      // borderRadius: 12,
     },
     modalbtnView: {
       flexDirection: 'row',
@@ -135,7 +132,7 @@ export const styles = () => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    pictureUpdateIcon: {
+    pictureUpdateIconView: {
       position: 'absolute',
       width: 28,
       height: 28,
@@ -153,9 +150,6 @@ export const styles = () => {
       elevation: 7,
       alignSelf: 'center',
       bottom: -10,
-      // marginTop: -10,
-      // marginLeft: 'auto',
-      // marginRight: 'auto',
     },
     pictureUpdateText: {
       ...CustomFonts.body.large14,
@@ -165,6 +159,61 @@ export const styles = () => {
       borderBottomWidth: 1,
       borderBottomColor: 'rgba(23,23,23,0.3)',
       paddingVertical: 20,
+    },
+    imageView: {
+      height: 64,
+      width: 64,
+    },
+    imageStyle: {
+      height: '100%',
+      width: '100%',
+      borderRadius: 50,
+    },
+    pictureUpdateIcon: {
+      height: 20,
+      width: 20,
+    },
+    userNameView: {
+      justifyContent: 'center',
+      marginLeft: '5%',
+    },
+    flatlistNameView: {
+      justifyContent: 'center',
+      marginLeft: '5%',
+    },
+    langText: {
+      color: COLORS.primaryColor,
+      fontSize: 14,
+    },
+    arrow: {
+      height: 24,
+      width: 24,
+    },
+    linearGradientContainer: {
+      height: 80,
+      width: 80,
+    },
+    modelOption: {
+      justifyContent: 'center',
+    },
+    textColor: {
+      color: 'rgba(23,23,23,0.5)',
+    },
+    rightIcon: {
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+    },
+    dropDownView: {
+      alignItems: 'center',
+    },
+    dropDownImageContainer: {
+      height: 250,
+      width: 250,
+    },
+    dropDownImage: {
+      height: '100%',
+      width: '100%',
+      borderRadius: 150,
     },
   });
 };

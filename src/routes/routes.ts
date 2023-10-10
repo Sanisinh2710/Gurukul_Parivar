@@ -26,7 +26,6 @@ import {
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
-  QuizHistory,
   QuizResult,
   RegisterScreen,
   ResetPassword,
@@ -67,10 +66,7 @@ export const NativeStackRouteList: Array<{
     name: 'ProfileEdit',
     component: ProfileSignupWithEdit,
   },
-  {
-    name: 'QuizHistory',
-    component: QuizHistory,
-  },
+
   {
     name: 'QuizResult',
     component: QuizResult,
@@ -192,3 +188,5 @@ export const NativeBottomRouteList: Array<{
     component: ProfileScreen,
   },
 ];
+
+export {AuthStackNavigator};

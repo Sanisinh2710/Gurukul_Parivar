@@ -498,6 +498,10 @@ export const options2: Intl.DateTimeFormatOptions = {
   month: 'short',
   year: 'numeric',
 };
+export const options3: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  weekday: 'long',
+};
 export const ApiDateFormat: Intl.DateTimeFormatOptions = {
   year: 'numeric',
   month: '2-digit',

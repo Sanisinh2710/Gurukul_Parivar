@@ -49,6 +49,7 @@ const handleApiResponse = (response: AxiosResponse<any, any>) => {
     resType: response.data.status === 'success' ? 'SUCCESS' : 'ERROR',
     data: response.data.data,
     message: response.data.message,
+    statusCode: response.data.code,
   };
   return data;
 };
@@ -84,6 +85,7 @@ const apiRequest = async (
     });
     return handleApiResponse(response);
   } catch (error: any) {
+    console.log(error, 'ERROR');
     return {
       resType: 'ERROR',
       data: [],

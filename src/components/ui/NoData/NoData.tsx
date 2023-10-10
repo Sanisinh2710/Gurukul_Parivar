@@ -11,19 +11,15 @@ type NoDataProps = {
 };
 
 export const NoData = React.memo(
-  ({ title, content }: NoDataProps): React.JSX.Element => {
+  ({title, content}: NoDataProps): React.JSX.Element => {
     const style = styles();
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     return (
       <View style={style.noDataWrapper}>
-        <View
-          style={style.noDataImgView}>
-          <Image
-            source={AllImages.NoData}
-            style={style.noDataImg}
-          />
+        <View style={style.noDataImgView}>
+          <Image source={AllImages.NoData} style={style.noDataImg} />
         </View>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <Text style={style.NoDataTitle}>{title ?? t('NoData.Title')}</Text>
           <Text style={style.NoDataContent}>
             {content ?? t('NoData.Content')}

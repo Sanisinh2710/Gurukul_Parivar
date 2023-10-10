@@ -170,10 +170,7 @@ export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
             <OtpComponent num={num} setNum={setNum} />
             {/* <OtpInput /> */}
 
-            <View
-              style={{
-                marginTop: 48,
-              }}>
+            <View style={style.buttonContainer}>
               <PrimaryButton
                 onPress={handleLogin}
                 title={t('otpScreen.Verify&Login')}

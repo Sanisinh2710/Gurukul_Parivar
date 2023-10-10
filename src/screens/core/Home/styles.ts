@@ -47,8 +47,33 @@ export const styles = () => {
       justifyContent: 'space-between',
       marginTop: 14,
     },
-
-    gridItem: {height: '100%', width: '100%'},
+    gridItem: {
+      height: '100%',
+      width: '100%',
+    },
+    linearGradientView: {
+      height: '100%',
+      width: '100%',
+    },
+    linearGradientStyle: {
+      flex: 1,
+      borderRadius: 12,
+    },
+    imageBgStyle: {
+      height: '100%',
+      width: '100%',
+      resizeMode: 'cover',
+    },
+    contentContainerStyle: {
+      paddingBottom: '30%',
+    },
+    WelcomeTextContainer: {
+      flexDirection: 'row',
+    },
+    id: {
+      fontSize: 18,
+      color: COLORS.primaryColor,
+    },
     submitButtonView: {
       marginTop: '10%',
       alignSelf: 'center',
@@ -73,7 +98,6 @@ export const styles = () => {
       justifyContent: 'flex-end',
       paddingHorizontal: '7%',
     },
-
     exitModelLogo: {
       height: 70,
       width: 70,

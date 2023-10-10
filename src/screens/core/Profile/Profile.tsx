@@ -137,8 +137,6 @@ export const ProfileScreen = ({
       case 'gallery':
         let pathGallery = await chooseFile('photo');
 
-        console.log(pathGallery);
-
         if (pathGallery) {
           userProfileUpdate({
             uri: pathGallery[0].uri,
@@ -210,7 +208,7 @@ export const ProfileScreen = ({
             onTouchEnd={
               userRole === 'USER' ? () => setProfileModel(true) : () => {}
             }>
-            <View style={{height: 64, width: 64}}>
+            <View style={style.imageView}>
               <Image
                 source={
                   profileImage?.uri != '' &&
@@ -218,25 +216,25 @@ export const ProfileScreen = ({
                     ? {uri: profileImage?.uri}
                     : AllIcons.DummyAvtar
                 }
-                style={{height: '100%', width: '100%', borderRadius: 50}}
+                style={style.imageStyle}
               />
             </View>
             {userRole === 'USER' && (
-              <View style={style.pictureUpdateIcon}>
+              <View style={style.pictureUpdateIconView}>
                 <Image
                   source={AllIcons.Camera}
-                  style={{height: 20, width: 20}}
+                  style={style.pictureUpdateIcon}
                 />
               </View>
             )}
           </View>
-          <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+          <View style={style.userNameView}>
             <Text style={style.profileName}>
               {userRole === 'GUEST'
                 ? 'GUEST USER'
                 : userData?.full_name ?? 'YOUR NAME'}
             </Text>
-            <Text style={{color: 'rgba(23,23,23,0.5)'}}>
+            <Text style={style.textColor}>
               {userData?.primary_contact
                 ? userData?.primary_contact_cc?.toString().split('(')[0]
                 : ''}
@@ -266,24 +264,15 @@ export const ProfileScreen = ({
                     onPress={() => {}}
                     imageStyle={{width: 20, height: 20}}
                   />
-                  <View style={{justifyContent: 'center', marginLeft: '5%'}}>
+                  <View style={style.flatlistNameView}>
                     <Text style={style.listName}>{item.name} </Text>
                   </View>
                   <View style={style.languageContainer}>
-                    <Text style={{color: COLORS.primaryColor, fontSize: 14}}>
-                      {item.language}
-                    </Text>
+                    <Text style={style.langText}>{item.language}</Text>
                   </View>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'flex-end',
-                    }}>
+                  <View style={style.rightIcon}>
                     {item.rightIcon && (
-                      <Image
-                        source={item.rightIcon}
-                        style={{height: 24, width: 24}}
-                      />
+                      <Image source={item.rightIcon} style={style.arrow} />
                     )}
                   </View>
                 </View>
@@ -332,7 +321,7 @@ export const ProfileScreen = ({
                 marginTop: '5%',
               }}
               onTouchEnd={e => e.stopPropagation()}>
-              <View style={{height: 80, width: 80}}>
+              <View style={style.linearGradientContainer}>
                 <LinearGradient
                   colors={['rgba(172, 43, 49, 0.15)', 'rgba(172, 43, 49, 0)']}
                   locations={[0, 1]}
@@ -413,12 +402,12 @@ export const ProfileScreen = ({
           modelVisible={profileModel}
           setModelVisible={setProfileModel}
           customModelchild={
-            <View style={{justifyContent: 'center'}}>
+            <View style={style.modelOption}>
               <Pressable
                 onPress={() => {
                   handleProfile('gallery');
                 }}
-                style={{justifyContent: 'center'}}>
+                style={style.modelOption}>
                 <Text style={style.pictureUpdateText}>Upload From Gallery</Text>
               </Pressable>
               <Pressable
@@ -452,15 +441,8 @@ export const ProfileScreen = ({
           modelVisible={viewPhotoModel}
           setModelVisible={setPhotoModel}
           customModelchild={
-            <View
-              style={{
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  height: 250,
-                  width: 250,
-                }}>
+            <View style={style.dropDownView}>
+              <View style={style.dropDownImageContainer}>
                 <Image
                   source={
                     profileImage?.uri != '' &&
@@ -468,11 +450,7 @@ export const ProfileScreen = ({
                       ? {uri: profileImage?.uri}
                       : AllIcons.DummyAvtar
                   }
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 150,
-                  }}
+                  style={style.dropDownImage}
                 />
               </View>
             </View>

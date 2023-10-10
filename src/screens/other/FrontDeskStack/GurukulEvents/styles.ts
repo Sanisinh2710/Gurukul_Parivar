@@ -1,5 +1,5 @@
 import {COLORS, CustomFonts} from '@utils';
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 export const styles = () => {
   return StyleSheet.create({
@@ -8,6 +8,7 @@ export const styles = () => {
       fontSize: 24,
       color: 'black',
     },
+    wrapperView: {flex: 1, marginTop: '3%'},
     modelSearchView: {
       width: '100%',
       flexDirection: 'row',
@@ -36,7 +37,7 @@ export const styles = () => {
       ...CustomFonts.body.large14,
       fontSize: 16,
       fontWeight: '400',
-      width: '100%',
+      width: '80%',
       color: COLORS.lightModetextColor,
       opacity: 1,
       marginLeft: 8,
@@ -53,12 +54,14 @@ export const styles = () => {
       lineHeight: 22.9,
     },
     textBoxContainer: {
+      // backgroundColor: 'yellow',
+      height: 'auto',
       width: '100%',
-      height: 70,
       flexDirection: 'row',
       marginVertical: '3%',
     },
     dateContainer: {
+      padding: 8,
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
       width: '20%',
@@ -66,7 +69,7 @@ export const styles = () => {
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
-      height: 70,
+      height: 'auto',
       backgroundColor: COLORS.primaryColor,
     },
     contentContainer: {
@@ -78,7 +81,6 @@ export const styles = () => {
       paddingLeft: '5%',
       borderColor: 'rgba(172, 43, 49, 0.3)',
       justifyContent: 'center',
-      height: 70,
     },
     date: {
       ...CustomFonts.header.medium20,
@@ -89,6 +91,55 @@ export const styles = () => {
       ...CustomFonts.body.small10,
       fontSize: 16,
       color: 'white',
+    },
+    timeContainer: {
+      flexDirection: 'row',
+      width: '70%',
+      gap: 6,
+    },
+    dropDownView: {
+      alignItems: 'center',
+      backgroundColor: COLORS.lightModeBackgroundColor,
+      height: 'auto',
+      width: '85%',
+      borderRadius: 10,
+    },
+    dropDownImageContainer: {
+      width: '100%',
+    },
+    modalDateContainer: {
+      backgroundColor: COLORS.primaryColor,
+      borderTopEndRadius: 10,
+      borderTopStartRadius: 10,
+      height: 60,
+      justifyContent: 'center',
+      paddingHorizontal: 15,
+    },
+    modalDateText: {
+      ...CustomFonts.header.medium20,
+      color: COLORS.darkModetextColor,
+    },
+    modalTitleContainer: {
+      paddingHorizontal: 15,
+      marginVertical: 15,
+    },
+    modalTitle: {
+      ...CustomFonts.header.small18,
+      fontSize: 18,
+      textAlign: 'justify',
+      color: COLORS.black,
+    },
+    modalTimeContainer: {
+      paddingHorizontal: 15,
+      marginBottom: 10,
+    },
+    modalTime: {
+      ...CustomFonts.header.medium20,
+      fontSize: 20,
+      color: COLORS.primaryColor,
+    },
+    noDataView: {
+      height: Dimensions.get('window').height * 0.65,
     },
   });
 };

@@ -7,7 +7,6 @@ import {
   PersonalInfoFormValidationSchemaType,
   SupportedFormInputTypes,
 } from '@types';
-import {COLORS, CustomFonts} from '@utils';
 import {PersonalInfoFormValidationSchema} from '@validations';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -484,7 +483,7 @@ export const PersonalInfo = React.memo(
                           {checkedArray[mainindex] ? (
                             <Image
                               source={AllIcons.Checkbox}
-                              style={personalInfoStyle.commonBtnStyle}
+                              style={personalInfoStyle.imageChecked}
                             />
                           ) : null}
                         </View>

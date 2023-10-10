@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {AllIcons} from '@assets';
+import {AllIcons, CommonStyle} from '@assets';
 import {ScreenHeader, ScreenWrapper} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@types';
@@ -12,16 +12,16 @@ import {styles} from './styles';
 export const FrontDeskScreen = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList>) => {
-  // const [dashboardImages, setDashboardImages] = React.useState([]);
+  const [dashboardImages, setDashboardImages] = React.useState([]);
 
-  // const [loader, setLoader] = React.useState<boolean>(false);
+  const [loader, setLoader] = React.useState<boolean>(false);
 
-  // const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const style = styles();
 
   const {t} = useTranslation();
-  // const commonStyle = CommonStyle();
+  const commonStyle = CommonStyle();
 
   // React.useMemo(async () => {
   //   setLoader(true);
