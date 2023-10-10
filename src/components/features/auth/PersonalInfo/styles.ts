@@ -1,10 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {useAppSelector} from '@redux/hooks';
 
 import {COLORS, CustomFonts} from '@utils';
 
 export const PersonalInfoStyle = () => {
-  const theme = useAppSelector(state => state.theme.theme);
   return StyleSheet.create({
     mainScrollviewContainer: {
       paddingBottom: '30%',
@@ -42,6 +40,10 @@ export const PersonalInfoStyle = () => {
       fontWeight: '400',
       lineHeight: 18.9,
       color: COLORS.lightModetextColor,
+    },
+    imageChecked: {
+      width: '100%',
+      height: '100%',
     },
   });
 };

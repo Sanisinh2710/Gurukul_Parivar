@@ -23,7 +23,11 @@ export const ControlCentre = ({
     const currentTrack = await TrackPlayer.getCurrentTrack();
 
     if (currentTrack !== null) {
-      if (playback === State.Paused || playback === State.Ready) {
+      if (
+        playback === State.Paused ||
+        playback === State.Ready ||
+        playback === State.Stopped
+      ) {
         await TrackPlayer.play();
       } else {
         await TrackPlayer.pause();
@@ -79,7 +83,7 @@ const style = StyleSheet.create({
   forwardImage: {
     width: 17,
     height: 17,
-    transform: [{ rotate: '180deg' }],
+    transform: [{rotate: '180deg'}],
   },
   commomImgStyle: {
     width: '100%',

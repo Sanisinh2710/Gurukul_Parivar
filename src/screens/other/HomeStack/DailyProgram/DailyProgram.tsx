@@ -5,7 +5,7 @@ import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
 import {BASE_URL} from '@env';
 import {DailyProgramGetApi} from '@services';
 import {DailyProgramProps} from '@types';
-import {COLORS, CustomFonts} from '@utils';
+import {COLORS} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   Dimensions,
@@ -16,6 +16,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {styles} from './style';
 
 export const DailyProgram = ({
   navigation,
@@ -23,6 +24,7 @@ export const DailyProgram = ({
   const {t} = useTranslation();
 
   const commonStyle = CommonStyle();
+  const style = styles();
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [DailyProgramData, setDailyProgramData] = React.useState<
@@ -59,6 +61,13 @@ export const DailyProgram = ({
     setRefreshing(false);
   };
 
+  const navigateScreen = (item: any) => {
+    navigation.navigate('programDetail', {
+      title: item.title,
+      description: item.description,
+    });
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -75,10 +84,7 @@ export const DailyProgram = ({
         ) : DailyProgramData.length > 0 ? (
           <FlatList
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              gap: 15,
-              marginTop: '10%',
-            }}
+            contentContainerStyle={style.flatListContentStyle}
             refreshControl={
               <RefreshControl
                 colors={[COLORS.primaryColor, COLORS.green]}
@@ -91,57 +97,21 @@ export const DailyProgram = ({
               return (
                 <>
                   <Pressable
-                    onPress={() => {
-                      navigation.navigate('programDetail', {
-                        title: item.title,
-                        description: item.description,
-                      });
-                    }}
+                    onPress={() => navigateScreen(item)}
                     android_ripple={{
                       color: COLORS.primaryRippleColor,
                       foreground: true,
                     }}
                     key={item.title + index}
-                    style={{
-                      height: 65,
-                      borderRadius: 8,
-                      borderWidth: 0.4,
-                      borderColor: COLORS.primaryColor,
-                      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                      overflow: 'hidden',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        height: '100%',
-                        alignItems: 'center',
-                        gap: 20,
-                      }}>
-                      <View
-                        style={{
-                          width: 40,
-                          height: 40,
-                          padding: 8,
-                          borderRadius: 6,
-                        }}>
+                    style={style.listContainer}>
+                    <View style={style.listContentView}>
+                      <View style={style.listImageView}>
                         <Image
                           source={{uri: `${BASE_URL}${item.image}`}}
-                          style={{
-                            height: 40,
-                            width: 40,
-                            flex: 1,
-                            resizeMode: 'contain',
-                          }}
+                          style={style.imageStyle}
                         />
                       </View>
-                      <Text
-                        style={{
-                          ...CustomFonts.header.medium20,
-                          color: COLORS.lightModetextColor,
-                          fontSize: 16,
-                        }}>
-                        {item.title}
-                      </Text>
+                      <Text style={style.listTextStyle}>{item.title}</Text>
                     </View>
                   </Pressable>
                 </>

@@ -79,7 +79,7 @@ export const DailyUpdates = ({
               return data;
             },
           );
-
+          console.log(data, 'This is data');
           setData(data);
           setLoader(false);
         }, 200);
@@ -193,12 +193,7 @@ export const DailyUpdates = ({
                         });
                       }}>
                       <View style={style.updateContainer}>
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '20%',
-                          }}>
+                        <View style={style.updateView}>
                           <View style={style.imageContainer}>
                             <Image
                               source={AllImages.AppLogo}
@@ -208,7 +203,9 @@ export const DailyUpdates = ({
                         </View>
                         <View style={{width: '80%'}}>
                           <View style={style.textContainer}>
-                            <Text style={style.title}>{item.title}</Text>
+                            <Text style={style.title} numberOfLines={2}>
+                              {item.title}
+                            </Text>
                             <Text style={style.time}>{item.created_at}</Text>
                           </View>
                         </View>

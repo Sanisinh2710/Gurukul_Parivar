@@ -1,15 +1,21 @@
 import React from 'react';
 
 import {AllIcons, CommonStyle} from '@assets';
-import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
+import {
+  DropDownModel,
+  Loader,
+  NoData,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GurukulEventGetApi} from '@services';
 import {RootStackParamList} from '@types';
-import {COLORS, monthsArray} from '@utils';
+import {COLORS, monthsArray, options} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
-  Dimensions,
   Image,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -28,6 +34,10 @@ export const GurukulEvents = ({
   const [loader, setLoader] = React.useState<boolean>(false);
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [viewEventModal, setEventModal] = React.useState(false);
+  const [currentModalData, setCurrentModalData] = React.useState<{
+    [key: string]: any;
+  }>();
 
   const style = styles();
   const commonstyle = CommonStyle();
@@ -75,6 +85,16 @@ export const GurukulEvents = ({
     setRefreshing(false);
   };
 
+  const setModalData = (item: any) => {
+    setEventModal(true);
+    setCurrentModalData({
+      date: new Date(item.date).toLocaleDateString('en-in', options),
+      title: item.title,
+      start_time: item.start_time,
+      end_time: item.end_time,
+    });
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -85,7 +105,7 @@ export const GurukulEvents = ({
         }}
         headerTitle={'Gurukul Events'}
       />
-      <View style={[commonstyle.commonContentView, {flex: 1, marginTop: '3%'}]}>
+      <View style={[commonstyle.commonContentView, style.wrapperView]}>
         {loader ? (
           <Loader />
         ) : (
@@ -107,7 +127,7 @@ export const GurukulEvents = ({
                 // value={searchvalue}
                 placeholder={t('common.Search')}
                 placeholderTextColor={COLORS.lightModetextColor}
-                style={[style.formTextInput, {width: '80%'}]}
+                style={[style.formTextInput]}
                 onChangeText={val => {
                   searchEvent(val.trim());
                 }}
@@ -116,7 +136,10 @@ export const GurukulEvents = ({
             {searchListData.length > 0 ? (
               searchListData.map((item, index) => {
                 return (
-                  <View key={index} style={style.textBoxContainer}>
+                  <Pressable
+                    onPress={() => setModalData(item)}
+                    key={index}
+                    style={style.textBoxContainer}>
                     <View style={style.dateContainer}>
                       <Text style={style.date}>
                         {new Date(item.date).getDate()}
@@ -126,13 +149,10 @@ export const GurukulEvents = ({
                       </Text>
                     </View>
                     <View style={style.contentContainer}>
-                      <Text style={style.content1}>{item.title}</Text>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          width: '70%',
-                          gap: 6,
-                        }}>
+                      <Text style={style.content1} numberOfLines={2}>
+                        {item.title}
+                      </Text>
+                      <View style={style.timeContainer}>
                         <Text style={style.content2}>
                           Time: {item.start_time}
                           {'  -'}
@@ -140,17 +160,46 @@ export const GurukulEvents = ({
                         <Text style={style.content2}>{item.end_time}</Text>
                       </View>
                     </View>
-                  </View>
+                  </Pressable>
                 );
               })
             ) : (
-              <View style={{height: Dimensions.get('window').height * 0.65}}>
+              <View style={style.noDataView}>
                 <NoData />
               </View>
             )}
           </ScrollView>
         )}
       </View>
+      <DropDownModel
+        viewPhoto={true}
+        modelVisible={viewEventModal}
+        setModelVisible={setEventModal}
+        customModelchild={
+          currentModalData && (
+            <View style={style.dropDownView}>
+              <View style={style.dropDownImageContainer}>
+                <View style={style.modalDateContainer}>
+                  <Text style={style.modalDateText}>
+                    {currentModalData.date} {currentModalData.month} {}
+                  </Text>
+                </View>
+                <View style={style.modalTitleContainer}>
+                  <Text style={style.modalTitle}>{currentModalData.title}</Text>
+                </View>
+                <View style={style.modalTimeContainer}>
+                  <Text style={style.modalTime}>
+                    Time: {currentModalData.start_time} -{' '}
+                    {currentModalData.end_time}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )
+        }
+        type={'simple'}
+        modalHeight={'40%'}
+      />
     </ScreenWrapper>
   );
 };

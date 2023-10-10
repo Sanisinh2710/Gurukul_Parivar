@@ -8,7 +8,7 @@ type SongInfoProps = {
   track: Track;
 };
 
-export const SongInfo = ({ track }: SongInfoProps): React.JSX.Element => {
+export const SongInfo = ({track}: SongInfoProps): React.JSX.Element => {
   return (
     <>
       <View>

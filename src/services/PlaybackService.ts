@@ -4,6 +4,7 @@ import TrackPlayer, {
   Capability,
   Event,
   RepeatMode,
+  State,
 } from 'react-native-track-player';
 
 export async function setupPlayer() {
@@ -25,11 +26,12 @@ export async function setupPlayer() {
         // Capability.SkipToPrevious,
         Capability.SeekTo,
       ],
-      // compactCapabilities: [
-      //   Capability.Play,
-      //   Capability.Pause,
-      //   Capability.SkipToNext,
-      // ],
+      compactCapabilities: [
+        Capability.Play,
+        Capability.Pause,
+        // Capability.SkipToNext,
+        Capability.SeekTo,
+      ],
       // progressUpdateEventInterval: 2,
     });
 
@@ -69,6 +71,18 @@ export const PlaybackService = async function () {
   TrackPlayer.addEventListener(Event.RemotePrevious, () => {
     console.log('Event.RemotePrevious');
     TrackPlayer.skipToPrevious();
+  });
+
+  TrackPlayer.addEventListener(Event.RemoteSeek, event => {
+    console.log('Event.RemoteSeek');
+    TrackPlayer.seekTo(event.position);
+  });
+
+  TrackPlayer.addEventListener(Event.PlaybackState, event => {
+    console.log('Event.PlaybackState', event.state);
+    if (event.state === State.Stopped) {
+      TrackPlayer.reset();
+    }
   });
 
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, event => {

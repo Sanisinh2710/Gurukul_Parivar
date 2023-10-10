@@ -71,7 +71,9 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
 
           const options = {
             title: 'Share via',
-            message: 'Jay Swaminarayana..!',
+            ...(Platform.OS === 'android'
+              ? {message: 'Jay Swaminarayana..!'}
+              : {}),
             url: Platform.OS === 'android' ? base64Image : imagePath,
             subject: 'Share Link', // for email
           };
@@ -128,13 +130,10 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
         if (parseInt(Platform.Version.toString()) >= 33) {
           const statuses = await PermissionsAndroid.requestMultiple([
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           ]);
           return (
             statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
-              PermissionsAndroid.RESULTS.GRANTED &&
-            statuses[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] ===
-              PermissionsAndroid.RESULTS.GRANTED
+            PermissionsAndroid.RESULTS.GRANTED
           );
         } else {
           const statuses = await PermissionsAndroid.requestMultiple([

@@ -17,7 +17,6 @@ import {RootBottomTabParamList, RootStackParamList} from '@types';
 import {COLORS, HomeGrid} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
-  Alert,
   BackHandler,
   Image,
   ImageBackground,
@@ -102,15 +101,20 @@ export const HomeScreen = ({
 
   const ExitCallBack = React.useCallback(() => {
     // Add Event Listener for hardwareBackPress
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    Platform.OS === 'android'
+      ? BackHandler.addEventListener('hardwareBackPress', onBackPress)
+      : navigation.addListener('beforeRemove', onBackPress);
 
     return () => {
       // Once the Screen gets blur Remove Event Listener
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    };
-  }, []);
 
-  Platform.OS === 'ios' ? null : useFocusEffect(ExitCallBack);
+      Platform.OS === 'android'
+        ? BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+        : navigation.removeListener('beforeRemove', onBackPress);
+    };
+  }, [onBackPress]);
+
+  useFocusEffect(ExitCallBack);
 
   const handlePress = (val: string) => {
     switch (val) {
@@ -138,6 +142,57 @@ export const HomeScreen = ({
     }
   };
 
+  const ExitModelJSX = React.useMemo(() => {
+    return (
+      <View
+        style={style.exitModelView}
+        onTouchEnd={e => {
+          e.stopPropagation();
+        }}>
+        <View style={style.exitModelLogo}>
+          <Image
+            source={AllImages.AppLogo}
+            style={{
+              height: '100%',
+              width: '100%',
+            }}
+          />
+        </View>
+        <View style={{gap: 5}}>
+          <Text
+            style={[
+              style.exitText,
+              {
+                color: COLORS.black,
+                fontSize: 20,
+              },
+            ]}>
+            {t('common.AppName')}
+          </Text>
+          <Text style={style.exitText}>{t('common.AppExitMsg')}</Text>
+        </View>
+        <View style={style.submitButtonView}>
+          <PrimaryButton
+            title={t('common.No')}
+            buttonStyle={style.submitButtonStyle}
+            onPress={() => {
+              setExitModel(false);
+            }}
+          />
+          <PrimaryButton
+            title={t('common.Yes')}
+            buttonStyle={style.submitButtonStyle}
+            onPress={() => {
+              setExitModel(false);
+              if (Platform.OS === 'android') BackHandler.exitApp();
+            }}
+            buttonColor="#2f9635"
+          />
+        </View>
+      </View>
+    );
+  }, [BackHandler, t, style]);
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -145,16 +200,13 @@ export const HomeScreen = ({
         headerTitleAlign={'left'}
         customTitle={
           <View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={style.WelcomeTextContainer}>
               <Text style={style.WelcomeText1}>
                 {t('homeScreen.WelcomeText1')}
               </Text>
               <Text style={style.name}>
                 {userData?.full_name?.split(' ')?.at(0)}
-                <Text style={{fontSize: 18, color: COLORS.primaryColor}}>
-                  {' '}
-                  {userData?.id}
-                </Text>
+                <Text style={style.id}> {userData?.id}</Text>
               </Text>
             </View>
             <View>
@@ -181,31 +233,25 @@ export const HomeScreen = ({
           />
         }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: '30%',
-        }}>
+        contentContainerStyle={style.contentContainerStyle}>
         {dashboardImages.length > 0 && <PagerView images={dashboardImages} />}
         <View style={[commonStyle.commonContentView]}>
           <View style={style.gridContainer}>
             {HomeGrid(t).map((item, index) => (
               <ImageBackground
                 key={index}
-                imageStyle={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'cover',
-                }}
+                imageStyle={style.imageBgStyle}
                 borderRadius={12}
                 source={item.image}
                 style={style.images}>
                 <TouchableOpacity
-                  style={{height: '100%', width: '100%'}}
+                  style={style.linearGradientView}
                   activeOpacity={0.5}
                   onPress={() => handlePress(item.id)}>
                   <LinearGradient
                     colors={['rgba(23, 23, 23, 0.1)', 'rgba(23, 23, 23, 1)']}
                     locations={[0, 1]}
-                    style={{flex: 1, borderRadius: 12}}>
+                    style={style.linearGradientStyle}>
                     <Text style={style.textOverImage}>{item.name}</Text>
                   </LinearGradient>
                 </TouchableOpacity>
@@ -217,51 +263,7 @@ export const HomeScreen = ({
           viewPhoto={true}
           modelVisible={exitModel}
           setModelVisible={setExitModel}
-          customModelchild={
-            <View
-              style={style.exitModelView}
-              onTouchEnd={e => {
-                e.stopPropagation();
-              }}>
-              <View style={style.exitModelLogo}>
-                <Image
-                  source={AllImages.AppLogo}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                />
-              </View>
-              <View style={{gap: 5}}>
-                <Text
-                  style={[
-                    style.exitText,
-                    {
-                      color: COLORS.black,
-                      fontSize: 20,
-                    },
-                  ]}>
-                  {t('common.AppName')}
-                </Text>
-                <Text style={style.exitText}>{t('common.AppExitMsg')}</Text>
-              </View>
-              <View style={style.submitButtonView}>
-                <PrimaryButton
-                  title={t('common.No')}
-                  buttonStyle={style.submitButtonStyle}
-                  onPress={() => {
-                    setExitModel(false);
-                  }}
-                />
-                <PrimaryButton
-                  title={t('common.Yes')}
-                  buttonStyle={style.submitButtonStyle}
-                  onPress={() => BackHandler.exitApp()}
-                  buttonColor="#2f9635"
-                />
-              </View>
-            </View>
-          }
+          customModelchild={ExitModelJSX}
           type={'simple'}
           modalHeight={'40%'}
         />

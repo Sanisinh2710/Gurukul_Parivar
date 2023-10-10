@@ -15,7 +15,7 @@ import {BASE_URL} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DailyDarshanApi, GurukulBranchGetApi} from '@services';
 import {RootStackParamList} from '@types';
-import {COLORS, CustomFonts, d, options} from '@utils';
+import {COLORS, d, options} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {
   FlatList,
@@ -159,6 +159,15 @@ export const DailyDarshan = ({
     setRefreshing(false);
   };
 
+  const navigateScreen = (index: number) => {
+    navigation.navigate('dailyDarshanDetail', {
+      totalImages: DarshanImages.length,
+      data: DarshanImages,
+      currentImageIndex: index,
+      date: selectedDate.toLocaleDateString('en-in', options),
+    });
+  };
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -195,29 +204,16 @@ export const DailyDarshan = ({
             onRefresh={onRefresh}
           />
         }>
-        <View style={{height: 60, marginBottom: '16%'}}>
+        <View style={style.dropDownContainer}>
           <View
             style={{
               marginTop: '5%',
             }}>
-            <Text
-              style={{
-                ...CustomFonts.body.large14,
-                color: COLORS.lightModetextColor,
-                fontSize: 15,
-              }}>
+            <Text style={style.dropDownHeading}>
               {t('uploadPhoto.DropdownTitle')}
             </Text>
 
-            <View
-              style={{
-                marginTop: '2%',
-                backgroundColor: 'rgba(172,43,49,0.05)',
-                paddingHorizontal: '2%',
-                borderWidth: 1,
-                borderColor: 'rgba(172, 43, 49, 0.1)',
-                borderRadius: 12,
-              }}>
+            <View style={style.dropdownStyle}>
               <SimpleDropDown
                 label={t('uploadPhoto.DropdownTitle')}
                 placeholder={t('uploadPhoto.DropdownLable')}
@@ -235,11 +231,7 @@ export const DailyDarshan = ({
 
         <RadioLable
           wantFullSpace={false}
-          customStyle={{
-            borderRadius: 60,
-            height: 40,
-            borderWidth: 0,
-          }}
+          customStyle={style.radioLabelStyle}
           value={selectedItem}
           onChange={setselectedItem}
           list={TimeArray(t)}
@@ -271,39 +263,29 @@ export const DailyDarshan = ({
                   justifyContent: 'space-between',
                 }}
                 style={{}}
-                contentContainerStyle={{
-                  gap: 15,
-                  marginTop: '3%',
-                  paddingBottom: '10%',
-                }}
+                contentContainerStyle={style.imageFlatlistContentStyle}
                 renderItem={({item, index}) => {
                   return (
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      style={[
-                        style.imageContainer,
-                        {
-                          borderRadius: 8,
-                        },
-                      ]}
-                      onPress={() => {
-                        navigation.navigate('dailyDarshanDetail', {
-                          totalImages: DarshanImages.length,
-                          data: DarshanImages,
-                          currentImageIndex: index,
-                          date: selectedDate.toLocaleDateString(
-                            'en-in',
-                            options,
-                          ),
-                        });
-                      }}>
-                      <Image
-                        source={{
-                          uri: `${BASE_URL}${item}`,
-                        }}
-                        style={style.images}
-                      />
-                    </TouchableOpacity>
+                    <>
+                      <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={[
+                          style.imageContainer,
+                          {
+                            borderRadius: 8,
+                          },
+                        ]}
+                        onPress={() => {
+                          navigateScreen(index);
+                        }}>
+                        <Image
+                          source={{
+                            uri: `${BASE_URL}${item}`,
+                          }}
+                          style={style.images}
+                        />
+                      </TouchableOpacity>
+                    </>
                   );
                 }}
               />

@@ -31,15 +31,13 @@ export type RootStackParamList = {
   program: undefined;
   programDetail: {title: string; description: string} | undefined;
   dailyQuiz: undefined;
-  dailyQuizDetail: {id: number};
-  albumSong: {playListName: string; id: number};
+  dailyQuizDetail: undefined;
   donation: undefined;
   QuizResult: {marks: number};
   GurukulConnect: undefined;
   ProfileEdit: {formStep: number} | undefined;
   PaymentMethod: undefined;
   GurukulEvents: undefined;
-  QuizHistory: {date: string; id: number};
   ImageZommer: {images: Array<SingleImage>};
 };
 

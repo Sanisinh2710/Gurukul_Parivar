@@ -44,5 +44,10 @@ export const styles = () => {
       marginBottom: '20%',
       padding: 5,
     },
+    updateView:{
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '20%',
+    },
   });
 };

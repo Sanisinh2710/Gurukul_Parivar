@@ -251,8 +251,7 @@ export const DropDownModel = React.memo((props: DropDownModelProps) => {
               }}>
               <View>
                 {wantResetButton ? (
-                  <View
-                  style={style.resetBtnView}>
+                  <View style={style.resetBtnView}>
                     <Text style={style.modelLabelText}>{label}</Text>
                     <Text
                       style={style.modelValueResetText}

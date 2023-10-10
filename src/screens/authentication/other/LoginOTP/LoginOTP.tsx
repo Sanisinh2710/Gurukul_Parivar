@@ -27,13 +27,13 @@ import {styles} from './styles';
 
 const staticSeconds = 120;
 
-export const LoginOTP = ({ route, navigation }: LoginOtpScreenProps) => {
+export const LoginOTP = ({route, navigation}: LoginOtpScreenProps) => {
   const primary_email = route.params?.primary_email;
   const reset_pass = route.params?.reset_pass;
 
   const style = styles();
   const CommonStyles = CommonStyle();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [num, setNum] = React.useState<string[]>(['', '', '', '', '', '']);
   const [Otp, setOtp] = React.useState<string[]>([]);
   const [countdown, setCountdown] = React.useState(staticSeconds); // Initial countdown time in seconds
@@ -74,7 +74,7 @@ export const LoginOTP = ({ route, navigation }: LoginOtpScreenProps) => {
               storage.set('resetedPass', JSON.stringify(false));
             }
 
-            navigation.navigate('ResetPassword', { reset_pass: reset_pass });
+            navigation.navigate('ResetPassword', {reset_pass: reset_pass});
           } else {
             Toast.show(resType, 2);
           }
@@ -170,10 +170,7 @@ export const LoginOTP = ({ route, navigation }: LoginOtpScreenProps) => {
             <OtpComponent num={num} setNum={setNum} />
             {/* <OtpInput /> */}
 
-            <View
-              style={{
-                marginTop: 48,
-              }}>
+            <View style={style.buttonContainer}>
               <PrimaryButton
                 onPress={handleLogin}
                 title={t('otpScreen.Verify&Login')}

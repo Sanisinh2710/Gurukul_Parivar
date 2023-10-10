@@ -1,11 +1,17 @@
 import React from 'react';
 
 import {AllIcons, CommonStyle} from '@assets';
-import {Loader, PrimaryButton, ScreenHeader, ScreenWrapper} from '@components';
+import {
+  Loader,
+  NoData,
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DailyQuizAnswerPostApi, DailyQuizGetApi} from '@services';
 import {RootStackParamList} from '@types';
-import {COLORS, CustomFonts} from '@utils';
+import {COLORS} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Pressable, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +22,6 @@ export const DailyQuizDetail = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'dailyQuizDetail'>) => {
   const style = styles();
-  const Quizid = route.params.id;
   const [answer, setAnswer] = React.useState<Array<Object>>([]);
   const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 
@@ -28,10 +33,12 @@ export const DailyQuizDetail = ({
   React.useMemo(async () => {
     setLoader(true);
     try {
-      const res = await DailyQuizGetApi(Quizid);
+      const res = await DailyQuizGetApi(undefined);
 
-      if (res.resType === 'SUCCESS') {
-        setData(res.data.questions);
+      if (res.resType === 'SUCCESS' && res.statusCode === 200) {
+        setData(res.data);
+        setLoader(false);
+      } else if (res.statusCode === 400) {
         setLoader(false);
       }
     } catch (error) {
@@ -41,11 +48,11 @@ export const DailyQuizDetail = ({
 
   const handleSubmit = async () => {
     let finalData = {
-      quiz_id: Quizid,
       answer_log: answer,
     };
 
     const response = await DailyQuizAnswerPostApi(finalData);
+    console.log(response, 'RESPONSE POST API');
     if (response.resType === 'SUCCESS') {
       navigation.replace('QuizResult', {marks: response.data.score});
     }
@@ -95,8 +102,10 @@ export const DailyQuizDetail = ({
         }}
       />
       {loader ? (
-        <Loader />
-      ) : (
+        <View style={{flex: 1}}>
+          <Loader screenHeight={'100%'} />
+        </View>
+      ) : Data.length > 0 ? (
         <View style={[commonstyle.commonContentView, {flex: 1}]}>
           <FlatList
             data={Data}
@@ -107,40 +116,15 @@ export const DailyQuizDetail = ({
                     colors={['rgba(23, 23, 23, 0.05)', 'rgba(23, 23, 23, 0)']}
                     locations={[0, 1]}
                     useAngle={true}
-                    style={{
-                      marginTop: '10%',
-                      flex: 1,
-                      height: 40,
-                      borderTopLeftRadius: 3,
-                      borderBottomLeftRadius: 3,
-                    }}>
-                    <View style={{flexDirection: 'row', height: '100%'}}>
-                      <View
-                        style={{
-                          width: '5%',
-                          borderLeftWidth: 7,
-                          borderTopLeftRadius: 3,
-                          borderBottomLeftRadius: 3,
-                          borderColor: COLORS.primaryColor,
-                        }}
-                      />
-                      <View style={{width: '95%', justifyContent: 'center'}}>
-                        <Text
-                          style={{
-                            ...CustomFonts.header.small18,
-                            color: 'black',
-                            fontSize: 14,
-                          }}>
-                          {item.question}
-                        </Text>
+                    style={style.linearGradient}>
+                    <View style={style.leftQueBarContainer}>
+                      <View style={style.leftQueBar} />
+                      <View style={style.QueContainer}>
+                        <Text style={style.Que}>{item.question}</Text>
                       </View>
                     </View>
                   </LinearGradient>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                    }}>
+                  <View style={style.mapWrapper}>
                     {item.options.map((options: any, opIndex: number) => {
                       const isSelected = selectedOptions[index] === options;
 
@@ -150,16 +134,14 @@ export const DailyQuizDetail = ({
                           onPress={() => {
                             handleAnswer(options, index, item.id);
                           }}
-                          style={{
-                            width: '40%',
-                            marginRight: '5%',
-                            marginVertical: '3%',
-                            padding: 10,
-                            borderRadius: 20,
-                            backgroundColor: isSelected
-                              ? COLORS.primaryColor
-                              : 'rgba(172, 43, 49, 0.1)',
-                          }}>
+                          style={[
+                            style.option,
+                            {
+                              backgroundColor: isSelected
+                                ? COLORS.primaryColor
+                                : 'rgba(172, 43, 49, 0.1)',
+                            },
+                          ]}>
                           <View>
                             <Text
                               style={{
@@ -177,7 +159,7 @@ export const DailyQuizDetail = ({
               </>
             )}
           />
-          <View style={{paddingBottom: '5%', marginTop: '5%'}}>
+          <View style={style.btnWrapper}>
             <PrimaryButton
               title={t('DailyQuiz.SubmitBtn')}
               disabled={answer.length === Data.length ? false : true}
@@ -188,6 +170,11 @@ export const DailyQuizDetail = ({
             />
           </View>
         </View>
+      ) : (
+        <NoData
+          title={t('DailyQuiz.hasAttendTitle')}
+          content={t('DailyQuiz.hasAttendContent')}
+        />
       )}
     </ScreenWrapper>
   );

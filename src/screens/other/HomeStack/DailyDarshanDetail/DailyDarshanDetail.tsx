@@ -78,25 +78,12 @@ export const DailyDarshanDetail = ({
                     images: [{url: `${BASE_URL}${item}`}],
                   });
                 }}
-                style={[
-                  {
-                    height: '100%',
-                    width: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  },
-                ]}>
+                style={style.imageView}>
                 {imgLoad[index] && (
                   <ActivityIndicator
                     size={30}
                     color={COLORS.primaryColor}
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                    }}
+                    style={style.activityIndicator}
                   />
                 )}
                 <Image

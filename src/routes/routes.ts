@@ -1,5 +1,4 @@
 import {ImageZoomer} from '@components';
-import {AuthStackNavigator, BottomTabNavigator} from '@routes';
 import {
   CalendarScreen,
   ChangeLanguage,
@@ -27,7 +26,6 @@ import {
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
-  QuizHistory,
   QuizResult,
   RegisterScreen,
   ResetPassword,
@@ -38,6 +36,7 @@ import {
   RootBottomTabParamList,
   RootStackParamList,
 } from '@types';
+import {AuthStackNavigator, BottomTabNavigator} from './Routes';
 
 export const NativeStackRouteList: Array<{
   name: keyof RootStackParamList;
@@ -67,10 +66,7 @@ export const NativeStackRouteList: Array<{
     name: 'ProfileEdit',
     component: ProfileSignupWithEdit,
   },
-  {
-    name: 'QuizHistory',
-    component: QuizHistory,
-  },
+
   {
     name: 'QuizResult',
     component: QuizResult,
@@ -192,3 +188,5 @@ export const NativeBottomRouteList: Array<{
     component: ProfileScreen,
   },
 ];
+
+export {AuthStackNavigator};

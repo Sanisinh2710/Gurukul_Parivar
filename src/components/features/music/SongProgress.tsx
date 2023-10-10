@@ -33,12 +33,11 @@ export const SongProgress = ({
 
   return (
     <>
-      <View
-        style={style.songProgressMianView}>
+      <View style={style.songProgressMianView}>
         <View style={style.progressCountView}>
           <Text style={style.trackProgressText}>{format(progress)}</Text>
         </View>
-        <View style={{ width: '70%' }}>
+        <View style={{width: '70%'}}>
           <Slider
             trackStyle={style.trackStyle}
             animateTransitions={true}
@@ -80,8 +79,8 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
   },
-  progressCountView: { width: '15%', alignItems: 'center' },
-  trackStyle: { width: '100%', height: 3.5, borderRadius: 10 },
+  progressCountView: {width: '15%', alignItems: 'center'},
+  trackStyle: {width: '100%', height: 3.5, borderRadius: 10},
   thumbStyle: {
     backgroundColor: '#FFFFFF',
     shadowColor: '#70eaff',
@@ -89,5 +88,5 @@ const style = StyleSheet.create({
     height: 25,
     width: 25,
     borderRadius: 28,
-  }
+  },
 });

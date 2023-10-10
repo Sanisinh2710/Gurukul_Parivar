@@ -1,7 +1,7 @@
 import {AllIcons, AllImages} from '@assets';
 
 import {Theme} from '@types';
-import {COLORS} from '@utils';
+import {COLORS} from './colors';
 
 export const LightTheme: Theme = {
   isDark: false,
@@ -497,6 +497,10 @@ export const options: Intl.DateTimeFormatOptions = {
 export const options2: Intl.DateTimeFormatOptions = {
   month: 'short',
   year: 'numeric',
+};
+export const options3: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  weekday: 'long',
 };
 export const ApiDateFormat: Intl.DateTimeFormatOptions = {
   year: 'numeric',
