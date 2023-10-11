@@ -1,4 +1,11 @@
 import React from 'react';
+
+import {AllIcons, CommonStyle} from '@assets';
+import {DropDownModel} from '@components';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import {COLORS, CustomFonts} from '@utils';
+import LottieView from 'lottie-react-native';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   Animated,
@@ -12,14 +19,7 @@ import {
   Text,
   View,
 } from 'react-native';
-
-import {AllIcons, CommonStyle} from '@assets';
-import {DropDownModel} from '@components';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import {COLORS, CustomFonts} from '@utils';
-import LottieView from 'lottie-react-native';
-import {useTranslation} from 'react-i18next';
-import Share from 'react-native-share';
+import Share, {ShareOptions} from 'react-native-share';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {styles} from './style';
@@ -69,18 +69,30 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           const fileContent = await fs.readFile(imagePath, 'base64');
           const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
-          const options = {
-            title: 'Share via',
-            ...(Platform.OS === 'android'
-              ? {message: 'Jay Swaminarayana..!'}
-              : {}),
-            url: Platform.OS === 'android' ? base64Image : imagePath,
-            subject: 'Share Link', // for email
-          };
+          if (Platform.OS === 'android') {
+            const options: ShareOptions = {
+              title: 'Share via',
+              message: 'Jay Swaminarayana..!',
+              url: base64Image,
+              subject: 'Share Link', // for email
+              type: 'image/*',
+            };
 
-          setIsSharing(false);
+            setIsSharing(false);
 
-          await Share.open(options);
+            await Share.open(options);
+          } else {
+            const options: ShareOptions = {
+              title: 'Share via',
+              url: imagePath,
+              subject: 'Share Link', // for email
+              // type: 'image/*',
+            };
+
+            setIsSharing(false);
+
+            await Share.open(options);
+          }
         }
       } else {
         setIsSharing(false);
