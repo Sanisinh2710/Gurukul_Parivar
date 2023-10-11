@@ -69,30 +69,15 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           const fileContent = await fs.readFile(imagePath, 'base64');
           const base64Image = `data:image/jpeg;base64,${fileContent}`;
 
-          if (Platform.OS === 'android') {
-            const options: ShareOptions = {
-              title: 'Share via',
-              message: 'Jay Swaminarayana..!',
-              url: base64Image,
-              subject: 'Share Link', // for email
-              type: 'image/*',
-            };
+          const options: ShareOptions = {
+            title: 'Share via',
+            url: Platform.OS === 'android' ? base64Image : imagePath,
+            subject: 'Share Link', // for email
+          };
 
-            setIsSharing(false);
+          setIsSharing(false);
 
-            await Share.open(options);
-          } else {
-            const options: ShareOptions = {
-              title: 'Share via',
-              url: imagePath,
-              subject: 'Share Link', // for email
-              // type: 'image/*',
-            };
-
-            setIsSharing(false);
-
-            await Share.open(options);
-          }
+          await Share.open(options);
         }
       } else {
         setIsSharing(false);

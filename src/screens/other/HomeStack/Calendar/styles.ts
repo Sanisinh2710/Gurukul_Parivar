@@ -63,7 +63,7 @@ export const styles = () => {
       justifyContent: 'center',
     },
     calenderContainer: {
-      height: height * 0.8,
+      height: height * 0.85,
     },
     calenderEventView: {
       height: '25%',

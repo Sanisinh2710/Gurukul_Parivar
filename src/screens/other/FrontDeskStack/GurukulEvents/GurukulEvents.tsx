@@ -107,7 +107,7 @@ export const GurukulEvents = ({
         leftOnPress={() => {
           navigation.goBack();
         }}
-        headerTitle={'Gurukul Events'}
+        headerTitle={t('frontDesk.Event')}
       />
       <View style={[commonstyle.commonContentView, style.wrapperView]}>
         {loader ? (
