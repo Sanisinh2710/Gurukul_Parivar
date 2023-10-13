@@ -39,6 +39,7 @@ export type RootStackParamList = {
   PaymentMethod: undefined;
   GurukulEvents: undefined;
   ImageZommer: {images: Array<SingleImage>};
+  notifications: undefined;
 };
 
 export type RootBottomTabParamList = {

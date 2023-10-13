@@ -226,6 +226,15 @@ export const ShareDownload = ({wallpaper, imgURL}: ShareDownloadProps) => {
           path: finalPath,
           description: 'Image',
         },
+        ios: {
+          fileCache: true,
+          path: finalPath,
+          // mime: 'application/xlsx',
+          // appendExt: 'xlsx',
+          //path: filePath,
+          //appendExt: fileExt,
+          notification: true,
+        },
       },
     });
 

@@ -160,3 +160,9 @@ export type CurrentUserDataType = {
   userRole: 'GUEST' | 'USER';
   currUser: CurrUserDataTypeNested;
 };
+
+export type IntialNotificationType = {
+  status: boolean;
+  notifications: Array<any>;
+  isNewNotification: boolean;
+};

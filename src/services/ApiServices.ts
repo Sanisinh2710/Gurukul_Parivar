@@ -5,6 +5,7 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_NOTIFICATIONS_GET_ENDPOINT,
   DAILY_PROGRAM_GET_ENDPOINT,
   DAILY_QUIZ_ANSWER_POST_ENDPOINT,
   DAILY_QUIZ_GET_ENDPOINT,
@@ -350,6 +351,12 @@ export const GuestLoginGetApi = async () => {
     undefined,
     false,
   );
+};
+
+export const DailyNotification = async () => {
+  return apiRequest(DAILY_NOTIFICATIONS_GET_ENDPOINT, 'get', {
+    is_get_all_notification: true,
+  });
 };
 // All apis are above, below is helper function for used in auth wizard form:---
 

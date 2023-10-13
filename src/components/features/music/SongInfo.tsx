@@ -3,6 +3,7 @@ import React from 'react';
 import {CustomFonts} from '@utils';
 import {StyleSheet, Text, View} from 'react-native';
 import {Track} from 'react-native-track-player';
+import MarqueeText from 'react-native-marquee';
 
 type SongInfoProps = {
   track: Track;
@@ -11,10 +12,16 @@ type SongInfoProps = {
 export const SongInfo = ({track}: SongInfoProps): React.JSX.Element => {
   return (
     <>
-      <View>
-        <Text style={style.trackTitle}>
-          {track?.id} {track?.title}
-        </Text>
+      <View style={{flexDirection: 'row', gap: 5}}>
+        <Text style={style.trackTitle}>{track?.id}.</Text>
+        <MarqueeText
+          style={style.trackTitle}
+          speed={0.2}
+          marqueeOnStart={true}
+          loop={true}
+          delay={500}>
+          {track?.title}
+        </MarqueeText>
       </View>
     </>
   );

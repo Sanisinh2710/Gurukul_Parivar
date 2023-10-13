@@ -3,9 +3,15 @@ import {combineReducers} from 'redux';
 import MusicReducer from './ducks/musicSlice';
 import ThemeReducer from './ducks/themeslice';
 import CurrentUserReducer from './ducks/userSlice';
+import NotificationsReducer from './ducks/notificationSlice';
 
 import {reduxStorage} from '@storage';
-import {CurrentUserDataType, InitialSongsType, InitialThemeType} from '@types';
+import {
+  CurrentUserDataType,
+  InitialSongsType,
+  InitialThemeType,
+  IntialNotificationType,
+} from '@types';
 import {PersistConfig, persistReducer} from 'redux-persist';
 
 const themePersistConfig: PersistConfig<InitialThemeType> = {
@@ -23,8 +29,14 @@ const userPersistConfig: PersistConfig<CurrentUserDataType> = {
   storage: reduxStorage,
 };
 
+const notificationSliceConfig: PersistConfig<IntialNotificationType> = {
+  key: 'notification',
+  storage: reduxStorage,
+};
+
 export const rootReducer = combineReducers({
   theme: persistReducer(themePersistConfig, ThemeReducer),
   music: persistReducer(musicPersistConfig, MusicReducer),
   currUser: persistReducer(userPersistConfig, CurrentUserReducer),
+  notifications: persistReducer(notificationSliceConfig, NotificationsReducer),
 });

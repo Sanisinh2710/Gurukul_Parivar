@@ -108,6 +108,7 @@ export const DailyQuizDetail = ({
       ) : Data.length > 0 ? (
         <View style={[commonstyle.commonContentView, {flex: 1}]}>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={Data}
             renderItem={({item, index}) => (
               <>

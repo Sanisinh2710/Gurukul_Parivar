@@ -7,3 +7,4 @@ export * from './DailyQuotes';
 export * from './DailyUpdateDetail';
 export * from './DailyUpdates';
 export * from './LiveSatsang';
+export * from './Notifications';

@@ -323,19 +323,18 @@ export const FrontDesk = (t: any) => {
       id: 'connect',
       imageBG: 'rgba(1, 163, 212, 0.1)',
     },
-
     {
       image: AllIcons.Ticket,
       title: t('frontDesk.Event'),
       id: 'event',
       imageBG: 'rgba(174, 73, 141, 0.1)',
     },
-    // {
-    //   image: AllIcons.Star,
-    //   title: t('frontDesk.Quiz'),
-    //   id: 'quiz',
-    //   imageBG: 'rgba(60, 42, 152, 0.1)',
-    // },
+    {
+      image: AllIcons.Star,
+      title: t('frontDesk.Quiz'),
+      id: 'quiz',
+      imageBG: 'rgba(60, 42, 152, 0.1)',
+    },
     // {
     //   image: AllIcons.Donation,
     //   title: t('frontDesk.Donation'),
