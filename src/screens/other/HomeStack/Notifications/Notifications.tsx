@@ -33,7 +33,6 @@ export const Notifications = ({
   const dispatch = useAppDispatch();
 
   const {notifications} = useAppSelector(state => state.notifications);
-  console.log(notifications);
 
   React.useEffect(() => {
     setLoader(true);

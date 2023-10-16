@@ -28,6 +28,7 @@ import {
   ProfileSignup,
   ProfileSignupWithEdit,
   QuizResult,
+  RaviSabha,
   RegisterScreen,
   ResetPassword,
   Status,
@@ -139,6 +140,10 @@ export const NativeStackRouteList: Array<{
   {
     name: 'notifications',
     component: Notifications,
+  },
+  {
+    name: 'RaviSabha',
+    component: RaviSabha,
   },
 ];
 

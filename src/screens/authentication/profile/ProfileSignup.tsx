@@ -562,12 +562,12 @@ export const ProfileSignup = ({
       : '';
   }, [formStep, t]);
 
-  const leftPress = () =>{
-      if(width > 20) {
+  const leftPress = () => {
+    if (width > 20) {
       setwidth(width - 20);
       setFormStep(formStep - 1);
     }
-  }
+  };
 
   return (
     <ScreenWrapper>

@@ -311,12 +311,6 @@ export const AllCountryCodes = [
 
 export const FrontDesk = (t: any) => {
   return [
-    // {
-    //   image: AllIcons.Paper,
-    //   title: t('frontDesk.Form'),
-    //   id: 'goform',
-    //   imageBG: 'rgba(172, 168, 123, 0.1)',
-    // },
     {
       image: AllIcons.Chat,
       title: t('frontDesk.Connect'),
@@ -334,6 +328,12 @@ export const FrontDesk = (t: any) => {
       title: t('frontDesk.Quiz'),
       id: 'quiz',
       imageBG: 'rgba(60, 42, 152, 0.1)',
+    },
+    {
+      image: AllIcons.Paper,
+      title: t('frontDesk.Ravisabha'),
+      id: 'Ravisabha',
+      imageBG: 'rgba(172, 168, 123, 0.1)',
     },
     // {
     //   image: AllIcons.Donation,

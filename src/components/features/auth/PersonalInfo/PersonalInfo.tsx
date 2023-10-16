@@ -55,8 +55,6 @@ export const PersonalInfo = React.memo(
       ] || [false],
     );
 
-    console.log(initialValues, 'intial personal in fo');
-
     const [isArraySet, setIsArrayset] = React.useState(false);
 
     const PerosnalInfoForm1InputList: {
@@ -227,7 +225,6 @@ export const PersonalInfo = React.memo(
     }, [initialValues, isArraySet]);
 
     const onSubmit = (data: PersonalInfoFormValidationSchemaType) => {
-      console.log(data, 'on right click');
       if (data && data.emailInfo) {
         const formSubmitData = {
           gender: data.gender || '',

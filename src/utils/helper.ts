@@ -374,7 +374,7 @@ export const downloadSong = async (
 
       if (options) {
         const response = await config(options).fetch('GET', song_URL);
-    
+
         if (response) {
           return (resType = 'SUCCESS');
         } else {

@@ -40,6 +40,7 @@ export type RootStackParamList = {
   GurukulEvents: undefined;
   ImageZommer: {images: Array<SingleImage>};
   notifications: undefined;
+  RaviSabha: undefined;
 };
 
 export type RootBottomTabParamList = {

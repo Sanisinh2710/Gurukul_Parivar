@@ -16,7 +16,7 @@ type DatePickerProps = {
     [key: string]: any;
   };
   customIcon?: any;
-  type?: string;
+  type?: 'dob' | 'date' | 'ravisabha';
   focused: boolean;
 };
 
@@ -46,17 +46,43 @@ export const DatePicker = React.memo(
 
         setSelectedDate(minAllowedDate);
       }
+      if (type === 'date') {
+        const minAllowedDate = new Date();
+
+        setSelectedDate(minAllowedDate);
+      }
+      if (type === 'ravisabha') {
+        function getMostRecentSunday() {
+          const today = new Date();
+          const dayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+
+          // Calculate the number of days to subtract to get to the most recent Sunday
+          const daysToSunday = (dayOfWeek + 7 - 0) % 7;
+
+          // Create a new Date object representing the most recent Sunday
+          const mostRecentSunday = new Date(today);
+          mostRecentSunday.setDate(today.getDate() - daysToSunday);
+
+          return mostRecentSunday;
+        }
+
+        const mostRecentSunday = getMostRecentSunday();
+
+        setSelectedDate(mostRecentSunday);
+      }
     }, []);
 
     React.useEffect(() => {
       if (selectedDate && focused) {
         onChange(
-          `${selectedDate.getDate().toString().length <= 1
-            ? '0' + selectedDate.getDate().toString()
-            : selectedDate.getDate().toString()
-          }/${(selectedDate.getMonth() + 1).toString().length <= 1
-            ? '0' + (selectedDate.getMonth() + 1).toString()
-            : (selectedDate.getMonth() + 1).toString()
+          `${
+            selectedDate.getDate().toString().length <= 1
+              ? '0' + selectedDate.getDate().toString()
+              : selectedDate.getDate().toString()
+          }/${
+            (selectedDate.getMonth() + 1).toString().length <= 1
+              ? '0' + (selectedDate.getMonth() + 1).toString()
+              : (selectedDate.getMonth() + 1).toString()
           }/${selectedDate.getFullYear()}`,
         );
       }
@@ -75,8 +101,7 @@ export const DatePicker = React.memo(
               ? placeholder
               : value}
           </Text>
-          <View
-            style={style.datePickerDateImg}>
+          <View style={style.datePickerDateImg}>
             <Image
               style={style.rightSideImgStyle}
               source={customIcon || AllIcons.Calendar}
@@ -89,6 +114,7 @@ export const DatePicker = React.memo(
           setCalendarVisible={setCalendarVisible}
           selectedParentDate={selectedDate}
           setSelectedParentDate={setSelectedDate}
+          onBlur={onBlur}
         />
       </>
     );

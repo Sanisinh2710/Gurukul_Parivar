@@ -193,6 +193,22 @@ export const FormInput = React.memo(
         );
         break;
 
+      case 'ravisabha':
+        fieldblock = (
+          <DatePicker
+            type={type}
+            value={value}
+            label={label}
+            onChange={onChange}
+            onBlur={onBlur}
+            focused={focused}
+            placeholder={placeholder}
+            setFocused={setFocused}
+            customIcon={icon}
+          />
+        );
+        break;
+
       case 'number':
         fieldblock = (
           <TextInput

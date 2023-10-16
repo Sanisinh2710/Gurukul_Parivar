@@ -125,7 +125,8 @@ export type SupportedFormInputTypes =
   | 'date'
   | 'textarea'
   | 'email'
-  | 'multi-select';
+  | 'multi-select'
+  | 'ravisabha';
 
 export type SongType = {
   [key: string]: any;
@@ -165,4 +166,9 @@ export type IntialNotificationType = {
   status: boolean;
   notifications: Array<any>;
   isNewNotification: boolean;
+};
+
+export type RaviSabhaValidationSchemaType = {
+  date: string;
+  feedback: string;
 };

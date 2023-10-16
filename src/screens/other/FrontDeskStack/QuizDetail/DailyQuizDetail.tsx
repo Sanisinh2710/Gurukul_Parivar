@@ -52,7 +52,6 @@ export const DailyQuizDetail = ({
     };
 
     const response = await DailyQuizAnswerPostApi(finalData);
-    console.log(response, 'RESPONSE POST API');
     if (response.resType === 'SUCCESS') {
       navigation.replace('QuizResult', {marks: response.data.score});
     }

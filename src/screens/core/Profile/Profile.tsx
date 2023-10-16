@@ -97,8 +97,6 @@ export const ProfileScreen = ({
       }
       const response = await PersonalInfoSaveDetailsApi(userDataCloneObj);
 
-      console.log(userDataCloneObj);
-
       if (response.resType == 'SUCCESS') {
         const updatedReponse = await PersonalInfoGetDetailsApi();
         if (response.resType == 'SUCCESS') {

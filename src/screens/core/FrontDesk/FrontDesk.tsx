@@ -41,9 +41,9 @@ export const FrontDeskScreen = ({
 
   const handlePress = (val: string) => {
     switch (val) {
-      // case 'goform':
-      //   navigation.navigate('dailyDarshan');
-      //   break;
+      case 'Ravisabha':
+        navigation.navigate('RaviSabha');
+        break;
       case 'connect':
         navigation.navigate('GurukulConnect');
         break;
@@ -61,22 +61,6 @@ export const FrontDeskScreen = ({
     }
   };
 
-  // const onRefresh = async () => {
-  //   setRefreshing(true);
-
-  //   try {
-  //     const res = await SliderGetApi();
-
-  //     if (res.resType === 'SUCCESS') {
-  //       setDashboardImages(res.data.images);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  //   setRefreshing(false);
-  // };
-
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -87,10 +71,10 @@ export const FrontDeskScreen = ({
             <Text style={style.title}>{t('frontDesk.Heading')}</Text>
           </View>
         }
-        headerRight={{
-          icon: AllIcons.NotificationOutline,
-          onPress: () => navigation.navigate('dailyUpdates'),
-        }}
+        // headerRight={{
+        //   icon: AllIcons.NotificationOutline,
+        //   onPress: () => navigation.navigate('dailyUpdates'),
+        // }}
       />
       <ScrollView
         overScrollMode="always"

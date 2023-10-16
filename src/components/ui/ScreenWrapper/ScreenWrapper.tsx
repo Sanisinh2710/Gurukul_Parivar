@@ -9,12 +9,12 @@ type ScreenWrapperProps = {
 };
 
 export const ScreenWrapper = React.memo(
-  ({ children }: ScreenWrapperProps): React.JSX.Element => {
+  ({children}: ScreenWrapperProps): React.JSX.Element => {
     const common = CommonStyle();
 
     return (
       <SafeAreaView style={common.commonContainer}>
-        <ImageBackground source={AllImages.WrapBG} style={{ flex: 1 }}>
+        <ImageBackground source={AllImages.WrapBG} style={{flex: 1}}>
           {children}
         </ImageBackground>
       </SafeAreaView>
