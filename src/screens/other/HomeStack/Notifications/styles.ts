@@ -14,7 +14,7 @@ export const styles = () => {
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
-      padding: 5,
+      paddingVertical: '3.5%',
       backgroundColor: 'white',
       borderWidth: 1,
       marginTop: 20,
@@ -26,8 +26,9 @@ export const styles = () => {
       alignSelf: 'center',
     },
     time: {
+      marginTop: 8,
       color: 'rgba(23,23,23,0.5)',
-      fontSize: 12,
+      fontSize: 14,
       lineHeight: 16.5,
     },
     image: {
@@ -40,11 +41,10 @@ export const styles = () => {
       borderColor: COLORS.primaryColor,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: '5%',
-      marginBottom: '20%',
       padding: 5,
+      marginLeft: '20%',
     },
-    updateView:{
+    updateView: {
       justifyContent: 'center',
       alignItems: 'center',
       width: '20%',

@@ -4,22 +4,13 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {AllImages, CommonStyle} from '@assets';
 import {Loader, NoData, ScreenHeader, ScreenWrapper} from '@components';
-import {DailyUpdatesApi} from '@services';
 import {RootStackParamList} from '@types';
-import {COLORS} from '@utils';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  Image,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {useDispatch} from 'react-redux';
 import {UPDATE_STATUS} from '@redux/ducks/notificationSlice';
+import moment from 'moment';
 
 export const Notifications = ({
   navigation,
@@ -29,6 +20,12 @@ export const Notifications = ({
   const [loader, setLoader] = React.useState<boolean>(false);
   const commonStyle = CommonStyle();
   const {t} = useTranslation();
+
+  const formatTime = (time: string) => {
+    let now = moment(time, 'HH:mm:ss');
+
+    return now.fromNow();
+  };
 
   const dispatch = useAppDispatch();
 
@@ -104,7 +101,9 @@ export const Notifications = ({
                             <Text style={style.title} numberOfLines={2}>
                               {item.message}
                             </Text>
-                            {/* <Text style={style.time}>{item.created_at}</Text> */}
+                            <Text style={style.time}>
+                              {formatTime(item.time)}
+                            </Text>
                           </View>
                         </View>
                       </View>
