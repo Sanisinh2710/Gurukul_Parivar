@@ -30,6 +30,7 @@ import {
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
+  RAVISABHA_POST_ENDPOINT,
   RESET_PASSWORD_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
   SAINT_NAME_GET_ENDPOINT,
@@ -46,7 +47,12 @@ const axiosInstance = axios.create({
 });
 
 const handleApiResponse = (response: AxiosResponse<any, any>) => {
-  const data = {
+  const data: {
+    resType: 'SUCCESS' | 'ERROR';
+    data: any;
+    message: string;
+    statusCode: any;
+  } = {
     resType: response.data.status === 'success' ? 'SUCCESS' : 'ERROR',
     data: response.data.data,
     message: response.data.message,
@@ -61,7 +67,12 @@ const apiRequest = async (
   requestData = {},
   headers?: object,
   requireBearerToken = true,
-) => {
+): Promise<{
+  resType: 'SUCCESS' | 'ERROR';
+  data: any;
+  message: string;
+  statusCode: any;
+}> => {
   try {
     if (requireBearerToken) {
       const bearerToken = getBearerToken();
@@ -91,6 +102,7 @@ const apiRequest = async (
       resType: 'ERROR',
       data: [],
       message: 'Something went wrong!',
+      statusCode: '400',
     };
   }
 };
@@ -357,6 +369,13 @@ export const DailyNotification = async () => {
   return apiRequest(DAILY_NOTIFICATIONS_GET_ENDPOINT, 'get', {
     is_get_all_notification: true,
   });
+};
+
+export const RavisabhaFeedback = async (data: {
+  date: string;
+  feedback: string;
+}) => {
+  return apiRequest(RAVISABHA_POST_ENDPOINT, 'post', data);
 };
 // All apis are above, below is helper function for used in auth wizard form:---
 

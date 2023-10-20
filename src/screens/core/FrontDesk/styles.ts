@@ -1,4 +1,4 @@
-import {CustomFonts} from '@utils';
+import {COLORS, CustomFonts} from '@utils';
 import {StyleSheet} from 'react-native';
 
 export const styles = () => {
@@ -47,5 +47,39 @@ export const styles = () => {
     },
     image: {height: 24, width: 24},
     titleWrapper: {justifyContent: 'center', marginLeft: '2%'},
+    submitButtonView: {
+      marginTop: '10%',
+      alignSelf: 'center',
+      flexDirection: 'row',
+    },
+    submitButtonStyle: {
+      marginHorizontal: 5,
+      width: '50%',
+      marginBottom: '10%',
+    },
+    loginText: {
+      ...CustomFonts.header.small18,
+      color: COLORS.black,
+      fontSize: 17,
+      textAlign: 'center',
+    },
+    loginModelView: {
+      backgroundColor: COLORS.white,
+      height: 250,
+      width: '85%',
+      borderRadius: 12,
+      justifyContent: 'flex-end',
+      paddingHorizontal: '7%',
+    },
+    loginModelLogo: {
+      height: 70,
+      width: 70,
+      borderRadius: 60,
+      padding: 5,
+      backgroundColor: COLORS.white,
+      alignSelf: 'center',
+      position: 'absolute',
+      top: '-10%',
+    },
   });
 };

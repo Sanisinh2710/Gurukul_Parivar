@@ -1,48 +1,48 @@
 import React from 'react';
 
-import {AllIcons, CommonStyle} from '@assets';
-import {ScreenHeader, ScreenWrapper} from '@components';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '@types';
-import {FrontDesk} from '@utils';
+import {AllIcons, AllImages, CommonStyle} from '@assets';
+import {
+  DropDownModel,
+  PrimaryButton,
+  ScreenHeader,
+  ScreenWrapper,
+} from '@components';
+import {COLORS, FrontDesk} from '@utils';
 import {useTranslation} from 'react-i18next';
 import {Image, ScrollView, Text, View} from 'react-native';
 import {styles} from './styles';
+import {useAppSelector} from '@redux/hooks';
+import {
+  CompositeNavigationProp,
+  CompositeScreenProps,
+} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootBottomTabParamList, RootStackParamList} from '@types';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {removeAuthToken} from '@services';
 
 export const FrontDeskScreen = ({
   navigation,
-}: NativeStackScreenProps<RootStackParamList>) => {
-  const [dashboardImages, setDashboardImages] = React.useState([]);
-
-  const [loader, setLoader] = React.useState<boolean>(false);
-
-  const [refreshing, setRefreshing] = React.useState(false);
-
+}: CompositeScreenProps<
+  BottomTabScreenProps<RootBottomTabParamList, 'FrontDesk'>,
+  NativeStackScreenProps<RootStackParamList>
+>) => {
+  /*  */
   const style = styles();
+  const {userRole} = useAppSelector(state => state.currUser);
 
   const {t} = useTranslation();
   const commonStyle = CommonStyle();
-
-  // React.useMemo(async () => {
-  //   setLoader(true);
-
-  //   try {
-  //     const res = await SliderGetApi();
-
-  //     if (res.resType === 'SUCCESS') {
-  //       setDashboardImages(res.data.images);
-
-  //       setLoader(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, []);
+  const [loginModel, setloginModel] = React.useState<boolean>(false);
 
   const handlePress = (val: string) => {
     switch (val) {
       case 'Ravisabha':
-        navigation.navigate('RaviSabha');
+        if (userRole === 'GUEST') {
+          setloginModel(true);
+        } else {
+          navigation.navigate('RaviSabha');
+        }
         break;
       case 'connect':
         navigation.navigate('GurukulConnect');
@@ -61,6 +61,58 @@ export const FrontDeskScreen = ({
     }
   };
 
+  const loginModelJSX = (
+    <View
+      style={style.loginModelView}
+      onTouchEnd={e => {
+        e.stopPropagation();
+      }}>
+      <View style={style.loginModelLogo}>
+        <Image
+          source={AllImages.AppLogo}
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
+        />
+      </View>
+      <View style={{gap: 5}}>
+        <Text
+          style={[
+            style.loginText,
+            {
+              color: COLORS.black,
+              fontSize: 20,
+            },
+          ]}>
+          {t('common.AppName')}
+        </Text>
+        <Text style={style.loginText}>{t('common.feedbackMsg')}</Text>
+      </View>
+      <View style={style.submitButtonView}>
+        <PrimaryButton
+          title={t('common.No')}
+          buttonStyle={style.submitButtonStyle}
+          onPress={() => {
+            setloginModel(false);
+          }}
+        />
+        <PrimaryButton
+          title={t('common.Signin')}
+          buttonStyle={style.submitButtonStyle}
+          onPress={() => {
+            const resRemoveAuthToken = removeAuthToken();
+
+            if (resRemoveAuthToken === 'SUCCESS') {
+              navigation.replace('Auth');
+            }
+          }}
+          buttonColor="#2f9635"
+        />
+      </View>
+    </View>
+  );
+
   return (
     <ScreenWrapper>
       <ScreenHeader
@@ -71,10 +123,6 @@ export const FrontDeskScreen = ({
             <Text style={style.title}>{t('frontDesk.Heading')}</Text>
           </View>
         }
-        // headerRight={{
-        //   icon: AllIcons.NotificationOutline,
-        //   onPress: () => navigation.navigate('dailyUpdates'),
-        // }}
       />
       <ScrollView
         overScrollMode="always"
@@ -109,6 +157,14 @@ export const FrontDeskScreen = ({
             ))}
           </View>
         </View>
+        <DropDownModel
+          viewPhoto={true}
+          modelVisible={loginModel}
+          setModelVisible={setloginModel}
+          customModelchild={loginModelJSX}
+          type={'simple'}
+          modalHeight={'40%'}
+        />
       </ScrollView>
     </ScreenWrapper>
   );

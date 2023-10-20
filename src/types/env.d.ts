@@ -38,4 +38,5 @@ declare module '@env' {
   export const GURUKUL_AUDIO_MULTIPART_GET_ENDPOINT: string;
   export const GURUKUL_EVENTS_GET_ENDPOINT: string;
   export const DAILY_NOTIFICATIONS_GET_ENDPOINT: string;
+  export const RAVISABHA_POST_ENDPOINT: string;
 }

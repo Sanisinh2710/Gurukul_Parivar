@@ -25,6 +25,7 @@
       "PhotoGallery": "Photo Gallery",
       "AppName": "Gurukul Parivar",
       "AppExitMsg": "Do you want to exit ?",
+      "feedbackMsg": "Please sign in to provide your feedback",
       "TodayEventMsg": "Today's Event",
       "YouTubeLiveKatha": "YouTube Live Katha"
     },
@@ -313,6 +314,12 @@
       "Haribhakta": "Please select the name of the Haribhakta",
       "Relation": "Please select your relation with the saint",
       "RadioOption": "Please choose any one option from above"
+    },
+    "Ravisabha": {
+      "Date": "Date",
+      "Feedback": "Feedback",
+      "DateError": "Please Select a date",
+      "FeedbackError": "Please enter your feedback"
     }
   }
 }

@@ -14,12 +14,14 @@ import {
   SupportedFormInputTypes,
 } from '@types';
 import {useTranslation} from 'react-i18next';
-import {ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {styles} from './styles';
 import {Controller, useForm} from 'react-hook-form';
 import {RaviSabhaSchema} from '@validations';
-import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {RavisabhaFeedback} from '@services';
+import {CustomLocalDateSplitAndFormat} from '@utils';
+import Toast from 'react-native-simple-toast';
 
 export const RaviSabha = ({
   navigation,
@@ -28,7 +30,7 @@ export const RaviSabha = ({
   const style = styles();
   const commonstyle = CommonStyle();
 
-  const [date, setDate] = React.useState<string>('');
+  const [loader, setLoader] = React.useState<boolean>(false);
   const [values, setValues] = React.useState({
     date: '',
     feedback: '',
@@ -43,8 +45,21 @@ export const RaviSabha = ({
     mode: 'onBlur',
   });
 
-  const onsubmit = (data: RaviSabhaValidationSchemaType) => {
-    console.log(data);
+  const onsubmit = async (data: RaviSabhaValidationSchemaType) => {
+    setLoader(true);
+    const newData = {
+      date:
+        CustomLocalDateSplitAndFormat(data.date, '/', '-', 'yyyy-mm-dd') || '',
+      feedback: data.feedback,
+    };
+    const res = await RavisabhaFeedback(newData);
+    setLoader(false);
+
+    if (res.resType === 'SUCCESS') {
+      Toast.show('Your feedback has been received', Toast.SHORT);
+    } else if (res.resType === 'ERROR') {
+      Toast.show(res.message, Toast.SHORT);
+    }
   };
 
   const feedbackInputList: {
@@ -59,15 +74,15 @@ export const RaviSabha = ({
   }[] = [
     {
       name: 'date',
-      lable: 'Date',
-      placeholder: 'Select a date',
+      lable: t('Ravisabha.Date'),
+      placeholder: t('Ravisabha.DateError'),
       type: 'ravisabha',
       required: true,
     },
     {
       name: 'feedback',
-      lable: 'Feedback',
-      placeholder: 'Please provide your feedback',
+      lable: t('Ravisabha.Feedback'),
+      placeholder: t('Ravisabha.FeedbackError'),
       type: 'textarea',
       required: true,
     },
@@ -82,7 +97,11 @@ export const RaviSabha = ({
         }}
         headerTitle={t('frontDesk.Ravisabha')}
       />
-      <ScrollView contentContainerStyle={commonstyle.commonContentView}>
+      <ScrollView
+        contentContainerStyle={[
+          commonstyle.commonContentView,
+          {marginTop: '5%'},
+        ]}>
         {feedbackInputList.map((item, index) => {
           return (
             <View style={{marginVertical: 5}} key={index}>
@@ -109,7 +128,12 @@ export const RaviSabha = ({
             </View>
           );
         })}
-        <PrimaryButton title={'Submit'} onPress={handleSubmit(onsubmit)} />
+        <PrimaryButton
+          title={'Submit'}
+          onPress={handleSubmit(onsubmit)}
+          buttonStyle={{marginVertical: '8%'}}
+          customWidget={loader ? <ActivityIndicator size={25} /> : undefined}
+        />
       </ScrollView>
     </ScreenWrapper>
   );

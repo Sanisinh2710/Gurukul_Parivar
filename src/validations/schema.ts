@@ -336,8 +336,10 @@ export const GurukulFormValidationSchema =
 
 export const RaviSabhaSchema =
   (): yup.ObjectSchema<RaviSabhaValidationSchemaType> => {
+    const {t} = useTranslation();
+
     return yup.object().shape({
-      date: yup.string().required(),
-      feedback: yup.string().required(),
+      date: yup.string().required(t('Ravisabha.DateError')),
+      feedback: yup.string().required(t('Ravisabha.FeedbackError')),
     });
   };

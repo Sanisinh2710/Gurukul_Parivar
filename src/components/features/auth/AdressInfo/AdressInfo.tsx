@@ -122,7 +122,7 @@ export const AdressInfo = React.memo(
         required: true,
       },
       {
-        name: 'address_type',
+        name: 'ress_type',
         lable: t('addressInfo.TypeofaddressLbl'),
         placeholder: '',
         type: 'radio',
