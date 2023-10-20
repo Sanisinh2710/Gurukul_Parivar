@@ -45,7 +45,12 @@ const axiosInstance = axios.create({
 });
 
 const handleApiResponse = (response: AxiosResponse<any, any>) => {
-  const data = {
+  const data: {
+    resType: 'SUCCESS' | 'ERROR';
+    data: any;
+    message: string;
+    statusCode: any;
+  } = {
     resType: response.data.status === 'success' ? 'SUCCESS' : 'ERROR',
     data: response.data.data,
     message: response.data.message,
@@ -60,7 +65,12 @@ const apiRequest = async (
   requestData = {},
   headers?: object,
   requireBearerToken = true,
-) => {
+): Promise<{
+  resType: 'SUCCESS' | 'ERROR';
+  data: any;
+  message: string;
+  statusCode: any;
+}> => {
   try {
     if (requireBearerToken) {
       const bearerToken = getBearerToken();
