@@ -6,6 +6,7 @@ import {
   GurukulFormValidationSchemaType,
   LoginFormValidationSchemaType,
   PersonalInfoFormValidationSchemaType,
+  RaviSabhaValidationSchemaType,
   ResetPasswordValidationSchemaType,
 } from '@types';
 import {mailRegex, nameRegex, passwordRegex, phoneRegex} from '@utils';
@@ -330,5 +331,15 @@ export const GurukulFormValidationSchema =
           }),
         }),
       ),
+    });
+  };
+
+export const RaviSabhaSchema =
+  (): yup.ObjectSchema<RaviSabhaValidationSchemaType> => {
+    const {t} = useTranslation();
+
+    return yup.object().shape({
+      date: yup.string().required(t('Ravisabha.DateError')),
+      feedback: yup.string().required(t('Ravisabha.FeedbackError')),
     });
   };

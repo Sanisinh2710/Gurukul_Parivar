@@ -187,12 +187,6 @@ export const ProfileScreen = ({
             <Text style={style.title}>{t('myProfile.Heading')}</Text>
           </View>
         }
-        headerRight={{
-          icon: AllIcons.NotificationOutline,
-          onPress: () => {
-            navigation.navigate('dailyUpdates');
-          },
-        }}
       />
 
       <ScrollView

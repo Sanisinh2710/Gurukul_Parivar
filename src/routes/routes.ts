@@ -22,11 +22,13 @@ import {
   LoginOTP,
   LoginScreen,
   LoginSuccess,
+  Notifications,
   PaymentMethod,
   ProfileScreen,
   ProfileSignup,
   ProfileSignupWithEdit,
   QuizResult,
+  RaviSabha,
   RegisterScreen,
   ResetPassword,
   Status,
@@ -134,6 +136,14 @@ export const NativeStackRouteList: Array<{
   {
     name: 'ImageZommer',
     component: ImageZoomer,
+  },
+  {
+    name: 'notifications',
+    component: Notifications,
+  },
+  {
+    name: 'RaviSabha',
+    component: RaviSabha,
   },
 ];
 

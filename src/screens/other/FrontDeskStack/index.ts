@@ -8,3 +8,4 @@ export * from './GurukulEvents';
 export * from './PaymentMethod';
 export * from './GurukulEvents';
 export * from './GurukulConnect';
+export * from './Ravisabha';

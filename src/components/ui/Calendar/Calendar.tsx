@@ -22,6 +22,7 @@ type CalendarProps = {
   selectedParentDate: any;
   setSelectedParentDate: React.Dispatch<React.SetStateAction<any>>;
   type?: string;
+  onBlur?: (...event: any[]) => void;
 };
 
 export const Calendar = ({
@@ -30,6 +31,7 @@ export const Calendar = ({
   selectedParentDate,
   setSelectedParentDate,
   type,
+  onBlur,
 }: CalendarProps) => {
   const [selectedDate, setSelectedDate] = React.useState(
     selectedParentDate || new Date(),
@@ -52,7 +54,7 @@ export const Calendar = ({
   }, [selectedParentDate]);
 
   React.useEffect(() => {
-    if (currentMonth && currentYear) {
+    if (currentMonth && currentYear && type !== 'ravisabha') {
       setSelectedDate(
         new Date(
           `${currentYear}-${currentMonth + 1}-${selectedDate.getDate()}`,
@@ -72,11 +74,15 @@ export const Calendar = ({
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth((prevMonth: number) => {
-      const nextMonthDate = new Date(currentYear, prevMonth + 1, 1);
-      setCurrentYear(nextMonthDate.getFullYear());
-      return nextMonthDate.getMonth();
-    });
+    if (type === 'ravisabha' && currentMonth >= new Date().getMonth()) {
+      return;
+    } else {
+      setCurrentMonth((prevMonth: number) => {
+        const nextMonthDate = new Date(currentYear, prevMonth + 1, 1);
+        setCurrentYear(nextMonthDate.getFullYear());
+        return nextMonthDate.getMonth();
+      });
+    }
   };
 
   const handleDateSelect = (date: any) => {
@@ -99,7 +105,8 @@ export const Calendar = ({
   const saveDate = () => {
     setSelectedParentDate(
       new Date(
-        `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1
+        `${selectedDate.getFullYear()}-${
+          selectedDate.getMonth() + 1
         }-${selectedDate.getDate()}`,
       ),
     );
@@ -131,6 +138,10 @@ export const Calendar = ({
                 minAllowedDOBDate
                 ? 1
                 : 0
+              : type === 'ravisabha'
+              ? i % 7 === 0 && day <= new Date().getDate()
+                ? 0
+                : 1
               : 0
           }
           key={i}
@@ -139,26 +150,42 @@ export const Calendar = ({
               ? type === 'dob'
                 ? new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate
-                  ? () => { }
+                  ? () => {}
                   : () => {
+                      handleDateSelect(
+                        new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                      );
+                    }
+                : type === 'ravisabha'
+                ? i % 7 === 0 &&
+                  (day <= new Date().getDate() ||
+                    currentMonth <= new Date().getMonth())
+                  ? () => {
+                      handleDateSelect(
+                        new Date(`${currentYear}-${currentMonth + 1}-${day}`),
+                      );
+                    }
+                  : () => {}
+                : () => {
                     handleDateSelect(
                       new Date(`${currentYear}-${currentMonth + 1}-${day}`),
                     );
                   }
-                : () => {
-                  handleDateSelect(
-                    new Date(`${currentYear}-${currentMonth + 1}-${day}`),
-                  );
-                }
-              : () => { }
+              : () => {}
           }
           style={[
             styles.dayContainer,
             new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
               minAllowedDOBDate && type === 'dob'
               ? {
-                backgroundColor: 'rgba(202, 204, 203,0.2)',
-              }
+                  backgroundColor: 'rgba(202, 204, 203,0.2)',
+                }
+              : (i % 7 !== 0 && type === 'ravisabha') ||
+                (day > new Date().getDate() &&
+                  currentMonth >= new Date().getMonth())
+              ? {
+                  backgroundColor: 'rgba(202, 204, 203,0.2)',
+                }
               : selectedDate.getDate() === day && styles.selectedDateItem,
           ]}>
           <>
@@ -168,11 +195,17 @@ export const Calendar = ({
                 new Date(`${currentYear}-${currentMonth + 1}-${day}`) >
                   minAllowedDOBDate && type === 'dob'
                   ? {
-                    color: 'rgba(202, 204, 203,1)',
-                  }
+                      color: 'rgba(202, 204, 203,1)',
+                    }
+                  : (i % 7 !== 0 && type === 'ravisabha') ||
+                    (day > new Date().getDate() &&
+                      currentMonth >= new Date().getMonth())
+                  ? {
+                      color: 'rgba(202, 204, 203,1)',
+                    }
                   : selectedDate.getDate() === day && {
-                    color: COLORS.darkModetextColor,
-                  },
+                      color: COLORS.darkModetextColor,
+                    },
               ]}>
               {day ? day : ''}
             </Text>
@@ -230,6 +263,7 @@ export const Calendar = ({
         style={styles.mainContainer}
         onTouchEnd={() => {
           setCalendarVisible(false);
+          if (onBlur) onBlur();
         }}>
         <View
           style={styles.container}
@@ -243,8 +277,7 @@ export const Calendar = ({
               <Text style={styles.monthText}>
                 {months[currentMonth]} {currentYear}
               </Text>
-              <View
-                style={styles.yearRightArrowView}>
+              <View style={styles.yearRightArrowView}>
                 <Image
                   source={AllIcons.ChevronArrowDown}
                   style={styles.yearRightArrowImg}
@@ -254,36 +287,38 @@ export const Calendar = ({
             <View style={styles.leftRightArrowView}>
               <TouchableOpacity onPress={handlePreviousMonth}>
                 <Text style={styles.monthArrow}>
-                  <View
-                    style={styles.arrowCommonView}>
+                  <View style={styles.arrowCommonView}>
                     <Image
                       source={AllIcons.ChevronArrowDown}
-                      style={[styles.arrowImg,
-                      {
-                        transform: [
-                          {
-                            rotate: '90deg',
-                          },
-                        ],
-                      }]}
+                      style={[
+                        styles.arrowImg,
+                        {
+                          transform: [
+                            {
+                              rotate: '90deg',
+                            },
+                          ],
+                        },
+                      ]}
                     />
                   </View>
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleNextMonth}>
                 <Text style={styles.monthArrow}>
-                  <View
-                    style={styles.arrowCommonView}>
+                  <View style={styles.arrowCommonView}>
                     <Image
                       source={AllIcons.ChevronArrowDown}
-                      style={[styles.arrowImg,
-                      {
-                        transform: [
-                          {
-                            rotate: '270deg',
-                          },
-                        ],
-                      }]}
+                      style={[
+                        styles.arrowImg,
+                        {
+                          transform: [
+                            {
+                              rotate: '270deg',
+                            },
+                          ],
+                        },
+                      ]}
                     />
                   </View>
                 </Text>
@@ -309,10 +344,7 @@ export const Calendar = ({
               color: COLORS.primaryRippleColor,
             }}
             style={styles.saveBtn}>
-            <Text
-              style={styles.saveBtnTxt}>
-              SAVE
-            </Text>
+            <Text style={styles.saveBtnTxt}>SAVE</Text>
           </Pressable>
 
           {isModalVisible && (
@@ -384,7 +416,7 @@ const styles = StyleSheet.create({
       },
     ],
   },
-  leftRightArrowView: { flexDirection: 'row', gap: 20, alignItems: 'center' },
+  leftRightArrowView: {flexDirection: 'row', gap: 20, alignItems: 'center'},
   arrowCommonView: {
     width: 18,
     height: 18,

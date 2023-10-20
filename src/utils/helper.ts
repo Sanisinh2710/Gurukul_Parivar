@@ -172,7 +172,7 @@ export const CustomLocalDateSplitAndFormat = (
   date: string,
   fromSplitParameter: string,
   toSplitParameter: string,
-  format: 'mm/dd/yyyy' | 'dd/mm/yyyy',
+  format: 'mm/dd/yyyy' | 'dd/mm/yyyy' | 'yyyy-mm-dd',
 ) => {
   if (date !== '' && date !== null && date !== undefined) {
     if (format === 'mm/dd/yyyy') {
@@ -190,6 +190,15 @@ export const CustomLocalDateSplitAndFormat = (
       }${toSplitParameter}${
         date.split(`${fromSplitParameter}`)[1]
       }${toSplitParameter}${date.split(`${fromSplitParameter}`)[2]}`;
+
+      return newDate;
+    }
+    if (format === 'yyyy-mm-dd') {
+      const newDate = `${
+        date.split(`${fromSplitParameter}`)[2]
+      }${toSplitParameter}${
+        date.split(`${fromSplitParameter}`)[1]
+      }${toSplitParameter}${date.split(`${fromSplitParameter}`)[0]}`;
 
       return newDate;
     }
@@ -374,7 +383,7 @@ export const downloadSong = async (
 
       if (options) {
         const response = await config(options).fetch('GET', song_URL);
-    
+
         if (response) {
           return (resType = 'SUCCESS');
         } else {

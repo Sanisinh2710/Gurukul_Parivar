@@ -16,7 +16,7 @@ export const styles = () => {
     linearGradient: {
       marginTop: '10%',
       flex: 1,
-      height: 40,
+      // height: 40,
       borderTopLeftRadius: 3,
       borderBottomLeftRadius: 3,
     },
@@ -28,7 +28,12 @@ export const styles = () => {
       borderColor: COLORS.primaryColor,
     },
     leftQueBarContainer: {flexDirection: 'row', height: '100%'},
-    QueContainer: {width: '95%', justifyContent: 'center'},
+    QueContainer: {
+      width: '95%',
+      paddingVertical: '2.5%',
+
+      justifyContent: 'center',
+    },
     Que: {
       ...CustomFonts.header.small18,
       color: 'black',
@@ -39,6 +44,8 @@ export const styles = () => {
       flexWrap: 'wrap',
     },
     option: {
+      alignItems: 'center',
+      justifyContent: 'center',
       width: '40%',
       marginRight: '5%',
       marginVertical: '3%',

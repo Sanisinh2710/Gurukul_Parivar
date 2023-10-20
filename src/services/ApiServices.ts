@@ -5,6 +5,7 @@ import {
   BASE_URL,
   CALENDAR_GET_ENDPOINT,
   DAILY_DARSHAN_GET_ENDPOINT,
+  DAILY_NOTIFICATIONS_GET_ENDPOINT,
   DAILY_PROGRAM_GET_ENDPOINT,
   DAILY_QUIZ_ANSWER_POST_ENDPOINT,
   DAILY_QUIZ_GET_ENDPOINT,
@@ -29,6 +30,7 @@ import {
   LOGIN_POST_ENDPOINT,
   PERSONAL_INFO_GET_ENDPOINT,
   PERSONAL_INFO_POST_ENDPOINT,
+  RAVISABHA_POST_ENDPOINT,
   RESET_PASSWORD_ENDPOINT,
   SAINTFROMFAMILY_GET_ENDPOINT,
   SAINT_NAME_GET_ENDPOINT,
@@ -361,6 +363,19 @@ export const GuestLoginGetApi = async () => {
     undefined,
     false,
   );
+};
+
+export const DailyNotification = async () => {
+  return apiRequest(DAILY_NOTIFICATIONS_GET_ENDPOINT, 'get', {
+    is_get_all_notification: true,
+  });
+};
+
+export const RavisabhaFeedback = async (data: {
+  date: string;
+  feedback: string;
+}) => {
+  return apiRequest(RAVISABHA_POST_ENDPOINT, 'post', data);
 };
 // All apis are above, below is helper function for used in auth wizard form:---
 
