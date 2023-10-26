@@ -11,8 +11,9 @@ import {
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {CompositeScreenProps, useFocusEffect} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useAppSelector} from '@redux/hooks';
-import {SliderGetApi} from '@services';
+import {ADD_OR_UPDATE_NOTIFICATION} from '@redux/ducks/notificationSlice';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {DailyNotification, SliderGetApi} from '@services';
 import {RootBottomTabParamList, RootStackParamList} from '@types';
 import {COLORS, HomeGrid} from '@utils';
 import {useTranslation} from 'react-i18next';
@@ -28,6 +29,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {batch} from 'react-redux';
 import {styles} from './styles';
 
 export const HomeScreen = ({
@@ -37,7 +39,7 @@ export const HomeScreen = ({
   NativeStackScreenProps<RootStackParamList>
 >) => {
   const [loader, setLoader] = React.useState<boolean>(false);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [exitModel, setExitModel] = React.useState<boolean>(false);
 
@@ -50,9 +52,9 @@ export const HomeScreen = ({
 
   const [dashboardImages, setDashboardImages] = React.useState([]);
 
-  // const {status, isNewNotification} = useAppSelector(
-  //   state => state.notifications,
-  // );
+  const {status, isNewNotification} = useAppSelector(
+    state => state.notifications,
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -60,18 +62,18 @@ export const HomeScreen = ({
     try {
       const res = await SliderGetApi();
 
-      // const response = await DailyNotification();
+      const response = await DailyNotification();
 
       if (res.resType === 'SUCCESS') {
         setDashboardImages(res.data.images);
       }
-      // if (response.resType === 'SUCCESS') {
-      //   dispatch(
-      //     ADD_OR_UPDATE_NOTIFICATION({
-      //       notifications: response.data.notification,
-      //     }),
-      //   );
-      // }
+      if (response.resType === 'SUCCESS') {
+        dispatch(
+          ADD_OR_UPDATE_NOTIFICATION({
+            notifications: response.data.notification,
+          }),
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -85,16 +87,16 @@ export const HomeScreen = ({
     try {
       const res = await SliderGetApi();
 
-      // const response = await DailyNotification();
-      // if (response.resType === 'SUCCESS') {
-      //   batch(() => {
-      //     dispatch(
-      //       ADD_OR_UPDATE_NOTIFICATION({
-      //         notifications: response.data.notification,
-      //       }),
-      //     );
-      //   });
-      // }
+      const response = await DailyNotification();
+      if (response.resType === 'SUCCESS') {
+        batch(() => {
+          dispatch(
+            ADD_OR_UPDATE_NOTIFICATION({
+              notifications: response.data.notification,
+            }),
+          );
+        });
+      }
 
       if (res.resType === 'SUCCESS') {
         setDashboardImages(res.data.images);
@@ -238,9 +240,11 @@ export const HomeScreen = ({
           </View>
         }
         headerRight={{
-          icon: AllIcons.NotificationOutline,
+          icon: isNewNotification
+            ? AllIcons.Notification
+            : AllIcons.NotificationOutline,
           onPress: () => {
-            navigation.navigate('dailyUpdates');
+            navigation.navigate('notifications');
           },
         }}
       />
