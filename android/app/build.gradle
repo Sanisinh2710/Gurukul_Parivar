@@ -78,8 +78,8 @@ android {
         applicationId "com.gurukul_parivar"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "1.2.6"
+        versionCode 14
+        versionName "1.2.7"
     }
     signingConfigs {
         release{
